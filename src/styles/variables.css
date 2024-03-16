@@ -1,0 +1,72 @@
+/* theme dark */
+[data-theme="dark"] {
+}
+
+/* theme light */
+[data-theme="light"] {
+    --primary-color: #9C3541;
+    --backgound-color: #F1F1F1;
+}
+
+:root{
+    /* type pokemon colors */
+    --bug: #A7B723;
+    --dark: #75574C;
+    --dragon: #7037FF;
+    --electric: #F9CF30;
+    --fairy: #E69EAC;
+    --fighting: #C12239;
+    --fire: #F57D31;
+    --flying: #A891EC;
+    --ghost: #70559B;
+    --normal: #AAA67F;
+    --grass: #74CB48;
+    --ground: #DEC16B;
+    --ice: #9AD6DF;
+    --poison: #A43E9E;
+    --psychic: #FB5584;
+    --rock: #B69E31;
+    --steel: #B7B9D0;
+    --water: #6493EB;
+
+    /* font-family */
+    --ff-base: 'Spiegel Regular', sans-serif;
+    --ff-base-italic: 'Spiegel Regular Italic', sans-serif;
+    --ff-base-bold: 'Spiegel Bold', sans-serif;
+    --ff-base-bold-italic: 'Spiegel Bold Italic', sans-serif;
+    --ff-base-semibold: 'Spiegel Semibold', sans-serif;
+    --ff-base-semibold-italic: 'Spiegel Semibold Italic', sans-serif;
+
+    --ff-title: 'Beaufort for LOL Regular', sans-serif;
+    --ff-title-bold: 'Beaufort for LOL Bold', sans-serif;
+    --ff-title-bold-italic: 'Beaufort for LOL Bold Italic', sans-serif;
+    --ff-title-light: 'Beaufort for LOL Light', sans-serif;
+    --ff-title-light-italic: 'Beaufort for LOL Light Italic', sans-serif;
+    --ff-title-heavy: 'Beaufort for LOL Heavy', sans-serif;
+    --ff-title-heavy-italic: 'Beaufort for LOL Heavy Italic', sans-serif;
+    --ff-title-medium: 'Beaufort for LOL Medium', sans-serif;
+    --ff-title-medium-italic: 'Beaufort for LOL Medium Italic', sans-serif;
+    --ff-title-italic: 'Beaufort for LOL Italic', sans-serif;
+
+    /* font-size */
+    --fs-xxs: 0.625rem;
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.875rem;
+    --fs-base: 1rem;
+    --fs-md: 1.125rem;
+    --fs-lg: 1.25rem;
+    --fs-xl: 1.5rem;
+    --fs-xxl: 1.75rem;
+
+    /* font-weight */
+    --fw-light: 300;
+    --fw-normal: 400;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+
+
+    /* colors */
+    --success: #468129;
+    --warning: #FFC107;
+    --danger: #9C3541;
+}
