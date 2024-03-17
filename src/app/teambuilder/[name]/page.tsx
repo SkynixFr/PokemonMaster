@@ -1,26 +1,13 @@
 'use client';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import Team from '../../../types/Team';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 const pokemonBuilder = ({ params }: { params: { name: string } }) => {
-	const [team, setTeam] = useState<Team>();
-
-	useEffect(() => {
-		(async () => {
-			try {
-				const response = await axios.get(
-					`http://localhost:8080/api/v1/teams/${params.name}`
-				);
-				setTeam(response.data);
-			} catch (err) {
-				if (axios.isAxiosError(err)) {
-					console.error(err.response.data);
-				}
-			}
-		})();
-	}, [params.name]);
+	const decodedName = decodeURIComponent(params.name);
+	const team = useSelector((state: RootState) =>
+		state.teams.teams.find(team => team.name === decodedName)
+	);
 
 	return (
 		<div>
