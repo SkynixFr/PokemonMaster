@@ -1,11 +1,15 @@
 import { Metadata } from 'next';
-import Head from 'next/head';
 import React from 'react';
 
 import '../styles/global.css';
 
 export const metadata: Metadata = {
-	title: 'Pokemon Master'
+	title: 'Pokemon Master',
+	description: 'A new Pokemon battle game!',
+	keywords: 'pokemon, battle, game, PokemonShowdown, PokemonMaster',
+	icons: {
+		icon: '/favicon.ico'
+	}
 };
 
 export default function RootLayout({
@@ -15,9 +19,6 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<Head>
-				<link rel="icon" href="/public/images/favicon.ico" />
-			</Head>
 			<body>{children}</body>
 		</html>
 	);

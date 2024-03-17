@@ -4,11 +4,14 @@
 
 /* theme light */
 [data-theme="light"] {
-    --primary-color: #9C3541;
-    --backgound-color: #F1F1F1;
 }
 
 :root{
+
+    /* default value theme light : A bouger plus tard quand le theme sera mis en place */
+    --pr-color: #9C3541;
+    --bg-color: #F1F1F1;
+
     /* type pokemon colors */
     --bug: #A7B723;
     --dark: #75574C;
