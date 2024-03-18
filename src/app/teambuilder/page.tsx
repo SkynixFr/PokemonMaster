@@ -10,37 +10,52 @@ import { RootState } from '../store/store';
 import Team from '../../types/Team';
 
 // Slices
-import { addTeam } from '../store/features/teamsSlice';
+import { addTeam, deleteTeam } from '../store/features/teamsSlice';
 
 const TeamBuilder = () => {
 	const router = useRouter();
+	const dispatch = useDispatch();
 	const [apiMessage, setApiMessage] = useState<string>('');
 	const teams = useSelector((state: RootState) => state.teams.teams);
-	const dispatch = useDispatch();
 
-	const createTeam = async (e: FormEvent<HTMLFormElement>) => {
+	const handleAddTeam = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const { value } = e.target[0];
 		const newTeam: Team = { name: value };
 		try {
-			await axios
-				.post('http://localhost:8080/api/v1/teams', newTeam)
-				.then(res => {
-					dispatch(addTeam(newTeam));
-					setApiMessage(res.data);
-				});
+			const response = await axios.post(
+				'http://localhost:8080/api/v1/teams',
+				newTeam
+			);
+			dispatch(addTeam(newTeam));
+			setApiMessage(response.data);
 		} catch (err) {
 			if (axios.isAxiosError(err)) {
 				setApiMessage(err.response.data);
 			}
 		}
 	};
+
+	const handleDeleteTeam = async (team: Team) => {
+		try {
+			const response = await axios.delete(
+				'http://localhost:8080/api/v1/teams/' + team.name
+			);
+			dispatch(deleteTeam(team));
+			setApiMessage(response.data);
+		} catch (err) {
+			if (axios.isAxiosError(err)) {
+				setApiMessage(err.response.data);
+			}
+		}
+	};
+
 	return (
 		<div>
 			<Link href="/">Home</Link>
 			<h1>Team Builder</h1>
 			Create a team:{' '}
-			<form onSubmit={createTeam}>
+			<form onSubmit={handleAddTeam}>
 				<input type="text" placeholder="Team name" name="team" />
 				<button>Create</button>
 				{apiMessage && <p>{apiMessage}</p>}
@@ -55,6 +70,7 @@ const TeamBuilder = () => {
 						>
 							Update
 						</button>
+						<button onClick={() => handleDeleteTeam(team)}>Delete</button>
 					</li>
 				))}
 			</ul>

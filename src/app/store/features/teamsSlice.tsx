@@ -19,9 +19,14 @@ export const teamsSlice = createSlice({
 		},
 		addTeam: (state, action: PayloadAction<Team>) => {
 			state.teams.push(action.payload);
+		},
+		deleteTeam: (state, action: PayloadAction<Team>) => {
+			state.teams = state.teams.filter(
+				team => team.name !== action.payload.name
+			);
 		}
 	}
 });
 
-export const { addTeams, addTeam } = teamsSlice.actions;
+export const { addTeams, addTeam, deleteTeam } = teamsSlice.actions;
 export default teamsSlice.reducer;
