@@ -25,6 +25,7 @@ type Pokemon = {
 	game_indices?: string[];
 	forms?: string[];
 	flavor_text_entries?: string;
+	sprites?: string[];
 };
 
 export default Pokemon;
