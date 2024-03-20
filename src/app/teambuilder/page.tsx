@@ -12,16 +12,20 @@ import Team from '../../types/Team';
 // Slices
 import { addTeam, deleteTeam } from '../store/features/teamsSlice';
 
+// Components
+import Avatar from '../components/avatar';
+
 const TeamBuilder = () => {
 	const router = useRouter();
 	const dispatch = useDispatch();
 	const [apiMessage, setApiMessage] = useState<string>('');
+	const [avatarUrl, setAvatarUrl] = useState<string>('');
 	const teams = useSelector((state: RootState) => state.teams.teams);
 
 	const handleAddTeam = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const { value } = e.target[0];
-		const newTeam: Team = { name: value };
+		const newTeam: Team = { name: value, avatar: avatarUrl };
 		try {
 			const response = await axios.post(
 				'http://localhost:8080/api/v1/teams',
@@ -57,6 +61,50 @@ const TeamBuilder = () => {
 			Create a team:{' '}
 			<form onSubmit={handleAddTeam}>
 				<input type="text" placeholder="Team name" name="team" />
+				<div>
+					<h3>Avatars</h3>
+					<ul>
+						<li
+							onClick={() => setAvatarUrl('/images/avatars/cynthia.png')}
+							style={
+								avatarUrl === '/images/avatars/cynthia.png'
+									? { border: '2px solid red' }
+									: { border: 'none' }
+							}
+						>
+							<Avatar
+								avatarUrl="/images/avatars/cynthia.png"
+								altText="Cynthia"
+							/>
+						</li>
+						<li
+							onClick={() => setAvatarUrl('/images/avatars/blue.png')}
+							style={
+								avatarUrl === '/images/avatars/blue.png'
+									? { border: '2px solid red' }
+									: { border: 'none' }
+							}
+						>
+							<Avatar
+								avatarUrl="/images/avatars/blue.png"
+								altText="Cynthia"
+							/>
+						</li>
+						<li
+							onClick={() => setAvatarUrl('/images/avatars/red.png')}
+							style={
+								avatarUrl === '/images/avatars/red.png'
+									? { border: '2px solid red' }
+									: { border: 'none' }
+							}
+						>
+							<Avatar
+								avatarUrl="/images/avatars/red.png"
+								altText="Cynthia"
+							/>
+						</li>
+					</ul>
+				</div>
 				<button>Create</button>
 				{apiMessage && <p>{apiMessage}</p>}
 			</form>
