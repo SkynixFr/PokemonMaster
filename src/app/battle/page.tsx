@@ -28,7 +28,7 @@ const Battle = () => {
 					<ul>
 						{teamOne &&
 							teamOne.pokemons.map(pokemon => (
-								<li key={pokemon.id}>{pokemon.name}</li>
+								<li key={pokemon.pokedex}>{pokemon.name}</li>
 							))}
 					</ul>
 				</div>
@@ -37,7 +37,7 @@ const Battle = () => {
 					<ul>
 						{teamTwo &&
 							teamTwo.pokemons.map(pokemon => (
-								<li key={pokemon.id}>{pokemon.name}</li>
+								<li key={pokemon.pokedex}>{pokemon.name}</li>
 							))}
 					</ul>
 				</div>

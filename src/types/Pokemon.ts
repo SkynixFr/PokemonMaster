@@ -1,23 +1,23 @@
 type Pokemon = {
 	name: string;
+	nature?: string;
+	level?: number;
+	id: number;
+	gender?: string;
+	isShiny?: boolean;
 	types: Type[];
-	moves: Move[];
-	stats: Stat[];
-	ability: Ability;
-	item: Item;
-	nature: string;
-	level: number;
-	pokedex: number;
-	gender: string;
-	description: string;
-	isShiny: boolean;
+	moves?: Move[];
+	stats: Stat;
+	ability?: Ability;
+	item?: Item;
+	sprites: Sprites;
 };
 
-type Type = {
+export type Type = {
 	name: string;
 };
 
-type Move = {
+export type Move = {
 	name: string;
 	type: Type;
 	category: string;
@@ -28,26 +28,47 @@ type Move = {
 	effect: string;
 };
 
-type Stat = {
+export type Stat = {
 	hp: number;
 	attack: number;
 	defense: number;
 	spAttack: number;
 	spDefense: number;
 	speed: number;
-	ev: number;
-	iv: number;
+	ev?: number;
+	iv?: number;
 };
 
-type Ability = {
+export type Ability = {
 	name: string;
 	description: string;
 };
 
-type Item = {
+export type Item = {
 	name: string;
 	description: string;
 	image: string;
+};
+
+export type Sprites = {
+	back_default: string;
+	back_female: string;
+	back_shiny: string;
+	back_shiny_female: string;
+	front_default: string;
+	front_female: string;
+	front_shiny: string;
+	front_shiny_female: string;
+	showdown: {
+		back_default: string;
+		back_female: string;
+		back_shiny: string;
+		back_shiny_female: string;
+		front_default: string;
+		front_female: string;
+		front_shiny: string;
+		front_shiny_female: string;
+	};
 };
 
 export default Pokemon;

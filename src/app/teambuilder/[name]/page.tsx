@@ -34,10 +34,51 @@ const pokemonBuilder = ({ params }: { params: { name: string } }) => {
 				);
 				const promises = response.data.results.map(async (pokemon: any) => {
 					const pokemonResponseDetails = await axios.get(pokemon.url);
-					const { id, name, types, sprites } = pokemonResponseDetails.data;
-					return { id, name, types, sprites };
+					const { id, name, types, sprites, stats } =
+						pokemonResponseDetails.data;
+
+					const pokemonDataApi: Pokemon = {
+						name,
+						id,
+						types: types.map(type => {
+							return { name: type.type.name };
+						}),
+						sprites: {
+							back_default: sprites.back_default,
+							back_female: sprites.back_female,
+							back_shiny: sprites.back_shiny,
+							back_shiny_female: sprites.back_shiny_female,
+							front_default: sprites.front_default,
+							front_female: sprites.front_female,
+							front_shiny: sprites.front_shiny,
+							front_shiny_female: sprites.front_shiny_female,
+							showdown: {
+								back_default: sprites.other['showdown'].back_default,
+								back_female: sprites.other['showdown'].back_female,
+								back_shiny: sprites.other['showdown'].back_shiny,
+								back_shiny_female:
+									sprites.other['showdown'].back_shiny_female,
+								front_default: sprites.other['showdown'].front_default,
+								front_female: sprites.other['showdown'].front_female,
+								front_shiny: sprites.other['showdown'].front_shiny,
+								front_shiny_female:
+									sprites.other['showdown'].front_shiny_female
+							}
+						},
+						stats: {
+							hp: stats[0].base_stat,
+							attack: stats[1].base_stat,
+							defense: stats[2].base_stat,
+							spAttack: stats[3].base_stat,
+							spDefense: stats[4].base_stat,
+							speed: stats[5].base_stat
+						}
+					};
+
+					return pokemonDataApi;
 				});
 				const resolvedPromises = await Promise.all(promises);
+				console.log(resolvedPromises);
 				setPokemons(resolvedPromises);
 			} catch (err) {
 				if (axios.isAxiosError(err)) {
@@ -52,13 +93,14 @@ const pokemonBuilder = ({ params }: { params: { name: string } }) => {
 		setPokemonData(pokemon);
 	};
 
-	const handleAddPokemonTeam = async (pokemonName, team) => {
+	const handleAddPokemonTeam = async (pokemon, team) => {
 		try {
 			const response = await axios.post(
-				`http://localhost:8080/api/v1/teams/${team.name}/pokemons/${pokemonName}`
+				`http://localhost:8080/api/v1/teams/${team.name}/pokemons/${pokemon.name}`,
+				pokemon
 			);
 			setApiMessage(response.data);
-			const updatedPokemons = [...team.pokemons, { name: pokemonName }];
+			const updatedPokemons: Pokemon[] = [...team.pokemons, pokemon];
 			const newTeam: Team = { ...team, pokemons: updatedPokemons };
 			dispatch(updateTeam(newTeam));
 		} catch (err) {
@@ -84,8 +126,8 @@ const pokemonBuilder = ({ params }: { params: { name: string } }) => {
 							Pokemons:
 							<ul>
 								{team.pokemons &&
-									team.pokemons.map((pokemon: Object, index) => (
-										<li key={index}>{pokemon.name}</li>
+									team.pokemons.map(pokemon => (
+										<li key={pokemon.id}>{pokemon.name}</li>
 									))}
 							</ul>
 						</p>
@@ -115,8 +157,8 @@ const pokemonBuilder = ({ params }: { params: { name: string } }) => {
 								<span>#{pokemon.id} </span>
 								{pokemon.name}
 								<ul>
-									{pokemon.types.map((type: any) => (
-										<li key={type.slot}>{type.type.name}</li>
+									{pokemon.types.map((type, index) => (
+										<li key={index}>{type.name}</li>
 									))}
 								</ul>
 							</li>
@@ -144,14 +186,12 @@ const pokemonBuilder = ({ params }: { params: { name: string } }) => {
 								height={200}
 							/>
 							<ul>
-								{pokemonData.types.map((type: any) => (
-									<li key={type.slot}>{type.type.name}</li>
+								{pokemonData.types.map((type, index) => (
+									<li key={index}>{type.name}</li>
 								))}
 							</ul>
 							<button
-								onClick={() =>
-									handleAddPokemonTeam(pokemonData.name, team)
-								}
+								onClick={() => handleAddPokemonTeam(pokemonData, team)}
 							>
 								Add to team
 							</button>
