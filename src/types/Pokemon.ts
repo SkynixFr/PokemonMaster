@@ -1,31 +1,53 @@
 type Pokemon = {
 	name: string;
-	url?: string;
-	id: number;
-	height?: number;
-	weight?: number;
-	abilities?: string[];
-	types?: string[];
-	stats?: {
-		hp: number;
-		attack: number;
-		defense: number;
-		specialAttack: number;
-		specialDefense: number;
-		speed: number;
-	};
-	image?: string;
-	moves?: string[];
-	species?: string;
-	base_experience?: number;
-	order?: number;
-	is_default?: boolean;
-	location_area_encounters?: string;
-	held_items?: string[];
-	game_indices?: string[];
-	forms?: string[];
-	flavor_text_entries?: string;
-	sprites?: string[];
+	types: Type[];
+	moves: Move[];
+	stats: Stat[];
+	ability: Ability;
+	item: Item;
+	nature: string;
+	level: number;
+	pokedex: number;
+	gender: string;
+	description: string;
+	isShiny: boolean;
+};
+
+type Type = {
+	name: string;
+};
+
+type Move = {
+	name: string;
+	type: Type;
+	category: string;
+	power: number;
+	accuracy: number;
+	pp: number;
+	description: string;
+	effect: string;
+};
+
+type Stat = {
+	hp: number;
+	attack: number;
+	defense: number;
+	spAttack: number;
+	spDefense: number;
+	speed: number;
+	ev: number;
+	iv: number;
+};
+
+type Ability = {
+	name: string;
+	description: string;
+};
+
+type Item = {
+	name: string;
+	description: string;
+	image: string;
 };
 
 export default Pokemon;

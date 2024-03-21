@@ -4,7 +4,14 @@ const Home = () => {
 	return (
 		<div>
 			<h1>Hello World</h1>
-			<Link href="/teambuilder">Team builder</Link>
+			<ul>
+				<li>
+					<Link href={`/teambuilder`}>Team builder</Link>
+				</li>
+				<li>
+					<Link href={`/battle`}>Battle</Link>
+				</li>
+			</ul>
 		</div>
 	);
 };

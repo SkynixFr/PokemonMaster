@@ -2,6 +2,9 @@
 @import url("font.css");
 @import url("variables.css");
 
+/* Page styles */
+@import url("battle.css");
+
 /* Global styles */
 body {
     font-family: var(--ff-base);

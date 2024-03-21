@@ -9,8 +9,11 @@
 :root{
 
     /* default value theme light : A bouger plus tard quand le theme sera mis en place */
-    --pr-color: #9C3541;
-    --bg-color: #F1F1F1;
+    --red: #9C3541;
+    --grey: #F1F1F1;
+    --white: #FFFFFF;
+    --black: #000000;
+
 
     /* type pokemon colors */
     --bug: #A7B723;

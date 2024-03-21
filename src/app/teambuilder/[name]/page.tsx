@@ -83,9 +83,10 @@ const pokemonBuilder = ({ params }: { params: { name: string } }) => {
 						<p>
 							Pokemons:
 							<ul>
-								{team.pokemons.map((pokemon: Object, index) => (
-									<li key={index}>{pokemon.name}</li>
-								))}
+								{team.pokemons &&
+									team.pokemons.map((pokemon: Object, index) => (
+										<li key={index}>{pokemon.name}</li>
+									))}
 							</ul>
 						</p>
 						<p>Update your team here</p>
