@@ -88,6 +88,8 @@ const pokemonBuilder = ({ params }: { params: { name: string } }) => {
 		})();
 	}, [page]);
 
+	console.log(pokemons);
+
 	const handlePokemonData = (id: number) => {
 		const pokemon = pokemons.find(pokemon => pokemon.id === id);
 		setPokemonData(pokemon);

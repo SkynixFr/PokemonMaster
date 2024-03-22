@@ -5,7 +5,7 @@ import React from 'react';
 import StoreProvider from './components/providers/storeProvider';
 import TeamsProvider from './components/providers/teamsProvider';
 
-import '../styles/global.css';
+import '../styles/global.scss';
 
 export const metadata: Metadata = {
 	title: 'Pokemon Master',

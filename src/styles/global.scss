@@ -1,9 +1,9 @@
-@import url("normalize.css");
-@import url("font.css");
-@import url("variables.css");
+@import "normalize.css";
+@import "font.scss";
+@import "variables.scss";
 
 /* Page styles */
-@import url("battle.css");
+@import "battle.scss";
 
 /* Global styles */
 body {
