@@ -1,25 +1,20 @@
+import Pokemon from "./Pokemon";
+
 class Team {
-    id?: string;
-    name: string;
-    avatar?: string;
-    pokemons?: string[];
+    private pokemons: Pokemon[];
+    private activePokemon: Pokemon;
 
-    constructor(name: string, avatar?: string, pokemons?: string[]) {
-        this.name = name;
-        this.avatar = avatar;
+    constructor(pokemons: Pokemon[]) {
         this.pokemons = pokemons;
+        this.activePokemon = this.pokemons[0];
     }
 
-    static fromJson(json: any): Team {
-        return new Team(json.name, json.avatar, json.pokemons);
+    changeActivePokemon(index: number) {
+        this.activePokemon = this.pokemons[index];
     }
 
-    toJson(): any {
-        return {
-            name: this.name,
-            avatar: this.avatar,
-            pokemons: this.pokemons
-        };
+    getActivePokemon() {
+        return this.activePokemon;
     }
 }
 

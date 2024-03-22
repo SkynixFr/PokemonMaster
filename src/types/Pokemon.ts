@@ -10,7 +10,7 @@ type Pokemon = {
 	stats: Stat;
 	ability?: Ability;
 	item?: Item;
-	sprites: Sprites;
+	sprites?: Sprites;
 };
 
 export type Type = {
