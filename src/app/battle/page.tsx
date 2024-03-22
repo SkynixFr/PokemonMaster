@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { Moon, Sun } from 'lucide-react';
 import { useState } from 'react';
-import Image from 'next/image';
+import CustomImage from '../components/customImage';
 
 const Battle = () => {
 	const dispatch = useDispatch();
@@ -18,21 +18,12 @@ const Battle = () => {
 
 	return (
 		<div className="battle-container">
-			<div className={`battle-background ${theme}`}>
-				<Image
-					src={
-						theme === 'day'
-							? `/images/backgrounds/bg-battle-day-upscale.jpg`
-							: `/images/backgrounds/bg-battle-night-upscale.jpg`
-					}
-					alt="Battle Background"
-					fill={true}
-					priority={true}
-					objectFit="cover"
-					className="battle-background-image"
-				/>
-			</div>
-
+			<CustomImage
+				src={`/images/backgrounds/bg-battle-${theme}-upscale.jpg`}
+				alt="Battle background"
+				priority={true}
+				className="battle-background"
+			/>
 			<div className="theme-btn" onClick={toggleTheme}>
 				{theme === 'day' ? <Moon /> : <Sun />}
 			</div>
