@@ -8,7 +8,7 @@ interface CustomImageProps {
 	className?: string;
 	width?: number;
 	height?: number;
-	objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+	objectFit?: 'fill' | 'contain' | 'cover';
 }
 
 const CustomImage = ({
@@ -30,9 +30,9 @@ const CustomImage = ({
 			width={width}
 			height={height}
 			sizes="100vw"
-			objectFit={objectFit || 'cover'}
-			blurDataURL={src}
 			className={className}
+			quality={100}
+			style={{ objectFit: objectFit }}
 		/>
 	);
 };

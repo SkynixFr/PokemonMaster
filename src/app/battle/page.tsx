@@ -9,21 +9,39 @@ import { Moon, Shield, Sun, Timer, Wind } from 'lucide-react';
 // Components
 import CustomImage from '../components/customImage';
 import BattleTeam from '../components/battleTeam';
+import BattePokemon from '../components/battlePokemon';
+
+// Types
+import BattleEffect from '../../types/BattleEffect';
+import Pokemon from '../../types/Pokemon';
 
 const Battle = () => {
 	// const dispatch = useDispatch();
 	const teamOne = useSelector((state: RootState) => state.teams.teams[0]);
 	const teamTwo = useSelector((state: RootState) => state.teams.teams[1]);
-	const [theme, setTheme] = useState('day');
-	const [turn, setTurn] = useState(1);
-	const [toastMessage, setToastMessage] = useState('Arcanin uses');
-	const [toastImportantMessage, setToastImportantMessage] =
-		useState('Fire Blast');
+	const [activePokemonTeamOne, setActivePokemonTeamOne] = useState<Pokemon>(
+		teamOne.pokemons[0]
+	);
+	const [activePokemonTeamTwo, setActivePokemonTeamTwo] = useState<Pokemon>(
+		teamTwo.pokemons[0]
+	);
+	const [battleEffectsTeamOne, setBattleEffectsTeamOne] = useState<
+		BattleEffect[]
+	>([
+		{ name: 'BRU', type: 'status' },
+		{ name: 'Atk', number: 0.67, type: 'debuff' },
+		{ name: 'PAR', type: 'status' }
+	]);
+	const [battleEffectsTeamTwo, setBattleEffectsTeamTwo] = useState<
+		BattleEffect[]
+	>([{ name: 'SpD', number: 1.5, type: 'buff' }]);
+
+	const [theme, setTheme] = useState<string>('day');
 	const toggleTheme = () => {
 		setTheme(theme === 'day' ? 'night' : 'day');
 	};
 
-	if (!teamOne || !teamTwo) {
+	if (!teamOne || !teamTwo || !activePokemonTeamOne || !activePokemonTeamTwo) {
 		return <div>Loading...</div>;
 	}
 
@@ -37,59 +55,50 @@ const Battle = () => {
 				objectFit="cover"
 				className="battle-background"
 			/>
+			<div className="battle-turn">Turn 1</div>
 
-			<div className="battle-content left">
-				<h2>Turn {turn}</h2>
+			<div className="battle-toast">Toast</div>
+
+			<div className="battle-global-infos">
+				<Shield />
+				<Wind />
+			</div>
+
+			<div className="battle-team player">
 				<BattleTeam team={teamOne} />
 			</div>
 
-			<div className="battle-content center">
-				<div className="battle-notification">
-					<CustomImage
-						src={teamTwo.avatar}
-						alt="Avatar notification"
-						fill={false}
-						priority={true}
-						objectFit="contain"
-						width={60}
-						height={100}
-					/>
-					<h2>
-						{toastMessage} <span>{toastImportantMessage}</span> !
-					</h2>
-				</div>
-			</div>
-
-			<div className="battle-content right">
+			<div className="battle-team opponent">
 				<BattleTeam team={teamTwo} />
-				<button className="battle-timer">
-					<Timer />
-				</button>
 			</div>
 
-			<div className="theme-btn" onClick={toggleTheme}>
-				{theme === 'day' ? <Moon /> : <Sun />}
+			<div className="battle-pokemon player">
+				<BattePokemon
+					activePokemon={activePokemonTeamOne}
+					battleEffects={battleEffectsTeamOne}
+					player={true}
+				/>
 			</div>
 
-			<div className="battle-game-status">
-				<button>
-					<Shield />
-				</button>
-				<button>
-					<Wind />
-				</button>
+			<div className="battle-pokemon opponent">
+				<BattePokemon
+					activePokemon={activePokemonTeamTwo}
+					battleEffects={battleEffectsTeamTwo}
+				/>
 			</div>
 
-			<div className="battle-buttons">
+			<div className="battle-actions">
 				<button>Attack</button>
 				<button>Surrender</button>
 				<button>Chat</button>
 				<button>Team</button>
 			</div>
 
-			<div className="battle-pokemon">Pokemon 1</div>
-
-			<div className="battle-pokemon">Pokemon 2</div>
+			<div className="battle-timer">
+				<button>
+					<Timer />
+				</button>
+			</div>
 		</div>
 	);
 };

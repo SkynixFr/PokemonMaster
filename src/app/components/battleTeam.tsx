@@ -4,41 +4,46 @@ import CustomImage from './customImage';
 // Types
 import Team from '../../types/Team';
 
+// Utils
+import { PokemonImgByPokemonId } from '../../utils/pokemonImgByPokemonId';
+
+// Styles
+import '../../styles/components/battleTeam.css';
 interface BattleTeamProps {
 	team: Team;
 }
 const battleTeam = ({ team }: BattleTeamProps) => {
-	console.log('team', team);
 	return (
 		<div className="battle-team-container">
-			<div className="avatar-container">
+			<div className="avatar">
 				<CustomImage
 					src={team.avatar}
 					alt="Battle team avatar"
 					priority={true}
-					fill={true}
+					fill={false}
+					width={120}
+					height={200}
 					objectFit="contain"
-					className="avatar"
 				/>
 			</div>
-			<div className="team-name">
+
+			<div className="content">
 				<h3>{team.name}</h3>
-			</div>
-			<div className="pokemons-container">
-				{team.pokemons.map(pokemon => (
-					<div key={pokemon.id} className="pokemon-container">
-						<CustomImage
-							src={pokemon.sprites.front_default}
-							alt={`${pokemon.name} sprite`}
-							priority={true}
-							fill={false}
-							width={50}
-							height={50}
-							objectFit="contain"
-							className="pokemon-sprite"
-						/>
-					</div>
-				))}
+				<div className="battle-team-pokemons">
+					{team.pokemons.map(pokemon => (
+						<div key={pokemon.id}>
+							<CustomImage
+								src={PokemonImgByPokemonId[pokemon.id]}
+								alt={`${pokemon.name} sprite`}
+								priority={true}
+								fill={false}
+								width={40}
+								height={40}
+								objectFit="contain"
+							/>
+						</div>
+					))}
+				</div>
 			</div>
 		</div>
 	);
