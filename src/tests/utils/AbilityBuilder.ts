@@ -22,3 +22,5 @@ class AbilityBuilder {
         return this;
     }
 }
+
+export default AbilityBuilder;

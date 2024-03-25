@@ -28,3 +28,5 @@ class ItemBuilder {
         return this;
     }
 }
+
+export default ItemBuilder;

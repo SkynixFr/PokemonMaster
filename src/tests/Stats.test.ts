@@ -38,4 +38,21 @@ describe('Stats', () => {
                 .build()
         );
     });
+
+    test('should increase hp correctly', () => {
+        const stats = new Stats(hp, attack, defense, specialAttack, specialDefense, speed, evs, ivs);
+        stats.increaseHp(10);
+        expect(stats).toStrictEqual(
+            new StatsBuilder()
+                .withHp(110)
+                .withAttack(100)
+                .withDefense(100)
+                .withSpecialAttack(100)
+                .withSpecialDefense(100)
+                .withSpeed(100)
+                .withEvs(100)
+                .withIvs(100)
+                .build()
+        );
+    });
 });
