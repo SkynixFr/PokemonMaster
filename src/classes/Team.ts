@@ -2,11 +2,11 @@ import Pokemon from "./Pokemon";
 
 class Team {
     private pokemons: Pokemon[];
-    private activePokemon: Pokemon;
+    private activePokemon?: Pokemon;
 
-    constructor(pokemons: Pokemon[]) {
+    constructor(pokemons: Pokemon[], activePokemon?: Pokemon) {
         this.pokemons = pokemons;
-        this.activePokemon = this.pokemons[0];
+        this.activePokemon = activePokemon ? activePokemon : this.pokemons[0];
     }
 
     changeActivePokemon(index: number) {
