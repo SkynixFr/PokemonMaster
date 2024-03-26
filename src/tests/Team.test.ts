@@ -35,4 +35,8 @@ describe('Team', () => {
         team.changeActivePokemon(1);
         expect(team.getActivePokemon()).toStrictEqual(charmander);
     });
+
+    it('should get active pokemon correctly', () => {
+        expect(team.getActivePokemon()).toStrictEqual(pikachu);
+    });
 });
