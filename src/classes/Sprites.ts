@@ -1,54 +1,54 @@
 class Sprites
  {
-    private readonly back_default: string;
-    private readonly back_female: string;
-    private readonly back_shiny: string;
-    private readonly back_shiny_female: string;
-    private readonly front_default: string;
-    private readonly front_female: string;
-    private readonly front_shiny: string;
-    private readonly front_shiny_female: string;
+    private readonly backDefault: string;
+    private readonly backFemale: string;
+    private readonly backShiny: string;
+    private readonly backShinyFemale: string;
+    private readonly frontDefault: string;
+    private readonly frontFemale: string;
+    private readonly frontShiny: string;
+    private readonly frontShinyFemale: string;
     private readonly showdown: {
-        back_default: string
-        back_female: string
-        back_shiny: string;
-		back_shiny_female: string;
-		front_default: string;
-		front_female: string;
-		front_shiny: string;
-		front_shiny_female: string;
+        backDefault: string
+        backFemale: string
+        backShiny: string;
+		backShinyFemale: string;
+		frontDefault: string;
+		frontFemale: string;
+		frontShiny: string;
+		frontShinyFemale: string;
     };
 
     constructor(
-        back_default: string,
-        back_female: string,
-        back_shiny: string,
-        back_shiny_female: string,
-        front_default: string,
-        front_female: string,
-        front_shiny: string,
-        front_shiny_female: string,
+        backDefault: string,
+        backFemale: string,
+        backShiny: string,
+        backShinyFemale: string,
+        frontDefault: string,
+        frontFemale: string,
+        frontShiny: string,
+        frontShinyFemale: string,
         showdown: {
-            back_default: string
-            back_female: string
-            back_shiny: string;
-            back_shiny_female: string;
-            front_default: string;
-            front_female: string;
-            front_shiny: string;
-            front_shiny_female: string;
+            backDefault: string,
+            backFemale: string,
+            backShiny: string,
+            backShinyFemale: string,
+            frontDefault: string,
+            frontFemale: string,
+            frontShiny: string,
+            frontShinyFemale: string
         }
-    ) {
-        this.back_default = back_default;
-        this.back_female = back_female;
-        this.back_shiny = back_shiny;
-        this.back_shiny_female = back_shiny_female;
-        this.front_default = front_default;
-        this.front_female = front_female;
-        this.front_shiny = front_shiny;
-        this.front_shiny_female = front_shiny_female;
+    ){
+        this.backDefault = backDefault;
+        this.backFemale = backFemale;
+        this.backShiny = backShiny;
+        this.backShinyFemale = backShinyFemale;
+        this.frontDefault = frontDefault;
+        this.frontFemale = frontFemale;
+        this.frontShiny = frontShiny;
+        this.frontShinyFemale = frontShinyFemale;
         this.showdown = showdown;
     }
- }
+}
 
  export default Sprites;

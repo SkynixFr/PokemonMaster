@@ -19,11 +19,11 @@ class Stats {
         this.iv = iv;
     }
 
-    decreaseHp(damage: number) {
+    decreaseHp(damage: number): void {
         this.hp -= damage;
     }
 
-    increaseHp(heal: number) {
+    increaseHp(heal: number): void {
         this.hp += heal;
     }
 }

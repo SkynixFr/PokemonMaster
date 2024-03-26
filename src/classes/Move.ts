@@ -7,7 +7,7 @@ class Move {
     private readonly category: string;
     private readonly power: number;
     private readonly accuracy: number;
-    private readonly pp: number;
+    private pp: number;
     private readonly description: string;
     private readonly effect: string;
 
@@ -20,6 +20,14 @@ class Move {
         this.pp = pp;
         this.description = description;
         this.effect = effect;
+    }
+
+    decreasePp(): void {
+        this.pp -= 1;
+    }
+
+    increasePp(): void {
+        this.pp += 1;
     }
 }
 
