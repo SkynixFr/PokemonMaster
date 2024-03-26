@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-interface CustomImageProps {
+export interface CustomImageProps {
 	src: string;
 	alt: string;
 	fill?: boolean;

@@ -1,0 +1,21 @@
+.battle-icon {
+    position: absolute;
+    top: -5px;
+    left: 95px;
+    z-index: -1;
+}
+
+.battle-icon.run {
+    transform: scaleX(-1);
+}
+
+.theme-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    padding: 10px 10px;
+    background-color: var(--white);
+    color: var(--red);
+    border: none;
+    cursor: pointer;
+}

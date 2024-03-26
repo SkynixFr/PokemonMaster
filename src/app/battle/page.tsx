@@ -4,12 +4,13 @@ import { RootState } from '../store/store';
 import { useState } from 'react';
 
 // Icons
-import { Moon, Shield, Sun, Timer, Wind } from 'lucide-react';
+import { CloudRainWind, Timer } from 'lucide-react';
 
 // Components
 import CustomImage from '../components/customImage';
 import BattleTeam from '../components/battleTeam';
-import BattePokemon from '../components/battlePokemon';
+import BattlePokemon from '../components/battlePokemon';
+import CustomButton from '../components/customButton';
 
 // Types
 import BattleEffect from '../../types/BattleEffect';
@@ -17,13 +18,13 @@ import Pokemon from '../../types/Pokemon';
 
 const Battle = () => {
 	// const dispatch = useDispatch();
-	const teamOne = useSelector((state: RootState) => state.teams.teams[0]);
-	const teamTwo = useSelector((state: RootState) => state.teams.teams[1]);
+	const teamOne = useSelector((state: RootState) => state.teams!.teams[0]);
+	const teamTwo = useSelector((state: RootState) => state.teams!.teams[1]);
 	const [activePokemonTeamOne, setActivePokemonTeamOne] = useState<Pokemon>(
-		teamOne.pokemons[0]
+		teamOne?.pokemons[0]
 	);
 	const [activePokemonTeamTwo, setActivePokemonTeamTwo] = useState<Pokemon>(
-		teamTwo.pokemons[0]
+		teamTwo?.pokemons[0]
 	);
 	const [battleEffectsTeamOne, setBattleEffectsTeamOne] = useState<
 		BattleEffect[]
@@ -35,6 +36,10 @@ const Battle = () => {
 	const [battleEffectsTeamTwo, setBattleEffectsTeamTwo] = useState<
 		BattleEffect[]
 	>([{ name: 'SpD', number: 1.5, type: 'buff' }]);
+
+	const [globalEffect, setGlobalEffect] = useState<BattleEffect[]>([
+		{ name: 'Rain', turns: 5 }
+	]);
 
 	const [theme, setTheme] = useState<string>('day');
 	const toggleTheme = () => {
@@ -55,13 +60,33 @@ const Battle = () => {
 				objectFit="cover"
 				className="battle-background"
 			/>
+			<div className="battle-theme">
+				<CustomButton
+					icon={
+						theme === 'day'
+							? { name: 'Moon', size: 20 }
+							: { name: 'Sun', size: 20 }
+					}
+					onClick={toggleTheme}
+					className="theme-icon"
+				/>
+			</div>
 			<div className="battle-turn">Turn 1</div>
 
 			<div className="battle-toast">Toast</div>
 
 			<div className="battle-global-infos">
-				<Shield />
-				<Wind />
+				{globalEffect &&
+					globalEffect.map(effect => (
+						<>
+							{effect.name === 'Rain' && (
+								<div className="rain" key={effect.name}>
+									<CloudRainWind size={20} />
+									<span>{effect.turns}</span>
+								</div>
+							)}
+						</>
+					))}
 			</div>
 
 			<div className="battle-team player">
@@ -73,7 +98,7 @@ const Battle = () => {
 			</div>
 
 			<div className="battle-pokemon player">
-				<BattePokemon
+				<BattlePokemon
 					activePokemon={activePokemonTeamOne}
 					battleEffects={battleEffectsTeamOne}
 					player={true}
@@ -81,17 +106,59 @@ const Battle = () => {
 			</div>
 
 			<div className="battle-pokemon opponent">
-				<BattePokemon
+				<BattlePokemon
 					activePokemon={activePokemonTeamTwo}
 					battleEffects={battleEffectsTeamTwo}
 				/>
 			</div>
 
 			<div className="battle-actions">
-				<button>Attack</button>
-				<button>Surrender</button>
-				<button>Chat</button>
-				<button>Team</button>
+				<div>
+					<CustomButton
+						text="Attack"
+						image={{
+							src: '/images/icons/battle.png',
+							alt: 'Battle icon',
+							width: 75,
+							height: 75,
+							priority: true,
+							className: 'battle-icon'
+						}}
+					/>
+					<CustomButton
+						text="Team"
+						image={{
+							src: '/images/icons/pokeball.png',
+							alt: 'Battle icon',
+							width: 75,
+							height: 75,
+							priority: true,
+							className: 'battle-icon'
+						}}
+					/>
+					<CustomButton
+						text="Chat"
+						image={{
+							src: '/images/icons/chat.png',
+							alt: 'Battle icon',
+							width: 75,
+							height: 75,
+							priority: true,
+							className: 'battle-icon'
+						}}
+					/>
+					<CustomButton
+						text="Surrender"
+						image={{
+							src: '/images/icons/run.png',
+							alt: 'Battle icon',
+							width: 75,
+							height: 75,
+							priority: true,
+							className: 'battle-icon run'
+						}}
+					/>
+				</div>
 			</div>
 
 			<div className="battle-timer">

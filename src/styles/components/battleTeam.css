@@ -29,7 +29,7 @@
 }
 
 .content > h3  {
-    font-family: var(--ff-base-bold);
+    font-family: var(--ff-base);
     font-size: var(--fs-lg);
     font-weight: var(--fw-bold);
     color: var(--black);

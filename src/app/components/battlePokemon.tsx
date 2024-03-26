@@ -120,15 +120,24 @@ const BattlePokemon = ({
 				{/*</div>*/}
 			</div>
 
-			<CustomImage
-				src={PokemonImgByPokemonId[activePokemon.id]}
-				alt={`${activePokemon.name} sprite`}
-				priority={true}
-				fill={false}
-				width={200}
-				height={200}
-				objectFit="contain"
-			/>
+			<div>
+				<CustomImage
+					src={PokemonImgByPokemonId[activePokemon.id]}
+					alt={`${activePokemon.name} sprite`}
+					priority={true}
+					fill={false}
+					width={200}
+					height={200}
+					objectFit="contain"
+				/>
+
+				<div
+					className={`pokemon-shadow ${player ? 'player' : 'opponent'}`}
+					style={{
+						backgroundImage: `url(${PokemonImgByPokemonId[activePokemon.id]}`
+					}}
+				></div>
+			</div>
 		</div>
 	);
 };

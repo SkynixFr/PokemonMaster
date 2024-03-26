@@ -13,6 +13,11 @@ type Pokemon = {
 	sprites?: Sprites;
 };
 
+interface PokemonInterface {
+	pokemon: Pokemon;
+	activePokemon?: (pokemon: Pokemon) => Pokemon;
+}
+
 export type Type = {
 	name: string;
 };
