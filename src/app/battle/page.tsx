@@ -48,7 +48,7 @@ const Battle = () => {
 	return (
 		<div className="battle-container">
 			<CustomImage
-				src={`/images/backgrounds/bg-battle-${theme}-upscale.jpg`}
+				src={`/images/backgrounds/bg-battle-${theme}-upscale-tiny.jpg`}
 				alt="Battle background"
 				fill={true}
 				priority={true}
