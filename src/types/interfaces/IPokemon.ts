@@ -1,15 +1,9 @@
 import Pokemon from "../Pokemon"
 import { Ability, Sprites } from "../Pokemon";
 
-interface IPokemon {
+export default interface IPokemon {
 	pokemon: Pokemon;
-	type: IType;
-	move: IMove;
-	stats: IStat;
-	ability: Ability;
-	item: IItem;
-	sprites: Sprites;
-	attack?: () => void;
+	attack?: () => number;
 };
 
 interface IType {
@@ -46,8 +40,4 @@ interface IItem {
 	used?: boolean;
 	use?: () => void;
 }
-
-
-
-export default IPokemon;
 

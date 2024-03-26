@@ -1,13 +1,13 @@
 type Pokemon = {
+	id: number;
 	name: string;
+	moves: Move[];
 	nature?: string;
 	level?: number;
-	id: number;
 	gender?: string;
 	isShiny?: boolean;
-	types: Type[];
-	moves?: Move[];
-	stats: Stat;
+	types?: Type[];
+	stats?: Stat;
 	ability?: Ability;
 	item?: Item;
 	sprites?: Sprites;
