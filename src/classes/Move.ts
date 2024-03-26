@@ -29,6 +29,10 @@ class Move {
     increasePp(): void {
         this.pp += 1;
     }
+
+    getPower(): number {
+        return this.power;
+    }
 }
 
 export default Move;

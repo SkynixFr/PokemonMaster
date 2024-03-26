@@ -1,11 +1,7 @@
-import Type from './Type';
-import Move from './Move';
-import Stats from './Stats';
-import Ability from './Ability';
-import Item from './Item';
-import Sprites from './Sprites';
+import IPokemon from "../types/interfaces/IPokemon";
 
-class Pokemon {
+
+class Pokemon implements IPokemon{
     private readonly name: string;
     private readonly id: number;
     private readonly types: Type[];
@@ -32,6 +28,10 @@ class Pokemon {
         this.ability = ability;
         this.item = item;
         this.sprites = sprites;        
+    }
+
+    attack(move: Move) {
+        return move.getPower();
     }
 }
 
