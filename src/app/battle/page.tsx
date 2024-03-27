@@ -4,7 +4,7 @@ import { RootState } from '../store/store';
 import { useState } from 'react';
 
 // Icons
-import { CloudRainWind } from 'lucide-react';
+import { CloudRainWind, Timer } from 'lucide-react';
 
 // Components
 import CustomImage from '../components/customImage';
@@ -29,15 +29,18 @@ const Battle = () => {
 			name: 'Bulbasaur',
 			moves: [
 				{
-					name: 'Tackle',
-					type: { name: 'normal' },
-					category: 'physical',
-					power: 40,
-					accuracy: 100,
-					pp: 35,
-					description:
-						'A physical attack in which the user charges and slams into the target with its whole body.',
-					effect: 'no effect'
+					move:
+					{
+						name: 'Tackle',
+						type: { name: 'normal' },
+						category: 'physical',
+						power: 40,
+						accuracy: 100,
+						pp: 35,
+						description:
+							'A physical attack in which the user charges and slams into the target with its whole body.',
+						effect: 'no effect'
+					}
 				}
 			]
 		}
