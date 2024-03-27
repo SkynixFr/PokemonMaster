@@ -5,8 +5,7 @@ export default interface IPokemon {
 	attack?: () => number;
 }
 
-export interface IMove {
-	move: Move;
+export interface IMove extends Move {
 	decreasePP?: () => void;
 }
 
