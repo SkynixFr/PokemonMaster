@@ -4,7 +4,7 @@ import { RootState } from '../store/store';
 import { useState } from 'react';
 
 // Icons
-import { CloudRainWind, Timer } from 'lucide-react';
+import { CloudRainWind } from 'lucide-react';
 
 // Components
 import CustomImage from '../components/customImage';

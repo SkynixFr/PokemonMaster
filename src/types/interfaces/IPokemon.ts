@@ -1,16 +1,15 @@
-import Pokemon from "../Pokemon"
-import { Ability, Sprites } from "../Pokemon";
+import Pokemon from '../Pokemon';
 
 export default interface IPokemon {
 	pokemon: Pokemon;
 	attack?: () => number;
-};
+}
 
 interface IType {
 	name: string;
 }
 
-interface IMove{
+interface IMove {
 	name: string;
 	type: IType;
 	category: string;
@@ -40,4 +39,3 @@ interface IItem {
 	used?: boolean;
 	use?: () => void;
 }
-

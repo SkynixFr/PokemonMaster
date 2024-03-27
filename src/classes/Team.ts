@@ -1,21 +1,17 @@
-import Pokemon from "./Pokemon";
+import IPokemon from '../types/interfaces/IPokemon';
 
 class Team {
-    private pokemons: Pokemon[];
-    private activePokemon?: Pokemon;
+	private readonly pokemons: IPokemon[];
+	private activePokemon: IPokemon;
 
-    constructor(pokemons: Pokemon[], activePokemon?: Pokemon) {
-        this.pokemons = pokemons;
-        this.activePokemon = activePokemon ? activePokemon : this.pokemons[0];
-    }
+	constructor(pokemons: IPokemon[], activePokemon: IPokemon) {
+		this.pokemons = pokemons;
+		this.activePokemon = activePokemon ? activePokemon : this.pokemons[0];
+	}
 
-    changeActivePokemon(index: number) {
-        this.activePokemon = this.pokemons[index];
-    }
-
-    getActivePokemon() {
-        return this.activePokemon;
-    }
+	switch(index: number) {
+		this.activePokemon = this.pokemons[index];
+	}
 }
 
 export default Team;

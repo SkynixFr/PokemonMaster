@@ -1,20 +1,15 @@
-import Player from './Player';
-import Team from './Team';
+import ITeam from '../types/interfaces/ITeam';
 
 class Battle {
-    private host: Player;
-    private guest: Player;
-    private hostTeam: Team;
-    private guestTeam: Team;
-    private turn?: number;
+	private hostTeam: ITeam;
+	private guestTeam: ITeam;
+	private turn: number;
 
-    constructor(host: Player, guest: Player, turn?: number) {
-        this.host = host;
-        this.guest = guest;
-        this.hostTeam = host.team;
-        this.guestTeam = guest.team;
-        this.turn = turn ? turn : 0;
-    }
+	constructor(hostTeam: ITeam, guestTeam: ITeam, turn: number) {
+		this.hostTeam = hostTeam;
+		this.guestTeam = guestTeam;
+		this.turn = turn ? turn : 0;
+	}
 }
 
 export default Battle;
