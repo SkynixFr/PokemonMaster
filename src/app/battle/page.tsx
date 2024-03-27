@@ -20,11 +20,27 @@ import PokemonClass from '../../classes/Pokemon';
 import BattleClass from '../../classes/Battle';
 import TeamClass from '../../classes/Team';
 
-
 const Battle = () => {
-
 	const [hostTeam, setHostTeam] = useState<TeamClass | null>(null);
 	const [guestTeam, setGuestTeam] = useState<TeamClass | null>(null);
+	const [battleEffectsTeamOne, setBattleEffectsTeamOne] = useState<
+		BattleEffect[]
+	>([
+		{ name: 'BRU', type: 'status' },
+		{ name: 'Atk', number: 0.67, type: 'debuff' },
+		{ name: 'PAR', type: 'status' }
+	]);
+	const [battleEffectsTeamTwo, setBattleEffectsTeamTwo] = useState<
+		BattleEffect[]
+	>([{ name: 'SpD', number: 1.5, type: 'buff' }]);
+	const [globalEffect, setGlobalEffect] = useState<BattleEffect[]>([
+		{ name: 'Rain', turns: 5 }
+	]);
+
+	const [theme, setTheme] = useState<string>('day');
+	const toggleTheme = () => {
+		setTheme(theme === 'day' ? 'night' : 'day');
+	};
 
 	useEffect(() => {
 		const bulbasaur = new PokemonClass({
@@ -41,11 +57,11 @@ const Battle = () => {
 					description:
 						'A physical attack in which the user charges and slams into the target with its whole body.',
 					effect: 'no effect'
-				},
+				}
 			]
 		});
 		const squirtle = new PokemonClass({
-			id: 4,
+			id: 7,
 			name: 'Squirtle',
 			moves: [
 				{
@@ -58,56 +74,43 @@ const Battle = () => {
 					description:
 						'A physical attack in which the user charges and slams into the target with its whole body.',
 					effect: 'no effect'
-				},
+				}
 			]
 		});
 
-		const hostTeam = new TeamClass({
-			name: 'Host',
-			avatar: '/images/avatars/1.png',
-			pokemons: [bulbasaur, squirtle]
-		}, bulbasaur);
+		const hostTeam = new TeamClass(
+			{
+				name: 'Host',
+				avatar: '/images/avatars/cynthia.png',
+				pokemons: [bulbasaur, squirtle]
+			},
+			bulbasaur
+		);
 
 		setHostTeam(hostTeam);
 
-		const hostTeamActivePokemon = hostTeam.getActivePokemon();
-
-		const guestTeam = new TeamClass({
-			name: 'Guest',
-			avatar: '/images/avatars/2.png',
-			pokemons: [squirtle, bulbasaur]
-		}, squirtle);
+		const guestTeam = new TeamClass(
+			{
+				name: 'Guest',
+				avatar: '/images/avatars/red.png',
+				pokemons: [squirtle, bulbasaur]
+			},
+			squirtle
+		);
 
 		setGuestTeam(guestTeam);
-
-		const guestTeamActivePokemon = guestTeam.getActivePokemon();
 
 		const battle = new BattleClass(hostTeam, guestTeam, 1);
 	}, []);
 
-	if (!guestTeam || !hostTeam || !guestTeam.getActivePokemon() || !hostTeam.getActivePokemon()) {
+	if (
+		!guestTeam ||
+		!hostTeam ||
+		!guestTeam.getActivePokemon() ||
+		!hostTeam.getActivePokemon()
+	) {
 		return <div>Loading...</div>;
 	}
-
-	const [battleEffectsTeamOne, setBattleEffectsTeamOne] = useState<
-		BattleEffect[]
-	>([
-		{ name: 'BRU', type: 'status' },
-		{ name: 'Atk', number: 0.67, type: 'debuff' },
-		{ name: 'PAR', type: 'status' }
-	]);
-	const [battleEffectsTeamTwo, setBattleEffectsTeamTwo] = useState<
-		BattleEffect[]
-	>([{ name: 'SpD', number: 1.5, type: 'buff' }]);
-
-	const [globalEffect, setGlobalEffect] = useState<BattleEffect[]>([
-		{ name: 'Rain', turns: 5 }
-	]);
-
-	const [theme, setTheme] = useState<string>('day');
-	const toggleTheme = () => {
-		setTheme(theme === 'day' ? 'night' : 'day');
-	};
 
 	return (
 		<div className="battle-container">

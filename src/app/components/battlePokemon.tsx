@@ -30,7 +30,7 @@ const BattlePokemon = ({
 	battleEffects,
 	player = false
 }: BattlePokemonProps) => {
-	const [currentHp, setCurrentHp] = useState<number>(activePokemon.stats.hp);
+	const [currentHp, setCurrentHp] = useState<number>(0);
 
 	return (
 		<div className="pokemon-container">
@@ -66,9 +66,9 @@ const BattlePokemon = ({
 						<div>
 							<CustomProgressBar
 								currentProgress={currentHp}
-								maxProgress={activePokemon.stats.hp}
+								maxProgress={activePokemon.stats?.hp}
 							/>
-							{currentHp}/{activePokemon.stats.hp}
+							{currentHp}/{activePokemon.stats?.hp}
 						</div>
 					</div>
 				</div>
