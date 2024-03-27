@@ -1,5 +1,5 @@
 // Styles
-import '../../styles/components/customProgressBar.css';
+import '../../../styles/components/customProgressBar.css';
 
 interface CustomProgressBarProps {
 	currentProgress: number;

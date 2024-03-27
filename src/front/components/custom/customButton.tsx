@@ -2,7 +2,7 @@ import CustomImage, { CustomImageProps } from './customImage';
 import { icons } from 'lucide-react';
 
 // Styles
-import '../../styles/components/customButton.css';
+import '../../../styles/components/customButton.css';
 
 interface CustomButtonProps {
 	text?: string;

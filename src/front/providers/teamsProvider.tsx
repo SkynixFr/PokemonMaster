@@ -13,7 +13,6 @@ const TeamsProvider = ({ children }) => {
 				const response = await axios.get(
 					'http://localhost:8080/api/v1/teams'
 				);
-				console.log(response.data);
 				dispatch(addTeams(response.data));
 			} catch (err) {
 				if (axios.isAxiosError(err)) {

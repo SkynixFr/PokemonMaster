@@ -2,10 +2,10 @@ import { Metadata } from 'next';
 import React from 'react';
 
 // Providers
-import StoreProvider from './components/providers/storeProvider';
-import TeamsProvider from './components/providers/teamsProvider';
+import StoreProvider from '../front/providers/storeProvider';
+import TeamsProvider from '../front/providers/teamsProvider';
 
-import '../styles/global.css';
+import '../front/styles/global.css';
 
 export const metadata: Metadata = {
 	title: 'Pokemon Master',
