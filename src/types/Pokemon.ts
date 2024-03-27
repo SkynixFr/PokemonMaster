@@ -1,4 +1,4 @@
-import { IMove, IType, IStat, IItem } from './interfaces/IPokemon';
+import { IMove, IStat, IItem } from './interfaces/IPokemon';
 
 type Pokemon = {
 	id: number;
@@ -8,7 +8,7 @@ type Pokemon = {
 	level?: number;
 	gender?: string;
 	isShiny?: boolean;
-	types?: IType[];
+	types?: Type[];
 	stats?: IStat;
 	ability?: Ability;
 	item?: IItem;
