@@ -1,18 +1,17 @@
 .pokemon-container {
     position: relative;
-    width: 375px;
+    width: 100%;
     height: 318px;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
-    gap: 25px;
 }
 
 .pokemon-container > div:first-child {
     width: 100%;
     display: flex;
     flex-flow: column nowrap;
-    gap: 10px;
+    gap: 5px;
 }
 
 .pokemon-infos {
@@ -85,42 +84,65 @@
 
 .pokemon-shadow.player{
     transform: scaleX(-1) rotate(168.25deg);
-    top: 245px;
-    right: 110px;
+    top: 285px;
+    right: 180px;
 }
 
 .pokemon-shadow.opponent{
-    transform: scaleY(-1) rotate(15deg);
-    top: 237px;
-    right: 60px;
+    transform: scaleY(-1) rotate(12deg);
+    top: 315px;
+    right: 120px;
 }
 
-/*.battle-effects {*/
-/*    width: 320px;*/
-/*    display: flex;*/
-/*    justify-content: flex-start;*/
-/*    align-items: center;*/
-/*    flex-flow: row wrap;*/
-/*    gap: 10px;*/
-/*    padding: 0 25px;*/
-/*}*/
+.battle-effects {
+    width: 100%;
+    height: 63px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-flow: row wrap;
+}
 
-/*.battle-effects > span {*/
-/*    height: 25px;*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    border-radius: 5px;*/
-/*    padding: 1px 5px;*/
-/*}*/
+.battle-effects-content {
+    width: 385px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-flow: row wrap;
+    gap: 5px;
+}
 
-/*.burn {*/
-/*    background-color: var(--fire);*/
-/*}*/
-/*.burn > img {*/
-/*    color: var(--fire);*/
-/*}*/
+.battle-effects .battle-effects-content > span {
+    width: 50px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    padding: 1px 5px;
+    gap: 5px;
+    font-size: var(--fs-xs);
+}
 
-/*.paralisys {*/
-/*    background-color: var(--electric);*/
-/*}*/
+.burn {
+    background-color: var(--fire);
+}
+.burn > img {
+    color: var(--fire);
+}
+
+.paralisys {
+    background-color: var(--electric);
+}
+
+.buff {
+    outline: 1px solid var(--success);
+    color: var(--success);
+    background-color: var(--white);
+}
+
+.debuff {
+    outline: 1px solid var(--error);
+    color: var(--error);
+    background-color: var(--white);
+}

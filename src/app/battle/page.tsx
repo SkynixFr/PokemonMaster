@@ -28,11 +28,20 @@ const Battle = () => {
 	>([
 		{ name: 'BRU', type: 'status' },
 		{ name: 'Atk', number: 0.67, type: 'debuff' },
-		{ name: 'PAR', type: 'status' }
+		{ name: 'Atk', number: 0.67, type: 'debuff' },
+		{ name: 'Atk', number: 0.67, type: 'debuff' },
+		{ name: 'Atk', number: 0.67, type: 'debuff' },
+		{ name: 'Atk', number: 0.67, type: 'debuff' },
+		{ name: 'Atk', number: 0.67, type: 'debuff' },
+		{ name: 'Atk', number: 0.67, type: 'debuff' },
+		{ name: 'Atk', number: 0.67, type: 'debuff' }
 	]);
 	const [battleEffectsTeamTwo, setBattleEffectsTeamTwo] = useState<
 		BattleEffect[]
-	>([{ name: 'SpD', number: 1.5, type: 'buff' }]);
+	>([
+		{ name: 'SpD', number: 1.5, type: 'buff' },
+		{ name: 'PAR', type: 'status' }
+	]);
 	const [globalEffect, setGlobalEffect] = useState<BattleEffect[]>([
 		{ name: 'Rain', turns: 5 }
 	]);
