@@ -16,10 +16,30 @@ import CustomButton from '../components/customButton';
 import BattleEffect from '../../types/BattleEffect';
 import Pokemon from '../../types/Pokemon';
 
+// POO
+import PokemonClass from '../../classes/Pokemon';
+
 const Battle = () => {
 	// const dispatch = useDispatch();
 	const teamOne = useSelector((state: RootState) => state.teams!.teams[0]);
 	const teamTwo = useSelector((state: RootState) => state.teams!.teams[1]);
+	const pikachu = new PokemonClass({
+		pokemon: {
+			id: 25,
+			name: 'Bulbasaur',
+			moves: [{
+				name: 'Tackle',
+				type: { name: 'normal' },
+				category: 'physical',
+				power: 40,
+				accuracy: 100,
+				pp: 35,
+				description: 'A physical attack in which the user charges and slams into the target with its whole body.',
+				effect: 'no effect',
+			}],
+		},
+	});
+
 	const [activePokemonTeamOne, setActivePokemonTeamOne] = useState<Pokemon>(
 		teamOne?.pokemons[0]
 	);
@@ -124,6 +144,7 @@ const Battle = () => {
 							priority: true,
 							className: 'battle-icon'
 						}}
+						onClick={() => pikachu.attack()}
 					/>
 					<CustomButton
 						text="Team"

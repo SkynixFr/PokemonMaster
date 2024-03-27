@@ -107,3 +107,5 @@ class PokemonBuilder {
         return this;
     }
 }
+
+export default PokemonBuilder;
