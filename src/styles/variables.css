@@ -74,7 +74,7 @@
     /* colors */
     --success: #468129;
     --warning: #FFC107;
-    --danger: #9C3541;
+    --error: #9C3541;
 
     /* toast notifications */
     --toastify-color-light: #fff;

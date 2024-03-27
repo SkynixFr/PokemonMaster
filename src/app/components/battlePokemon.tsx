@@ -76,52 +76,55 @@ const BattlePokemon = ({
 						</div>
 					</div>
 				</div>
-				{/*<div className="battle-effects">*/}
-				{/*	{battleEffects.map(effect => (*/}
-				{/*		<>*/}
-				{/*			{effect.type === 'status' && effect.name === 'BRU' && (*/}
-				{/*				<span className="burn" key={effect.name}>*/}
-				{/*					<CustomImage*/}
-				{/*						src="/images/types/fire.png"*/}
-				{/*						alt="Type fire"*/}
-				{/*						width={15}*/}
-				{/*						height={15}*/}
-				{/*					/>*/}
-				{/*					{effect.name}*/}
-				{/*				</span>*/}
-				{/*			)}*/}
-				{/*			{effect.type === 'status' && effect.name === 'PAR' && (*/}
-				{/*				<span className="paralisys" key={effect.name}>*/}
-				{/*					<CustomImage*/}
-				{/*						src="/images/types/electric.png"*/}
-				{/*						alt="Type fire"*/}
-				{/*						width={15}*/}
-				{/*						height={15}*/}
-				{/*					/>*/}
-				{/*					{effect.name}*/}
-				{/*				</span>*/}
-				{/*			)}*/}
-				{/*		</>*/}
-				{/*	))}*/}
-				{/*	{battleEffects.map(effect => (*/}
-				{/*		<>*/}
-				{/*			{effect.type === 'buff' && (*/}
-				{/*				<span className="buff" key={effect.name}>*/}
-				{/*					x{effect.number} {effect.name}*/}
-				{/*				</span>*/}
-				{/*			)}*/}
-				{/*		</>*/}
-				{/*	))}*/}
-				{/*	{battleEffects.map(effect => (*/}
-				{/*		<>*/}
-				{/*			{effect.type === 'debuff' && (*/}
-				{/*				<span className="debuff" key={effect.name}>*/}
-				{/*					x{effect.number} {effect.name}*/}
-				{/*				</span>*/}
-				{/*			)}*/}
-				{/*		</>*/}
-				{/*	))}*/}
-				{/*</div>*/}
+				<div className="battle-effects">
+					<div className="battle-effects-content">
+						{battleEffects.map(effect => (
+							<>
+								{effect.type === 'status' && effect.name === 'BRU' && (
+									<span className="burn" key={effect.name}>
+										<CustomImage
+											src="/images/types/fire.png"
+											alt="Type fire"
+											width={15}
+											height={15}
+										/>
+										{effect.name}
+									</span>
+								)}
+								{effect.type === 'status' && effect.name === 'PAR' && (
+									<span className="paralisys" key={effect.name}>
+										<CustomImage
+											src="/images/types/electric.png"
+											alt="Type fire"
+											width={15}
+											height={15}
+										/>
+										{effect.name}
+									</span>
+								)}
+							</>
+						))}
+
+						{battleEffects.map(effect => (
+							<>
+								{effect.type === 'buff' && (
+									<span className="buff" key={effect.name}>
+										x{effect.number} {effect.name}
+									</span>
+								)}
+							</>
+						))}
+						{battleEffects.map(effect => (
+							<>
+								{effect.type === 'debuff' && (
+									<span className="debuff" key={effect.name}>
+										x{effect.number} {effect.name}
+									</span>
+								)}
+							</>
+						))}
+					</div>
+				</div>
 			</div>
 
 			<div>
