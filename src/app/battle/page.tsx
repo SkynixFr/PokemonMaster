@@ -64,13 +64,21 @@ const Battle = () => {
 			pokemons: [bulbasaur, squirtle]
 		}, bulbasaur);
 
+		const hostTeamActivePokemon = hostTeam.getActivePokemon();
+
 		const guestTeam = new TeamClass({
 			name: 'Guest',
 			avatar: '/images/avatars/2.png',
 			pokemons: [squirtle, bulbasaur]
 		}, squirtle);
 
+		const guestTeamActivePokemon = guestTeam.getActivePokemon();
+
 		const battle = new BattleClass(hostTeam, guestTeam, 1);
+
+		if (!guestTeam || !hostTeam || !hostTeamActivePokemon || !guestTeamActivePokemon) {
+			return <div>Loading...</div>;
+		}
 	});
 
 	const [battleEffectsTeamOne, setBattleEffectsTeamOne] = useState<
@@ -92,10 +100,6 @@ const Battle = () => {
 	const toggleTheme = () => {
 		setTheme(theme === 'day' ? 'night' : 'day');
 	};
-
-	if (!guestTeam || !hostTeam || !hostTeamActivePokemon || !guestTeamActivePokemon) {
-		return <div>Loading...</div>;
-	}
 
 	return (
 		<div className="battle-container">

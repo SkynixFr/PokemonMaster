@@ -19,6 +19,10 @@ class Team {
 	switch(pokemon: IPokemon) {
 		this.activePokemon = pokemon;
 	}
+
+	getActivePokemon() {
+		return this.activePokemon;
+	}
 }
 
 export default Team;
