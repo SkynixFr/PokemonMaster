@@ -1,7 +1,7 @@
 'use client';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store/store';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Icons
 import { CloudRainWind, Timer } from 'lucide-react';
@@ -14,40 +14,65 @@ import CustomButton from '../components/customButton';
 
 // Types
 import BattleEffect from '../../types/BattleEffect';
-import Pokemon from '../../types/Pokemon';
 
 // POO
 import PokemonClass from '../../classes/Pokemon';
+import BattleClass from '../../classes/Battle';
+import TeamClass from '../../classes/Team';
+
 
 const Battle = () => {
-	
-	// const dispatch = useDispatch();
-	const guestTeam = useSelector((state: RootState) => state.teams!.teams[0]);
-	const hostTeam = useSelector((state: RootState) => state.teams!.teams[1]);
-	const bulbasaur = new PokemonClass({
-		id: 25,
-		name: 'Bulbasaur',
-		moves: [
-			{
-				name: 'Tackle',
-				type: { name: 'normal' },
-				category: 'physical',
-				power: 40,
-				accuracy: 100,
-				pp: 35,
-				description:
-					'A physical attack in which the user charges and slams into the target with its whole body.',
-				effect: 'no effect'
-			},
-		]
+	useEffect(() => {
+		const bulbasaur = new PokemonClass({
+			id: 1,
+			name: 'Bulbasaur',
+			moves: [
+				{
+					name: 'Tackle',
+					type: { name: 'normal' },
+					category: 'physical',
+					power: 40,
+					accuracy: 100,
+					pp: 35,
+					description:
+						'A physical attack in which the user charges and slams into the target with its whole body.',
+					effect: 'no effect'
+				},
+			]
+		});
+		const squirtle = new PokemonClass({
+			id: 4,
+			name: 'Squirtle',
+			moves: [
+				{
+					name: 'Tackle',
+					type: { name: 'normal' },
+					category: 'physical',
+					power: 40,
+					accuracy: 100,
+					pp: 35,
+					description:
+						'A physical attack in which the user charges and slams into the target with its whole body.',
+					effect: 'no effect'
+				},
+			]
+		});
+
+		const hostTeam = new TeamClass({
+			name: 'Host',
+			avatar: '/images/avatars/1.png',
+			pokemons: [bulbasaur, squirtle]
+		}, bulbasaur);
+
+		const guestTeam = new TeamClass({
+			name: 'Guest',
+			avatar: '/images/avatars/2.png',
+			pokemons: [squirtle, bulbasaur]
+		}, squirtle);
+
+		const battle = new BattleClass(hostTeam, guestTeam, 1);
 	});
 
-	const [hostTeamActivePokemon, setHostTeamActivePokemon] = useState<Pokemon>(
-		guestTeam?.pokemons[0]
-	);
-	const [guestTeamActivePokemon, setGuestTeamActivePokemon] = useState<Pokemon>(
-		hostTeam?.pokemons[0]
-	);
 	const [battleEffectsTeamOne, setBattleEffectsTeamOne] = useState<
 		BattleEffect[]
 	>([
