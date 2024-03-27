@@ -34,8 +34,7 @@ const pokemonBuilder = ({ params }: { params: { name: string } }) => {
 				);
 				const promises = response.data.results.map(async (pokemon: any) => {
 					const pokemonResponseDetails = await axios.get(pokemon.url);
-					const { id, name, types, sprites, stats } =
-						pokemonResponseDetails.data;
+					const { id, name, types, stats } = pokemonResponseDetails.data;
 
 					const pokemonDataApi: Pokemon = {
 						name,
@@ -127,13 +126,6 @@ const pokemonBuilder = ({ params }: { params: { name: string } }) => {
 										: {}
 								}
 							>
-								<Image
-									src={pokemon.sprites['front_default']}
-									alt="Pokemon image"
-									priority={true}
-									width={50}
-									height={50}
-								/>
 								<span>#{pokemon.id} </span>
 								{pokemon.name}
 								<ul>
@@ -158,13 +150,7 @@ const pokemonBuilder = ({ params }: { params: { name: string } }) => {
 					{pokemonData && (
 						<div>
 							<h1>{pokemonData.name}</h1>
-							<Image
-								src={pokemonData.sprites['front_default']}
-								alt="Pokemon image"
-								priority={true}
-								width={200}
-								height={200}
-							/>
+
 							<ul>
 								{pokemonData.types.map((type, index) => (
 									<li key={index}>{type.name}</li>
