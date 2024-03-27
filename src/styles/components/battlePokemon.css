@@ -70,6 +70,10 @@
     font-size: var(--fs-xs);
 }
 
+.pokemon-sprite.player {
+    transform: scaleX(-1);
+}
+
 .pokemon-shadow {
     position: absolute;
     width: 200px;

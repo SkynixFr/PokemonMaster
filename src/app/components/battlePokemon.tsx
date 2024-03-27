@@ -129,6 +129,7 @@ const BattlePokemon = ({
 					width={200}
 					height={200}
 					objectFit="contain"
+					className={`pokemon-sprite ${player ? 'player' : ''}`}
 				/>
 
 				<div
