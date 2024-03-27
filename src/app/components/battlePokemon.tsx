@@ -65,10 +65,10 @@ const BattlePokemon = ({
 
 						<div>
 							<CustomProgressBar
-								currentProgress={currentHp}
-								maxProgress={activePokemon.stats?.hp}
+								currentProgress={activePokemon.stats.currentHp}
+								maxProgress={activePokemon.stats.hp}
 							/>
-							{currentHp}/{activePokemon.stats?.hp}
+							{activePokemon.stats.currentHp}/{activePokemon.stats?.hp}
 						</div>
 					</div>
 				</div>
