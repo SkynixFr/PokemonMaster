@@ -1,7 +1,7 @@
 import IPokemon from './interfaces/IPokemon';
 
 type Team = {
-	id?: string;
+	id?: number;
 	name: string;
 	avatar: string;
 	pokemons?: IPokemon[];

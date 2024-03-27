@@ -1,11 +1,18 @@
 import IPokemon from '../types/interfaces/IPokemon';
+import ITeam from '../types/interfaces/ITeam';
 
 class Team {
-	private readonly pokemons: IPokemon[];
-	private activePokemon: IPokemon;
+	readonly id: number;
+	readonly name: string;
+	readonly avatar: string;
+	readonly pokemons: IPokemon[];
+	private activePokemon?: IPokemon;
 
-	constructor(pokemons: IPokemon[], activePokemon: IPokemon) {
-		this.pokemons = pokemons;
+	constructor(team: ITeam, activePokemon: IPokemon) {
+		this.id = team.id;
+		this.name = team.name;
+		this.avatar = team.avatar;
+		this.pokemons = team.pokemons;
 		this.activePokemon = activePokemon ? activePokemon : this.pokemons[0];
 	}
 
