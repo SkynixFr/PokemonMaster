@@ -29,6 +29,8 @@ class Pokemon {
     }
     
     attack(pokemon: Pokemon, move: IMove){
+        console.log(pokemon.stats);
+        console.log(pokemon)
        pokemon.stats.decreaseHp(move.power);
     }
 }

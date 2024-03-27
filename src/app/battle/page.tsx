@@ -72,7 +72,7 @@ const Battle = () => {
 			]
 		});
 		const squirtle = new PokemonClass({
-			id: 470,
+			id: 7,
 			name: 'Squirtle',
 			stats: {
 				hp: 44,
@@ -83,7 +83,7 @@ const Battle = () => {
 				speed: 43,
 				ev: 0,
 				iv: 0,
-				currentHp: 23
+				currentHp: 44
 			},
 			moves: [
 				{
@@ -100,11 +100,127 @@ const Battle = () => {
 			]
 		});
 
+		const charmander = new PokemonClass({
+			id: 4,
+			name: 'Charmander',
+			stats: {
+				hp: 39,
+				attack: 52,
+				defense: 43,
+				spAttack: 60,
+				spDefense: 50,
+				speed: 65,
+				ev: 0,
+				iv: 0,
+				currentHp: 39
+			},
+			moves: [
+				{
+					name: 'Tackle',
+					type: { name: 'normal' },
+					category: 'physical',
+					power: 40,
+					accuracy: 100,
+					pp: 35,
+					description:
+						'A physical attack in which the user charges and slams into the target with its whole body.',
+					effect: 'no effect'
+				}
+			]
+		});
+
+		const mew = new PokemonClass({
+			id: 151,
+			name: 'Mew',
+			stats: {
+				hp: 100,
+				attack: 100,
+				defense: 100,
+				spAttack: 100,
+				spDefense: 100,
+				speed: 100,
+				ev: 0,
+				iv: 0,
+				currentHp: 100
+			},
+			moves: [
+				{
+					name: 'Tackle',
+					type: { name: 'normal' },
+					category: 'physical',
+					power: 40,
+					accuracy: 100,
+					pp: 35,
+					description:
+						'A physical attack in which the user charges and slams into the target with its whole body.',
+					effect: 'no effect'
+				}
+			]
+		});
+
+		const arcanine = new PokemonClass({
+			id: 59,
+			name: 'Arcanine',
+			stats: {
+				hp: 90,
+				attack: 110,
+				defense: 80,
+				spAttack: 100,
+				spDefense: 80,
+				speed: 95,
+				ev: 0,
+				iv: 0,
+				currentHp: 90
+			},
+			moves: [
+				{
+					name: 'Tackle',
+					type: { name: 'normal' },
+					category: 'physical',
+					power: 40,
+					accuracy: 100,
+					pp: 35,
+					description:
+						'A physical attack in which the user charges and slams into the target with its whole body.',
+					effect: 'no effect'
+				}
+			]
+		});
+
+		const ninetails = new PokemonClass({
+			id: 38,
+			name: 'Ninetails',
+			stats: {
+				hp: 73,
+				attack: 76,
+				defense: 75,
+				spAttack: 81,
+				spDefense: 100,
+				speed: 100,
+				ev: 0,
+				iv: 0,
+				currentHp: 73
+			},
+			moves: [
+				{
+					name: 'Tackle',
+					type: { name: 'normal' },
+					category: 'physical',
+					power: 40,
+					accuracy: 100,
+					pp: 35,
+					description:
+						'A physical attack in which the user charges and slams into the target with its whole body.',
+					effect: 'no effect'
+				}
+			]
+		});
+			
 		const hostTeam = new TeamClass(
 			{
 				name: 'Host',
 				avatar: '/images/avatars/cynthia.png',
-				pokemons: [bulbasaur, squirtle]
+				pokemons: [bulbasaur, squirtle, charmander, mew, arcanine, ninetails]
 			},
 			bulbasaur
 		);
@@ -115,12 +231,14 @@ const Battle = () => {
 			{
 				name: 'Guest',
 				avatar: '/images/avatars/red.png',
-				pokemons: [squirtle, bulbasaur]
+				pokemons: [squirtle, charmander, bulbasaur, ninetails, mew, arcanine]
 			},
 			squirtle
 		);
 
 		setGuestTeam(guestTeam);
+
+		console.log(guestTeam.getActivePokemon());
 
 		const battle = new BattleClass(hostTeam, guestTeam, 1);
 	}, []);
@@ -174,11 +292,11 @@ const Battle = () => {
 			</div>
 
 			<div className="battle-team player">
-				<BattleTeam team={guestTeam} />
+				<BattleTeam team={hostTeam} />
 			</div>
 
 			<div className="battle-team opponent">
-				<BattleTeam team={hostTeam} />
+				<BattleTeam team={guestTeam} />
 			</div>
 
 			<div className="battle-pokemon player">
