@@ -1,9 +1,10 @@
 import ITeam from '../types/interfaces/ITeam';
+import IPokemon from '../types/interfaces/IPokemon';
 
 class Battle {
-	private hostTeam: ITeam;
-	private guestTeam: ITeam;
-	private turn: number;
+	hostTeam: ITeam;
+	guestTeam: ITeam;
+	turn: number;
 
 	constructor(hostTeam: ITeam, guestTeam: ITeam, turn: number) {
 		this.hostTeam = hostTeam;

@@ -9,7 +9,7 @@ import battleReducer from './features/battleSlice';
 export const store = configureStore({
 	reducer: {
 		teams: teamsReducer,
-		battle: battleReducer
+		battleSlice: battleReducer
 	}
 });
 

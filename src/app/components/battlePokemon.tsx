@@ -18,23 +18,27 @@ import FemaleIcon from '../../../public/images/icons/female.svg';
 import MaleIcon from '../../../public/images/icons/male.svg';
 import CustomProgressBar from './customProgressBar';
 import { PokemonImgByPokemonId } from '../../utils/pokemonImgByPokemonId';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store';
 
-interface BattlePokemonProps {
-	activePokemon: Pokemon;
-	battleEffects: BattleEffect[];
-	player?: boolean;
-}
+// interface BattlePokemonProps {
+// 	activePokemon: Pokemon;
+// 	battleEffects: BattleEffect[];
+// 	player?: boolean;
+// }
 
-const BattlePokemon = ({
-	activePokemon,
-	battleEffects,
-	player = false
-}: BattlePokemonProps) => {
-	const [currentHp, setCurrentHp] = useState<number>(activePokemon.stats.currentHp);
-	useEffect(() => {
-		setCurrentHp(activePokemon.stats.currentHp);
-	}, [activePokemon.stats.currentHp]);
+const BattlePokemon = () => {
+	// const [currentHp, setCurrentHp] = useState<number>(
+	// 	activePokemon.stats.currentHp
+	// );
+	// console.log(activePokemon);
+	//
+	// useEffect(() => {
+	// 	// Mettez à jour les points de vie actuels avec la nouvelle valeur
+	// 	setCurrentHp(activePokemon.stats.currentHp);
+	// }, [activePokemon.stats.currentHp]);
 
+	const activePokemon = useSelector((state: RootState) => );
 
 	return (
 		<div className="pokemon-container">

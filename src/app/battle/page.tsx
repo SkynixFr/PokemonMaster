@@ -1,10 +1,10 @@
 'use client';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { useEffect, useState } from 'react';
 
 // Icons
-import { CloudRainWind, Timer } from 'lucide-react';
+import { CloudRainWind } from 'lucide-react';
 
 // Components
 import CustomImage from '../components/customImage';
@@ -20,11 +20,20 @@ import PokemonClass from '../../classes/Pokemon';
 import BattleClass from '../../classes/Battle';
 import TeamClass from '../../classes/Team';
 import StatsClass from '../../classes/Stats';
+import {
+	setBattle,
+	setGuestActivePokemon
+} from '../store/features/battleSlice';
 
 const Battle = () => {
-	const [hostTeam, setHostTeam] = useState<TeamClass | null>(null);
-	const [guestTeam, setGuestTeam] = useState<TeamClass | null>(null);
-	const [currentHp, setCurrentHp] = useState<number>(guestTeam?.getActivePokemon().stats.currentHp);
+	const dispatch = useDispatch();
+	const hostTeam = useSelector(
+		(state: RootState) => state.battleSlice.hostTeam
+	);
+	const guestTeam = useSelector(
+		(state: RootState) => state.battleSlice.guestTeam
+	);
+
 	const [hostTeamBattleEffects, setBattleEffectsTeamOne] = useState<
 		BattleEffect[]
 	>([
@@ -54,7 +63,6 @@ const Battle = () => {
 	};
 
 	useEffect(() => {
-
 		const stats = new StatsClass({
 			hp: 45,
 			attack: 49,
@@ -179,42 +187,48 @@ const Battle = () => {
 				}
 			]
 		});
-			
-		const hostTeam = new TeamClass(
-			{
-				name: 'Host',
-				avatar: '/images/avatars/cynthia.png',
-				pokemons: [bulbasaur, squirtle, charmander, mew, arcanine, ninetails]
-			},
-			bulbasaur
-		);
 
-		setHostTeam(hostTeam);
+		const hostTeam = new TeamClass({
+			name: 'Host',
+			avatar: '/images/avatars/cynthia.png',
+			pokemons: [bulbasaur, squirtle, charmander, mew, arcanine, ninetails],
+			activePokemon: bulbasaur
+		});
 
-		const guestTeam = new TeamClass(
-			{
-				name: 'Guest',
-				avatar: '/images/avatars/red.png',
-				pokemons: [squirtle, charmander, bulbasaur, ninetails, mew, arcanine]
-			},
-			squirtle
-		);
-
-		setGuestTeam(guestTeam);
-
-		console.log(guestTeam.getActivePokemon());
+		const guestTeam = new TeamClass({
+			name: 'Guest',
+			avatar: '/images/avatars/red.png',
+			pokemons: [squirtle, charmander, bulbasaur, ninetails, mew, arcanine],
+			activePokemon: squirtle
+		});
 
 		const battle = new BattleClass(hostTeam, guestTeam, 1);
+
+		dispatch(setBattle(battle));
 	}, []);
+
+	useEffect(() => {}, [guestTeam.activePokemon]);
 
 	if (
 		!guestTeam ||
 		!hostTeam ||
-		!guestTeam.getActivePokemon() ||
-		!hostTeam.getActivePokemon()
+		!hostTeam.activePokemon ||
+		!guestTeam.activePokemon
 	) {
 		return <div>Loading...</div>;
 	}
+
+	const handleAttack = () => {
+		const updatedHp = hostTeam.activePokemon.attack(
+			guestTeam.activePokemon,
+			hostTeam.activePokemon.moves[0]
+		);
+		const updatedGuestPokemon = {
+			...guestTeam.activePokemon,
+			stats: { ...guestTeam.activePokemon.stats, currentHp: updatedHp }
+		};
+		dispatch(setGuestActivePokemon(updatedGuestPokemon));
+	};
 
 	return (
 		<div className="battle-container">
@@ -265,7 +279,7 @@ const Battle = () => {
 
 			<div className="battle-pokemon player">
 				<BattlePokemon
-					activePokemon={hostTeam.getActivePokemon()}
+					activePokemon={hostTeam.activePokemon}
 					battleEffects={hostTeamBattleEffects}
 					player={true}
 				/>
@@ -273,7 +287,7 @@ const Battle = () => {
 
 			<div className="battle-pokemon opponent">
 				<BattlePokemon
-					activePokemon={guestTeam.getActivePokemon()}
+					activePokemon={guestTeam.activePokemon}
 					battleEffects={guestTeamBattleEffects}
 				/>
 			</div>
@@ -290,11 +304,26 @@ const Battle = () => {
 							priority: true,
 							className: 'battle-icon'
 						}}
-						onClick={() => {setCurrentHp(hostTeam.getActivePokemon().attack(guestTeam.getActivePokemon(), hostTeam.getActivePokemon().moves[0]))
-						guestTeam.getActivePokemon().stats.currentHp = currentHp;
-						console.log('guest:', guestTeam.getActivePokemon().stats.currentHp)
-						console.log('host:', hostTeam.getActivePokemon().stats.currentHp)
-					}}
+						onClick={() => {
+							handleAttack();
+							// setCurrentHp(
+							// 	hostTeam
+							// 		.getActivePokemon()
+							// 		.attack(
+							// 			guestTeam.getActivePokemon(),
+							// 			hostTeam.getActivePokemon().moves[0]
+							// 		)
+							// );
+							// guestTeam.getActivePokemon().stats.currentHp = currentHp;
+							// console.log(
+							// 	'guest:',
+							// 	guestTeam.getActivePokemon().stats.currentHp
+							// );
+							// console.log(
+							// 	'host:',
+							// 	hostTeam.getActivePokemon().stats.currentHp
+							// );
+						}}
 					/>
 					<CustomButton
 						text="Team"
