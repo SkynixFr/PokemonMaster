@@ -46,6 +46,17 @@ const Battle = () => {
 		const bulbasaur = new PokemonClass({
 			id: 1,
 			name: 'Bulbasaur',
+			stats: {
+				hp: 45,
+				attack: 49,
+				defense: 49,
+				spAttack: 65,
+				spDefense: 65,
+				speed: 45,
+				ev: 0,
+				iv: 0,
+				currentHp: 45
+			},
 			moves: [
 				{
 					name: 'Tackle',
@@ -61,8 +72,19 @@ const Battle = () => {
 			]
 		});
 		const squirtle = new PokemonClass({
-			id: 7,
+			id: 470,
 			name: 'Squirtle',
+			stats: {
+				hp: 44,
+				attack: 48,
+				defense: 65,
+				spAttack: 50,
+				spDefense: 64,
+				speed: 43,
+				ev: 0,
+				iv: 0,
+				currentHp: 44
+			},
 			moves: [
 				{
 					name: 'Tackle',
