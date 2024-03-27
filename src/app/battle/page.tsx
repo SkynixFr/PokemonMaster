@@ -22,6 +22,10 @@ import TeamClass from '../../classes/Team';
 
 
 const Battle = () => {
+
+	const [hostTeam, setHostTeam] = useState<TeamClass | null>(null);
+	const [guestTeam, setGuestTeam] = useState<TeamClass | null>(null);
+
 	useEffect(() => {
 		const bulbasaur = new PokemonClass({
 			id: 1,
@@ -64,6 +68,8 @@ const Battle = () => {
 			pokemons: [bulbasaur, squirtle]
 		}, bulbasaur);
 
+		setHostTeam(hostTeam);
+
 		const hostTeamActivePokemon = hostTeam.getActivePokemon();
 
 		const guestTeam = new TeamClass({
@@ -72,14 +78,16 @@ const Battle = () => {
 			pokemons: [squirtle, bulbasaur]
 		}, squirtle);
 
+		setGuestTeam(guestTeam);
+
 		const guestTeamActivePokemon = guestTeam.getActivePokemon();
 
 		const battle = new BattleClass(hostTeam, guestTeam, 1);
+	}, []);
 
-		if (!guestTeam || !hostTeam || !hostTeamActivePokemon || !guestTeamActivePokemon) {
-			return <div>Loading...</div>;
-		}
-	});
+	if (!guestTeam || !hostTeam || !guestTeam.getActivePokemon() || !hostTeam.getActivePokemon()) {
+		return <div>Loading...</div>;
+	}
 
 	const [battleEffectsTeamOne, setBattleEffectsTeamOne] = useState<
 		BattleEffect[]
@@ -150,7 +158,7 @@ const Battle = () => {
 
 			<div className="battle-pokemon player">
 				<BattlePokemon
-					activePokemon={hostTeamActivePokemon}
+					activePokemon={hostTeam.getActivePokemon()}
 					battleEffects={battleEffectsTeamOne}
 					player={true}
 				/>
@@ -158,7 +166,7 @@ const Battle = () => {
 
 			<div className="battle-pokemon opponent">
 				<BattlePokemon
-					activePokemon={guestTeamActivePokemon}
+					activePokemon={guestTeam.getActivePokemon()}
 					battleEffects={battleEffectsTeamTwo}
 				/>
 			</div>
@@ -175,7 +183,7 @@ const Battle = () => {
 							priority: true,
 							className: 'battle-icon'
 						}}
-						onClick={() => bulbasaur.attack()}
+						onClick={() => hostTeam.getActivePokemon().attack()}
 					/>
 					<CustomButton
 						text="Team"
