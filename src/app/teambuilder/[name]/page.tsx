@@ -43,28 +43,6 @@ const pokemonBuilder = ({ params }: { params: { name: string } }) => {
 						types: types.map(type => {
 							return { name: type.type.name };
 						}),
-						sprites: {
-							back_default: sprites.back_default,
-							back_female: sprites.back_female,
-							back_shiny: sprites.back_shiny,
-							back_shiny_female: sprites.back_shiny_female,
-							front_default: sprites.front_default,
-							front_female: sprites.front_female,
-							front_shiny: sprites.front_shiny,
-							front_shiny_female: sprites.front_shiny_female,
-							showdown: {
-								back_default: sprites.other['showdown'].back_default,
-								back_female: sprites.other['showdown'].back_female,
-								back_shiny: sprites.other['showdown'].back_shiny,
-								back_shiny_female:
-									sprites.other['showdown'].back_shiny_female,
-								front_default: sprites.other['showdown'].front_default,
-								front_female: sprites.other['showdown'].front_female,
-								front_shiny: sprites.other['showdown'].front_shiny,
-								front_shiny_female:
-									sprites.other['showdown'].front_shiny_female
-							}
-						},
 						stats: {
 							hp: stats[0].base_stat,
 							attack: stats[1].base_stat,

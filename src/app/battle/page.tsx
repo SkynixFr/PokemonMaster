@@ -20,30 +20,26 @@ import Pokemon from '../../types/Pokemon';
 import PokemonClass from '../../classes/Pokemon';
 
 const Battle = () => {
+	
 	// const dispatch = useDispatch();
 	const guestTeam = useSelector((state: RootState) => state.teams!.teams[0]);
 	const hostTeam = useSelector((state: RootState) => state.teams!.teams[1]);
 	const bulbasaur = new PokemonClass({
-		pokemon: {
-			id: 25,
-			name: 'Bulbasaur',
-			moves: [
-				{
-					move:
-					{
-						name: 'Tackle',
-						type: { name: 'normal' },
-						category: 'physical',
-						power: 40,
-						accuracy: 100,
-						pp: 35,
-						description:
-							'A physical attack in which the user charges and slams into the target with its whole body.',
-						effect: 'no effect'
-					}
-				}
-			]
-		}
+		id: 25,
+		name: 'Bulbasaur',
+		moves: [
+			{
+				name: 'Tackle',
+				type: { name: 'normal' },
+				category: 'physical',
+				power: 40,
+				accuracy: 100,
+				pp: 35,
+				description:
+					'A physical attack in which the user charges and slams into the target with its whole body.',
+				effect: 'no effect'
+			},
+		]
 	});
 
 	const [hostTeamActivePokemon, setHostTeamActivePokemon] = useState<Pokemon>(
