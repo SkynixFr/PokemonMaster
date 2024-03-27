@@ -24,8 +24,10 @@ class Stats {
         this.currentHp = stats.currentHp;
     }
 
-    decreaseHp(damage: number): void {
+    decreaseHp(damage: number): number {
         this.currentHp -= damage;
+        console.log(this.currentHp);
+        return this.currentHp;
     }
 
     increaseHp(heal: number): void {

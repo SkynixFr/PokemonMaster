@@ -19,18 +19,20 @@ import BattleEffect from '../../types/BattleEffect';
 import PokemonClass from '../../classes/Pokemon';
 import BattleClass from '../../classes/Battle';
 import TeamClass from '../../classes/Team';
+import StatsClass from '../../classes/Stats';
 
 const Battle = () => {
 	const [hostTeam, setHostTeam] = useState<TeamClass | null>(null);
 	const [guestTeam, setGuestTeam] = useState<TeamClass | null>(null);
-	const [battleEffectsTeamOne, setBattleEffectsTeamOne] = useState<
+	const [currentHp, setCurrentHp] = useState<number>(guestTeam?.getActivePokemon().stats.currentHp);
+	const [hostTeamBattleEffects, setBattleEffectsTeamOne] = useState<
 		BattleEffect[]
 	>([
 		{ name: 'BRU', type: 'status' },
 		{ name: 'Atk', number: 0.67, type: 'debuff' },
 		{ name: 'PAR', type: 'status' }
 	]);
-	const [battleEffectsTeamTwo, setBattleEffectsTeamTwo] = useState<
+	const [guestTeamBattleEffects, setBattleEffectsTeamTwo] = useState<
 		BattleEffect[]
 	>([{ name: 'SpD', number: 1.5, type: 'buff' }]);
 	const [globalEffect, setGlobalEffect] = useState<BattleEffect[]>([
@@ -43,20 +45,23 @@ const Battle = () => {
 	};
 
 	useEffect(() => {
+
+		const stats = new StatsClass({
+			hp: 45,
+			attack: 49,
+			defense: 49,
+			spAttack: 65,
+			spDefense: 65,
+			speed: 45,
+			ev: 0,
+			iv: 0,
+			currentHp: 45
+		});
+
 		const bulbasaur = new PokemonClass({
 			id: 1,
 			name: 'Bulbasaur',
-			stats: {
-				hp: 45,
-				attack: 49,
-				defense: 49,
-				spAttack: 65,
-				spDefense: 65,
-				speed: 45,
-				ev: 0,
-				iv: 0,
-				currentHp: 45
-			},
+			stats,
 			moves: [
 				{
 					name: 'Tackle',
@@ -74,17 +79,7 @@ const Battle = () => {
 		const squirtle = new PokemonClass({
 			id: 7,
 			name: 'Squirtle',
-			stats: {
-				hp: 44,
-				attack: 48,
-				defense: 65,
-				spAttack: 50,
-				spDefense: 64,
-				speed: 43,
-				ev: 0,
-				iv: 0,
-				currentHp: 44
-			},
+			stats,
 			moves: [
 				{
 					name: 'Tackle',
@@ -103,17 +98,7 @@ const Battle = () => {
 		const charmander = new PokemonClass({
 			id: 4,
 			name: 'Charmander',
-			stats: {
-				hp: 39,
-				attack: 52,
-				defense: 43,
-				spAttack: 60,
-				spDefense: 50,
-				speed: 65,
-				ev: 0,
-				iv: 0,
-				currentHp: 39
-			},
+			stats,
 			moves: [
 				{
 					name: 'Tackle',
@@ -132,17 +117,7 @@ const Battle = () => {
 		const mew = new PokemonClass({
 			id: 151,
 			name: 'Mew',
-			stats: {
-				hp: 100,
-				attack: 100,
-				defense: 100,
-				spAttack: 100,
-				spDefense: 100,
-				speed: 100,
-				ev: 0,
-				iv: 0,
-				currentHp: 100
-			},
+			stats,
 			moves: [
 				{
 					name: 'Tackle',
@@ -161,17 +136,7 @@ const Battle = () => {
 		const arcanine = new PokemonClass({
 			id: 59,
 			name: 'Arcanine',
-			stats: {
-				hp: 90,
-				attack: 110,
-				defense: 80,
-				spAttack: 100,
-				spDefense: 80,
-				speed: 95,
-				ev: 0,
-				iv: 0,
-				currentHp: 90
-			},
+			stats,
 			moves: [
 				{
 					name: 'Tackle',
@@ -190,17 +155,7 @@ const Battle = () => {
 		const ninetails = new PokemonClass({
 			id: 38,
 			name: 'Ninetails',
-			stats: {
-				hp: 73,
-				attack: 76,
-				defense: 75,
-				spAttack: 81,
-				spDefense: 100,
-				speed: 100,
-				ev: 0,
-				iv: 0,
-				currentHp: 73
-			},
+			stats,
 			moves: [
 				{
 					name: 'Tackle',
@@ -302,7 +257,7 @@ const Battle = () => {
 			<div className="battle-pokemon player">
 				<BattlePokemon
 					activePokemon={hostTeam.getActivePokemon()}
-					battleEffects={battleEffectsTeamOne}
+					battleEffects={hostTeamBattleEffects}
 					player={true}
 				/>
 			</div>
@@ -310,7 +265,7 @@ const Battle = () => {
 			<div className="battle-pokemon opponent">
 				<BattlePokemon
 					activePokemon={guestTeam.getActivePokemon()}
-					battleEffects={battleEffectsTeamTwo}
+					battleEffects={guestTeamBattleEffects}
 				/>
 			</div>
 
@@ -326,7 +281,11 @@ const Battle = () => {
 							priority: true,
 							className: 'battle-icon'
 						}}
-						onClick={() => hostTeam.getActivePokemon().attack(guestTeam.getActivePokemon(), hostTeam.getActivePokemon().moves[0])}
+						onClick={() => {setCurrentHp(hostTeam.getActivePokemon().attack(guestTeam.getActivePokemon(), hostTeam.getActivePokemon().moves[0]))
+						guestTeam.getActivePokemon().stats.currentHp = currentHp;
+						console.log('guest:', guestTeam.getActivePokemon().stats.currentHp)
+						console.log('host:', hostTeam.getActivePokemon().stats.currentHp)
+					}}
 					/>
 					<CustomButton
 						text="Team"

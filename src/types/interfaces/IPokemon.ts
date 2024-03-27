@@ -1,8 +1,7 @@
 import Pokemon, { Item, Move, Stat } from '../Pokemon';
 
 interface IPokemon extends Pokemon{
-	currentHp?: number;
-	attack?: (pokemon: Pokemon, move: IMove) => void;
+	attack?: (pokemon: Pokemon, move: IMove) => number;
 }
 
 export interface IMove extends Move {
@@ -11,7 +10,7 @@ export interface IMove extends Move {
 
 export interface IStat extends Stat{
 	currentHp?: number;
-	decreaseHp?: (damage: number) => void;
+	decreaseHp?: (damage: number) => number;
 }
 
 export interface IItem extends Item{

@@ -28,10 +28,8 @@ class Pokemon {
         this.item = pokemon.item;
     }
     
-    attack(pokemon: Pokemon, move: IMove){
-        console.log(pokemon.stats);
-        console.log(pokemon)
-       pokemon.stats.decreaseHp(move.power);
+    attack(pokemon: Pokemon, move: IMove): number{
+        return pokemon.stats.decreaseHp(move.power);
     }
 }
 

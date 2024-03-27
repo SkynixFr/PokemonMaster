@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Utils
 import { firstLetterMaj } from '../../utils/formatString';
@@ -30,7 +30,11 @@ const BattlePokemon = ({
 	battleEffects,
 	player = false
 }: BattlePokemonProps) => {
-	const [currentHp, setCurrentHp] = useState<number>(0);
+	const [currentHp, setCurrentHp] = useState<number>(activePokemon.stats.currentHp);
+	useEffect(() => {
+		setCurrentHp(activePokemon.stats.currentHp);
+	}, [activePokemon.stats.currentHp]);
+
 
 	return (
 		<div className="pokemon-container">
@@ -68,7 +72,7 @@ const BattlePokemon = ({
 								currentProgress={activePokemon.stats.currentHp}
 								maxProgress={activePokemon.stats.hp}
 							/>
-							{activePokemon.stats.currentHp}/{activePokemon.stats?.hp}
+							{currentHp}/{activePokemon.stats.hp}
 						</div>
 					</div>
 				</div>
