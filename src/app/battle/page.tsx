@@ -83,7 +83,7 @@ const Battle = () => {
 				speed: 43,
 				ev: 0,
 				iv: 0,
-				currentHp: 44
+				currentHp: 23
 			},
 			moves: [
 				{
@@ -208,7 +208,7 @@ const Battle = () => {
 							priority: true,
 							className: 'battle-icon'
 						}}
-						onClick={() => hostTeam.getActivePokemon().attack()}
+						onClick={() => hostTeam.getActivePokemon().attack(guestTeam.getActivePokemon(), hostTeam.getActivePokemon().moves[0])}
 					/>
 					<CustomButton
 						text="Team"

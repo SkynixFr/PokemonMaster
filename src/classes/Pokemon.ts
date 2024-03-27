@@ -28,8 +28,8 @@ class Pokemon {
         this.item = pokemon.item;
     }
     
-    attack(){
-       return this.moves[0].power;
+    attack(pokemon: Pokemon, move: IMove){
+       pokemon.stats.decreaseHp(move.power);
     }
 }
 
