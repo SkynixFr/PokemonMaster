@@ -4,7 +4,7 @@ interface IPokemon extends Pokemon{
 	attack?: () => number;
 }
 
-export interface IMove extends Move{
+export interface IMove extends Move {
 	decreasePP?: () => void;
 }
 
