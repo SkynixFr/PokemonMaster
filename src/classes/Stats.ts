@@ -1,15 +1,15 @@
 import { IStat } from "../types/interfaces/IPokemon";
 
 class Stats {
-    private readonly hp: number;
-    private readonly attack: number;
-    private readonly defense: number;
-    private readonly spAttack: number;
-    private readonly spDefense: number;
-    private readonly speed: number;
-    private readonly ev?: number;
-    private readonly iv?: number;
-    private currentHp?: number;
+    hp: number;
+    attack: number;
+    defense: number;
+    spAttack: number;
+    spDefense: number;
+    speed: number;
+    ev?: number;
+    iv?: number;
+    currentHp?: number;;
 
 
     constructor(stats: IStat) {
@@ -21,7 +21,7 @@ class Stats {
         this.speed = stats.speed;
         this.ev = stats.ev;
         this.iv = stats.iv;
-        this.currentHp = stats.hp;
+        this.currentHp = stats.currentHp;
     }
 
     decreaseHp(damage: number): void {
