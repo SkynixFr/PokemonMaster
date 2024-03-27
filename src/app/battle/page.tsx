@@ -27,17 +27,20 @@ const Battle = () => {
 		pokemon: {
 			id: 25,
 			name: 'Bulbasaur',
-			moves: [{
-				name: 'Tackle',
-				type: { name: 'normal' },
-				category: 'physical',
-				power: 40,
-				accuracy: 100,
-				pp: 35,
-				description: 'A physical attack in which the user charges and slams into the target with its whole body.',
-				effect: 'no effect',
-			}],
-		},
+			moves: [
+				{
+					name: 'Tackle',
+					type: { name: 'normal' },
+					category: 'physical',
+					power: 40,
+					accuracy: 100,
+					pp: 35,
+					description:
+						'A physical attack in which the user charges and slams into the target with its whole body.',
+					effect: 'no effect'
+				}
+			]
+		}
 	});
 
 	const [activePokemonTeamOne, setActivePokemonTeamOne] = useState<Pokemon>(
@@ -183,9 +186,15 @@ const Battle = () => {
 			</div>
 
 			<div className="battle-timer">
-				<button>
-					<Timer />
-				</button>
+				<CustomButton
+					icon={{
+						name: 'Timer',
+						size: 20,
+						strokeWidth: 3
+					}}
+					text="Start the timer"
+					className="timer-icon"
+				/>
 			</div>
 		</div>
 	);

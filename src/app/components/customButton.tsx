@@ -9,6 +9,8 @@ interface CustomButtonProps {
 	icon?: {
 		name: string;
 		size: number;
+		strokeWidth?: number;
+		absoluteStrokeWidth?: boolean;
 	};
 	image?: CustomImageProps;
 	onClick?: () => void;
@@ -26,7 +28,13 @@ const customButton = ({
 	return (
 		<button onClick={onClick} className={className}>
 			{text}
-			{icon && <Icon size={icon.size} />}
+			{icon && (
+				<Icon
+					size={icon.size}
+					strokeWidth={icon.strokeWidth}
+					absoluteStrokeWidth={icon.absoluteStrokeWidth}
+				/>
+			)}
 			{image && <CustomImage {...image} />}
 		</button>
 	);

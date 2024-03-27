@@ -19,3 +19,20 @@
     border: none;
     cursor: pointer;
 }
+
+.timer-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: max-content;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    color: var(--red);
+    padding: 0 10px;
+    background-color: var(--white);
+    font-size: var(--fs-lg);
+    font-family: var(--ff-base-bold);
+    stroke-width: 4px;
+}
