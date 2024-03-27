@@ -1,21 +1,18 @@
 import Pokemon, { Item, Move, Stat } from '../Pokemon';
 
-export default interface IPokemon {
-	pokemon: Pokemon;
+export default interface IPokemon extends Pokemon{
 	attack?: () => number;
 }
 
-export interface IMove {
-	move: Move;
+export interface IMove extends Move{
 	decreasePP?: () => void;
 }
 
-export interface IStat {
-	stats: Stat;
+export interface IStat extends Stat{
+	decreaseHp?: () => void;
 }
 
-export interface IItem {
-	item: Item;
+export interface IItem extends Item{
 	used?: boolean;
 	use?: () => void;
 }
