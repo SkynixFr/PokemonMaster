@@ -1,22 +1,18 @@
+import { IMove, IType, IStat, IItem } from './interfaces/IPokemon';
+
 type Pokemon = {
 	id: number;
 	name: string;
-	moves: Move[];
+	moves?: IMove[];
 	nature?: string;
 	level?: number;
 	gender?: string;
 	isShiny?: boolean;
-	types?: Type[];
-	stats?: Stat;
+	types?: IType[];
+	stats?: IStat;
 	ability?: Ability;
-	item?: Item;
-	sprites?: Sprites;
+	item?: IItem;
 };
-
-interface PokemonInterface {
-	pokemon: Pokemon;
-	activePokemon?: (pokemon: Pokemon) => Pokemon;
-}
 
 export type Type = {
 	name: string;
@@ -53,27 +49,6 @@ export type Item = {
 	name: string;
 	description: string;
 	image: string;
-};
-
-export type Sprites = {
-	back_default: string;
-	back_female: string;
-	back_shiny: string;
-	back_shiny_female: string;
-	front_default: string;
-	front_female: string;
-	front_shiny: string;
-	front_shiny_female: string;
-	showdown: {
-		back_default: string;
-		back_female: string;
-		back_shiny: string;
-		back_shiny_female: string;
-		front_default: string;
-		front_female: string;
-		front_shiny: string;
-		front_shiny_female: string;
-	};
 };
 
 export default Pokemon;
