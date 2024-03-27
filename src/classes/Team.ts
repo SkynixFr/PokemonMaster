@@ -16,8 +16,8 @@ class Team {
 		this.activePokemon = activePokemon ? activePokemon : this.pokemons[0];
 	}
 
-	switch(index: number) {
-		this.activePokemon = this.pokemons[index];
+	switch(pokemon: IPokemon) {
+		this.activePokemon = pokemon;
 	}
 }
 
