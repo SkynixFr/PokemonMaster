@@ -1,7 +1,53 @@
+'use client';
+
+import { useState } from 'react';
+
+// Classes
+import BattleClass from '../../back/classes/battle';
+import PokemonClass from '../../back/classes/pokemon';
+import StatClass from '../../back/classes/stat';
+import MoveClass from '../../back/classes/move';
+
 const Battle = () => {
+	const [playerPokemon, setPlayerPokemon] = useState(
+		new PokemonClass(
+			'Bulbasaur',
+			[new StatClass('hp', 100)],
+			[new MoveClass('Tackle', 15)]
+		)
+	);
+
+	const [opponentPokemon, setOpponentPokemon] = useState(
+		new PokemonClass(
+			'Charmander',
+			[new StatClass('hp', 100)],
+			[new MoveClass('Scratch', 15)]
+		)
+	);
+
+	const handleAttack = () => {
+		const updatedOpponentPokemon = playerPokemon.attack(
+			opponentPokemon,
+			playerPokemon.moves[0]
+		);
+		setOpponentPokemon(updatedOpponentPokemon);
+	};
+
 	return (
 		<div>
 			<h1>Battle</h1>
+			{playerPokemon ? (
+				<p>
+					{playerPokemon.name} has {playerPokemon.stats[0].value} HP
+				</p>
+			) : null}
+			{opponentPokemon ? (
+				<p>
+					{opponentPokemon.name} has {opponentPokemon.stats[0].value} HP
+				</p>
+			) : null}
+
+			<button onClick={handleAttack}>Attack</button>
 		</div>
 	);
 };
