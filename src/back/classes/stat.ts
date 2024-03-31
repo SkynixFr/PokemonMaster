@@ -1,18 +1,26 @@
 class Stat {
 	readonly name: string;
 	readonly value: number;
+	readonly max?: number;
 
-	constructor(name: string, value: number) {
+	constructor(name: string, value: number, max?: number) {
 		this.name = name;
 		this.value = value;
+		this.max = max;
 	}
 
 	increase(value: number): Stat {
-		return new Stat(this.name, this.value + value);
+		const newValue = this.value + value;
+		return new Stat(
+			this.name,
+			newValue > this.max ? this.max : newValue,
+			this.max
+		);
 	}
 
 	decrease(value: number): Stat {
-		return new Stat(this.name, this.value - value);
+		const newValue = this.value - value;
+		return new Stat(this.name, newValue < 0 ? 0 : newValue, this.max);
 	}
 }
 

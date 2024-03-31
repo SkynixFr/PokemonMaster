@@ -19,13 +19,24 @@ describe('Stat', () => {
 		expect(stat.value).toBeDefined();
 	});
 
-	test('should increase the value', () => {
-		const increasedStat = stat.increase(5);
-		expect(increasedStat.value).toBe(stat.value + 5);
+	test('should not decrease the value below 0', () => {
+		const decreasedStat = stat.decrease(stat.max + 1);
+		expect(decreasedStat.value).toBe(0);
 	});
 
 	test('should decrease the value', () => {
 		const decreasedStat = stat.decrease(5);
 		expect(decreasedStat.value).toBe(stat.value - 5);
+	});
+
+	test('should not increase the value above the max', () => {
+		const increasedStat = stat.increase(stat.value + 1);
+		expect(increasedStat.value).toBe(stat.max);
+	});
+
+	test('should increase the value', () => {
+		const newStat = stat.decrease(10);
+		const increasedStat = newStat.increase(5);
+		expect(increasedStat.value).toBe(newStat.value + 5);
 	});
 });

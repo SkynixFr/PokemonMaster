@@ -1,9 +1,9 @@
 // Builder
 import PokemonBuilder from './utils/pokemonBuilder';
+import StatBuilder from './utils/statBuilder';
 
 // Classes
 import Pokemon from '../classes/pokemon';
-import StatBuilder from './utils/statBuilder';
 
 describe('Pokemon', () => {
 	let playerPokemon: Pokemon;
@@ -45,12 +45,15 @@ describe('Pokemon', () => {
 	});
 
 	test('should heal', () => {
-		const hp = playerPokemon.stats.find(stat => stat.name === 'hp');
-		const initialHp = hp.value;
-		const updatedPlayerPokemon = playerPokemon.heal();
-		const updatedHp = updatedPlayerPokemon.stats.find(
-			stat => stat.name === 'hp'
+		const newPokemon = new PokemonBuilder()
+			.withName('Bulbasaur')
+			.withStats([
+				new StatBuilder().withName('hp').withValue(80).withMax(100).build()
+			])
+			.build();
+		const updatedPokemon = newPokemon.heal();
+		expect(updatedPokemon.stats[0].value).toBe(
+			newPokemon.stats[0].value + 20
 		);
-		expect(updatedHp.value).toBe(initialHp + 20);
 	});
 });
