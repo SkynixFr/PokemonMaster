@@ -13,13 +13,22 @@ class Pokemon {
 		this.moves = moves;
 	}
 
-	attack(opponentPokemon: Pokemon, move: Move): void {
+	attack(opponentPokemon: Pokemon, move: Move): Pokemon {
 		const damage = move.power;
 		const opponentHp = opponentPokemon.stats.find(stat => stat.name === 'hp');
-		opponentHp.decrease(damage);
+		const updatedHp = opponentHp.decrease(damage);
+		return new Pokemon(
+			opponentPokemon.name,
+			[updatedHp],
+			opponentPokemon.moves
+		);
 	}
 
-	heal(): void {}
+	heal(): Pokemon {
+		const hp = this.stats.find(stat => stat.name === 'hp');
+		const updatedHp = hp.increase(20);
+		return new Pokemon(this.name, [updatedHp], this.moves);
+	}
 }
 
 export default Pokemon;
