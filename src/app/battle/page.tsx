@@ -12,7 +12,7 @@ const Battle = () => {
 	const [playerPokemon, setPlayerPokemon] = useState(
 		new PokemonClass(
 			'Bulbasaur',
-			[new StatClass('hp', 100)],
+			[new StatClass('hp', 100, 100)],
 			[new MoveClass('Tackle', 15)]
 		)
 	);
@@ -20,7 +20,7 @@ const Battle = () => {
 	const [opponentPokemon, setOpponentPokemon] = useState(
 		new PokemonClass(
 			'Charmander',
-			[new StatClass('hp', 100)],
+			[new StatClass('hp', 100, 100)],
 			[new MoveClass('Scratch', 15)]
 		)
 	);
@@ -31,6 +31,11 @@ const Battle = () => {
 			playerPokemon.moves[0]
 		);
 		setOpponentPokemon(updatedOpponentPokemon);
+	};
+
+	const handleHeal = () => {
+		const updatedPlayerPokemon = playerPokemon.heal();
+		setPlayerPokemon(updatedPlayerPokemon);
 	};
 
 	return (
@@ -48,6 +53,18 @@ const Battle = () => {
 			) : null}
 
 			<button onClick={handleAttack}>Attack</button>
+			<button
+				onClick={() => {
+					const updatedPlayerPokemon = playerPokemon.attack(
+						playerPokemon,
+						playerPokemon.moves[0]
+					);
+					setPlayerPokemon(updatedPlayerPokemon);
+				}}
+			>
+				Auto-attack
+			</button>
+			<button onClick={handleHeal}>Heal</button>
 		</div>
 	);
 };
