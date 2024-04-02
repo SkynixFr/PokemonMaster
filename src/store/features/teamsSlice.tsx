@@ -1,6 +1,9 @@
 // 'use client';
 // import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import Team from '../../../interfaces/Team';
+//
+// interface Team {
+// 	name: string;
+// }
 //
 // interface TeamState {
 // 	teams: Team[];

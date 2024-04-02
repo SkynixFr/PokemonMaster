@@ -1,8 +1,11 @@
+// Interfaces
+import IPokemon from '../../interfaces/IPokemon';
+
 // Classes
 import Move from './move';
 import Stat from './stat';
 
-class Pokemon {
+class Pokemon implements IPokemon {
 	readonly name: string;
 	readonly stats: Stat[];
 	readonly moves: Move[];

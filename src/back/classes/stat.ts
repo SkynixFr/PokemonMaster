@@ -1,4 +1,7 @@
-class Stat {
+// Interface
+import IStat from '../../interfaces/IStat';
+
+class Stat implements IStat {
 	readonly name: string;
 	readonly value: number;
 	readonly max?: number;

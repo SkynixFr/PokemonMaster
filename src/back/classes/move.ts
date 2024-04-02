@@ -1,4 +1,7 @@
-class Move {
+// Interface
+import IMove from '../../interfaces/IMove';
+
+class Move implements IMove {
 	readonly name: string;
 	readonly power: number;
 

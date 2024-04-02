@@ -3,7 +3,7 @@ import React from 'react';
 
 // Providers
 import StoreProvider from '../front/providers/storeProvider';
-import TeamsProvider from '../front/providers/teamsProvider';
+import BattleProvider from '../front/providers/battleProvider';
 
 import '../front/styles/global.css';
 
@@ -24,9 +24,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body>
-				<StoreProvider>
-					<TeamsProvider>{children}</TeamsProvider>
-				</StoreProvider>
+				<StoreProvider>{children}</StoreProvider>
 			</body>
 		</html>
 	);

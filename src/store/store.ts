@@ -3,11 +3,12 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 
 // Slices
-// import teamsReducer from './features/teamsSlice';
+import { battleSlice } from './features/battleSlice';
 
 export const store = configureStore({
 	reducer: {
 		// teams: teamsReducer
+		battle: battleSlice.reducer
 	}
 });
 
