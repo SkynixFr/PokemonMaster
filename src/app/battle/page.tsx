@@ -1,69 +1,123 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Classes
-import BattleClass from '../../back/classes/battle';
 import PokemonClass from '../../back/classes/pokemon';
 import StatClass from '../../back/classes/stat';
-import MoveClass from '../../back/classes/move';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import {
+	setOpponentPokemon,
+	setPlayerPokemon
+} from '../../store/features/battleSlice';
 
 const Battle = () => {
-	const [playerPokemon, setPlayerPokemon] = useState(
-		new PokemonClass(
-			'Bulbasaur',
-			[new StatClass('hp', 100, 100)],
-			[new MoveClass('Tackle', 15)]
-		)
+	const dispatch = useDispatch();
+	const { opponentPokemon, playerPokemon } = useSelector(
+		(state: RootState) => state.battle
 	);
+	const [playerPokemonInstance, setPlayerPokemonInstance] =
+		useState<PokemonClass | null>(null);
+	const [opponentPokemonInstance, setOpponentPokemonInstance] =
+		useState<PokemonClass | null>(null);
 
-	const [opponentPokemon, setOpponentPokemon] = useState(
-		new PokemonClass(
-			'Charmander',
-			[new StatClass('hp', 100, 100)],
-			[new MoveClass('Scratch', 15)]
-		)
-	);
+	useEffect(() => {
+		setPlayerPokemonInstance(
+			new PokemonClass(
+				playerPokemon.name,
+				playerPokemon.stats.map(
+					stat => new StatClass(stat.name, stat.value, stat.max)
+				),
+				playerPokemon.moves
+			)
+		);
+		setOpponentPokemonInstance(
+			new PokemonClass(
+				opponentPokemon.name,
+				opponentPokemon.stats.map(
+					stat => new StatClass(stat.name, stat.value, stat.max)
+				),
+				opponentPokemon.moves
+			)
+		);
+	}, [playerPokemon, opponentPokemon, dispatch]);
 
 	const handleAttack = () => {
-		const updatedOpponentPokemon = playerPokemon.attack(
-			opponentPokemon,
-			playerPokemon.moves[0]
+		const updatedOpponentPokemon = playerPokemonInstance.attack(
+			opponentPokemonInstance,
+			playerPokemonInstance.moves[0]
 		);
-		setOpponentPokemon(updatedOpponentPokemon);
+		const serializedOpponentPokemon = {
+			name: updatedOpponentPokemon.name,
+			stats: updatedOpponentPokemon.stats,
+			moves: updatedOpponentPokemon.moves
+		};
+
+		dispatch(setOpponentPokemon(serializedOpponentPokemon));
+		localStorage.setItem(
+			'opponentPokemon',
+			JSON.stringify(serializedOpponentPokemon)
+		);
 	};
 
 	const handleHeal = () => {
-		const updatedPlayerPokemon = playerPokemon.heal();
-		setPlayerPokemon(updatedPlayerPokemon);
+		const updatedPlayerPokemon = playerPokemonInstance.heal();
+		const serializedPlayerPokemon = {
+			name: updatedPlayerPokemon.name,
+			stats: updatedPlayerPokemon.stats,
+			moves: updatedPlayerPokemon.moves
+		};
+
+		dispatch(setPlayerPokemon(serializedPlayerPokemon));
+		localStorage.setItem(
+			'playerPokemon',
+			JSON.stringify(serializedPlayerPokemon)
+		);
+	};
+
+	const handleAutoAttack = () => {
+		const updatedPlayerPokemon = playerPokemonInstance.attack(
+			playerPokemonInstance,
+			playerPokemonInstance.moves[0]
+		);
+		const serializedPlayerPokemon = {
+			name: updatedPlayerPokemon.name,
+			stats: updatedPlayerPokemon.stats,
+			moves: updatedPlayerPokemon.moves
+		};
+
+		dispatch(setPlayerPokemon(serializedPlayerPokemon));
+		localStorage.setItem(
+			'playerPokemon',
+			JSON.stringify(serializedPlayerPokemon)
+		);
 	};
 
 	return (
 		<div>
 			<h1>Battle</h1>
-			{playerPokemon ? (
+			{playerPokemonInstance ? (
 				<p>
-					{playerPokemon.name} has {playerPokemon.stats[0].value} HP
+					{playerPokemonInstance.name} has{' '}
+					{playerPokemonInstance.stats.map(stat =>
+						stat.name === 'hp' ? stat.value : ''
+					)}{' '}
+					HP
 				</p>
 			) : null}
-			{opponentPokemon ? (
+			{opponentPokemonInstance ? (
 				<p>
-					{opponentPokemon.name} has {opponentPokemon.stats[0].value} HP
+					{opponentPokemonInstance.name} has{' '}
+					{opponentPokemonInstance.stats.map(stat =>
+						stat.name === 'hp' ? stat.value : ''
+					)}{' '}
+					HP
 				</p>
 			) : null}
 
 			<button onClick={handleAttack}>Attack</button>
-			<button
-				onClick={() => {
-					const updatedPlayerPokemon = playerPokemon.attack(
-						playerPokemon,
-						playerPokemon.moves[0]
-					);
-					setPlayerPokemon(updatedPlayerPokemon);
-				}}
-			>
-				Auto-attack
-			</button>
+			<button onClick={handleAutoAttack}>Auto-attack</button>
 			<button onClick={handleHeal}>Heal</button>
 		</div>
 	);
