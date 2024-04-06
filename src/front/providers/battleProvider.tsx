@@ -1,37 +1,55 @@
 'use client';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
+import React, { useEffect, useState } from 'react';
 
-// Slice
-import {
-	setOpponentPokemon,
-	setPlayerPokemon
-} from '../../store/features/battleSlice';
+// Classes
+import BattleClass from '../../back/classes/battle';
+import Pokemon from '../../back/classes/pokemon';
+import Stat from '../../back/classes/stat';
+import Move from '../../back/classes/move';
 
-const BattleProvider = ({ children }: { children: React.ReactNode }) => {
-	const dispatch = useDispatch();
-	const { opponentPokemon, playerPokemon } = useSelector(
-		(state: RootState) => state.battle
-	);
+// Pages
+import Battle from '../../app/battle/page';
+
+const BattleProvider = () => {
+	const [battle, setBattle] = useState<BattleClass>(null);
 
 	useEffect(() => {
-		const storedOpponentPokemon = localStorage.getItem('opponentPokemon');
-		const storedPlayerPokemon = localStorage.getItem('playerPokemon');
+		const storedOpponentPokemon = JSON.parse(
+			localStorage.getItem('opponentPokemon')
+		);
+		const storedPlayerPokemon = JSON.parse(
+			localStorage.getItem('playerPokemon')
+		);
 
 		if (storedOpponentPokemon && storedPlayerPokemon) {
-			dispatch(setOpponentPokemon(JSON.parse(storedOpponentPokemon)));
-			dispatch(setPlayerPokemon(JSON.parse(storedPlayerPokemon)));
-		} else {
-			localStorage.setItem(
-				'opponentPokemon',
-				JSON.stringify(opponentPokemon)
+			const battle = new BattleClass(
+				new Pokemon(
+					storedPlayerPokemon.name,
+					storedPlayerPokemon.stats.map(
+						(stat: Stat) => new Stat(stat.name, stat.value, stat.max)
+					),
+					storedPlayerPokemon.moves.map(
+						(move: Move) => new Move(move.name, move.power)
+					)
+				),
+				new Pokemon(
+					storedOpponentPokemon.name,
+					storedOpponentPokemon.stats.map(
+						(stat: Stat) => new Stat(stat.name, stat.value, stat.max)
+					),
+					storedOpponentPokemon.moves.map(
+						(move: Move) => new Move(move.name, move.power)
+					)
+				)
 			);
-			localStorage.setItem('playerPokemon', JSON.stringify(playerPokemon));
+			console.log('Battle created');
+			setBattle(battle);
+		} else {
+			console.error('No stored pokemon found');
 		}
 	}, []);
 
-	return <>{children}</>;
+	return <Battle battle={battle} />;
 };
 
 export default BattleProvider;

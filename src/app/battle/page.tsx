@@ -4,125 +4,90 @@ import { useEffect, useState } from 'react';
 
 // Classes
 import PokemonClass from '../../back/classes/pokemon';
-import StatClass from '../../back/classes/stat';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
-import {
-	setOpponentPokemon,
-	setPlayerPokemon
-} from '../../store/features/battleSlice';
+import BattleClass from '../../back/classes/battle';
 
-const Battle = () => {
-	const dispatch = useDispatch();
-	const { opponentPokemon, playerPokemon } = useSelector(
-		(state: RootState) => state.battle
-	);
-	const [playerPokemonInstance, setPlayerPokemonInstance] =
-		useState<PokemonClass | null>(null);
-	const [opponentPokemonInstance, setOpponentPokemonInstance] =
-		useState<PokemonClass | null>(null);
+// Interfaces
+interface BattleProps {
+	battle: BattleClass;
+}
+
+const Battle = ({ battle }: BattleProps) => {
+	const [playerPokemon, setPlayerPokemon] = useState<PokemonClass | null>();
+	const [opponentPokemon, setOpponentPokemon] =
+		useState<PokemonClass | null>();
 
 	useEffect(() => {
-		setPlayerPokemonInstance(
-			new PokemonClass(
-				playerPokemon.name,
-				playerPokemon.stats.map(
-					stat => new StatClass(stat.name, stat.value, stat.max)
-				),
-				playerPokemon.moves
-			)
-		);
-		setOpponentPokemonInstance(
-			new PokemonClass(
-				opponentPokemon.name,
-				opponentPokemon.stats.map(
-					stat => new StatClass(stat.name, stat.value, stat.max)
-				),
-				opponentPokemon.moves
-			)
-		);
-	}, [playerPokemon, opponentPokemon, dispatch]);
+		if (!battle) return;
+		setPlayerPokemon(battle.playerPokemon);
+		setOpponentPokemon(battle.opponentPokemon);
+		console.log('Battle started');
+		console.log(battle);
+		console.log(playerPokemon, opponentPokemon);
+	}, [battle]);
+
+	if (!battle || !playerPokemon || !opponentPokemon) {
+		console.log('Battle loading...');
+		return <div>Loading...</div>;
+	}
 
 	const handleAttack = () => {
-		const updatedOpponentPokemon = playerPokemonInstance.attack(
-			opponentPokemonInstance,
-			playerPokemonInstance.moves[0]
+		const updatedOpponentPokemon = playerPokemon.attack(
+			opponentPokemon,
+			playerPokemon.moves[0]
 		);
-		const serializedOpponentPokemon = {
-			name: updatedOpponentPokemon.name,
-			stats: updatedOpponentPokemon.stats,
-			moves: updatedOpponentPokemon.moves
-		};
-
-		dispatch(setOpponentPokemon(serializedOpponentPokemon));
+		setOpponentPokemon(updatedOpponentPokemon);
 		localStorage.setItem(
 			'opponentPokemon',
-			JSON.stringify(serializedOpponentPokemon)
+			JSON.stringify(updatedOpponentPokemon)
 		);
 	};
 
 	const handleHeal = () => {
-		const updatedPlayerPokemon = playerPokemonInstance.heal();
-		const serializedPlayerPokemon = {
-			name: updatedPlayerPokemon.name,
-			stats: updatedPlayerPokemon.stats,
-			moves: updatedPlayerPokemon.moves
-		};
-
-		dispatch(setPlayerPokemon(serializedPlayerPokemon));
+		const updatedPlayerPokemon = playerPokemon.heal();
+		setPlayerPokemon(updatedPlayerPokemon);
 		localStorage.setItem(
 			'playerPokemon',
-			JSON.stringify(serializedPlayerPokemon)
+			JSON.stringify(updatedPlayerPokemon)
 		);
 	};
 
 	const handleAutoAttack = () => {
-		const updatedPlayerPokemon = playerPokemonInstance.attack(
-			playerPokemonInstance,
-			playerPokemonInstance.moves[0]
+		const updatedPlayerPokemon = playerPokemon.attack(
+			playerPokemon,
+			playerPokemon.moves[0]
 		);
-		const serializedPlayerPokemon = {
-			name: updatedPlayerPokemon.name,
-			stats: updatedPlayerPokemon.stats,
-			moves: updatedPlayerPokemon.moves
-		};
-
-		dispatch(setPlayerPokemon(serializedPlayerPokemon));
+		setPlayerPokemon(updatedPlayerPokemon);
 		localStorage.setItem(
 			'playerPokemon',
-			JSON.stringify(serializedPlayerPokemon)
+			JSON.stringify(updatedPlayerPokemon)
 		);
 	};
 
 	return (
 		<div>
 			<h1>Battle</h1>
-			{playerPokemonInstance ? (
-				<p>
-					{playerPokemonInstance.name} has{' '}
-					{playerPokemonInstance.stats.map(stat =>
-						stat.name === 'hp' ? stat.value : ''
-					)}{' '}
-					HP
-				</p>
-			) : null}
-			{opponentPokemonInstance ? (
-				<p>
-					{opponentPokemonInstance.name} has{' '}
-					{opponentPokemonInstance.stats.map(stat =>
-						stat.name === 'hp' ? stat.value : ''
-					)}{' '}
-					HP
-				</p>
-			) : null}
-
+			<p>
+				<span>You : </span>
+				{playerPokemon.name} has{' '}
+				{playerPokemon.stats.map(stat =>
+					stat.name === 'hp' ? stat.value : ''
+				)}{' '}
+				HP
+			</p>
+			<p>
+				<span>Opponent : </span>
+				{opponentPokemon.name} has{' '}
+				{opponentPokemon.stats.map(stat =>
+					stat.name === 'hp' ? stat.value : ''
+				)}{' '}
+				HP
+			</p>
 			<button onClick={handleAttack}>Attack</button>
 			<button onClick={handleAutoAttack}>Auto-attack</button>
 			<button onClick={handleHeal}>Heal</button>
 		</div>
 	);
 };
-
 export default Battle;
 
 // 'use client';

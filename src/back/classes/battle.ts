@@ -5,12 +5,12 @@ import IBattle from '../../interfaces/IBattle';
 import Pokemon from './pokemon';
 
 class Battle implements IBattle {
-	readonly opponentPokemon: Pokemon;
 	readonly playerPokemon: Pokemon;
+	readonly opponentPokemon: Pokemon;
 
-	constructor(opponentPokemon: Pokemon, playerPokemon: Pokemon) {
-		this.opponentPokemon = opponentPokemon;
+	constructor(playerPokemon: Pokemon, opponentPokemon: Pokemon) {
 		this.playerPokemon = playerPokemon;
+		this.opponentPokemon = opponentPokemon;
 	}
 }
 
