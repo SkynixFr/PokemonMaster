@@ -1,3 +1,18 @@
+import Link from 'next/link';
+
+const PokemonBuilder = ({ params }: { params: { teamName: string } }) => {
+	const decodedName = decodeURIComponent(params.teamName);
+
+	return (
+		<div>
+			<Link href="/teambuilder">Go back</Link>
+			<h1>Pokemon Builder</h1>
+			<span>{decodedName}</span>
+		</div>
+	);
+};
+
+export default PokemonBuilder;
 // 'use client';
 // import Link from 'next/link';
 // import { useSelector, useDispatch } from 'react-redux';

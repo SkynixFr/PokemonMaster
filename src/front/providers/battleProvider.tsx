@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 // Classes
 import BattleClass from '../../back/classes/battle';
@@ -10,7 +10,7 @@ import Move from '../../back/classes/move';
 // Pages
 import Battle from '../../app/battle/page';
 
-const BattleProvider = () => {
+const BattleProvider = ({ children }: { children: ReactNode }) => {
 	const [battle, setBattle] = useState<BattleClass>(null);
 
 	useEffect(() => {

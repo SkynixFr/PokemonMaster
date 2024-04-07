@@ -8,3 +8,9 @@ export default interface IPokemon {
 	attack?(opponentPokemon: IPokemon, move: IMove): IPokemon;
 	heal?(): IPokemon;
 }
+
+export interface IPokemonAPI {
+	name: string;
+	stats?: IStat[];
+	moves?: IMove[];
+}
