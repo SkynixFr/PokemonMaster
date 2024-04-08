@@ -1,6 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const Rooms = () => {
 	const router = useRouter();
@@ -28,11 +29,11 @@ const Rooms = () => {
 
 		localStorage.setItem('playerPokemon', JSON.stringify(playerPokemon));
 		localStorage.setItem('opponentPokemon', JSON.stringify(opponentPokemon));
-
 		console.log('Setting player and opponent pokemon in store');
 	}, []);
 	return (
 		<div>
+			<Link href={'/'}>Go back</Link>
 			<h1>Rooms</h1>
 			<button onClick={() => router.push('/battle')}>Battle</button>
 		</div>

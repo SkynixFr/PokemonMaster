@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 // Classes
 import PokemonClass from '../../back/classes/pokemon';
@@ -65,6 +66,7 @@ const Battle = ({ battle }: BattleProps) => {
 
 	return (
 		<div>
+			<Link href={'/rooms'}>Go back</Link>
 			<h1>Battle</h1>
 			<p>
 				<span>You : </span>
