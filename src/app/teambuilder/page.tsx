@@ -9,14 +9,21 @@ import CustomImage from '../../front/components/custom/customImage';
 // Interfaces
 import IAvatar from '../../interfaces/IAvatar';
 import ITeam from '../../interfaces/ITeam';
+import PokemonList from '../../front/components/pokemonbuilder/pokemonList';
 
 interface TeamBuilderProps {
 	avatars: IAvatar[];
 	teams: ITeam[];
 	createTeam: (team: ITeam) => Promise<string>;
+	deleteTeam: (team: ITeam) => Promise<string>;
 }
 
-const TeamBuilder = ({ avatars, teams, createTeam }: TeamBuilderProps) => {
+const TeamBuilder = ({
+	avatars,
+	teams,
+	createTeam,
+	deleteTeam
+}: TeamBuilderProps) => {
 	const router = useRouter();
 	const [teamName, setTeamName] = React.useState<string>('');
 	const [selectedAvatar, setSelectedAvatar] = React.useState<IAvatar>(null);
@@ -93,17 +100,18 @@ const TeamBuilder = ({ avatars, teams, createTeam }: TeamBuilderProps) => {
 								width={150}
 								height={150}
 							/>
-							{team.pokemons.map(pokemon => (
-								<div key={pokemon.name}>
-									<span>{pokemon.name}</span>
-								</div>
-							))}
+
+							<PokemonList pokemons={team.pokemons} />
 							<button
-								onClick={() => router.push(`/pokemonbuilder/${team.name}`)}
+								onClick={() =>
+									router.push(`/pokemonbuilder/${team.name}`)
+								}
 							>
 								Update
 							</button>
-							<button>Delete</button>
+							<button onClick={async () => await deleteTeam(team)}>
+								Delete
+							</button>
 						</li>
 					))}
 				</ul>

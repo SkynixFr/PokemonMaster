@@ -1,13 +1,122 @@
 import Link from 'next/link';
+import Team from '../../../front/components/pokemonbuilder/team';
+import axios from 'axios';
+import ITeam from '../../../interfaces/ITeam';
+import PokemonPokedexList from '../../../front/components/pokemonbuilder/pokemonPokedexList';
+import IPokemon from '../../../interfaces/IPokemon';
+import { PokemonImgByPokemonId } from '../../../front/utils/pokemonImgByPokemonId';
+import { revalidatePath } from 'next/cache';
 
-const PokemonBuilder = ({ params }: { params: { teamName: string } }) => {
-	const decodedName = decodeURIComponent(params.teamName);
+async function getTeamData(teamName: string): Promise<ITeam> {
+	try {
+		const decodedName = decodeURIComponent(teamName);
+		const response = await axios.get(
+			`http://localhost:8080/api/v1/teams/${decodedName}`
+		);
+		return response.data;
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return err.response?.data;
+		}
+	}
+}
 
+async function getPokemons(): Promise<IPokemon[]> {
+	try {
+		const response = await axios.get(
+			'https://pokeapi.co/api/v2/pokemon/?limit=9,offset=0'
+		);
+
+		const promises = response.data.results.map(async (pokemon: any) => {
+			const pokemonResponseDetails = await axios.get(pokemon.url);
+			const { id, name, stats, types } = pokemonResponseDetails.data;
+			const pokemonDataApi: IPokemon = {
+				name: name,
+				id: id,
+				types: [
+					{
+						name: types[0].type.name
+					}
+				],
+				ability: {
+					name: 'Overgrow',
+					description:
+						'Powers up Grass-type moves when the Pokémon’s HP is low.'
+				},
+				moves: [
+					{
+						name: 'Tackle',
+						power: 40
+					}
+				],
+				stats: [
+					{
+						name: 'hp',
+						value: stats[0].base_stat,
+						max: stats[0].base_stat
+					}
+				],
+				nature: 'Adamant',
+				isShiny: false,
+				item: {
+					name: 'None',
+					description: 'No item',
+					image: ''
+				},
+				gender: 'M',
+				level: 1,
+				sprite: PokemonImgByPokemonId[id]
+			};
+			return pokemonDataApi;
+		});
+		return await Promise.all(promises);
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return err.response?.data;
+		}
+	}
+}
+
+async function addPokemonToTeam(
+	pokemon: IPokemon,
+	teamName: string
+): Promise<string> {
+	'use server';
+	const team = await getTeamData(teamName);
+
+	try {
+		const response = await axios.post(
+			`http://localhost:8080/api/v1/teams/${team.name}/pokemons/${pokemon.name}`,
+			pokemon
+		);
+		revalidatePath(`/pokemonbuilder/${team.name}`);
+		return response.data;
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return err.response?.data;
+		}
+	}
+}
+
+const PokemonBuilder = async ({ params }: { params: { teamName: string } }) => {
+	const teamData = getTeamData(params.teamName);
+	const pokemonData = getPokemons();
+	const [team, pokemons] = await Promise.all([teamData, pokemonData]);
 	return (
 		<div>
-			<Link href="/teambuilder">Go back</Link>
-			<h1>Pokemon Builder</h1>
-			<span>{decodedName}</span>
+			{team && pokemons ? (
+				<>
+					<Link href={'/teambuilder'}>Go back</Link>
+					<Team team={team} />
+					<PokemonPokedexList
+						pokemons={pokemons}
+						teamName={team.name}
+						addPokemonToTeam={addPokemonToTeam}
+					/>
+				</>
+			) : (
+				<h1>Loading...</h1>
+			)}
 		</div>
 	);
 };

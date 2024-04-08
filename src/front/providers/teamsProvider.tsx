@@ -43,6 +43,21 @@ async function createTeam(team: ITeam): Promise<string> {
 	}
 }
 
+async function deleteTeam(team: ITeam): Promise<string> {
+	'use server';
+	try {
+		const response = await axios.delete(
+			'http://localhost:8080/api/v1/teams/' + team.name
+		);
+		revalidatePath('/teambuilder');
+		return response.data;
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return err.response.data;
+		}
+	}
+}
+
 const TeamsProvider = async ({ children }: { children: ReactNode }) => {
 	const avatarsData = getAvatars();
 	const teamsData = getTeams();
@@ -55,6 +70,7 @@ const TeamsProvider = async ({ children }: { children: ReactNode }) => {
 					avatars={avatars}
 					teams={teams}
 					createTeam={createTeam}
+					deleteTeam={deleteTeam}
 				/>
 			) : (
 				<p>No data, something went wrong</p>
