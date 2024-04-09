@@ -4,6 +4,7 @@ import IPokemon from '../../interfaces/IPokemon';
 // Classes
 import Move from './move';
 import Stat from './stat';
+import Status from './status';
 
 class Pokemon implements IPokemon {
 	readonly name: string;
