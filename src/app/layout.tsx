@@ -1,10 +1,6 @@
 import { Metadata } from 'next';
 import React from 'react';
 
-// Providers
-import StoreProvider from '../front/providers/storeProvider';
-import BattleProvider from '../front/providers/battleProvider';
-
 import '../front/styles/global.css';
 
 export const metadata: Metadata = {
@@ -23,9 +19,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<body>
-				<StoreProvider>{children}</StoreProvider>
-			</body>
+			<body>{children}</body>
 		</html>
 	);
 }
