@@ -98,6 +98,26 @@ async function addPokemonToTeam(
 	}
 }
 
+async function removePokemonFromTeam(
+	pokemon: IPokemon,
+	teamName: string
+): Promise<string> {
+	'use server';
+	const team = await getTeamData(teamName);
+
+	try {
+		const response = await axios.delete(
+			`http://localhost:8080/api/v1/teams/${team.id}/pokemons/${pokemon.name}`
+		);
+		revalidatePath(`/pokemonbuilder/${team.name}`);
+		return response.data;
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return err.response?.data;
+		}
+	}
+}
+
 const PokemonBuilder = async ({ params }: { params: { teamName: string } }) => {
 	const teamData = getTeamData(params.teamName);
 	const pokemonData = getPokemons();
@@ -107,7 +127,10 @@ const PokemonBuilder = async ({ params }: { params: { teamName: string } }) => {
 			{team && pokemons ? (
 				<>
 					<Link href={'/teambuilder'}>Go back</Link>
-					<Team team={team} />
+					<Team
+						team={team}
+						removePokemonFromTeam={removePokemonFromTeam}
+					/>
 					<PokemonPokedexList
 						pokemons={pokemons}
 						teamName={team.name}
