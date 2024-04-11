@@ -38,14 +38,11 @@ async function createTeam(team: ITeamEntity): Promise<ITeamResponse> {
 	return response.data;
 }
 
-async function deleteTeam(team: ITeam): Promise<string> {
+async function deleteTeam(teamId: string): Promise<void> {
 	'use server';
 	try {
-		const response = await axios.delete(
-			'http://localhost:8080/api/v1/teams/' + team.name
-		);
+		await axios.delete('http://localhost:8080/api/v1/teams/' + teamId);
 		revalidatePath('/teambuilder');
-		return response.data;
 	} catch (err) {
 		if (axios.isAxiosError(err)) {
 			return err.response.data;

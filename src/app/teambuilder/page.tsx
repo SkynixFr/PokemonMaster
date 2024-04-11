@@ -16,7 +16,7 @@ interface TeamBuilderProps {
 	avatars: IAvatar[];
 	teams: ITeam[];
 	createTeam: (team: ITeamEntity) => Promise<ITeamResponse>;
-	deleteTeam: (team: ITeam) => Promise<string>;
+	deleteTeam: (teamId: string) => Promise<void>;
 }
 
 const TeamBuilder = ({
@@ -30,7 +30,7 @@ const TeamBuilder = ({
 	const [selectedAvatar, setSelectedAvatar] = useState<IAvatar>(null);
 	const [apiMessage, setApiMessage] = useState<string>('');
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const newTeam: ITeamEntity = {
 			name: teamName,
@@ -40,13 +40,17 @@ const TeamBuilder = ({
 		await createTeam(newTeam);
 	};
 
+	const handleDelete = async (teamId: string) => {
+		await deleteTeam(teamId);
+	};
+
 	if (!avatars || !teams) return <div>Loading...</div>;
 
 	return (
 		<div>
 			<Link href="/">Go back </Link>
 			<h1>Team Builder</h1>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleCreate}>
 				<label htmlFor="teamName">Team Name</label>
 				<input
 					type="text"
@@ -116,7 +120,7 @@ const TeamBuilder = ({
 							>
 								Update
 							</button>
-							<button onClick={async () => await deleteTeam(team)}>
+							<button onClick={() => handleDelete(team.id)}>
 								Delete
 							</button>
 						</li>
