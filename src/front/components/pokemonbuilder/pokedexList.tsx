@@ -1,12 +1,17 @@
 'use client';
+import { useState } from 'react';
 import IPokemon from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
+import PokemonInformation from './pokemonInformation';
 
 interface PokemonListProps {
 	pokemons: IPokemon[];
 	addToTeam?: (pokemon: IPokemon) => void;
 }
 const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
+	const [pokemonSelected, setpokemonSelected] = useState<IPokemon | null>(
+		null
+	);
 	return (
 		<div>
 			<h1>Pokemon:</h1>
@@ -17,7 +22,13 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 				}}
 			>
 				{pokemons.map((pokemon: IPokemon) => (
-					<li key={pokemon.name}>
+					<li
+						key={pokemon.name}
+						onClick={() => setpokemonSelected(pokemon)}
+						style={{
+							cursor: 'pointer'
+						}}
+					>
 						<CustomImage
 							src={pokemon.sprite}
 							alt={pokemon.name}
@@ -36,6 +47,9 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 					</li>
 				))}
 			</ul>
+			{pokemonSelected && (
+				<PokemonInformation pokemon={pokemonSelected}></PokemonInformation>
+			)}
 		</div>
 	);
 };
