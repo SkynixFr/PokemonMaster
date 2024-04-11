@@ -63,6 +63,7 @@ const TeamsProvider = async ({ children }: { children: ReactNode }) => {
 	const teamsData = getTeams();
 	const [avatars, teams] = await Promise.all([avatarsData, teamsData]);
 
+	console.log(teams);
 	return (
 		<>
 			{avatars && teams ? (

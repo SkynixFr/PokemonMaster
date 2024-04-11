@@ -1,25 +1,10 @@
 import Link from 'next/link';
 import Team from '../../../front/components/pokemonbuilder/team';
 import axios from 'axios';
-import ITeam from '../../../interfaces/ITeam';
-import PokemonPokedexList from '../../../front/components/pokemonbuilder/pokemonPokedexList';
 import IPokemon from '../../../interfaces/IPokemon';
 import { PokemonImgByPokemonId } from '../../../front/utils/pokemonImgByPokemonId';
 import { revalidatePath } from 'next/cache';
-
-async function getTeamData(teamName: string): Promise<ITeam> {
-	try {
-		const decodedName = decodeURIComponent(teamName);
-		const response = await axios.get(
-			`http://localhost:8080/api/v1/teams/${decodedName}`
-		);
-		return response.data;
-	} catch (err) {
-		if (axios.isAxiosError(err)) {
-			return err.response?.data;
-		}
-	}
-}
+import ITeam from '../../../interfaces/ITeam';
 
 async function getPokemons(): Promise<IPokemon[]> {
 	try {
@@ -77,19 +62,28 @@ async function getPokemons(): Promise<IPokemon[]> {
 	}
 }
 
-async function addPokemonToTeam(
-	pokemon: IPokemon,
-	teamName: string
-): Promise<string> {
+export async function saveTeam(team: ITeam): Promise<string> {
 	'use server';
-	const team = await getTeamData(teamName);
-
 	try {
-		const response = await axios.post(
-			`http://localhost:8080/api/v1/teams/${team.name}/pokemons/${pokemon.name}`,
-			pokemon
+		const response = await axios.put(
+			`http://localhost:8080/api/v1/teams/${team.name}/pokemons/`,
+			team
 		);
-		revalidatePath(`/pokemonbuilder/${team.name}`);
+		revalidatePath('/teambuilder');
+		return response.data;
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return err.response?.data;
+		}
+	}
+}
+
+export async function getTeamData(teamName: string): Promise<ITeam> {
+	try {
+		const decodedName = decodeURIComponent(teamName);
+		const response = await axios.get(
+			`http://localhost:8080/api/v1/teams/${decodedName}`
+		);
 		return response.data;
 	} catch (err) {
 		if (axios.isAxiosError(err)) {
@@ -107,12 +101,7 @@ const PokemonBuilder = async ({ params }: { params: { teamName: string } }) => {
 			{team && pokemons ? (
 				<>
 					<Link href={'/teambuilder'}>Go back</Link>
-					<Team team={team} />
-					<PokemonPokedexList
-						pokemons={pokemons}
-						teamName={team.name}
-						addPokemonToTeam={addPokemonToTeam}
-					/>
+					<Team team={team} saveTeam={saveTeam} pokemons={pokemons} />
 				</>
 			) : (
 				<h1>Loading...</h1>

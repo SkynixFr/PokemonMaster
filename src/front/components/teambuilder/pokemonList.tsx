@@ -1,20 +1,14 @@
-'use client';
 import IPokemon from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
+import { PokemonImgByPokemonId } from '../../utils/pokemonImgByPokemonId';
 
 interface PokemonListProps {
 	pokemons: IPokemon[];
-	teamName?: string;
-	addPokemonToTeam?: (pokemon: IPokemon, teamName: string) => Promise<string>;
 }
-const PokemonPokedexList = ({
-	pokemons,
-	teamName,
-	addPokemonToTeam
-}: PokemonListProps) => {
+
+const PokemonList = ({ pokemons }: PokemonListProps) => {
 	return (
 		<div>
-			<h1>Pokemon:</h1>
 			<ul
 				style={{
 					display: 'flex',
@@ -24,7 +18,7 @@ const PokemonPokedexList = ({
 				{pokemons.map((pokemon: IPokemon) => (
 					<li key={pokemon.name}>
 						<CustomImage
-							src={pokemon.sprite}
+							src={PokemonImgByPokemonId[pokemon.id]}
 							alt={pokemon.name}
 							priority={true}
 							width={50}
@@ -35,13 +29,6 @@ const PokemonPokedexList = ({
 							<span>#{pokemon.id} </span>
 							{pokemon.name}
 						</div>
-						<button
-							onClick={async () =>
-								await addPokemonToTeam(pokemon, teamName)
-							}
-						>
-							Add to team
-						</button>
 					</li>
 				))}
 			</ul>
@@ -49,4 +36,4 @@ const PokemonPokedexList = ({
 	);
 };
 
-export default PokemonPokedexList;
+export default PokemonList;
