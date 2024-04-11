@@ -4,9 +4,10 @@ import IPokemon, {
 	IPokemonRequest
 } from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import {
 	getNextPokemons,
+	getPokemonByName,
 	getPreviousPokemons
 } from '../../actions/pokedex.actions';
 import PokemonInformation from './pokemonInformation';
@@ -21,9 +22,12 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 	const [pokemonsPokedex, setPokemonsPokedex] = useState<IPokemonPokedex[]>(
 		pokemons.results
 	);
+	const originalPokemons = pokemons.results;
+
 	const [page, setPage] = useState<number>(1);
 	const [nextReq, setNextReq] = useState<string | null>(null);
 	const [previousReq, setPreviousReq] = useState<string | null>(null);
+	const [searchTerm, setSearchTerm] = useState<string>('');
 
 	useEffect(() => {
 		if (!pokemons) return;
@@ -48,9 +52,37 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 		setPreviousReq(previous);
 	};
 
+	const handleSearchPokemon = async (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		if (searchTerm === '') return setPokemonsPokedex(originalPokemons);
+		const pokemon = await getPokemonByName(searchTerm.toLowerCase());
+		if (pokemon.name === searchTerm.toLowerCase()) {
+			setPokemonsPokedex([pokemon]);
+		}
+	};
+
 	return (
 		<div>
 			<h1>Pokemon:</h1>
+			<div>
+				<form onSubmit={handleSearchPokemon}>
+					<input
+						type="text"
+						id="search"
+						name="Search"
+						placeholder="Search Pokemon"
+						onChange={e => {
+							if (e.target.value === '') {
+								setPokemonsPokedex(originalPokemons);
+								setSearchTerm('');
+							} else {
+								setSearchTerm(e.target.value);
+							}
+						}}
+					/>
+					<button>Search</button>
+				</form>
+			</div>
 			<ul
 				style={{
 					display: 'flex',

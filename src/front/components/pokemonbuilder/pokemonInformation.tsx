@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import IPokemon from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
-import { getPokemon } from '../../actions/pokedex.actions';
+import { getPokemonById } from '../../actions/pokedex.actions';
 
 interface PokemonInformationProps {
 	pokemonId: number;
@@ -17,7 +17,7 @@ const PokemonInformation = ({
 
 	useEffect(() => {
 		const fetchPokemonData = async () => {
-			const data = await getPokemon(pokemonId);
+			const data = await getPokemonById(pokemonId);
 			setPokemon(data);
 		};
 

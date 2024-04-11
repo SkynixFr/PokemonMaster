@@ -102,7 +102,9 @@ export async function getPreviousPokemons(
 	}
 }
 
-export async function getPokemon(pokemonId: number): Promise<IPokemonEntity> {
+export async function getPokemonById(
+	pokemonId: number
+): Promise<IPokemonEntity> {
 	try {
 		const response = await axios.get(
 			`https://pokeapi.co/api/v2/pokemon/${pokemonId}`
@@ -148,6 +150,29 @@ export async function getPokemon(pokemonId: number): Promise<IPokemonEntity> {
 			types: types.map((type: any) => {
 				return { name: type.type.name };
 			})
+		};
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return err.response?.data;
+		}
+	}
+}
+
+export async function getPokemonByName(
+	pokemonName: string
+): Promise<IPokemonPokedex> {
+	try {
+		const response = await axios.get(
+			`https://pokeapi.co/api/v2/pokemon/${pokemonName}`
+		);
+		const { id, name, types } = response.data;
+		return {
+			name: name,
+			id: id,
+			types: types.map((type: any) => {
+				return { name: type.type.name };
+			}),
+			sprite: PokemonImgByPokemonId[id]
 		};
 	} catch (err) {
 		if (axios.isAxiosError(err)) {
