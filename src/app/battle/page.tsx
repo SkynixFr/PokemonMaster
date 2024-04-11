@@ -6,6 +6,7 @@ import Link from 'next/link';
 // Classes
 import PokemonClass from '../../back/classes/pokemon';
 import BattleClass from '../../back/classes/battle';
+import StatusClass from '../../back/classes/status';
 
 // Interfaces
 interface BattleProps {
@@ -14,15 +15,13 @@ interface BattleProps {
 
 const Battle = ({ battle }: BattleProps) => {
 	const [playerPokemon, setPlayerPokemon] = useState<PokemonClass | null>();
-	const [opponentPokemon, setOpponentPokemon] = useState<PokemonClass | null>();
+	const [opponentPokemon, setOpponentPokemon] =
+		useState<PokemonClass | null>();
 
 	useEffect(() => {
 		if (!battle) return;
 		setPlayerPokemon(battle.playerPokemon);
 		setOpponentPokemon(battle.opponentPokemon);
-		console.log('Battle started');
-		console.log(battle);
-		console.log(playerPokemon, opponentPokemon);
 	}, [battle]);
 
 	if (!battle || !playerPokemon || !opponentPokemon) {
@@ -43,7 +42,23 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handlePlayerHeal = () => {
-		const updatedPlayerPokemon = playerPokemon.heal();
+		if (!playerPokemon.isKO()) {
+			const updatedPlayerPokemon = playerPokemon.heal();
+			setPlayerPokemon(updatedPlayerPokemon);
+			localStorage.setItem(
+				'playerPokemon',
+				JSON.stringify(updatedPlayerPokemon)
+			);
+			return;
+		}
+		console.log("Pokemon is KO, it couldn't heal.");
+	};
+
+	const handleOpponentAttack = () => {
+		const updatedPlayerPokemon = opponentPokemon.attack(
+			playerPokemon,
+			opponentPokemon.moves[0]
+		);
 		setPlayerPokemon(updatedPlayerPokemon);
 		localStorage.setItem(
 			'playerPokemon',
@@ -51,47 +66,43 @@ const Battle = ({ battle }: BattleProps) => {
 		);
 	};
 
-	
-	const handleOpponentAttack = () => {
-		const updatedPlayerPokemon = opponentPokemon.attack(
-			playerPokemon,
-			opponentPokemon.moves[0]
-			);
-			setPlayerPokemon(updatedPlayerPokemon);
-			localStorage.setItem(
-				'playerPokemon',
-				JSON.stringify(updatedPlayerPokemon)
-				);
-	};
-			
 	const handleOpponentHeal = () => {
 		const updatedOpponentPokemon = opponentPokemon.heal();
-			setOpponentPokemon(updatedOpponentPokemon);
-			localStorage.setItem(
-				'playerPokemon',
-				JSON.stringify(updatedOpponentPokemon)
-			);
+		setOpponentPokemon(updatedOpponentPokemon);
+		localStorage.setItem(
+			'playerPokemon',
+			JSON.stringify(updatedOpponentPokemon)
+		);
 	};
 
-			return (
+	return (
 		<div>
 			<Link href={'/rooms'}>Go back</Link>
 			<h1>Battle</h1>
 			<p>
 				<span>Opponent : </span>
-				{opponentPokemon.name}
-				{opponentPokemon.stats.map(stat =>
-					stat.name === 'hp' ? (stat.value === 0 ? ' fainted' : ' has ' + stat.value + ' HP') : '')
-				}
+				{opponentPokemon.name + ' '}
+				{opponentPokemon.getStat('hp').value !== 0
+					? opponentPokemon.getStat('hp').value +
+						'/' +
+						opponentPokemon.getStat('hp').max
+					: opponentPokemon.changeStatus(
+							new StatusClass('KO', 'Pokemon fainted.')
+						).status.name}
 			</p>
+
 			<button onClick={handleOpponentAttack}>Attack</button>
 			<button onClick={handleOpponentHeal}>Heal</button>
 			<p>
-				<span>You : </span>
-				{playerPokemon.name}
-				{playerPokemon.stats.map(stat =>
-					stat.name === 'hp' ? (stat.value === 0 ? ' fainted' : ' has ' + stat.value + ' HP') : '')
-				}
+				<span>Player : </span>
+				{playerPokemon.name + ' '}
+				{playerPokemon.getStat('hp').value !== 0
+					? playerPokemon.getStat('hp').value +
+						'/' +
+						playerPokemon.getStat('hp').max
+					: playerPokemon.changeStatus(
+							new StatusClass('KO', 'Pokemon fainted.')
+						).status.name}
 			</p>
 			<button onClick={handlePlayerAttack}>Attack</button>
 			<button onClick={handlePlayerHeal}>Heal</button>

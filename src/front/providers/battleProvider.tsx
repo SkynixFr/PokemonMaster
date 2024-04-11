@@ -42,7 +42,6 @@ const BattleProvider = ({ children }: { children: ReactNode }) => {
 					)
 				)
 			);
-			console.log('Battle created');
 			setBattle(battle);
 		} else {
 			console.error('No stored pokemon found');
