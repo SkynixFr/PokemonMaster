@@ -6,7 +6,6 @@ import Link from 'next/link';
 // Classes
 import PokemonClass from '../../back/classes/pokemon';
 import BattleClass from '../../back/classes/battle';
-import StatusClass from '../../back/classes/status';
 
 // Interfaces
 interface BattleProps {
@@ -42,16 +41,13 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handlePlayerHeal = () => {
-		if (!playerPokemon.isKO()) {
-			const updatedPlayerPokemon = playerPokemon.heal();
-			setPlayerPokemon(updatedPlayerPokemon);
-			localStorage.setItem(
-				'playerPokemon',
-				JSON.stringify(updatedPlayerPokemon)
-			);
-			return;
-		}
-		console.log("Pokemon is KO, it couldn't heal.");
+		const updatedPlayerPokemon = playerPokemon.heal();
+		setPlayerPokemon(updatedPlayerPokemon);
+		localStorage.setItem(
+			'playerPokemon',
+			JSON.stringify(updatedPlayerPokemon)
+		);
+		return;
 	};
 
 	const handleOpponentAttack = () => {
@@ -82,13 +78,11 @@ const Battle = ({ battle }: BattleProps) => {
 			<p>
 				<span>Opponent : </span>
 				{opponentPokemon.name + ' '}
-				{opponentPokemon.getStat('hp').value !== 0
+				{opponentPokemon.status.name !== 'KO'
 					? opponentPokemon.getStat('hp').value +
 						'/' +
 						opponentPokemon.getStat('hp').max
-					: opponentPokemon.changeStatus(
-							new StatusClass('KO', 'Pokemon fainted.')
-						).status.name}
+					: opponentPokemon.status.name}
 			</p>
 
 			<button onClick={handleOpponentAttack}>Attack</button>
@@ -96,13 +90,11 @@ const Battle = ({ battle }: BattleProps) => {
 			<p>
 				<span>Player : </span>
 				{playerPokemon.name + ' '}
-				{playerPokemon.getStat('hp').value !== 0
+				{playerPokemon.status.name !== 'KO'
 					? playerPokemon.getStat('hp').value +
 						'/' +
 						playerPokemon.getStat('hp').max
-					: playerPokemon.changeStatus(
-							new StatusClass('KO', 'Pokemon fainted.')
-						).status.name}
+					: playerPokemon.status.name}
 			</p>
 			<button onClick={handlePlayerAttack}>Attack</button>
 			<button onClick={handlePlayerHeal}>Heal</button>

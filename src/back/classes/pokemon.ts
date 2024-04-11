@@ -16,7 +16,7 @@ class Pokemon implements IPokemon {
 		this.name = name;
 		this.stats = stat;
 		this.moves = moves;
-		this.status = status;
+		this.status = status ? status : new Status('', '');
 	}
 
 	getStat(statName: string): Stat {
@@ -30,14 +30,22 @@ class Pokemon implements IPokemon {
 		const updatedHp = opponentHp.decrease(damage);
 		const index = opponentPokemon.stats.findIndex(stat => stat.name === 'hp');
 		opponentPokemon.stats[index] = updatedHp;
+		if (updatedHp.value <= 0) {
+			const updatedStatus = new Status('KO', 'The Pokémon has fainted');
+			opponentPokemon = opponentPokemon.changeStatus(updatedStatus);
+		}
 		return new Pokemon(
 			opponentPokemon.name,
 			opponentPokemon.stats,
-			opponentPokemon.moves
+			opponentPokemon.moves,
+			opponentPokemon.status
 		);
 	}
 
 	heal(): Pokemon {
+		if (this.status.name === 'KO') {
+			return this;
+		}
 		const hp = this.getStat('hp');
 		const updatedHp = hp.increase(30);
 		const index = this.stats.findIndex(stat => stat.name === 'hp');
@@ -47,13 +55,6 @@ class Pokemon implements IPokemon {
 
 	changeStatus(status: Status): Pokemon {
 		return new Pokemon(this.name, this.stats, this.moves, status);
-	}
-
-	isKO(): boolean {
-		if (this.status !== undefined) {
-			return this.status.name === 'KO';
-		}
-		return false;
 	}
 }
 

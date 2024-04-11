@@ -13,6 +13,9 @@ class Stat implements IStat {
 	}
 
 	increase(value: number): Stat {
+		if (this.value <= 0) {
+			return this;
+		}
 		const newValue = this.value + value;
 		return new Stat(
 			this.name,
