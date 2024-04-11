@@ -50,6 +50,20 @@ async function deleteTeam(teamId: string): Promise<void> {
 	}
 }
 
+export async function getTeam(teamId: string): Promise<ITeamResponse> {
+	'use server';
+	try {
+		const response = await axios.get(
+			'http://localhost:8080/api/v1/teams/' + teamId
+		);
+		return response.data;
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return err.response.data;
+		}
+	}
+}
+
 const TeamsProvider = async ({ children }: { children: ReactNode }) => {
 	const avatarsData = getAvatars();
 	const teamsData = getTeams();

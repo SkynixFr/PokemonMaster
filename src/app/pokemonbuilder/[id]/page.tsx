@@ -4,6 +4,7 @@ import axios from 'axios';
 import IPokemon from '../../../interfaces/IPokemon';
 import { PokemonImgByPokemonId } from '../../../front/utils/pokemonImgByPokemonId';
 import { revalidatePath } from 'next/cache';
+import { getTeam } from '../../../front/providers/teamsProvider';
 
 async function getPokemons(): Promise<IPokemon[]> {
 	try {
@@ -61,12 +62,9 @@ async function getPokemons(): Promise<IPokemon[]> {
 	}
 }
 
-async function addPokemonToTeam(
-	pokemon: IPokemon,
-	teamName: string
-): Promise<string> {
+async function saveTeam(pokemon: IPokemon, teamId: string): Promise<string> {
 	'use server';
-	const team = await getTeamData(teamName);
+	const team = await getTeam(teamId);
 
 	try {
 		const response = await axios.post(
@@ -82,8 +80,8 @@ async function addPokemonToTeam(
 	}
 }
 
-const PokemonBuilder = async ({ params }: { params: { teamName: string } }) => {
-	const teamData = getTeamData(params.teamName);
+const PokemonBuilder = async ({ params }: { params: { id: string } }) => {
+	const teamData = await getTeam(params.id);
 	const pokemonData = getPokemons();
 	const [team, pokemons] = await Promise.all([teamData, pokemonData]);
 	return (
@@ -91,12 +89,7 @@ const PokemonBuilder = async ({ params }: { params: { teamName: string } }) => {
 			{team && pokemons ? (
 				<>
 					<Link href={'/teambuilder'}>Go back</Link>
-					<Team team={team} />
-					<PokemonPokedexList
-						pokemons={pokemons}
-						teamName={team.name}
-						addPokemonToTeam={addPokemonToTeam}
-					/>
+					<Team team={team} pokemons={pokemons} />
 				</>
 			) : (
 				<h1>Loading...</h1>

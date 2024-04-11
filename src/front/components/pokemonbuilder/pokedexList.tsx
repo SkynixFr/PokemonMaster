@@ -4,7 +4,6 @@ import CustomImage from '../custom/customImage';
 
 interface PokemonListProps {
 	pokemons: IPokemon[];
-	teamPokemons?: IPokemon[];
 	addToTeam?: (pokemon: IPokemon) => void;
 }
 const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {

@@ -115,7 +115,7 @@ const TeamBuilder = ({
 
 							<button
 								onClick={() =>
-									router.push(`/pokemonbuilder/${team.name}`)
+									router.push(`/pokemonbuilder/${team.id}`)
 								}
 							>
 								Update
