@@ -4,7 +4,6 @@ import axios from 'axios';
 import IPokemon from '../../../interfaces/IPokemon';
 import { PokemonImgByPokemonId } from '../../../front/utils/pokemonImgByPokemonId';
 import { revalidatePath } from 'next/cache';
-import ITeam from '../../../interfaces/ITeam';
 
 async function getPokemons(): Promise<IPokemon[]> {
 	try {
@@ -62,28 +61,19 @@ async function getPokemons(): Promise<IPokemon[]> {
 	}
 }
 
-export async function saveTeam(team: ITeam): Promise<string> {
+async function addPokemonToTeam(
+	pokemon: IPokemon,
+	teamName: string
+): Promise<string> {
 	'use server';
-	try {
-		const response = await axios.put(
-			`http://localhost:8080/api/v1/teams/${team.name}/pokemons/`,
-			team
-		);
-		revalidatePath('/teambuilder');
-		return response.data;
-	} catch (err) {
-		if (axios.isAxiosError(err)) {
-			return err.response?.data;
-		}
-	}
-}
+	const team = await getTeamData(teamName);
 
-export async function getTeamData(teamName: string): Promise<ITeam> {
 	try {
-		const decodedName = decodeURIComponent(teamName);
-		const response = await axios.get(
-			`http://localhost:8080/api/v1/teams/${decodedName}`
+		const response = await axios.post(
+			`http://localhost:8080/api/v1/teams/${team.name}/pokemons/${pokemon.name}`,
+			pokemon
 		);
+		revalidatePath(`/pokemonbuilder/${team.name}`);
 		return response.data;
 	} catch (err) {
 		if (axios.isAxiosError(err)) {
@@ -101,7 +91,12 @@ const PokemonBuilder = async ({ params }: { params: { teamName: string } }) => {
 			{team && pokemons ? (
 				<>
 					<Link href={'/teambuilder'}>Go back</Link>
-					<Team team={team} saveTeam={saveTeam} pokemons={pokemons} />
+					<Team team={team} />
+					<PokemonPokedexList
+						pokemons={pokemons}
+						teamName={team.name}
+						addPokemonToTeam={addPokemonToTeam}
+					/>
 				</>
 			) : (
 				<h1>Loading...</h1>

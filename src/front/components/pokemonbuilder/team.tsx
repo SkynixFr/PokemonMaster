@@ -4,7 +4,6 @@ import ITeam from '../../../interfaces/ITeam';
 import IPokemon from '../../../interfaces/IPokemon';
 import PokemonList from './pokemonList';
 import PokedexList from './pokedexList';
-
 interface TeamProps {
 	team: ITeam;
 	saveTeam?: (team: ITeam) => Promise<string>;

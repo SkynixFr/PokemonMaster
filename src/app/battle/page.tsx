@@ -14,8 +14,7 @@ interface BattleProps {
 
 const Battle = ({ battle }: BattleProps) => {
 	const [playerPokemon, setPlayerPokemon] = useState<PokemonClass | null>();
-	const [opponentPokemon, setOpponentPokemon] =
-		useState<PokemonClass | null>();
+	const [opponentPokemon, setOpponentPokemon] = useState<PokemonClass | null>();
 
 	useEffect(() => {
 		if (!battle) return;
@@ -31,7 +30,7 @@ const Battle = ({ battle }: BattleProps) => {
 		return <div>Loading...</div>;
 	}
 
-	const handleAttack = () => {
+	const handlePlayerAttack = () => {
 		const updatedOpponentPokemon = playerPokemon.attack(
 			opponentPokemon,
 			playerPokemon.moves[0]
@@ -43,7 +42,7 @@ const Battle = ({ battle }: BattleProps) => {
 		);
 	};
 
-	const handleHeal = () => {
+	const handlePlayerHeal = () => {
 		const updatedPlayerPokemon = playerPokemon.heal();
 		setPlayerPokemon(updatedPlayerPokemon);
 		localStorage.setItem(
@@ -52,41 +51,50 @@ const Battle = ({ battle }: BattleProps) => {
 		);
 	};
 
-	const handleAutoAttack = () => {
-		const updatedPlayerPokemon = playerPokemon.attack(
+	
+	const handleOpponentAttack = () => {
+		const updatedPlayerPokemon = opponentPokemon.attack(
 			playerPokemon,
-			playerPokemon.moves[0]
-		);
-		setPlayerPokemon(updatedPlayerPokemon);
-		localStorage.setItem(
-			'playerPokemon',
-			JSON.stringify(updatedPlayerPokemon)
-		);
+			opponentPokemon.moves[0]
+			);
+			setPlayerPokemon(updatedPlayerPokemon);
+			localStorage.setItem(
+				'playerPokemon',
+				JSON.stringify(updatedPlayerPokemon)
+				);
+	};
+			
+	const handleOpponentHeal = () => {
+		const updatedOpponentPokemon = opponentPokemon.heal();
+			setOpponentPokemon(updatedOpponentPokemon);
+			localStorage.setItem(
+				'playerPokemon',
+				JSON.stringify(updatedOpponentPokemon)
+			);
 	};
 
-	return (
+			return (
 		<div>
 			<Link href={'/rooms'}>Go back</Link>
 			<h1>Battle</h1>
 			<p>
-				<span>You : </span>
-				{playerPokemon.name} has{' '}
-				{playerPokemon.stats.map(stat =>
-					stat.name === 'hp' ? stat.value : ''
-				)}{' '}
-				HP
-			</p>
-			<p>
 				<span>Opponent : </span>
-				{opponentPokemon.name} has{' '}
+				{opponentPokemon.name}
 				{opponentPokemon.stats.map(stat =>
-					stat.name === 'hp' ? stat.value : ''
-				)}{' '}
-				HP
+					stat.name === 'hp' ? (stat.value === 0 ? ' fainted' : ' has ' + stat.value + ' HP') : '')
+				}
 			</p>
-			<button onClick={handleAttack}>Attack</button>
-			<button onClick={handleAutoAttack}>Auto-attack</button>
-			<button onClick={handleHeal}>Heal</button>
+			<button onClick={handleOpponentAttack}>Attack</button>
+			<button onClick={handleOpponentHeal}>Heal</button>
+			<p>
+				<span>You : </span>
+				{playerPokemon.name}
+				{playerPokemon.stats.map(stat =>
+					stat.name === 'hp' ? (stat.value === 0 ? ' fainted' : ' has ' + stat.value + ' HP') : '')
+				}
+			</p>
+			<button onClick={handlePlayerAttack}>Attack</button>
+			<button onClick={handlePlayerHeal}>Heal</button>
 		</div>
 	);
 };
