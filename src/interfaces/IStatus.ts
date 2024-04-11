@@ -1,4 +1,4 @@
 export default interface IStatus {
-    name: string;
-    description: string;
+	name: string;
+	description: string;
 }

@@ -24,12 +24,8 @@ const Rooms = () => {
 			moves: [{ name: 'flamethrower', power: 25 }]
 		};
 
-		console.log('Creating player and opponent pokemon');
-		console.log(playerPokemon, opponentPokemon);
-
 		localStorage.setItem('playerPokemon', JSON.stringify(playerPokemon));
 		localStorage.setItem('opponentPokemon', JSON.stringify(opponentPokemon));
-		console.log('Setting player and opponent pokemon in store');
 	}, []);
 	return (
 		<div>

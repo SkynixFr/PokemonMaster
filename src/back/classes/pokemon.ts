@@ -19,9 +19,14 @@ class Pokemon implements IPokemon {
 		this.status = status;
 	}
 
+	getStat(statName: string): Stat {
+		const searchedStat = this.stats.find(stat => stat.name === statName);
+		return new Stat(searchedStat.name, searchedStat.value, searchedStat.max);
+	}
+
 	attack(opponentPokemon: Pokemon, move: Move): Pokemon {
 		const damage = move.power;
-		const opponentHp = opponentPokemon.stats.find(stat => stat.name === 'hp');
+		const opponentHp = opponentPokemon.getStat('hp');
 		const updatedHp = opponentHp.decrease(damage);
 		const index = opponentPokemon.stats.findIndex(stat => stat.name === 'hp');
 		opponentPokemon.stats[index] = updatedHp;
@@ -33,16 +38,22 @@ class Pokemon implements IPokemon {
 	}
 
 	heal(): Pokemon {
-		const hp = this.stats.find(stat => stat.name === 'hp');
+		const hp = this.getStat('hp');
 		const updatedHp = hp.increase(30);
 		const index = this.stats.findIndex(stat => stat.name === 'hp');
 		this.stats[index] = updatedHp;
-		console.log(this);
 		return new Pokemon(this.name, this.stats, this.moves);
 	}
 
 	changeStatus(status: Status): Pokemon {
 		return new Pokemon(this.name, this.stats, this.moves, status);
+	}
+
+	isKO(): boolean {
+		if (this.status !== undefined) {
+			return this.status.name === 'KO';
+		}
+		return false;
 	}
 }
 

@@ -25,6 +25,12 @@ class Stat implements IStat {
 		const newValue = this.value - value;
 		return new Stat(this.name, newValue < 0 ? 0 : newValue, this.max);
 	}
+
+	getStat(statName: string): Stat {
+		return this.name === statName
+			? new Stat(this.name, this.value, this.max)
+			: null;
+	}
 }
 
 export default Stat;

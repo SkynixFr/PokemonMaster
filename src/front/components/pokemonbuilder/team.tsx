@@ -6,7 +6,6 @@ interface TeamProps {
 }
 
 const Team = ({ team }: TeamProps) => {
-	console.log(team);
 	return (
 		<div>
 			<h1>{team.name}</h1>
