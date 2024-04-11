@@ -8,13 +8,14 @@ import CustomImage from '../../front/components/custom/customImage';
 
 // Interfaces
 import IAvatar from '../../interfaces/IAvatar';
-import ITeam from '../../interfaces/ITeam';
+import ITeam, { ITeamEntity } from '../../interfaces/ITeam';
+import ITeamResponse from '../../interfaces/ITeam';
 import PokemonList from '../../front/components/teambuilder/pokemonList';
 
 interface TeamBuilderProps {
 	avatars: IAvatar[];
 	teams: ITeam[];
-	createTeam: (team: ITeam) => Promise<string>;
+	createTeam: (team: ITeamEntity) => Promise<ITeamResponse>;
 	deleteTeam: (team: ITeam) => Promise<string>;
 }
 
@@ -31,14 +32,15 @@ const TeamBuilder = ({
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const newTeam: ITeam = {
+		const newTeam: ITeamEntity = {
 			name: teamName,
-			avatar: selectedAvatar,
-			pokemons: []
+			avatarId: selectedAvatar.id
 		};
 
-		setApiMessage(await createTeam(newTeam));
+		await createTeam(newTeam);
 	};
+
+	if (!avatars || !teams) return <div>Loading...</div>;
 
 	return (
 		<div>
@@ -60,7 +62,7 @@ const TeamBuilder = ({
 				>
 					{avatars.map((avatar: IAvatar) => (
 						<li
-							key={avatar.name}
+							key={avatar.id}
 							onClick={() => setSelectedAvatar(avatar)}
 							style={
 								selectedAvatar?.url === avatar.url
@@ -89,7 +91,7 @@ const TeamBuilder = ({
 			<div>
 				<h2>Your teams:</h2>
 				<ul>
-					{teams.map((team: ITeam) => (
+					{teams.map((team: ITeamResponse) => (
 						<li key={team.id}>
 							<span>{team.name}</span>
 							<CustomImage
@@ -101,7 +103,12 @@ const TeamBuilder = ({
 								height={150}
 							/>
 
-							<PokemonList pokemons={team.pokemons} />
+							{team.pokemons === null ? (
+								<span>No pokemons in this team</span>
+							) : (
+								<PokemonList pokemons={team.pokemons} />
+							)}
+
 							<button
 								onClick={() =>
 									router.push(`/pokemonbuilder/${team.name}`)

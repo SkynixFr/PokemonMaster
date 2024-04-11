@@ -1,5 +1,6 @@
 export default interface IAvatar {
+	id: string;
 	name: string;
-	location: string;
+	region: string;
 	url: string;
 }

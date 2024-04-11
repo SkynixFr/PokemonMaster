@@ -1,9 +1,10 @@
 import IAvatar from '../../interfaces/IAvatar';
 import axios from 'axios';
-import ITeam from '../../interfaces/ITeam';
+import ITeam, { ITeamEntity } from '../../interfaces/ITeam';
 import TeamBuilder from '../../app/teambuilder/page';
 import { ReactNode } from 'react';
 import { revalidatePath } from 'next/cache';
+import ITeamResponse from '../../interfaces/ITeam';
 
 async function getAvatars(): Promise<IAvatar[]> {
 	try {
@@ -27,20 +28,14 @@ async function getTeams(): Promise<ITeam[]> {
 	}
 }
 
-async function createTeam(team: ITeam): Promise<string> {
+async function createTeam(team: ITeamEntity): Promise<ITeamResponse> {
 	'use server';
-	try {
-		const response = await axios.post(
-			'http://localhost:8080/api/v1/teams',
-			team
-		);
-		revalidatePath('/teambuilder');
-		return response.data;
-	} catch (err) {
-		if (axios.isAxiosError(err)) {
-			return err.response.data;
-		}
-	}
+	const response = await axios.post(
+		'http://localhost:8080/api/v1/teams',
+		team
+	);
+	revalidatePath('/teambuilder');
+	return response.data;
 }
 
 async function deleteTeam(team: ITeam): Promise<string> {
@@ -63,7 +58,6 @@ const TeamsProvider = async ({ children }: { children: ReactNode }) => {
 	const teamsData = getTeams();
 	const [avatars, teams] = await Promise.all([avatarsData, teamsData]);
 
-	console.log(teams);
 	return (
 		<>
 			{avatars && teams ? (
