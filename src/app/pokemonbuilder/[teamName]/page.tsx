@@ -1,25 +1,9 @@
 import Link from 'next/link';
 import Team from '../../../front/components/pokemonbuilder/team';
 import axios from 'axios';
-import ITeam from '../../../interfaces/ITeam';
-import PokemonPokedexList from '../../../front/components/pokemonbuilder/pokemonPokedexList';
 import IPokemon from '../../../interfaces/IPokemon';
 import { PokemonImgByPokemonId } from '../../../front/utils/pokemonImgByPokemonId';
 import { revalidatePath } from 'next/cache';
-
-async function getTeamData(teamName: string): Promise<ITeam> {
-	try {
-		const decodedName = decodeURIComponent(teamName);
-		const response = await axios.get(
-			`http://localhost:8080/api/v1/teams/${decodedName}`
-		);
-		return response.data;
-	} catch (err) {
-		if (axios.isAxiosError(err)) {
-			return err.response?.data;
-		}
-	}
-}
 
 async function getPokemons(): Promise<IPokemon[]> {
 	try {
@@ -98,26 +82,6 @@ async function addPokemonToTeam(
 	}
 }
 
-async function removePokemonFromTeam(
-	pokemon: IPokemon,
-	teamName: string
-): Promise<string> {
-	'use server';
-	const team = await getTeamData(teamName);
-
-	try {
-		const response = await axios.delete(
-			`http://localhost:8080/api/v1/teams/${team.id}/pokemons/${pokemon.name}`
-		);
-		revalidatePath(`/pokemonbuilder/${team.name}`);
-		return response.data;
-	} catch (err) {
-		if (axios.isAxiosError(err)) {
-			return err.response?.data;
-		}
-	}
-}
-
 const PokemonBuilder = async ({ params }: { params: { teamName: string } }) => {
 	const teamData = getTeamData(params.teamName);
 	const pokemonData = getPokemons();
@@ -127,10 +91,7 @@ const PokemonBuilder = async ({ params }: { params: { teamName: string } }) => {
 			{team && pokemons ? (
 				<>
 					<Link href={'/teambuilder'}>Go back</Link>
-					<Team
-						team={team}
-						removePokemonFromTeam={removePokemonFromTeam}
-					/>
+					<Team team={team} />
 					<PokemonPokedexList
 						pokemons={pokemons}
 						teamName={team.name}

@@ -1,21 +1,20 @@
 'use client';
 import IPokemon from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
+import { PokemonImgByPokemonId } from '../../utils/pokemonImgByPokemonId';
+import ITeam from '../../../interfaces/ITeam';
+import { useState } from 'react';
 
 interface PokemonListProps {
-	pokemons: IPokemon[];
-	teamName?: string;
-	removePokemonFromTeam?: (
-		pokemon: IPokemon,
-		teamName: string
-	) => Promise<string>;
+	team: ITeam;
+	saveTeam?: (team: ITeam) => Promise<string>;
 }
 
-const PokemonList = ({
-	pokemons,
-	teamName,
-	removePokemonFromTeam
-}: PokemonListProps) => {
+const PokemonList = ({ team, saveTeam }: PokemonListProps) => {
+	const [apiMessage, setApiMessage] = useState<string>('');
+	const handleSaveTeam = async (team: ITeam) => {
+		setApiMessage(await saveTeam(team));
+	};
 	return (
 		<div>
 			<ul
@@ -24,10 +23,10 @@ const PokemonList = ({
 					gap: '50px'
 				}}
 			>
-				{pokemons.map((pokemon: IPokemon) => (
-					<li key={pokemon.name}>
+				{team.pokemons.map((pokemon: IPokemon, index) => (
+					<li key={index}>
 						<CustomImage
-							src={pokemon.sprite}
+							src={PokemonImgByPokemonId[pokemon.id]}
 							alt={pokemon.name}
 							priority={true}
 							width={50}
@@ -38,18 +37,11 @@ const PokemonList = ({
 							<span>#{pokemon.id} </span>
 							{pokemon.name}
 						</div>
-						{removePokemonFromTeam && (
-							<button
-								onClick={async () =>
-									await removePokemonFromTeam(pokemon, teamName)
-								}
-							>
-								Remove from team
-							</button>
-						)}
 					</li>
 				))}
+				<button onClick={() => handleSaveTeam(team)}>Save</button>
 			</ul>
+			{apiMessage && <p>{apiMessage}</p>}
 		</div>
 	);
 };

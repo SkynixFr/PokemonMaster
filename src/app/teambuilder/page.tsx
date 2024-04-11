@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -9,7 +9,7 @@ import CustomImage from '../../front/components/custom/customImage';
 // Interfaces
 import IAvatar from '../../interfaces/IAvatar';
 import ITeam from '../../interfaces/ITeam';
-import PokemonList from '../../front/components/pokemonbuilder/pokemonList';
+import PokemonList from '../../front/components/teambuilder/pokemonList';
 
 interface TeamBuilderProps {
 	avatars: IAvatar[];
@@ -25,9 +25,9 @@ const TeamBuilder = ({
 	deleteTeam
 }: TeamBuilderProps) => {
 	const router = useRouter();
-	const [teamName, setTeamName] = React.useState<string>('');
-	const [selectedAvatar, setSelectedAvatar] = React.useState<IAvatar>(null);
-	const [apiMessage, setApiMessage] = React.useState<string>('');
+	const [teamName, setTeamName] = useState<string>('');
+	const [selectedAvatar, setSelectedAvatar] = useState<IAvatar>(null);
+	const [apiMessage, setApiMessage] = useState<string>('');
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();

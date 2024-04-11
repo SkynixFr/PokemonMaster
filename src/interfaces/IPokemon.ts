@@ -14,7 +14,7 @@ export default interface IPokemon {
 	item?: IItem;
 	ability?: IAbility;
 	nature?: string;
-	gender?: string | 'N';
+	gender?: string;
 	isShiny?: boolean;
 	level?: number;
 	sprite?: string;
