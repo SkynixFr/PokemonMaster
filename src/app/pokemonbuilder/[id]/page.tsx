@@ -1,12 +1,11 @@
 import Link from 'next/link';
 import Team from '../../../front/components/pokemonbuilder/team';
 import { getTeam } from '../../../front/actions/teams.actions';
-import { getPokemons } from '../../../front/actions/pokedex.actions';
-import pokemon from '../../../back/classes/pokemon';
+import { getPokedexPokemons } from '../../../front/actions/pokedex.actions';
 
 const PokemonBuilder = async ({ params }: { params: { id: string } }) => {
 	const teamData = await getTeam(params.id);
-	const pokemonData = await getPokemons();
+	const pokemonData = await getPokedexPokemons();
 	const [team] = await Promise.all([teamData]);
 	return (
 		<div>

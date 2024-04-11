@@ -5,18 +5,19 @@ import IPokemon, {
 } from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
 import { useEffect, useState } from 'react';
-import { getNextPokemons } from '../../actions/pokedex.actions';
+import {
+	getNextPokemons,
+	getPreviousPokemons
+} from '../../actions/pokedex.actions';
 import PokemonInformation from './pokemonInformation';
 
 interface PokemonListProps {
 	addToTeam?: (pokemon: IPokemon) => void;
 	pokemons: IPokemonRequest;
 }
+
 const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
-	const [pokemonSelected, setpokemonSelected] = useState<IPokemon | null>(
-		null
-	);
-const PokedexList = ({ addToTeam, pokemons }: PokemonListProps) => {
+	const [pokemonSelected, setpokemonSelected] = useState<number | null>(null);
 	const [pokemonsPokedex, setPokemonsPokedex] = useState<IPokemonPokedex[]>(
 		pokemons.results
 	);
@@ -40,7 +41,8 @@ const PokedexList = ({ addToTeam, pokemons }: PokemonListProps) => {
 
 	const handlePreviousPokemon = async () => {
 		setPage(page - 1);
-		const { results, next, previous } = await getNextPokemons(previousReq);
+		const { results, next, previous } =
+			await getPreviousPokemons(previousReq);
 		setPokemonsPokedex(results);
 		setNextReq(next);
 		setPreviousReq(previous);
@@ -57,7 +59,10 @@ const PokedexList = ({ addToTeam, pokemons }: PokemonListProps) => {
 			>
 				{pokemonsPokedex ? (
 					pokemonsPokedex.map((pokemon: IPokemonPokedex) => (
-						<li key={pokemon.id}>
+						<li
+							key={pokemon.id}
+							onClick={() => setpokemonSelected(pokemon.id)}
+						>
 							<CustomImage
 								src={pokemon.sprite}
 								alt={pokemon.name}
@@ -75,9 +80,6 @@ const PokedexList = ({ addToTeam, pokemons }: PokemonListProps) => {
 									))}
 								</ul>
 							</div>
-							{/*<button onClick={() => addToTeam(pokemon)}>*/}
-							{/*	Add to team*/}
-							{/*</button>*/}
 						</li>
 					))
 				) : (
@@ -93,7 +95,10 @@ const PokedexList = ({ addToTeam, pokemons }: PokemonListProps) => {
 				{page < 145 && <button onClick={handleNextPokemon}>Next</button>}
 			</div>
 			{pokemonSelected && (
-				<PokemonInformation pokemon={pokemonSelected}></PokemonInformation>
+				<PokemonInformation
+					pokemonId={pokemonSelected}
+					addToTeam={addToTeam}
+				/>
 			)}
 		</div>
 	);

@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import IPokemon, { IPokemonRequest } from '../../../interfaces/IPokemon';
 import PokemonList from './pokemonList';
-import PokedexList from './pokedexList';
 import ITeamResponse from '../../../interfaces/ITeam';
+import PokedexList from './pokedexList';
 
 interface TeamProps {
 	team: ITeamResponse;

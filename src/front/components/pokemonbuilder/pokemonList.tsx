@@ -6,6 +6,7 @@ import { ITeamUpdate } from '../../../interfaces/ITeam';
 import { useState } from 'react';
 import ITeamResponse from '../../../interfaces/ITeam';
 import { saveTeam } from '../../actions/teams.actions';
+import { useRouter } from 'next/navigation';
 
 interface PokemonListProps {
 	team: ITeamResponse;
@@ -13,6 +14,7 @@ interface PokemonListProps {
 }
 
 const PokemonList = ({ team, removeFromTeam }: PokemonListProps) => {
+	const router = useRouter();
 	const [apiMessage, setApiMessage] = useState<string>('');
 	const handleSaveTeam = async (teamId: string, team: ITeamResponse) => {
 		const newTeam: ITeamUpdate = {
@@ -20,7 +22,7 @@ const PokemonList = ({ team, removeFromTeam }: PokemonListProps) => {
 			avatarId: team.avatar.id,
 			pokemons: team.pokemons
 		};
-		const response = await saveTeam(teamId, newTeam);
+		await saveTeam(teamId, newTeam);
 	};
 	return (
 		<div>
@@ -51,7 +53,12 @@ const PokemonList = ({ team, removeFromTeam }: PokemonListProps) => {
 				))}
 				{team.pokemons.length === 0 && <p>No pokemons in this team</p>}
 				{team.pokemons.length > 0 && (
-					<button onClick={() => handleSaveTeam(team.id, team)}>
+					<button
+						onClick={() => {
+							handleSaveTeam(team.id, team);
+							router.push('/teambuilder');
+						}}
+					>
 						Save
 					</button>
 				)}

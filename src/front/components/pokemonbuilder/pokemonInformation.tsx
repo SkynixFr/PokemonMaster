@@ -1,15 +1,32 @@
 'use client';
-
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IPokemon from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
+import { getPokemon } from '../../actions/pokedex.actions';
 
 interface PokemonInformationProps {
-	pokemon: IPokemon;
+	pokemonId: number;
+	addToTeam?: (pokemon: IPokemon) => void;
 }
 
-const PokemonInformation = ({ pokemon }: PokemonInformationProps) => {
-	console.log(pokemon.types);
+const PokemonInformation = ({
+	pokemonId,
+	addToTeam
+}: PokemonInformationProps) => {
+	const [pokemon, setPokemon] = useState<IPokemon>(null);
+
+	useEffect(() => {
+		const fetchPokemonData = async () => {
+			const data = await getPokemon(pokemonId);
+			setPokemon(data);
+		};
+
+		fetchPokemonData().then(() => console.log('Pokemon fetched'));
+	}, [pokemonId]);
+
+	if (!pokemon) {
+		return <div>Loading...</div>;
+	}
 	return (
 		<div>
 			<h1>
@@ -60,6 +77,13 @@ const PokemonInformation = ({ pokemon }: PokemonInformationProps) => {
 						))}
 					</ul>
 				</div>
+				<button
+					onClick={() => {
+						addToTeam(pokemon);
+					}}
+				>
+					Add to team
+				</button>
 			</div>
 		</div>
 	);
