@@ -1,81 +1,19 @@
 import Link from 'next/link';
 import Team from '../../../front/components/pokemonbuilder/team';
-import axios from 'axios';
-import IPokemon from '../../../interfaces/IPokemon';
-import { PokemonImgByPokemonId } from '../../../front/utils/pokemonImgByPokemonId';
 import { getTeam } from '../../../front/actions/teams.actions';
-
-async function getPokemons(): Promise<IPokemon[]> {
-	try {
-		const response = await axios.get(
-			'https://pokeapi.co/api/v2/pokemon/?limit=9,offset=0'
-		);
-
-		const promises = response.data.results.map(async (pokemon: any) => {
-			const pokemonResponseDetails = await axios.get(pokemon.url);
-			const { id, name, stats, types } = pokemonResponseDetails.data;
-			const pokemonDataApi: IPokemon = {
-				name: name,
-				id: id,
-				types: [
-					{
-						name: types[0].type.name
-					}
-				],
-				ability: {
-					name: 'Overgrow',
-					description:
-						'Powers up Grass-type moves when the Pokémon’s HP is low.'
-				},
-				moves: [
-					{
-						name: 'Tackle',
-						type: 'Normal',
-						category: 'Physical',
-						power: 40,
-						accuracy: 100,
-						pp: 35,
-						description:
-							'A physical attack in which the user charges and slams into the target with its whole body.'
-					}
-				],
-				stats: [
-					{
-						name: 'hp',
-						value: stats[0].base_stat,
-						max: stats[0].base_stat
-					}
-				],
-				nature: 'Adamant',
-				isShiny: false,
-				item: {
-					name: 'None',
-					description: 'No item',
-					image: '/items/none.png'
-				},
-				level: 1,
-				sprite: PokemonImgByPokemonId[id]
-			};
-			return pokemonDataApi;
-		});
-		return await Promise.all(promises);
-	} catch (err) {
-		if (axios.isAxiosError(err)) {
-			return err.response?.data;
-		}
-	}
-}
+import { getPokemons } from '../../../front/actions/pokedex.actions';
+import pokemon from '../../../back/classes/pokemon';
 
 const PokemonBuilder = async ({ params }: { params: { id: string } }) => {
 	const teamData = await getTeam(params.id);
-	const pokemonData = getPokemons();
-	const [team, pokemons] = await Promise.all([teamData, pokemonData]);
+	const pokemonData = await getPokemons();
+	const [team] = await Promise.all([teamData]);
 	return (
 		<div>
-			{team && pokemons ? (
+			{team && pokemonData ? (
 				<>
 					<Link href={'/teambuilder'}>Go back</Link>
-					<Team team={team} pokemons={pokemons} />
+					<Team team={team} pokemons={pokemonData} />
 				</>
 			) : (
 				<h1>Loading...</h1>

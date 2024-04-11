@@ -1,13 +1,13 @@
 'use client';
 import React, { useState } from 'react';
-import IPokemon from '../../../interfaces/IPokemon';
+import IPokemon, { IPokemonRequest } from '../../../interfaces/IPokemon';
 import PokemonList from './pokemonList';
 import PokedexList from './pokedexList';
 import ITeamResponse from '../../../interfaces/ITeam';
 
 interface TeamProps {
 	team: ITeamResponse;
-	pokemons: IPokemon[];
+	pokemons: IPokemonRequest;
 }
 
 const Team: React.FC<TeamProps> = ({ team, pokemons }) => {
@@ -31,7 +31,7 @@ const Team: React.FC<TeamProps> = ({ team, pokemons }) => {
 					<PokemonList team={teamData} />
 				</ul>
 			)}
-			<PokedexList pokemons={pokemons} addToTeam={addToTeam} />
+			<PokedexList addToTeam={addToTeam} pokemons={pokemons} />
 		</div>
 	);
 };
