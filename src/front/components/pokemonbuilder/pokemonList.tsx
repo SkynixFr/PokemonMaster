@@ -1,11 +1,21 @@
+'use client';
 import IPokemon from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
 
 interface PokemonListProps {
 	pokemons: IPokemon[];
+	teamName?: string;
+	removePokemonFromTeam?: (
+		pokemon: IPokemon,
+		teamName: string
+	) => Promise<string>;
 }
 
-const PokemonList = ({ pokemons }: PokemonListProps) => {
+const PokemonList = ({
+	pokemons,
+	teamName,
+	removePokemonFromTeam
+}: PokemonListProps) => {
 	return (
 		<div>
 			<ul
@@ -28,6 +38,15 @@ const PokemonList = ({ pokemons }: PokemonListProps) => {
 							<span>#{pokemon.id} </span>
 							{pokemon.name}
 						</div>
+						{removePokemonFromTeam && (
+							<button
+								onClick={async () =>
+									await removePokemonFromTeam(pokemon, teamName)
+								}
+							>
+								Remove from team
+							</button>
+						)}
 					</li>
 				))}
 			</ul>
