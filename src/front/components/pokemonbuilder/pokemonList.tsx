@@ -9,9 +9,10 @@ import { saveTeam } from '../../actions/teams.actions';
 
 interface PokemonListProps {
 	team: ITeamResponse;
+	removeFromTeam: (pokemon: IPokemon, index: number) => void;
 }
 
-const PokemonList = ({ team }: PokemonListProps) => {
+const PokemonList = ({ team, removeFromTeam }: PokemonListProps) => {
 	const [apiMessage, setApiMessage] = useState<string>('');
 	const handleSaveTeam = async (teamId: string, team: ITeamResponse) => {
 		const newTeam: ITeamUpdate = {
@@ -19,9 +20,7 @@ const PokemonList = ({ team }: PokemonListProps) => {
 			avatarId: team.avatar.id,
 			pokemons: team.pokemons
 		};
-		console.log(newTeam);
 		const response = await saveTeam(teamId, newTeam);
-		console.log(response);
 	};
 	return (
 		<div>
@@ -33,6 +32,9 @@ const PokemonList = ({ team }: PokemonListProps) => {
 			>
 				{team.pokemons.map((pokemon: IPokemon, index) => (
 					<li key={index}>
+						<button onClick={() => removeFromTeam(pokemon, index)}>
+							X
+						</button>
 						<CustomImage
 							src={PokemonImgByPokemonId[pokemon.id]}
 							alt={pokemon.name}
@@ -47,7 +49,12 @@ const PokemonList = ({ team }: PokemonListProps) => {
 						</div>
 					</li>
 				))}
-				<button onClick={() => handleSaveTeam(team.id, team)}>Save</button>
+				{team.pokemons.length === 0 && <p>No pokemons in this team</p>}
+				{team.pokemons.length > 0 && (
+					<button onClick={() => handleSaveTeam(team.id, team)}>
+						Save
+					</button>
+				)}
 			</ul>
 			{apiMessage && <p>{apiMessage}</p>}
 		</div>

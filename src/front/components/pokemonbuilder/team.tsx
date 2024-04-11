@@ -21,6 +21,13 @@ const Team: React.FC<TeamProps> = ({ team, pokemons }) => {
 		}));
 	};
 
+	const removeFromTeam = (pokemon: IPokemon, index: number) => {
+		setTeamData(prev => ({
+			...prev,
+			pokemons: prev.pokemons.filter((p, i) => i !== index)
+		}));
+	};
+
 	return (
 		<div>
 			<h1>{team.name}</h1>
@@ -28,7 +35,7 @@ const Team: React.FC<TeamProps> = ({ team, pokemons }) => {
 				<div>No pokemons in this team</div>
 			) : (
 				<ul>
-					<PokemonList team={teamData} />
+					<PokemonList team={teamData} removeFromTeam={removeFromTeam} />
 				</ul>
 			)}
 			<PokedexList pokemons={pokemons} addToTeam={addToTeam} />
