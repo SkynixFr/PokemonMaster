@@ -3,8 +3,7 @@ import Team from '../../../front/components/pokemonbuilder/team';
 import axios from 'axios';
 import IPokemon from '../../../interfaces/IPokemon';
 import { PokemonImgByPokemonId } from '../../../front/utils/pokemonImgByPokemonId';
-import { revalidatePath } from 'next/cache';
-import { getTeam } from '../../../front/providers/teamsProvider';
+import { getTeam } from '../../../front/actions/teams.actions';
 
 async function getPokemons(): Promise<IPokemon[]> {
 	try {
@@ -31,7 +30,13 @@ async function getPokemons(): Promise<IPokemon[]> {
 				moves: [
 					{
 						name: 'Tackle',
-						power: 40
+						type: 'Normal',
+						category: 'Physical',
+						power: 40,
+						accuracy: 100,
+						pp: 35,
+						description:
+							'A physical attack in which the user charges and slams into the target with its whole body.'
 					}
 				],
 				stats: [
@@ -46,33 +51,14 @@ async function getPokemons(): Promise<IPokemon[]> {
 				item: {
 					name: 'None',
 					description: 'No item',
-					image: ''
+					image: '/items/none.png'
 				},
-				gender: 'M',
 				level: 1,
 				sprite: PokemonImgByPokemonId[id]
 			};
 			return pokemonDataApi;
 		});
 		return await Promise.all(promises);
-	} catch (err) {
-		if (axios.isAxiosError(err)) {
-			return err.response?.data;
-		}
-	}
-}
-
-async function saveTeam(pokemon: IPokemon, teamId: string): Promise<string> {
-	'use server';
-	const team = await getTeam(teamId);
-
-	try {
-		const response = await axios.post(
-			`http://localhost:8080/api/v1/teams/${team.name}/pokemons/${pokemon.name}`,
-			pokemon
-		);
-		revalidatePath(`/pokemonbuilder/${team.name}`);
-		return response.data;
 	} catch (err) {
 		if (axios.isAxiosError(err)) {
 			return err.response?.data;

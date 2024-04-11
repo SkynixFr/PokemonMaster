@@ -8,7 +8,13 @@ export default interface ITeamResponse {
 	pokemons: IPokemon[];
 }
 
-export interface ITeamEntity {
+export interface ITeamCreate {
 	name: string;
 	avatarId: string;
+}
+
+export interface ITeamUpdate {
+	name: string;
+	avatarId: string;
+	pokemons: IPokemon[];
 }

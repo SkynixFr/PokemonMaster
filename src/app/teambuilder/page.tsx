@@ -8,14 +8,14 @@ import CustomImage from '../../front/components/custom/customImage';
 
 // Interfaces
 import IAvatar from '../../interfaces/IAvatar';
-import ITeam, { ITeamEntity } from '../../interfaces/ITeam';
+import ITeam, { ITeamCreate } from '../../interfaces/ITeam';
 import ITeamResponse from '../../interfaces/ITeam';
 import PokemonList from '../../front/components/teambuilder/pokemonList';
 
 interface TeamBuilderProps {
 	avatars: IAvatar[];
 	teams: ITeam[];
-	createTeam: (team: ITeamEntity) => Promise<ITeamResponse>;
+	createTeam: (team: ITeamCreate) => Promise<ITeamResponse>;
 	deleteTeam: (teamId: string) => Promise<void>;
 }
 
@@ -32,7 +32,7 @@ const TeamBuilder = ({
 
 	const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const newTeam: ITeamEntity = {
+		const newTeam: ITeamCreate = {
 			name: teamName,
 			avatarId: selectedAvatar.id
 		};

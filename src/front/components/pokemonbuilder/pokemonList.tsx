@@ -2,18 +2,26 @@
 import IPokemon from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
 import { PokemonImgByPokemonId } from '../../utils/pokemonImgByPokemonId';
-import ITeam from '../../../interfaces/ITeam';
+import { ITeamUpdate } from '../../../interfaces/ITeam';
 import { useState } from 'react';
+import ITeamResponse from '../../../interfaces/ITeam';
+import { saveTeam } from '../../actions/teams.actions';
 
 interface PokemonListProps {
-	team: ITeam;
-	saveTeam?: (team: ITeam) => Promise<string>;
+	team: ITeamResponse;
 }
 
-const PokemonList = ({ team, saveTeam }: PokemonListProps) => {
+const PokemonList = ({ team }: PokemonListProps) => {
 	const [apiMessage, setApiMessage] = useState<string>('');
-	const handleSaveTeam = async (team: ITeam) => {
-		setApiMessage(await saveTeam(team));
+	const handleSaveTeam = async (teamId: string, team: ITeamResponse) => {
+		const newTeam: ITeamUpdate = {
+			name: team.name,
+			avatarId: team.avatar.id,
+			pokemons: team.pokemons
+		};
+		console.log(newTeam);
+		const response = await saveTeam(teamId, newTeam);
+		console.log(response);
 	};
 	return (
 		<div>
@@ -39,7 +47,7 @@ const PokemonList = ({ team, saveTeam }: PokemonListProps) => {
 						</div>
 					</li>
 				))}
-				<button onClick={() => handleSaveTeam(team)}>Save</button>
+				<button onClick={() => handleSaveTeam(team.id, team)}>Save</button>
 			</ul>
 			{apiMessage && <p>{apiMessage}</p>}
 		</div>

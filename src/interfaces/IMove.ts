@@ -1,4 +1,9 @@
 export default interface IMove {
 	name: string;
-	power: number;
+	type?: string;
+	category?: string;
+	power?: number;
+	accuracy?: number;
+	pp?: number;
+	description?: string;
 }
