@@ -9,6 +9,7 @@ import {
 	getNextPokemons,
 	getPokemonByName,
 	getPokemonsByRegion,
+	getPokemonByType,
 	getPreviousPokemons
 } from '../../actions/pokedex.actions';
 import PokemonInformation from './pokemonInformation';
@@ -67,6 +68,20 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 		}
 	};
 
+	const handleTypeChange = async (
+		event: React.ChangeEvent<HTMLSelectElement>
+	) => {
+		event.preventDefault();
+		const selectedType = event.target.value;
+		setSearchTerm(selectedType);
+		if (selectedType === 'All Types') {
+			setPokemonsPokedex(originalPokemons);
+		} else {
+			const pokemons = await getPokemonByType(selectedType);
+			setPokemonsPokedex(pokemons.results);
+		}
+	};
+
 	const handleFilterByRegion = async (
 		event: ChangeEvent<HTMLSelectElement>
 	) => {
@@ -115,6 +130,7 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 						}}
 					/>
 					<button>Search</button>
+
 				</form>
 				<div>
 					<form>
@@ -131,6 +147,27 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 							<option value={3}>Johto</option>
 							<option value={15}>Hoenn</option>
 							<option value={5}>Sinnoh</option>
+						</select>
+						<select value={searchTerm} onChange={handleTypeChange}>
+							<option value="All Types">All Types</option>
+							<option value="fire">Fire</option>
+							<option value="water">Water</option>
+							<option value="grass">Grass</option>
+							<option value="electric">Electric</option>
+							<option value="rock">Rock</option>
+							<option value="ground">Ground</option>
+							<option value="ice">Ice</option>
+							<option value="poison">Poison</option>
+							<option value="flying">Flying</option>
+							<option value="bug">Bug</option>
+							<option value="normal">Normal</option>
+							<option value="fighting">Fighting</option>
+							<option value="psychic">Psychic</option>
+							<option value="ghost">Ghost</option>
+							<option value="dragon">Dragon</option>
+							<option value="dark">Dark</option>
+							<option value="steel">Steel</option>
+							<option value="fairy">Fairy</option>
 						</select>
 					</form>
 				</div>
@@ -159,7 +196,7 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 								<span>#{pokemon.id} </span>
 								{pokemon.name}
 								<ul>
-									{pokemon.types?.map((type, index) => (
+									{pokemon.types.map((type, index) => (
 										<li key={index}>{type.name}</li>
 									))}
 								</ul>
