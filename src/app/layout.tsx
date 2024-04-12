@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import React from 'react';
 
-import '../styles/global.css';
+import '../front/styles/global.css';
 
 export const metadata: Metadata = {
 	title: 'Pokemon Master',
