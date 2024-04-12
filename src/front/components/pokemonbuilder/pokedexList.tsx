@@ -29,11 +29,12 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 	const [originalPokemons, setOriginalPokemons] = useState<IPokemonPokedex[]>(
 		pokemons.results
 	);
-
 	const [page, setPage] = useState<number>(1);
 	const [nextReq, setNextReq] = useState<string | null>(null);
 	const [previousReq, setPreviousReq] = useState<string | null>(null);
 	const [searchTerm, setSearchTerm] = useState<string>('');
+	const [type, setType] = useState<string>('All Types');
+	const [region, setRegion] = useState<string>('default');
 	const [pagination, setPagination] = useState<boolean>(true);
 
 	useEffect(() => {
@@ -68,29 +69,34 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 		}
 	};
 
-	const handleTypeChange = async (
-		event: React.ChangeEvent<HTMLSelectElement>
-	) => {
+	const handleTypeChange = async (event: ChangeEvent<HTMLSelectElement>) => {
 		event.preventDefault();
-		const selectedType = event.target.value;
-		setSearchTerm(selectedType);
-		if (selectedType === 'All Types') {
+		setType(event.target.value);
+		setRegion('default');
+		if (event.target.value === 'All Types') {
+			setType('All Types');
+			setPagination(true);
 			setPokemonsPokedex(originalPokemons);
-		} else {
-			const pokemons = await getPokemonByType(selectedType);
-			setPokemonsPokedex(pokemons.results);
+			return;
 		}
+
+		setPagination(false);
+		const pokemons = await getPokemonByType(event.target.value);
+		setPokemonsPokedex(pokemons.results);
 	};
 
 	const handleFilterByRegion = async (
 		event: ChangeEvent<HTMLSelectElement>
 	) => {
 		event.preventDefault();
+		setRegion(event.target.value);
+		setType('All Types');
 		if (event.target.value === 'default') {
 			setPagination(true);
 			setPokemonsPokedex(originalPokemons);
 			return;
 		}
+
 		setPagination(false);
 		const pokemons = await getPokemonsByRegion(Number(event.target.value));
 		if (
@@ -136,10 +142,8 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 						<select
 							name="region"
 							id="region"
-							defaultValue={'default'}
-							onChange={async e => {
-								await handleFilterByRegion(e);
-							}}
+							value={region}
+							onChange={handleFilterByRegion}
 						>
 							<option value="default">Region</option>
 							<option value={2}>Kanto</option>
@@ -147,7 +151,12 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 							<option value={15}>Hoenn</option>
 							<option value={5}>Sinnoh</option>
 						</select>
-						<select value={searchTerm} onChange={handleTypeChange}>
+						<select
+							id="type"
+							name="type"
+							value={type}
+							onChange={handleTypeChange}
+						>
 							<option value="All Types">All Types</option>
 							<option value="fire">Fire</option>
 							<option value="water">Water</option>
