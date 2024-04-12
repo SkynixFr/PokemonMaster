@@ -13,6 +13,9 @@ import {
 	getPreviousPokemons
 } from '../../actions/pokedex.actions';
 import PokemonInformation from './pokemonInformation';
+import { firstLetterMaj } from '../../utils/formatString';
+
+import '../../styles/components/pokedex.css';
 
 interface PokemonListProps {
 	addToTeam?: (pokemon: IPokemon) => void;
@@ -42,6 +45,11 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 		setNextReq(pokemons.next);
 		setPreviousReq(pokemons.previous);
 	}, []);
+
+	useEffect(() => {
+		if (!pokemonsPokedex) return;
+		setpokemonSelected(pokemonsPokedex[0].id);
+	}, [pokemonsPokedex]);
 
 	const handleNextPokemon = async () => {
 		setPage(page + 1);
@@ -180,60 +188,133 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 					</form>
 				</div>
 			</div>
-			<ul
+			<div
 				style={{
 					display: 'flex',
-					gap: '50px'
+					flexDirection: 'row',
+					alignItems: 'flex-start',
+					justifyContent: 'space-around',
+					width: '100%'
 				}}
 			>
-				{pokemonsPokedex ? (
-					pokemonsPokedex.map((pokemon: IPokemonPokedex) => (
-						<li
-							key={pokemon.id}
-							onClick={() => setpokemonSelected(pokemon.id)}
-						>
-							<CustomImage
-								src={pokemon.sprite}
-								alt={pokemon.name}
-								priority={true}
-								width={50}
-								height={50}
-								objectFit={'contain'}
-							/>
-							<div>
-								<span>#{pokemon.id} </span>
-								{pokemon.name}
-								<ul>
-									{pokemon.types.map((type, index) => (
-										<li key={index}>{type.name}</li>
-									))}
-								</ul>
-							</div>
-						</li>
-					))
-				) : (
-					<div>No pokemons</div>
-				)}
-			</ul>
+				<div
+					style={{
+						display: 'flex',
+						flexWrap: 'wrap',
+						justifyContent: 'space-around',
+						gap: '50px',
+						width: '50%',
+						listStyleType: 'none'
+					}}
+				>
+					<ul
+						style={{
+							display: 'flex',
+							flexWrap: 'wrap',
+							justifyContent: 'space-around',
+							gap: '50px',
 
-			{pagination ? (
-				<div>
-					<span>Page: {page}</span>
-					{page > 1 && (
-						<button onClick={handlePreviousPokemon}>Previous</button>
+							listStyleType: 'none'
+						}}
+					>
+						{pokemonsPokedex ? (
+							pokemonsPokedex.map((pokemon: IPokemonPokedex) => (
+								<li
+									key={pokemon.id}
+									onClick={() => setpokemonSelected(pokemon.id)}
+									className={`pokemon-pokedex ${pokemonSelected === pokemon.id ? 'selected' : ''}`}
+								>
+									<CustomImage
+										src={pokemon.sprite}
+										alt={pokemon.name}
+										priority={true}
+										width={50}
+										height={50}
+										objectFit={'contain'}
+									/>
+									<div
+										style={{
+											display: 'flex',
+											flexDirection: 'column',
+											alignItems: 'center',
+											justifyContent: 'center',
+											gap: '5px'
+										}}
+									>
+										<h4
+											style={{
+												fontWeight: 'bold',
+												fontFamily: 'var(--ff-title-bold)',
+												color: 'black'
+											}}
+										>
+											#{pokemon.id}{' '}
+										</h4>
+										<h3>{firstLetterMaj(pokemon.name)}</h3>
+										<ul
+											style={{
+												listStyleType: 'none',
+												display: 'flex',
+												justifyContent: 'center',
+												alignItems: 'center',
+												flexDirection: 'row',
+												padding: '0',
+												gap: '5px'
+											}}
+										>
+											{pokemon.types.map((type, index) => (
+												<li
+													className={`pokemon-type ${pokemonSelected === pokemon.id ? 'selected' : ''}`}
+													key={index}
+												>
+													{type.name}
+												</li>
+											))}
+										</ul>
+									</div>
+								</li>
+							))
+						) : (
+							<div>No pokemons</div>
+						)}
+					</ul>
+
+					{pagination ? (
+						<div>
+							<span>Page: {page}</span>
+							{page > 1 && (
+								<button onClick={handlePreviousPokemon}>
+									Previous
+								</button>
+							)}
+							{page < 145 && (
+								<button onClick={handleNextPokemon}>Next</button>
+							)}
+						</div>
+					) : (
+						''
 					)}
-					{page < 145 && <button onClick={handleNextPokemon}>Next</button>}
 				</div>
-			) : (
-				''
-			)}
 
-			{pokemonSelected && (
-				<PokemonInformation
-					pokemonId={pokemonSelected}
-					addToTeam={addToTeam}
-				/>
-			)}
+				<div
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						backgroundColor: 'white',
+						borderRadius: '10px',
+						padding: '25px',
+						width: '300px'
+					}}
+				>
+					{pokemonSelected && (
+						<PokemonInformation
+							pokemonId={pokemonSelected}
+							addToTeam={addToTeam}
+						/>
+					)}
+				</div>
+			</div>
 		</div>
 	);
 };

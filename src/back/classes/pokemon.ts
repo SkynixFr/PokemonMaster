@@ -25,6 +25,9 @@ class Pokemon implements IPokemon {
 	}
 
 	attack(opponentPokemon: Pokemon, move: Move): Pokemon {
+		if (this.status.name === 'KO') {
+			return opponentPokemon;
+		}
 		const damage = move.power;
 		const opponentHp = opponentPokemon.getStat('hp');
 		const updatedHp = opponentHp.decrease(damage);

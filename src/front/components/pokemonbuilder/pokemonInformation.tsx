@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import IPokemon from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
 import { getPokemonById } from '../../actions/pokedex.actions';
+import { firstLetterMaj } from '../../utils/formatString';
 
 interface PokemonInformationProps {
 	pokemonId: number;
@@ -28,9 +29,17 @@ const PokemonInformation = ({
 		return <div>Loading...</div>;
 	}
 	return (
-		<div>
+		<div
+			style={{
+				width: '100%',
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center'
+			}}
+		>
 			<h1>
-				#{pokemon.id} : {pokemon.name}
+				#{pokemon.id} : {firstLetterMaj(pokemon.name)}
 			</h1>
 			<CustomImage
 				src={pokemon.sprite}
@@ -40,25 +49,35 @@ const PokemonInformation = ({
 				height={200}
 				objectFit={'contain'}
 			/>
-			<div>
+			<div
+				style={{
+					width: '80%',
+					display: 'flex',
+					flexDirection: 'column',
+					justifyContent: 'flex-start',
+					alignItems: 'flex-start'
+				}}
+			>
 				<h2>Types:</h2>
 				<ul>
 					{pokemon.types.map(type => (
 						<li key={type.name}>{type.name}</li>
 					))}
 				</ul>
-				<p>Level : {pokemon.level}</p>
-				<p>Gender : {pokemon.gender}</p>
-				<p>Item : {pokemon.item.name}</p>
-				<p>Shiny : {pokemon.isShiny ? 'Yes' : 'No'}</p>
+				<span>Level : {pokemon.level}</span>
+				<span>Gender : {pokemon.gender}</span>
+
+				<span>Shiny : {pokemon.isShiny ? 'Yes' : 'No'}</span>
 				<h2>Item</h2>
-				<span>
-					{pokemon.item.name} : {pokemon.item.description}
-				</span>
+				{pokemon.item.name && pokemon.item.name === 'No item' ? (
+					<span>No item</span>
+				) : (
+					<span>{pokemon.item.name}</span>
+				)}
 				<h2>Nature</h2>
-				<p> {pokemon.nature}</p>
+				<span> {pokemon.nature}</span>
 				<h2>Ability</h2>
-				<p>{pokemon.ability.name}</p>
+				<span>{pokemon.ability.name}</span>
 				<div>
 					<h2>Moves</h2>
 					<ul>
