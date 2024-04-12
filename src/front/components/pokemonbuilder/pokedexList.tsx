@@ -8,6 +8,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import {
 	getNextPokemons,
 	getPokemonByName,
+	getPokemonByType,
 	getPreviousPokemons
 } from '../../actions/pokedex.actions';
 import PokemonInformation from './pokemonInformation';
@@ -61,6 +62,20 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 		}
 	};
 
+	const handleTypeChange = async (
+		event: React.ChangeEvent<HTMLSelectElement>
+	) => {
+		event.preventDefault();
+		const selectedType = event.target.value;
+		setSearchTerm(selectedType);
+		if (selectedType === 'All Types') {
+			setPokemonsPokedex(originalPokemons);
+		} else {
+			const pokemons = await getPokemonByType(selectedType);
+			setPokemonsPokedex(pokemons.results);
+		}
+	};
+
 	return (
 		<div>
 			<h1>Pokemon:</h1>
@@ -81,6 +96,27 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 						}}
 					/>
 					<button>Search</button>
+					<select value={searchTerm} onChange={handleTypeChange}>
+						<option value="All Types">All Types</option>
+						<option value="fire">Fire</option>
+						<option value="water">Water</option>
+						<option value="grass">Grass</option>
+						<option value="electric">Electric</option>
+						<option value="rock">Rock</option>
+						<option value="ground">Ground</option>
+						<option value="ice">Ice</option>
+						<option value="poison">Poison</option>
+						<option value="flying">Flying</option>
+						<option value="bug">Bug</option>
+						<option value="normal">Normal</option>
+						<option value="fighting">Fighting</option>
+						<option value="psychic">Psychic</option>
+						<option value="ghost">Ghost</option>
+						<option value="dragon">Dragon</option>
+						<option value="dark">Dark</option>
+						<option value="steel">Steel</option>
+						<option value="fairy">Fairy</option>
+					</select>
 				</form>
 			</div>
 			<ul

@@ -180,3 +180,37 @@ export async function getPokemonByName(
 		}
 	}
 }
+
+export async function getPokemonByType(type: string): Promise<IPokemonRequest> {
+	try {
+		const response = await axios.get(
+			`https://pokeapi.co/api/v2/type/${type}`
+		);
+
+		const { pokemon } = response.data;
+
+		const promises = pokemon.map(async (pokemon: any) => {
+			const pokemonResponseDetails = await axios.get(pokemon.pokemon.url);
+			const { id, name, types } = pokemonResponseDetails.data;
+			const pokemonDataApi: IPokemonPokedex = {
+				name: name,
+				id: id,
+				types: types.map((type: any) => {
+					return { name: type.type.name };
+				}),
+				sprite: PokemonImgByPokemonId[id]
+			};
+			return pokemonDataApi;
+		});
+
+		return {
+			results: await Promise.all(promises),
+			next: null,
+			previous: null
+		};
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return err.response?.data;
+		}
+	}
+}
