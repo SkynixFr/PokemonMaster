@@ -130,7 +130,6 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 						}}
 					/>
 					<button>Search</button>
-
 				</form>
 				<div>
 					<form>
