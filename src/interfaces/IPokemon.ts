@@ -33,7 +33,7 @@ export interface IPokemonPokedex {
 	name: string;
 	id: number;
 	sprite: string;
-	types: IType[];
+	types?: IType[];
 }
 
 export interface IPokemonRequest {

@@ -4,10 +4,11 @@ import IPokemon, {
 	IPokemonRequest
 } from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
-import { FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import {
 	getNextPokemons,
 	getPokemonByName,
+	getPokemonsByRegion,
 	getPreviousPokemons
 } from '../../actions/pokedex.actions';
 import PokemonInformation from './pokemonInformation';
@@ -22,12 +23,17 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 	const [pokemonsPokedex, setPokemonsPokedex] = useState<IPokemonPokedex[]>(
 		pokemons.results
 	);
-	const originalPokemons = pokemons.results;
+	const [pokemonsByRegion, setPokemonsByRegion] =
+		useState<IPokemonPokedex[]>();
+	const [originalPokemons, setOriginalPokemons] = useState<IPokemonPokedex[]>(
+		pokemons.results
+	);
 
 	const [page, setPage] = useState<number>(1);
 	const [nextReq, setNextReq] = useState<string | null>(null);
 	const [previousReq, setPreviousReq] = useState<string | null>(null);
 	const [searchTerm, setSearchTerm] = useState<string>('');
+	const [pagination, setPagination] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (!pokemons) return;
@@ -61,6 +67,34 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 		}
 	};
 
+	const handleFilterByRegion = async (
+		event: ChangeEvent<HTMLSelectElement>
+	) => {
+		event.preventDefault();
+		if (event.target.value === 'default') {
+			setPagination(true);
+			setPokemonsPokedex(originalPokemons);
+			return;
+		}
+		setPagination(false);
+		const pokemons = await getPokemonsByRegion(Number(event.target.value));
+		if (
+			Number(event.target.value) === 15 &&
+			!pokemons.find(pokemon => pokemon.id === 210)
+		) {
+			pokemons[210] = await getPokemonByName('deoxys-normal');
+		}
+
+		if (
+			Number(event.target.value) === 5 &&
+			!pokemons.find(pokemon => pokemon.id === 45)
+		) {
+			pokemons[45] = await getPokemonByName('vileplume');
+		}
+		setPokemonsPokedex(pokemons);
+		console.log(pokemons);
+	};
+
 	return (
 		<div>
 			<h1>Pokemon:</h1>
@@ -82,6 +116,24 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 					/>
 					<button>Search</button>
 				</form>
+				<div>
+					<form>
+						<select
+							name="region"
+							id="region"
+							defaultValue={'default'}
+							onChange={async e => {
+								await handleFilterByRegion(e);
+							}}
+						>
+							<option value="default">Region</option>
+							<option value={2}>Kanto</option>
+							<option value={3}>Johto</option>
+							<option value={15}>Hoenn</option>
+							<option value={5}>Sinnoh</option>
+						</select>
+					</form>
+				</div>
 			</div>
 			<ul
 				style={{
@@ -107,7 +159,7 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 								<span>#{pokemon.id} </span>
 								{pokemon.name}
 								<ul>
-									{pokemon.types.map((type, index) => (
+									{pokemon.types?.map((type, index) => (
 										<li key={index}>{type.name}</li>
 									))}
 								</ul>
@@ -119,13 +171,18 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 				)}
 			</ul>
 
-			<div>
-				<span>Page: {page}</span>
-				{page > 1 && (
-					<button onClick={handlePreviousPokemon}>Previous</button>
-				)}
-				{page < 145 && <button onClick={handleNextPokemon}>Next</button>}
-			</div>
+			{pagination ? (
+				<div>
+					<span>Page: {page}</span>
+					{page > 1 && (
+						<button onClick={handlePreviousPokemon}>Previous</button>
+					)}
+					{page < 145 && <button onClick={handleNextPokemon}>Next</button>}
+				</div>
+			) : (
+				''
+			)}
+
 			{pokemonSelected && (
 				<PokemonInformation
 					pokemonId={pokemonSelected}
