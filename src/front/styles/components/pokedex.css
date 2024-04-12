@@ -16,7 +16,7 @@ ul > .pokemon-pokedex.selected {
 }
 
 ul > .pokemon-pokedex:not(.selected) {
-    opacity: 0.7;
+    opacity: 0.9;
 }
 
 .pokemon-pokedex.selected {
