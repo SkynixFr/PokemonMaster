@@ -214,3 +214,23 @@ export async function getPokemonByType(type: string): Promise<IPokemonRequest> {
 		}
 	}
 }
+
+export async function getPokemonsByRegion(
+	regionId: number
+): Promise<IPokemonPokedex[]> {
+	try {
+		const response = await axios.get(
+			`https://pokeapi.co/api/v2/pokedex/${regionId}`
+		);
+		const { pokemon_entries } = response.data;
+		const promises = pokemon_entries.map(async (pokemon: any) => {
+			return await getPokemonByName(pokemon.pokemon_species.name);
+		});
+
+		return await Promise.all(promises);
+	} catch (err) {
+		if (axios.isAxiosError(err)) {
+			return err.response?.data;
+		}
+	}
+}

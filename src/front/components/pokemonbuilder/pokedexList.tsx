@@ -4,10 +4,11 @@ import IPokemon, {
 	IPokemonRequest
 } from '../../../interfaces/IPokemon';
 import CustomImage from '../custom/customImage';
-import { FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import {
 	getNextPokemons,
 	getPokemonByName,
+	getPokemonsByRegion,
 	getPokemonByType,
 	getPreviousPokemons
 } from '../../actions/pokedex.actions';
@@ -23,12 +24,17 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 	const [pokemonsPokedex, setPokemonsPokedex] = useState<IPokemonPokedex[]>(
 		pokemons.results
 	);
-	const originalPokemons = pokemons.results;
+	const [pokemonsByRegion, setPokemonsByRegion] =
+		useState<IPokemonPokedex[]>();
+	const [originalPokemons, setOriginalPokemons] = useState<IPokemonPokedex[]>(
+		pokemons.results
+	);
 
 	const [page, setPage] = useState<number>(1);
 	const [nextReq, setNextReq] = useState<string | null>(null);
 	const [previousReq, setPreviousReq] = useState<string | null>(null);
 	const [searchTerm, setSearchTerm] = useState<string>('');
+	const [pagination, setPagination] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (!pokemons) return;
@@ -76,6 +82,34 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 		}
 	};
 
+	const handleFilterByRegion = async (
+		event: ChangeEvent<HTMLSelectElement>
+	) => {
+		event.preventDefault();
+		if (event.target.value === 'default') {
+			setPagination(true);
+			setPokemonsPokedex(originalPokemons);
+			return;
+		}
+		setPagination(false);
+		const pokemons = await getPokemonsByRegion(Number(event.target.value));
+		if (
+			Number(event.target.value) === 15 &&
+			!pokemons.find(pokemon => pokemon.id === 210)
+		) {
+			pokemons[210] = await getPokemonByName('deoxys-normal');
+		}
+
+		if (
+			Number(event.target.value) === 5 &&
+			!pokemons.find(pokemon => pokemon.id === 45)
+		) {
+			pokemons[45] = await getPokemonByName('vileplume');
+		}
+		setPokemonsPokedex(pokemons);
+		console.log(pokemons);
+	};
+
 	return (
 		<div>
 			<h1>Pokemon:</h1>
@@ -96,28 +130,46 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 						}}
 					/>
 					<button>Search</button>
-					<select value={searchTerm} onChange={handleTypeChange}>
-						<option value="All Types">All Types</option>
-						<option value="fire">Fire</option>
-						<option value="water">Water</option>
-						<option value="grass">Grass</option>
-						<option value="electric">Electric</option>
-						<option value="rock">Rock</option>
-						<option value="ground">Ground</option>
-						<option value="ice">Ice</option>
-						<option value="poison">Poison</option>
-						<option value="flying">Flying</option>
-						<option value="bug">Bug</option>
-						<option value="normal">Normal</option>
-						<option value="fighting">Fighting</option>
-						<option value="psychic">Psychic</option>
-						<option value="ghost">Ghost</option>
-						<option value="dragon">Dragon</option>
-						<option value="dark">Dark</option>
-						<option value="steel">Steel</option>
-						<option value="fairy">Fairy</option>
-					</select>
 				</form>
+				<div>
+					<form>
+						<select
+							name="region"
+							id="region"
+							defaultValue={'default'}
+							onChange={async e => {
+								await handleFilterByRegion(e);
+							}}
+						>
+							<option value="default">Region</option>
+							<option value={2}>Kanto</option>
+							<option value={3}>Johto</option>
+							<option value={15}>Hoenn</option>
+							<option value={5}>Sinnoh</option>
+						</select>
+						<select value={searchTerm} onChange={handleTypeChange}>
+							<option value="All Types">All Types</option>
+							<option value="fire">Fire</option>
+							<option value="water">Water</option>
+							<option value="grass">Grass</option>
+							<option value="electric">Electric</option>
+							<option value="rock">Rock</option>
+							<option value="ground">Ground</option>
+							<option value="ice">Ice</option>
+							<option value="poison">Poison</option>
+							<option value="flying">Flying</option>
+							<option value="bug">Bug</option>
+							<option value="normal">Normal</option>
+							<option value="fighting">Fighting</option>
+							<option value="psychic">Psychic</option>
+							<option value="ghost">Ghost</option>
+							<option value="dragon">Dragon</option>
+							<option value="dark">Dark</option>
+							<option value="steel">Steel</option>
+							<option value="fairy">Fairy</option>
+						</select>
+					</form>
+				</div>
 			</div>
 			<ul
 				style={{
@@ -155,13 +207,18 @@ const PokedexList = ({ pokemons, addToTeam }: PokemonListProps) => {
 				)}
 			</ul>
 
-			<div>
-				<span>Page: {page}</span>
-				{page > 1 && (
-					<button onClick={handlePreviousPokemon}>Previous</button>
-				)}
-				{page < 145 && <button onClick={handleNextPokemon}>Next</button>}
-			</div>
+			{pagination ? (
+				<div>
+					<span>Page: {page}</span>
+					{page > 1 && (
+						<button onClick={handlePreviousPokemon}>Previous</button>
+					)}
+					{page < 145 && <button onClick={handleNextPokemon}>Next</button>}
+				</div>
+			) : (
+				''
+			)}
+
 			{pokemonSelected && (
 				<PokemonInformation
 					pokemonId={pokemonSelected}
