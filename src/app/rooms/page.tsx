@@ -14,7 +14,12 @@ const Rooms = () => {
 				{ name: 'attack', value: 291, max: 291 },
 				{ name: 'speed', value: 280, max: 280 }
 			],
-			moves: [{ name: 'surf', power: 95 }]
+			moves: [
+				{ name: 'surf', power: 95 },
+				{ name: 'hydro pump', power: 120 },
+				{ name: 'ice beam', power: 90 },
+				{ name: 'bite', power: 60 }
+			]
 		};
 		const opponentPokemon = {
 			name: 'Charizard',
@@ -23,7 +28,12 @@ const Rooms = () => {
 				{ name: 'attack', value: 293, max: 293 },
 				{ name: 'speed', value: 328, max: 328 }
 			],
-			moves: [{ name: 'flamethrower', power: 95 }]
+			moves: [
+				{ name: 'flamethrower', power: 95 },
+				{ name: 'fire blast', power: 120 },
+				{ name: 'wing attack', power: 60 },
+				{ name: 'slash', power: 70 }
+			]
 		};
 
 		localStorage.setItem('playerPokemon', JSON.stringify(playerPokemon));

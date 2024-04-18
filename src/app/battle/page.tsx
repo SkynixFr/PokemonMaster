@@ -6,6 +6,7 @@ import Link from 'next/link';
 // Classes
 import PokemonClass from '../../back/classes/pokemon';
 import BattleClass from '../../back/classes/battle';
+import Move from '../../back/classes/move';
 
 // Interfaces
 interface BattleProps {
@@ -106,6 +107,36 @@ const Battle = ({ battle }: BattleProps) => {
 		return <div>Loading...</div>;
 	}
 
+	const handleOpponentMoves = pokemon => {
+		const movesContainer = document.getElementById(
+			'opponent-moves-container'
+		);
+		movesContainer.innerHTML = '';
+		pokemon.moves.forEach((move: Move) => {
+			const moveButton = document.createElement('button');
+			moveButton.textContent = move.name;
+			moveButton.onclick = () => {
+				setOpponentSelectedMove('attack');
+				handleOpponentReady();
+			};
+			movesContainer.appendChild(moveButton);
+		});
+	};
+
+	const handlePlayerMoves = pokemon => {
+		const movesContainer = document.getElementById('player-moves-container');
+		movesContainer.innerHTML = '';
+		pokemon.moves.forEach((move: Move) => {
+			const moveButton = document.createElement('button');
+			moveButton.textContent = move.name;
+			moveButton.onclick = () => {
+				setPlayerSelectedMove('attack');
+				handlePlayerReady();
+			};
+			movesContainer.appendChild(moveButton);
+		});
+	};
+
 	const handlePlayerAttack = () => {
 		const updatedOpponentPokemon = playerPokemon.attack(
 			opponentPokemon,
@@ -174,8 +205,7 @@ const Battle = ({ battle }: BattleProps) => {
 
 			<button
 				onClick={() => {
-					setOpponentSelectedMove('attack');
-					handlePlayerReady();
+					handleOpponentMoves(opponentPokemon);
 				}}
 			>
 				Attack
@@ -183,11 +213,12 @@ const Battle = ({ battle }: BattleProps) => {
 			<button
 				onClick={() => {
 					setOpponentSelectedMove('heal');
-					handlePlayerReady();
+					handleOpponentReady();
 				}}
 			>
 				Heal
 			</button>
+			<div id="opponent-moves-container"></div>
 			<p>
 				<span>Player : </span>
 				{playerPokemon.name + ' '}
@@ -199,8 +230,7 @@ const Battle = ({ battle }: BattleProps) => {
 			</p>
 			<button
 				onClick={() => {
-					setPlayerSelectedMove('attack');
-					handleOpponentReady();
+					handlePlayerMoves(playerPokemon);
 				}}
 			>
 				Attack
@@ -208,11 +238,12 @@ const Battle = ({ battle }: BattleProps) => {
 			<button
 				onClick={() => {
 					setPlayerSelectedMove('heal');
-					handleOpponentReady();
+					handlePlayerReady();
 				}}
 			>
 				Heal
 			</button>
+			<div id="player-moves-container"></div>
 			{battleWinner && <h1>{battleWinner} wins!!!</h1>}
 		</div>
 	);
