@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import React from 'react';
+import { Toaster } from 'sonner';
 
 import '../front/styles/global.css';
 
@@ -19,7 +20,14 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<body>{children}</body>
+			<body>
+				<Toaster
+					richColors={true}
+					visibleToasts={5}
+					position={'top-right'}
+				/>
+				{children}
+			</body>
 		</html>
 	);
 }
