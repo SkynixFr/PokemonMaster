@@ -25,7 +25,7 @@ class Pokemon implements IPokemon {
 	}
 
 	attack(opponentPokemon: Pokemon, move: Move): Pokemon {
-		if (this.status.name === 'KO') {
+		if (this.status.name === 'KO' || this.status.name === 'SLP') {
 			return opponentPokemon;
 		}
 		const damage = move.power;

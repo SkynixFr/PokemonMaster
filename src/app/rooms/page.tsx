@@ -30,7 +30,7 @@ const Rooms = () => {
 			],
 			moves: [
 				{ name: 'flamethrower', power: 95 },
-				{ name: 'fire blast', power: 120 },
+				{ name: 'hypnosis', power: 0 },
 				{ name: 'wing attack', power: 60 },
 				{ name: 'slash', power: 70 }
 			]

@@ -66,12 +66,16 @@ const Battle = ({ battle }: BattleProps) => {
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
 		let updatedPokemon: PokemonClass;
+		let excludedStatus = ['SLP', 'KO'];
 		if (
 			playerPokemon.getStat('speed').value >
 			opponentPokemon.getStat('speed').value
 		) {
 			updatedPokemon = handlePlayerAttack();
-			if (updatedPokemon.status.name !== 'KO') {
+			if (
+				updatedPokemon.status.name !== 'KO' &&
+				updatedPokemon.status.name !== 'SLP'
+			) {
 				handleOpponentAttack();
 			}
 		} else if (
@@ -79,7 +83,10 @@ const Battle = ({ battle }: BattleProps) => {
 			opponentPokemon.getStat('speed').value
 		) {
 			updatedPokemon = handleOpponentAttack();
-			if (updatedPokemon.status.name !== 'KO') {
+			if (
+				updatedPokemon.status.name !== 'KO' &&
+				updatedPokemon.status.name !== 'SLP'
+			) {
 				handlePlayerAttack();
 			}
 		}
@@ -149,9 +156,20 @@ const Battle = ({ battle }: BattleProps) => {
 		);
 	};
 
-	const handlePoisonAttack = () => {
+	const handlePlayerPoisonAttack = () => {
 		const updatedOpponentPokemon = opponentPokemon.changeStatus(
 			new Status('PSN', 'The Pokémon is poisoned')
+		);
+		setOpponentPokemon(updatedOpponentPokemon);
+		localStorage.setItem(
+			'opponentPokemon',
+			JSON.stringify(updatedOpponentPokemon)
+		);
+	};
+
+	const handlePlayerSleepAttack = () => {
+		const updatedOpponentPokemon = opponentPokemon.changeStatus(
+			new Status('SLP', 'The Pokémon is asleep')
 		);
 		setOpponentPokemon(updatedOpponentPokemon);
 		localStorage.setItem(
@@ -251,10 +269,18 @@ const Battle = ({ battle }: BattleProps) => {
 
 			<button
 				onClick={() => {
-					handlePoisonAttack();
+					handlePlayerPoisonAttack();
 				}}
 			>
 				Poison
+			</button>
+
+			<button
+				onClick={() => {
+					handlePlayerSleepAttack();
+				}}
+			>
+				Sleep
 			</button>
 
 			{/* Affichage des moves du joueur */}
