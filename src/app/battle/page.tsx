@@ -7,6 +7,7 @@ import Link from 'next/link';
 import PokemonClass from '../../back/classes/pokemon';
 import BattleClass from '../../back/classes/battle';
 import Move from '../../back/classes/move';
+import Status from '../../back/classes/status';
 
 // Interfaces
 interface BattleProps {
@@ -116,14 +117,14 @@ const Battle = ({ battle }: BattleProps) => {
 		return updatedOpponentPokemon;
 	};
 
-	// const handlePlayerHeal = () => {
-	// 	const updatedPlayerPokemon = playerPokemon.heal();
-	// 	setPlayerPokemon(updatedPlayerPokemon);
-	// 	localStorage.setItem(
-	// 		'playerPokemon',
-	// 		JSON.stringify(updatedPlayerPokemon)
-	// 	);
-	// };
+	const handlePlayerHeal = () => {
+		const updatedPlayerPokemon = playerPokemon.heal();
+		setPlayerPokemon(updatedPlayerPokemon);
+		localStorage.setItem(
+			'playerPokemon',
+			JSON.stringify(updatedPlayerPokemon)
+		);
+	};
 
 	// Gestion du move de l'adversaire
 	const handleOpponentAttack = () => {
@@ -139,14 +140,25 @@ const Battle = ({ battle }: BattleProps) => {
 		return updatedPlayerPokemon;
 	};
 
-	// const handleOpponentHeal = () => {
-	// 	const updatedOpponentPokemon = opponentPokemon.heal();
-	// 	setOpponentPokemon(updatedOpponentPokemon);
-	// 	localStorage.setItem(
-	// 		'playerPokemon',
-	// 		JSON.stringify(updatedOpponentPokemon)
-	// 	);
-	// };
+	const handleOpponentHeal = () => {
+		const updatedOpponentPokemon = opponentPokemon.heal();
+		setOpponentPokemon(updatedOpponentPokemon);
+		localStorage.setItem(
+			'playerPokemon',
+			JSON.stringify(updatedOpponentPokemon)
+		);
+	};
+
+	const handlePoisonAttack = () => {
+		const updatedOpponentPokemon = opponentPokemon.changeStatus(
+			new Status('PSN', 'The Pokémon is poisoned')
+		);
+		setOpponentPokemon(updatedOpponentPokemon);
+		localStorage.setItem(
+			'opponentPokemon',
+			JSON.stringify(updatedOpponentPokemon)
+		);
+	};
 
 	const handlePlayerReady = () => {
 		setPlayerReady(true);
@@ -160,15 +172,20 @@ const Battle = ({ battle }: BattleProps) => {
 		<div>
 			<Link href={'/rooms'}>Go back</Link>
 			<h1>Battle</h1>
+
+			{/* Affichage des informations du Pokemon de l'adversaire */}
 			<p>
 				<span>Opponent : </span>
-				{opponentPokemon.name + ' '}
-				{opponentPokemon.status.name !== 'KO'
-					? opponentPokemon.getStat('hp').value +
-						'/' +
-						opponentPokemon.getStat('hp').max
-					: opponentPokemon.status.name}
+				{opponentPokemon.getStat('hp').value +
+					'/' +
+					opponentPokemon.getStat('hp').max}
+				<br />
+				{'status ' + opponentPokemon.status.name
+					? opponentPokemon.status.name
+					: ''}
 			</p>
+
+			{/* Bouton Attack de l'adversaire */}
 			<button
 				onClick={() => {
 					setOpponentMovesShowed(!opponentMovesShowed);
@@ -176,8 +193,18 @@ const Battle = ({ battle }: BattleProps) => {
 			>
 				Attack
 			</button>
+
+			<button
+				onClick={() => {
+					handleOpponentHeal();
+				}}
+			>
+				Heal
+			</button>
+
+			{/* Affichage des moves de l'adversaire */}
 			{opponentMovesShowed && (
-				<div id="opponent-moves-container">
+				<div>
 					{opponentPokemon.moves.map((move: Move) => (
 						<button
 							key={move.name}
@@ -191,15 +218,21 @@ const Battle = ({ battle }: BattleProps) => {
 					))}
 				</div>
 			)}
+
+			{/* Affichage des informations du Pokemon du joueur */}
 			<p>
 				<span>Player : </span>
 				{playerPokemon.name + ' '}
-				{playerPokemon.status.name !== 'KO'
-					? playerPokemon.getStat('hp').value +
-						'/' +
-						playerPokemon.getStat('hp').max
-					: playerPokemon.status.name}
+				{playerPokemon.getStat('hp').value +
+					'/' +
+					playerPokemon.getStat('hp').max}
+				<br />
+				{'status ' + playerPokemon.status.name
+					? playerPokemon.status.name
+					: ''}
 			</p>
+
+			{/* Bouton Attack du joueur */}
 			<button
 				onClick={() => {
 					setPlayerMovesShowed(!playerMovesShowed);
@@ -207,8 +240,26 @@ const Battle = ({ battle }: BattleProps) => {
 			>
 				Attack
 			</button>
+
+			<button
+				onClick={() => {
+					handlePlayerHeal();
+				}}
+			>
+				Heal
+			</button>
+
+			<button
+				onClick={() => {
+					handlePoisonAttack();
+				}}
+			>
+				Poison
+			</button>
+
+			{/* Affichage des moves du joueur */}
 			{playerMovesShowed && (
-				<div id="player-moves-container">
+				<div>
 					{playerPokemon.moves.map((move: Move) => (
 						<button
 							key={move.name}
@@ -222,6 +273,8 @@ const Battle = ({ battle }: BattleProps) => {
 					))}
 				</div>
 			)}
+
+			{/* Affichage du vainqueur */}
 			{battleWinner && <h1>{battleWinner} wins!!!</h1>}
 		</div>
 	);
