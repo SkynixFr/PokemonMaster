@@ -96,42 +96,6 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	}, [playerPokemon, opponentPokemon]);
 
-	// Affichage des moves de l'adversaire
-	useEffect(() => {
-		const movesContainer = document.getElementById(
-			'opponent-moves-container'
-		);
-		if (movesContainer && opponentMovesShowed) {
-			movesContainer.innerHTML = '';
-			opponentPokemon.moves.forEach((move: Move) => {
-				const moveButton = document.createElement('button');
-				moveButton.textContent = move.name;
-				moveButton.onclick = () => {
-					setOpponentSelectedMove(move);
-					handleOpponentReady();
-				};
-				movesContainer.appendChild(moveButton);
-			});
-		}
-	}, [opponentMovesShowed]);
-
-	// Affichage des moves du joueur
-	useEffect(() => {
-		const movesContainer = document.getElementById('player-moves-container');
-		if (movesContainer) {
-			movesContainer.innerHTML = '';
-			playerPokemon.moves.forEach((move: Move) => {
-				const moveButton = document.createElement('button');
-				moveButton.textContent = move.name;
-				moveButton.onclick = () => {
-					setPlayerSelectedMove(move);
-					handlePlayerReady();
-				};
-				movesContainer.appendChild(moveButton);
-			});
-		}
-	}, [playerMovesShowed]);
-
 	// Affichage du loader
 	if (!battle || !playerPokemon || !opponentPokemon) {
 		console.log('Battle loading...');
@@ -212,7 +176,21 @@ const Battle = ({ battle }: BattleProps) => {
 			>
 				Attack
 			</button>
-			{opponentMovesShowed && <div id="opponent-moves-container"></div>}
+			{opponentMovesShowed && (
+				<div id="opponent-moves-container">
+					{opponentPokemon.moves.map((move: Move) => (
+						<button
+							key={move.name}
+							onClick={() => {
+								setOpponentSelectedMove(move);
+								handleOpponentReady();
+							}}
+						>
+							{move.name}
+						</button>
+					))}
+				</div>
+			)}
 			<p>
 				<span>Player : </span>
 				{playerPokemon.name + ' '}
@@ -229,7 +207,21 @@ const Battle = ({ battle }: BattleProps) => {
 			>
 				Attack
 			</button>
-			{playerMovesShowed && <div id="player-moves-container"></div>}
+			{playerMovesShowed && (
+				<div id="player-moves-container">
+					{playerPokemon.moves.map((move: Move) => (
+						<button
+							key={move.name}
+							onClick={() => {
+								setPlayerSelectedMove(move);
+								handlePlayerReady();
+							}}
+						>
+							{move.name}
+						</button>
+					))}
+				</div>
+			)}
 			{battleWinner && <h1>{battleWinner} wins!!!</h1>}
 		</div>
 	);
