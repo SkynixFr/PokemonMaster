@@ -107,7 +107,7 @@ const Battle = ({ battle }: BattleProps) => {
 		return <div>Loading...</div>;
 	}
 
-	const handleOpponentMoves = pokemon => {
+	const handleOpponentMoves = (pokemon: PokemonClass) => {
 		const movesContainer = document.getElementById(
 			'opponent-moves-container'
 		);
@@ -123,7 +123,7 @@ const Battle = ({ battle }: BattleProps) => {
 		});
 	};
 
-	const handlePlayerMoves = pokemon => {
+	const handlePlayerMoves = (pokemon: PokemonClass) => {
 		const movesContainer = document.getElementById('player-moves-container');
 		movesContainer.innerHTML = '';
 		pokemon.moves.forEach((move: Move) => {
