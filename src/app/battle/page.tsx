@@ -19,8 +19,8 @@ const Battle = ({ battle }: BattleProps) => {
 		useState<PokemonClass | null>();
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
 	const [opponentReady, setOpponentReady] = useState<boolean>(false);
-	const [playerSelectedMove, setPlayerSelectedMove] = useState<string>('');
-	const [opponentSelectedMove, setOpponentSelectedMove] = useState<string>('');
+	const [playerSelectedMove, setPlayerSelectedMove] = useState<Move>();
+	const [opponentSelectedMove, setOpponentSelectedMove] = useState<Move>();
 	const [battleWinner, setBattleWinner] = useState<string>('');
 
 	// Récupération des pokémons depuis le localStorage ou la room
@@ -66,31 +66,23 @@ const Battle = ({ battle }: BattleProps) => {
 			playerPokemon.getStat('speed').value >
 			opponentPokemon.getStat('speed').value
 		) {
-			if (playerSelectedMove === 'attack') {
-				updatedPokemon = handlePlayerAttack();
-			}
-			if (playerSelectedMove === 'heal') handlePlayerHeal();
+			updatedPokemon = handlePlayerAttack();
 			if (updatedPokemon.status.name !== 'KO') {
-				if (opponentSelectedMove === 'attack') handleOpponentAttack();
-				if (opponentSelectedMove === 'heal') handleOpponentHeal();
+				handleOpponentAttack();
 			}
 		} else if (
 			playerPokemon.getStat('speed').value <
 			opponentPokemon.getStat('speed').value
 		) {
-			if (opponentSelectedMove === 'attack') {
-				updatedPokemon = handleOpponentAttack();
-			}
-			if (opponentSelectedMove === 'heal') handleOpponentHeal();
+			updatedPokemon = handleOpponentAttack();
 			if (updatedPokemon.status.name !== 'KO') {
-				if (playerSelectedMove === 'attack') handlePlayerAttack();
-				if (playerSelectedMove === 'heal') handlePlayerHeal();
+				handlePlayerAttack();
 			}
 		}
 		setPlayerReady(false);
 		setOpponentReady(false);
-		setPlayerSelectedMove('');
-		setOpponentSelectedMove('');
+		setPlayerSelectedMove(null);
+		setOpponentSelectedMove(null);
 	}, [playerReady, opponentReady]);
 
 	useEffect(() => {
@@ -116,7 +108,7 @@ const Battle = ({ battle }: BattleProps) => {
 			const moveButton = document.createElement('button');
 			moveButton.textContent = move.name;
 			moveButton.onclick = () => {
-				setOpponentSelectedMove('attack');
+				setOpponentSelectedMove(move);
 				handleOpponentReady();
 			};
 			movesContainer.appendChild(moveButton);
@@ -130,7 +122,7 @@ const Battle = ({ battle }: BattleProps) => {
 			const moveButton = document.createElement('button');
 			moveButton.textContent = move.name;
 			moveButton.onclick = () => {
-				setPlayerSelectedMove('attack');
+				setPlayerSelectedMove(move);
 				handlePlayerReady();
 			};
 			movesContainer.appendChild(moveButton);
@@ -140,7 +132,7 @@ const Battle = ({ battle }: BattleProps) => {
 	const handlePlayerAttack = () => {
 		const updatedOpponentPokemon = playerPokemon.attack(
 			opponentPokemon,
-			playerPokemon.moves[0]
+			playerSelectedMove
 		);
 		setOpponentPokemon(updatedOpponentPokemon);
 		localStorage.setItem(
@@ -162,7 +154,7 @@ const Battle = ({ battle }: BattleProps) => {
 	const handleOpponentAttack = () => {
 		const updatedPlayerPokemon = opponentPokemon.attack(
 			playerPokemon,
-			opponentPokemon.moves[0]
+			opponentSelectedMove
 		);
 		setPlayerPokemon(updatedPlayerPokemon);
 		localStorage.setItem(
@@ -212,7 +204,7 @@ const Battle = ({ battle }: BattleProps) => {
 			</button>
 			<button
 				onClick={() => {
-					setOpponentSelectedMove('heal');
+					// setOpponentSelectedMove('heal');
 					handleOpponentReady();
 				}}
 			>
@@ -237,7 +229,7 @@ const Battle = ({ battle }: BattleProps) => {
 			</button>
 			<button
 				onClick={() => {
-					setPlayerSelectedMove('heal');
+					// setPlayerSelectedMove('heal');
 					handlePlayerReady();
 				}}
 			>
