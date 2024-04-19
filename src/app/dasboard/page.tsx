@@ -3,22 +3,44 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 // Actions
-import { updatePokemons } from '../../front/actions/dashboard.actions';
+import {
+	updateMoves,
+	updatePokemons
+} from '../../front/actions/dashboard.actions';
 
 const DasboardPage = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleUpdatePokemons = async () => {
 		setIsLoading(true);
+		toast.promise(updatePokemons(), {
+			loading: 'Updating pokemons...',
+			success: response => {
+				setIsLoading(false);
+				return `${response.length} pokemons updated`;
+			},
+			error: error => {
+				setIsLoading(false);
+				return error.message;
+			},
+			duration: null
+		});
+	};
 
-		const response = await updatePokemons();
-		if (response.status === 404) {
-			toast.error('Failed to update pokemons');
-		} else {
-			toast.success('Pokemons updated');
-		}
-
-		setIsLoading(false);
+	const handleUpdateMoves = async () => {
+		setIsLoading(true);
+		toast.promise(updateMoves(), {
+			loading: 'Updating moves...',
+			success: response => {
+				setIsLoading(false);
+				return `${response.length} moves updated`;
+			},
+			error: error => {
+				setIsLoading(false);
+				return error.message;
+			},
+			duration: null
+		});
 	};
 
 	return (
@@ -26,21 +48,23 @@ const DasboardPage = () => {
 			<h1>Admin dasboard</h1>
 			<ul>
 				<li>
-					<button onClick={handleUpdatePokemons}>
-						{isLoading ? 'Loading...' : 'Update Pokemons'}
+					<button onClick={handleUpdatePokemons} disabled={isLoading}>
+						Update Pokemons
 					</button>
 				</li>
 				<li>
 					<button disabled={true}>Update Items</button>
 				</li>
 				<li>
-					<button>Update Moves</button>
+					<button onClick={handleUpdateMoves} disabled={isLoading}>
+						Update Moves
+					</button>
 				</li>
 				<li>
-					<button>Update Abilities</button>
+					<button disabled={isLoading}>Update Abilities</button>
 				</li>
 				<li>
-					<button>Update Natures</button>
+					<button disabled={isLoading}>Update Natures</button>
 				</li>
 			</ul>
 		</div>
