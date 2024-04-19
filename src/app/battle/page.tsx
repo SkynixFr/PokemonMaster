@@ -22,6 +22,9 @@ const Battle = ({ battle }: BattleProps) => {
 	const [playerSelectedMove, setPlayerSelectedMove] = useState<Move>();
 	const [opponentSelectedMove, setOpponentSelectedMove] = useState<Move>();
 	const [battleWinner, setBattleWinner] = useState<string>('');
+	const [playerMovesShowed, setPlayerMovesShowed] = useState<boolean>(false);
+	const [opponentMovesShowed, setOpponentMovesShowed] =
+		useState<boolean>(false);
 
 	// Récupération des pokémons depuis le localStorage ou la room
 	useEffect(() => {
@@ -58,7 +61,7 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	}, [battle]);
 
-	// Gestion de la priorité des moves
+	// Déclenchement des attaques et gestion de la vitesse des Pokémon
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
 		let updatedPokemon: PokemonClass;
@@ -81,10 +84,9 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 		setPlayerReady(false);
 		setOpponentReady(false);
-		setPlayerSelectedMove(null);
-		setOpponentSelectedMove(null);
 	}, [playerReady, opponentReady]);
 
+	// Détermination du gagnant
 	useEffect(() => {
 		if (playerPokemon?.status.name === 'KO') {
 			setBattleWinner('Opponent');
@@ -94,41 +96,49 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	}, [playerPokemon, opponentPokemon]);
 
+	// Affichage des moves de l'adversaire
+	useEffect(() => {
+		const movesContainer = document.getElementById(
+			'opponent-moves-container'
+		);
+		if (movesContainer && opponentMovesShowed) {
+			movesContainer.innerHTML = '';
+			opponentPokemon.moves.forEach((move: Move) => {
+				const moveButton = document.createElement('button');
+				moveButton.textContent = move.name;
+				moveButton.onclick = () => {
+					setOpponentSelectedMove(move);
+					handleOpponentReady();
+				};
+				movesContainer.appendChild(moveButton);
+			});
+		}
+	}, [opponentMovesShowed]);
+
+	// Affichage des moves du joueur
+	useEffect(() => {
+		const movesContainer = document.getElementById('player-moves-container');
+		if (movesContainer) {
+			movesContainer.innerHTML = '';
+			playerPokemon.moves.forEach((move: Move) => {
+				const moveButton = document.createElement('button');
+				moveButton.textContent = move.name;
+				moveButton.onclick = () => {
+					setPlayerSelectedMove(move);
+					handlePlayerReady();
+				};
+				movesContainer.appendChild(moveButton);
+			});
+		}
+	}, [playerMovesShowed]);
+
+	// Affichage du loader
 	if (!battle || !playerPokemon || !opponentPokemon) {
 		console.log('Battle loading...');
 		return <div>Loading...</div>;
 	}
 
-	const handleOpponentMoves = (pokemon: PokemonClass) => {
-		const movesContainer = document.getElementById(
-			'opponent-moves-container'
-		);
-		movesContainer.innerHTML = '';
-		pokemon.moves.forEach((move: Move) => {
-			const moveButton = document.createElement('button');
-			moveButton.textContent = move.name;
-			moveButton.onclick = () => {
-				setOpponentSelectedMove(move);
-				handleOpponentReady();
-			};
-			movesContainer.appendChild(moveButton);
-		});
-	};
-
-	const handlePlayerMoves = (pokemon: PokemonClass) => {
-		const movesContainer = document.getElementById('player-moves-container');
-		movesContainer.innerHTML = '';
-		pokemon.moves.forEach((move: Move) => {
-			const moveButton = document.createElement('button');
-			moveButton.textContent = move.name;
-			moveButton.onclick = () => {
-				setPlayerSelectedMove(move);
-				handlePlayerReady();
-			};
-			movesContainer.appendChild(moveButton);
-		});
-	};
-
+	// Gestion du move du joueur
 	const handlePlayerAttack = () => {
 		const updatedOpponentPokemon = playerPokemon.attack(
 			opponentPokemon,
@@ -142,15 +152,16 @@ const Battle = ({ battle }: BattleProps) => {
 		return updatedOpponentPokemon;
 	};
 
-	const handlePlayerHeal = () => {
-		const updatedPlayerPokemon = playerPokemon.heal();
-		setPlayerPokemon(updatedPlayerPokemon);
-		localStorage.setItem(
-			'playerPokemon',
-			JSON.stringify(updatedPlayerPokemon)
-		);
-	};
+	// const handlePlayerHeal = () => {
+	// 	const updatedPlayerPokemon = playerPokemon.heal();
+	// 	setPlayerPokemon(updatedPlayerPokemon);
+	// 	localStorage.setItem(
+	// 		'playerPokemon',
+	// 		JSON.stringify(updatedPlayerPokemon)
+	// 	);
+	// };
 
+	// Gestion du move de l'adversaire
 	const handleOpponentAttack = () => {
 		const updatedPlayerPokemon = opponentPokemon.attack(
 			playerPokemon,
@@ -164,14 +175,14 @@ const Battle = ({ battle }: BattleProps) => {
 		return updatedPlayerPokemon;
 	};
 
-	const handleOpponentHeal = () => {
-		const updatedOpponentPokemon = opponentPokemon.heal();
-		setOpponentPokemon(updatedOpponentPokemon);
-		localStorage.setItem(
-			'playerPokemon',
-			JSON.stringify(updatedOpponentPokemon)
-		);
-	};
+	// const handleOpponentHeal = () => {
+	// 	const updatedOpponentPokemon = opponentPokemon.heal();
+	// 	setOpponentPokemon(updatedOpponentPokemon);
+	// 	localStorage.setItem(
+	// 		'playerPokemon',
+	// 		JSON.stringify(updatedOpponentPokemon)
+	// 	);
+	// };
 
 	const handlePlayerReady = () => {
 		setPlayerReady(true);
@@ -194,23 +205,14 @@ const Battle = ({ battle }: BattleProps) => {
 						opponentPokemon.getStat('hp').max
 					: opponentPokemon.status.name}
 			</p>
-
 			<button
 				onClick={() => {
-					handleOpponentMoves(opponentPokemon);
+					setOpponentMovesShowed(!opponentMovesShowed);
 				}}
 			>
 				Attack
 			</button>
-			<button
-				onClick={() => {
-					// setOpponentSelectedMove('heal');
-					handleOpponentReady();
-				}}
-			>
-				Heal
-			</button>
-			<div id="opponent-moves-container"></div>
+			{opponentMovesShowed && <div id="opponent-moves-container"></div>}
 			<p>
 				<span>Player : </span>
 				{playerPokemon.name + ' '}
@@ -222,20 +224,12 @@ const Battle = ({ battle }: BattleProps) => {
 			</p>
 			<button
 				onClick={() => {
-					handlePlayerMoves(playerPokemon);
+					setPlayerMovesShowed(!playerMovesShowed);
 				}}
 			>
 				Attack
 			</button>
-			<button
-				onClick={() => {
-					// setPlayerSelectedMove('heal');
-					handlePlayerReady();
-				}}
-			>
-				Heal
-			</button>
-			<div id="player-moves-container"></div>
+			{playerMovesShowed && <div id="player-moves-container"></div>}
 			{battleWinner && <h1>{battleWinner} wins!!!</h1>}
 		</div>
 	);
