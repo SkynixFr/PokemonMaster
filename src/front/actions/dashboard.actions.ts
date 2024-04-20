@@ -1,6 +1,11 @@
 'use server';
 
-import { getMoves, getNatures, getPokemons } from './pokeapi.actions';
+import {
+	getAbilities,
+	getMoves,
+	getNatures,
+	getPokemons
+} from './pokeapi.actions';
 
 export const updatePokemons = async () => {
 	const pokemons = await getPokemons();
@@ -48,6 +53,23 @@ export const updateNatures = async () => {
 
 	if (response.status !== 201) {
 		throw new Error('Failed to update natures');
+	}
+
+	return response.json();
+};
+
+export const updateAbilities = async () => {
+	const abilities = await getAbilities();
+	const response = await fetch('http://localhost:8080/api/v1/abilities', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(abilities)
+	});
+
+	if (response.status !== 201) {
+		throw new Error('Failed to update abilities');
 	}
 
 	return response.json();

@@ -1,6 +1,8 @@
 import { PokemonCreate } from '../../interfaces/pokemon/pokemonCreate';
 import { TypeEntity } from '../../interfaces/pokemon/type/typeEntity';
 import { MoveCreate } from '../../interfaces/pokemon/move/moveCreate';
+import { AbilityCreate } from '../../interfaces/pokemon/ability/abilityCreate';
+import { NatureCreate } from '../../interfaces/pokemon/nature/natureCreate';
 
 export const getPokemons = async () => {
 	const response = await fetch(
@@ -208,7 +210,7 @@ const fetchMoves = async (offset: number, limit: number) => {
 export const getNatures = async () => {
 	const response = await fetch('https://pokeapi.co/api/v2/nature/?limit=25');
 	const naturesData = await response.json();
-	const naturesPromises = naturesData.results.map(
+	const naturesPromises: NatureCreate[] = naturesData.results.map(
 		async (nature: { url: string; name: string }) => {
 			const response = await fetch(nature.url);
 			const natureData = await response.json();
@@ -221,4 +223,35 @@ export const getNatures = async () => {
 		}
 	);
 	return await Promise.all(naturesPromises);
+};
+
+export const getAbilities = async () => {
+	const response = await fetch('https://pokeapi.co/api/v2/ability/?limit=367');
+	const abilitiesData = await response.json();
+	const abilitiesPromises: AbilityCreate[] = abilitiesData.results.map(
+		async (ability: { url: string; name: string }) => {
+			const response = await fetch(ability.url);
+			const abilityData = await response.json();
+
+			return {
+				name: ability.name,
+				description:
+					abilityData.effect_entries.find(
+						(entry: {
+							effect: string;
+							language: { name: string; url: string };
+							short_effect: string;
+						}) => entry.language.name === 'en'
+					)?.short_effect || 'No description available',
+				learnedBy: abilityData.pokemon.map(
+					(pokemon: {
+						is_hidden: boolean;
+						pokemon: { name: string; url: string };
+						slot: number;
+					}) => pokemon.pokemon.name
+				)
+			};
+		}
+	);
+	return await Promise.all(abilitiesPromises);
 };
