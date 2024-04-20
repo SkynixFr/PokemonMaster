@@ -77,6 +77,32 @@ const DasboardPage = () => {
 		});
 	};
 
+	const handleUpdateAll = async () => {
+		setIsLoading(true);
+		const promises = [
+			{ name: 'natures', action: updateNatures() },
+			{ name: 'abilities', action: updateAbilities() },
+			{ name: 'moves', action: updateMoves() },
+			{ name: 'pokemons', action: updatePokemons() }
+		];
+		toast.promise(Promise.all([...promises.map(({ action }) => action)]), {
+			loading: 'Updating all...',
+			success: response => {
+				response.map((value, index) => {
+					const { name } = promises[index];
+					return toast.success(`${value.length} ${name} updated`);
+				});
+				setIsLoading(false);
+				return 'All data updated';
+			},
+			error: error => {
+				setIsLoading(false);
+				return error.message;
+			},
+			duration: null
+		});
+	};
+
 	return (
 		<div>
 			<h1>Admin dasboard</h1>
@@ -105,6 +131,11 @@ const DasboardPage = () => {
 					</button>
 				</li>
 			</ul>
+			<div>
+				<button onClick={handleUpdateAll} disabled={isLoading}>
+					Update All
+				</button>
+			</div>
 		</div>
 	);
 };

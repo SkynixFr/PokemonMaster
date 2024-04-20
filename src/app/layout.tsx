@@ -23,7 +23,7 @@ export default function RootLayout({
 			<body>
 				<Toaster
 					richColors={true}
-					visibleToasts={5}
+					visibleToasts={10}
 					position={'top-right'}
 				/>
 				{children}
