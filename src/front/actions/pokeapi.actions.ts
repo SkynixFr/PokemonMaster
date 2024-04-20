@@ -1,3 +1,5 @@
+'use server';
+
 import { PokemonCreate } from '../../interfaces/pokemon/pokemonCreate';
 import { TypeEntity } from '../../interfaces/pokemon/type/typeEntity';
 import { MoveCreate } from '../../interfaces/pokemon/move/moveCreate';
