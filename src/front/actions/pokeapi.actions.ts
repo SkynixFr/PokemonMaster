@@ -204,3 +204,21 @@ const fetchMoves = async (offset: number, limit: number) => {
 	);
 	return await Promise.all(movesPromises);
 };
+
+export const getNatures = async () => {
+	const response = await fetch('https://pokeapi.co/api/v2/nature/?limit=25');
+	const naturesData = await response.json();
+	const naturesPromises = naturesData.results.map(
+		async (nature: { url: string; name: string }) => {
+			const response = await fetch(nature.url);
+			const natureData = await response.json();
+
+			return {
+				name: nature.name,
+				increasedStat: natureData.increased_stat?.name || 'none',
+				decreasedStat: natureData.decreased_stat?.name || 'none'
+			};
+		}
+	);
+	return await Promise.all(naturesPromises);
+};

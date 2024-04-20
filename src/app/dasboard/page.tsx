@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 // Actions
 import {
 	updateMoves,
+	updateNatures,
 	updatePokemons
 } from '../../front/actions/dashboard.actions';
 
@@ -43,6 +44,22 @@ const DasboardPage = () => {
 		});
 	};
 
+	const handleUpdateNatures = async () => {
+		setIsLoading(true);
+		toast.promise(updateNatures(), {
+			loading: 'Updating natures...',
+			success: response => {
+				setIsLoading(false);
+				return `${response.length} natures updated`;
+			},
+			error: error => {
+				setIsLoading(false);
+				return error.message;
+			},
+			duration: null
+		});
+	};
+
 	return (
 		<div>
 			<h1>Admin dasboard</h1>
@@ -64,7 +81,9 @@ const DasboardPage = () => {
 					<button disabled={isLoading}>Update Abilities</button>
 				</li>
 				<li>
-					<button disabled={isLoading}>Update Natures</button>
+					<button onClick={handleUpdateNatures} disabled={isLoading}>
+						Update Natures
+					</button>
 				</li>
 			</ul>
 		</div>
