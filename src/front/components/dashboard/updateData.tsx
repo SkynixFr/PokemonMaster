@@ -11,13 +11,7 @@ import {
 	updatePokemons
 } from '../../actions/dashboard.actions';
 
-// Interfaces
-import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
-interface DashboardPageProps {
-	avatars: AvatarEntity[];
-}
-
-const DashboardPage = ({ avatars }: DashboardPageProps) => {
+const DashboardPage = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleUpdatePokemons = async () => {
@@ -112,7 +106,7 @@ const DashboardPage = ({ avatars }: DashboardPageProps) => {
 
 	return (
 		<div>
-			<h1>Admin dasboard</h1>
+			<h3>Update Data</h3>
 			<ul>
 				<li>
 					<button onClick={handleUpdatePokemons} disabled={isLoading}>
@@ -143,25 +137,6 @@ const DashboardPage = ({ avatars }: DashboardPageProps) => {
 					Update All
 				</button>
 			</div>
-
-			{avatars && (
-				<div>
-					<h2>Avatars</h2>
-					<ul>
-						{avatars.map(avatar => (
-							<li key={avatar.id}>
-								{/*<Image*/}
-								{/*	src={avatar.sprite}*/}
-								{/*	alt={avatar.name}*/}
-								{/*	width={50}*/}
-								{/*	height={50}*/}
-								{/*/>*/}
-								{avatar.name}
-							</li>
-						))}
-					</ul>
-				</div>
-			)}
 		</div>
 	);
 };
