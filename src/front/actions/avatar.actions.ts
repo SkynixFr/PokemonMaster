@@ -1,3 +1,6 @@
+'use server';
+
+// Interfaces
 import { AvatarCreate } from '../../interfaces/avatar/avatarCreate';
 
 export const getAvatars = async () => {

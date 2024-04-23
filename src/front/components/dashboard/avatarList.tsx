@@ -1,6 +1,10 @@
-import AvatarItem from './avatarItem';
-import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
+'use client';
 
+// Components
+import AvatarItem from './avatarItem';
+
+// Interfaces
+import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
 interface AvatarListProps {
 	avatars: AvatarEntity[];
 }

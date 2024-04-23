@@ -1,6 +1,9 @@
-import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
+'use client';
+
 import Image from 'next/image';
 
+// Interfaces
+import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
 interface AvatarItemProps {
 	avatar: AvatarEntity;
 }

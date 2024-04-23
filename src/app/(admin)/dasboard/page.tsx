@@ -1,6 +1,10 @@
-import UpdateData from '../../../front/components/dashboard/updateData';
 import Link from 'next/link';
+
+// Actions
 import { getAvatars } from '../../../front/actions/avatar.actions';
+
+// Components
+import UpdateData from '../../../front/components/dashboard/updateData';
 import AvatarList from '../../../front/components/dashboard/avatarList';
 import FormAvatar from '../../../front/components/dashboard/formAvatar';
 

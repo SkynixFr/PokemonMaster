@@ -8,6 +8,9 @@ const Home = () => {
 				<li>
 					<Link href={'/dasboard'}>Admin Dasboard</Link>
 				</li>
+				<li>
+					<Link href={'/teambuilder'}>Team builder</Link>
+				</li>
 			</ul>
 		</div>
 	);

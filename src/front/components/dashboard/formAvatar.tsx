@@ -1,9 +1,12 @@
 'use client';
-import { addAvatar } from '../../actions/avatar.actions';
+
 import { FormEventHandler, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { toast } from 'sonner';
+
+// Actions
+import { addAvatar } from '../../actions/avatar.actions';
 
 const avatarSchema = z.object({
 	name: z.string().min(1, { message: 'Name is required' }),
