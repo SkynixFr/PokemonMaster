@@ -1,5 +1,5 @@
 export interface AvatarEntity {
-	id: number;
+	id: string;
 	name: string;
 	region: string;
 	sprite: string;

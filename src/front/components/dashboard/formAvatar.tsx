@@ -50,7 +50,7 @@ const FormAvatar = () => {
 			const formData = new FormData(form);
 			toast.promise(addAvatar(formData), {
 				loading: 'Adding avatar...',
-				success: () => {
+				success: response => {
 					setErrors({
 						name: '',
 						region: ''
@@ -58,9 +58,11 @@ const FormAvatar = () => {
 					router.refresh();
 					form.reset();
 					form.avatar.focus();
-					return 'Avatar added';
+					return `Avatar ${response.name} added`;
 				},
-				error: 'Failed to add avatar'
+				error: error => {
+					return error.message;
+				}
 			});
 		} catch (error) {
 			if (error instanceof z.ZodError) {
