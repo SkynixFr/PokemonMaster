@@ -25,6 +25,7 @@ export default function RootLayout({
 					richColors={true}
 					visibleToasts={10}
 					position={'top-right'}
+					className={'toast'}
 				/>
 				{children}
 			</body>
