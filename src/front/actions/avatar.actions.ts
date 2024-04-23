@@ -2,6 +2,7 @@
 
 // Interfaces
 import { AvatarCreate } from '../../interfaces/avatar/avatarCreate';
+import { toLowerCaseWithoutSpaceAndSpecialChar } from '../utils/formatString';
 
 export const getAvatars = async () => {
 	const response = await fetch('http://localhost:8080/api/v1/avatars', {
@@ -16,7 +17,7 @@ export const addAvatar = async (formData: FormData) => {
 	const avatar: AvatarCreate = {
 		name: formData.get('avatar').toString(),
 		region: formData.get('region').toString() as AvatarCreate['region'],
-		sprite: `/images/compressed/avatars/${formData.get('region')}/${formData.get('avatar')}.png`
+		sprite: `/images/compressed/avatars/${formData.get('region').toString()}/${toLowerCaseWithoutSpaceAndSpecialChar(formData.get('avatar').toString())}.png`
 	};
 
 	const response = await fetch('http://localhost:8080/api/v1/avatars', {
