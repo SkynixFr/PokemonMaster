@@ -65,47 +65,26 @@ const Battle = ({ battle }: BattleProps) => {
 	// Déclenchement des attaques en fonction de la vitesse des Pokémon
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
-		let updatedPokemon: PokemonClass;
 		if (
 			playerPokemon.getStat('speed').value >
 			opponentPokemon.getStat('speed').value
 		) {
-			updatedPokemon = handlePlayerAttack();
-			if (
-				updatedPokemon.status.name !== 'KO' &&
-				updatedPokemon.status.name !== 'SLP'
-			) {
-				handleOpponentAttack();
-			}
+			handlePlayerAttack();
+			handleOpponentAttack();
 		} else if (
 			playerPokemon.getStat('speed').value <
 			opponentPokemon.getStat('speed').value
 		) {
-			updatedPokemon = handleOpponentAttack();
-			if (
-				updatedPokemon.status.name !== 'KO' &&
-				updatedPokemon.status.name !== 'SLP'
-			) {
-				handlePlayerAttack();
-			}
+			handleOpponentAttack();
+			handlePlayerAttack();
 		} else {
 			const random = Math.random();
 			if (random < 0.5) {
-				updatedPokemon = handlePlayerAttack();
-				if (
-					updatedPokemon.status.name !== 'KO' &&
-					updatedPokemon.status.name !== 'SLP'
-				) {
-					handleOpponentAttack();
-				}
+				handlePlayerAttack();
+				handleOpponentAttack();
 			} else {
-				updatedPokemon = handleOpponentAttack();
-				if (
-					updatedPokemon.status.name !== 'KO' &&
-					updatedPokemon.status.name !== 'SLP'
-				) {
-					handlePlayerAttack();
-				}
+				handleOpponentAttack();
+				handlePlayerAttack();
 			}
 		}
 		setPlayerReady(false);
@@ -139,7 +118,6 @@ const Battle = ({ battle }: BattleProps) => {
 			'opponentPokemon',
 			JSON.stringify(updatedOpponentPokemon)
 		);
-		return updatedOpponentPokemon;
 	};
 
 	// Gestion du move de l'adversaire
@@ -153,7 +131,6 @@ const Battle = ({ battle }: BattleProps) => {
 			'playerPokemon',
 			JSON.stringify(updatedPlayerPokemon)
 		);
-		return updatedPlayerPokemon;
 	};
 
 	const handlePlayerReady = () => {
