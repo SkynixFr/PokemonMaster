@@ -10,13 +10,14 @@ import FormAvatar from '../../../front/components/dashboard/formAvatar';
 
 const Dasboard = async () => {
 	const avatars = await getAvatars();
+
 	return (
 		<div>
 			<Link href={'/'}>Go Back</Link>
-			<h1>Admin Dasboard</h1>
+			<h1>Admin Dashboard</h1>
 			<UpdateData />
 			<FormAvatar />
-			{avatars.length > 0 ? (
+			{avatars.length > 0 && avatars ? (
 				<AvatarList avatars={avatars} />
 			) : (
 				<div>No avatars found</div>

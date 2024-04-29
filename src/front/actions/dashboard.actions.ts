@@ -18,10 +18,6 @@ export const updatePokemons = async () => {
 		body: JSON.stringify(pokemons)
 	});
 
-	if (response.status !== 201) {
-		throw new Error('Failed to update pokemons');
-	}
-
 	return response.json();
 };
 
@@ -34,10 +30,6 @@ export const updateMoves = async () => {
 		},
 		body: JSON.stringify(moves)
 	});
-
-	if (response.status !== 201) {
-		throw new Error('Failed to update moves');
-	}
 
 	return response.json();
 };
@@ -52,10 +44,6 @@ export const updateNatures = async () => {
 		body: JSON.stringify(natures)
 	});
 
-	if (response.status !== 201) {
-		throw new Error('Failed to update natures');
-	}
-
 	return response.json();
 };
 
@@ -68,10 +56,6 @@ export const updateAbilities = async () => {
 		},
 		body: JSON.stringify(abilities)
 	});
-
-	if (response.status !== 201) {
-		throw new Error('Failed to update abilities');
-	}
 
 	return response.json();
 };

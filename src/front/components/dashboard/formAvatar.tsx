@@ -48,16 +48,16 @@ const FormAvatar = () => {
 				region: form.region.value
 			});
 			const formData = new FormData(form);
+
 			toast.promise(addAvatar(formData), {
 				loading: 'Adding avatar...',
 				success: response => {
-					setErrors({
-						name: '',
-						region: ''
-					});
-					router.refresh();
+					if (response.status) {
+						throw new Error(response.message);
+					}
 					form.reset();
 					form.avatar.focus();
+					router.refresh();
 					return `Avatar ${response.name} added`;
 				},
 				error: error => {

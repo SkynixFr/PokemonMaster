@@ -2,15 +2,19 @@
 
 // Interfaces
 import { AvatarCreate } from '../../interfaces/avatar/avatarCreate';
+import { AvatarEntity } from '../../interfaces/avatar/avatarEntity';
+
+// Utils
 import { toLowerCaseWithoutSpaceAndSpecialChar } from '../utils/formatString';
 
-export const getAvatars = async () => {
+export const getAvatars = async (): Promise<AvatarEntity[]> => {
+	// try {
 	const response = await fetch('http://localhost:8080/api/v1/avatars', {
 		method: 'GET',
 		cache: 'no-store'
 	});
 
-	return response.json();
+	return await response.json();
 };
 
 export const addAvatar = async (formData: FormData) => {
@@ -27,15 +31,6 @@ export const addAvatar = async (formData: FormData) => {
 		},
 		body: JSON.stringify(avatar)
 	});
-
-	if (response.status === 409) {
-		throw new Error('Avatar already exists');
-	}
-
-	if (!response.ok) {
-		throw new Error('Failed to add avatar');
-	}
-
 	return response.json();
 };
 

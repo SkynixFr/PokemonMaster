@@ -19,6 +19,9 @@ const DashboardPage = () => {
 		toast.promise(updatePokemons(), {
 			loading: 'Updating pokemons...',
 			success: response => {
+				if (response.status) {
+					throw new Error(response.message);
+				}
 				setIsLoading(false);
 				return `${response.length} pokemons updated`;
 			},
@@ -35,6 +38,9 @@ const DashboardPage = () => {
 		toast.promise(updateMoves(), {
 			loading: 'Updating moves...',
 			success: response => {
+				if (response.status) {
+					throw new Error(response.message);
+				}
 				setIsLoading(false);
 				return `${response.length} moves updated`;
 			},
@@ -51,6 +57,9 @@ const DashboardPage = () => {
 		toast.promise(updateNatures(), {
 			loading: 'Updating natures...',
 			success: response => {
+				if (response.status) {
+					throw new Error(response.message);
+				}
 				setIsLoading(false);
 				return `${response.length} natures updated`;
 			},
@@ -67,6 +76,9 @@ const DashboardPage = () => {
 		toast.promise(updateAbilities(), {
 			loading: 'Updating abilities...',
 			success: response => {
+				if (response.status) {
+					throw new Error(response.message);
+				}
 				setIsLoading(false);
 				return `${response.length} abilities updated`;
 			},
