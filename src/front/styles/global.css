@@ -2,6 +2,9 @@
 @import url('font.css');
 @import url('variables.css');
 
+/* Components styles */
+@import url('navbar.css');
+
 /* Page styles */
 @import url('battle.css');
 
@@ -13,6 +16,7 @@ body {
 	background-color: var(--grey);
 	width: 100%;
 	height: 100dvh;
+	margin: 75px 0 0 0
 }
 
 h1,
@@ -24,8 +28,32 @@ h6 {
 	margin: 0;
 }
 
+button	{
+	cursor: pointer;
+}
+
+ul {
+	list-style: none;
+}
+
+a {
+	text-decoration: none;
+	color: var(--black);
+}
+
 .toast {
 	font-family: var(--ff-base);
 	font-size: var(--fs-base);
 	font-weight: var(--fw-normal);
+}
+
+.button-primary {
+	background-color: var(--red);
+	color: var(--white);
+	border: none;
+}
+.button-secondary {
+	background-color: var(--white);
+	color: var(--red);
+	border: 1px solid var(--red);
 }

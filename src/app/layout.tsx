@@ -3,6 +3,7 @@ import React from 'react';
 import { Toaster } from 'sonner';
 
 import '../front/styles/global.css';
+import Navbar from '../front/components/navbar';
 
 export const metadata: Metadata = {
 	title: 'Pokemon Master',
@@ -27,6 +28,7 @@ export default function RootLayout({
 					position={'top-right'}
 					className={'toast'}
 				/>
+				<Navbar />
 				{children}
 			</body>
 		</html>
