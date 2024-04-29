@@ -24,24 +24,30 @@ class Pokemon implements IPokemon {
 		return new Stat(searchedStat.name, searchedStat.value, searchedStat.max);
 	}
 
-	attack(opponentPokemon: Pokemon, move: Move): Pokemon {
+	attack(target: Pokemon, move: Move): Pokemon {
+		let updatedStatus = target.status;
 		if (this.status.name === 'KO' || this.status.name === 'SLP') {
-			return opponentPokemon;
+			return target;
 		}
 		const damage = move.power;
-		const opponentHp = opponentPokemon.getStat('hp');
+		const opponentHp = target.getStat('hp');
 		const updatedHp = opponentHp.decrease(damage);
-		const index = opponentPokemon.stats.findIndex(stat => stat.name === 'hp');
-		opponentPokemon.stats[index] = updatedHp;
-		if (updatedHp.value <= 0) {
-			const updatedStatus = new Status('KO', 'The Pokémon has fainted');
-			opponentPokemon = opponentPokemon.changeStatus(updatedStatus);
+		const index = target.stats.findIndex(stat => stat.name === 'hp');
+		target.stats[index] = updatedHp;
+		console.log(move);
+		console.log(move.meta?.ailment);
+		if (move.meta?.ailment === 'sleep') {
+			updatedStatus = new Status('SLP', 'The Pokémon has fallen asleep');
 		}
+		if (updatedHp.value <= 0) {
+			updatedStatus = new Status('KO', 'The Pokémon has fainted');
+		}
+		target = target.changeStatus(updatedStatus);
 		return new Pokemon(
-			opponentPokemon.name,
-			opponentPokemon.stats,
-			opponentPokemon.moves,
-			opponentPokemon.status
+			target.name,
+			target.stats,
+			target.moves,
+			target.status
 		);
 	}
 

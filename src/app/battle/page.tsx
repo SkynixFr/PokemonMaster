@@ -156,17 +156,6 @@ const Battle = ({ battle }: BattleProps) => {
 		);
 	};
 
-	const handlePlayerPoisonAttack = () => {
-		const updatedOpponentPokemon = opponentPokemon.changeStatus(
-			new Status('PSN', 'The Pokémon is poisoned')
-		);
-		setOpponentPokemon(updatedOpponentPokemon);
-		localStorage.setItem(
-			'opponentPokemon',
-			JSON.stringify(updatedOpponentPokemon)
-		);
-	};
-
 	const handlePlayerSleepAttack = () => {
 		const updatedOpponentPokemon = opponentPokemon.changeStatus(
 			new Status('SLP', 'The Pokémon is asleep')
@@ -265,14 +254,6 @@ const Battle = ({ battle }: BattleProps) => {
 				}}
 			>
 				Heal
-			</button>
-
-			<button
-				onClick={() => {
-					handlePlayerPoisonAttack();
-				}}
-			>
-				Poison
 			</button>
 
 			<button
