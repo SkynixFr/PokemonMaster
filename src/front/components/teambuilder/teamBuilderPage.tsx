@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 // Interfaces
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
@@ -21,6 +22,7 @@ const TeamBuilderPage = ({ teams, avatars }: TeamListProps) => {
 
 	return (
 		<div>
+			<Link href={'/'}>Go back</Link>
 			<div>
 				<FormTeam avatars={avatars} />
 				<Teams teams={teams} setSelectedTeam={setSelectedTeam} />
