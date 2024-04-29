@@ -62,11 +62,10 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	}, [battle]);
 
-	// Déclenchement des attaques et gestion de la vitesse des Pokémon
+	// Déclenchement des attaques en fonction de la vitesse des Pokémon
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
 		let updatedPokemon: PokemonClass;
-		let excludedStatus = ['SLP', 'KO'];
 		if (
 			playerPokemon.getStat('speed').value >
 			opponentPokemon.getStat('speed').value
@@ -88,6 +87,25 @@ const Battle = ({ battle }: BattleProps) => {
 				updatedPokemon.status.name !== 'SLP'
 			) {
 				handlePlayerAttack();
+			}
+		} else {
+			const random = Math.random();
+			if (random < 0.5) {
+				updatedPokemon = handlePlayerAttack();
+				if (
+					updatedPokemon.status.name !== 'KO' &&
+					updatedPokemon.status.name !== 'SLP'
+				) {
+					handleOpponentAttack();
+				}
+			} else {
+				updatedPokemon = handleOpponentAttack();
+				if (
+					updatedPokemon.status.name !== 'KO' &&
+					updatedPokemon.status.name !== 'SLP'
+				) {
+					handlePlayerAttack();
+				}
 			}
 		}
 		setPlayerReady(false);

@@ -26,6 +26,7 @@ class Pokemon implements IPokemon {
 
 	attack(target: Pokemon, move: Move): Pokemon {
 		let updatedStatus = target.status;
+		let statusList = ['PSN', 'SLP', 'KO'];
 		if (this.status.name === 'KO' || this.status.name === 'SLP') {
 			return target;
 		}
@@ -34,10 +35,23 @@ class Pokemon implements IPokemon {
 		const updatedHp = opponentHp.decrease(damage);
 		const index = target.stats.findIndex(stat => stat.name === 'hp');
 		target.stats[index] = updatedHp;
-		console.log(move);
-		console.log(move.meta?.ailment);
-		if (move.meta?.ailment === 'sleep') {
+		if (
+			move.meta?.ailment === 'sleep' &&
+			!statusList.includes(target.status.name)
+		) {
 			updatedStatus = new Status('SLP', 'The Pokémon has fallen asleep');
+		}
+		if (
+			move.meta?.ailment === 'poison' &&
+			!statusList.includes(target.status.name)
+		) {
+			updatedStatus = new Status('PSN', 'The Pokémon has been poisoned');
+		}
+		if (
+			move.meta?.ailment === 'freeze' &&
+			!statusList.includes(target.status.name)
+		) {
+			updatedStatus = new Status('FRZ', 'The Pokémon has been frozen');
 		}
 		if (updatedHp.value <= 0) {
 			updatedStatus = new Status('KO', 'The Pokémon has fainted');
