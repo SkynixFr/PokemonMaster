@@ -14,7 +14,7 @@ export const getAvatars = async (): Promise<AvatarEntity[]> => {
 		cache: 'no-store'
 	});
 
-	return await response.json();
+	return response.json();
 };
 
 export const addAvatar = async (formData: FormData) => {
@@ -35,15 +35,7 @@ export const addAvatar = async (formData: FormData) => {
 };
 
 export const deleteAvatar = async (id: string) => {
-	const response = await fetch(`http://localhost:8080/api/v1/avatars/${id}`, {
+	await fetch(`http://localhost:8080/api/v1/avatars/${id}`, {
 		method: 'DELETE'
 	});
-
-	if (response.status === 404) {
-		throw new Error('Avatar not found');
-	}
-
-	if (!response.ok) {
-		throw new Error('Failed to delete avatar');
-	}
 };

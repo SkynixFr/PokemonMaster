@@ -13,7 +13,7 @@ interface AvatarItemProps {
 	avatar: AvatarEntity;
 }
 
-const AvatarItem = ({ avatar }: AvatarItemProps) => {
+const Avatar = ({ avatar }: AvatarItemProps) => {
 	const router = useRouter();
 
 	const handleDelete = async (avatarId: string) => {
@@ -48,4 +48,4 @@ const AvatarItem = ({ avatar }: AvatarItemProps) => {
 	);
 };
 
-export default AvatarItem;
+export default Avatar;
