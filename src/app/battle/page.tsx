@@ -124,15 +124,6 @@ const Battle = ({ battle }: BattleProps) => {
 		return updatedOpponentPokemon;
 	};
 
-	const handlePlayerHeal = () => {
-		const updatedPlayerPokemon = playerPokemon.heal();
-		setPlayerPokemon(updatedPlayerPokemon);
-		localStorage.setItem(
-			'playerPokemon',
-			JSON.stringify(updatedPlayerPokemon)
-		);
-	};
-
 	// Gestion du move de l'adversaire
 	const handleOpponentAttack = () => {
 		const updatedPlayerPokemon = opponentPokemon.attack(
@@ -145,26 +136,6 @@ const Battle = ({ battle }: BattleProps) => {
 			JSON.stringify(updatedPlayerPokemon)
 		);
 		return updatedPlayerPokemon;
-	};
-
-	const handleOpponentHeal = () => {
-		const updatedOpponentPokemon = opponentPokemon.heal();
-		setOpponentPokemon(updatedOpponentPokemon);
-		localStorage.setItem(
-			'playerPokemon',
-			JSON.stringify(updatedOpponentPokemon)
-		);
-	};
-
-	const handlePlayerSleepAttack = () => {
-		const updatedOpponentPokemon = opponentPokemon.changeStatus(
-			new Status('SLP', 'The Pokémon is asleep')
-		);
-		setOpponentPokemon(updatedOpponentPokemon);
-		localStorage.setItem(
-			'opponentPokemon',
-			JSON.stringify(updatedOpponentPokemon)
-		);
 	};
 
 	const handlePlayerReady = () => {
@@ -199,14 +170,6 @@ const Battle = ({ battle }: BattleProps) => {
 				}}
 			>
 				Attack
-			</button>
-
-			<button
-				onClick={() => {
-					handleOpponentHeal();
-				}}
-			>
-				Heal
 			</button>
 
 			{/* Affichage des moves de l'adversaire */}
@@ -246,22 +209,6 @@ const Battle = ({ battle }: BattleProps) => {
 				}}
 			>
 				Attack
-			</button>
-
-			<button
-				onClick={() => {
-					handlePlayerHeal();
-				}}
-			>
-				Heal
-			</button>
-
-			<button
-				onClick={() => {
-					handlePlayerSleepAttack();
-				}}
-			>
-				Sleep
 			</button>
 
 			{/* Affichage des moves du joueur */}
