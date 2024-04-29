@@ -24,3 +24,8 @@ h6 {
 	margin: 0;
 }
 
+.toast {
+	font-family: var(--ff-base);
+	font-size: var(--fs-base);
+	font-weight: var(--fw-normal);
+}
