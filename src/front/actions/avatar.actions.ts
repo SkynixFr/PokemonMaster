@@ -5,7 +5,7 @@ import { AvatarCreate } from '../../interfaces/avatar/avatarCreate';
 import { AvatarEntity } from '../../interfaces/avatar/avatarEntity';
 
 // Utils
-import { toLowerCaseWithoutSpaceAndSpecialChar } from '../utils/formatString';
+import { firstLetterMaj } from '../utils/formatString';
 
 export const getAvatars = async (): Promise<AvatarEntity[]> => {
 	// try {
@@ -19,9 +19,12 @@ export const getAvatars = async (): Promise<AvatarEntity[]> => {
 
 export const addAvatar = async (formData: FormData) => {
 	const avatar: AvatarCreate = {
-		name: formData.get('avatar').toString(),
-		region: formData.get('region').toString() as AvatarCreate['region'],
-		sprite: `/images/compressed/avatars/${formData.get('region').toString()}/${toLowerCaseWithoutSpaceAndSpecialChar(formData.get('avatar').toString())}.png`
+		name: firstLetterMaj(formData.get('avatar').toString()),
+		region: formData
+			.get('region')
+			.toString()
+			.toLowerCase() as AvatarCreate['region'],
+		sprite: `/images/avatars/${formData.get('region').toString().toLowerCase()}/${formData.get('sprite').toString().toLowerCase()}.png`
 	};
 
 	const response = await fetch('http://localhost:8080/api/v1/avatars', {

@@ -22,7 +22,7 @@
 .navbar-links > li {
     width: 160px;
     text-align: center;
-    font-family: var(--ff-base-bold);
+    font-family: var(--ff-base-bold), sans-serif;
     font-size: var(--fs-md);
 }
 
@@ -46,7 +46,7 @@
     width: 75px;
     height: 30px;
     border-radius: 5px;
-    font-family: var(--ff-base-bold);
+    font-family: var(--ff-base-bold), sans-serif;
 }
 
 

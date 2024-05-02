@@ -26,7 +26,8 @@ const avatarSchema = z.object({
 				'Hisui',
 				'Other'
 			].includes(region)
-		)
+		),
+	sprite: z.string().min(1, { message: 'Sprite is required' })
 });
 
 const FormAvatar = () => {
@@ -34,23 +35,26 @@ const FormAvatar = () => {
 	const [errors, setErrors] = useState<{
 		name: string;
 		region: string;
+		sprite: string;
 	}>({
 		name: '',
-		region: ''
+		region: '',
+		sprite: ''
 	});
 
-	const onsubmit: FormEventHandler<HTMLFormElement> = async event => {
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async event => {
 		event.preventDefault();
 		const form = event.currentTarget;
 		try {
 			avatarSchema.parse({
 				name: form.avatar.value,
-				region: form.region.value
+				region: form.region.value,
+				sprite: form.sprite.value
 			});
 			const formData = new FormData(form);
 
 			toast.promise(addAvatar(formData), {
-				loading: 'Adding avatar...',
+				loading: 'Creating avatar...',
 				success: response => {
 					if (response.status) {
 						throw new Error(response.message);
@@ -70,7 +74,9 @@ const FormAvatar = () => {
 					name:
 						error.errors.find(e => e.path[0] === 'name')?.message ?? '',
 					region:
-						error.errors.find(e => e.path[0] === 'region')?.message ?? ''
+						error.errors.find(e => e.path[0] === 'region')?.message ?? '',
+					sprite:
+						error.errors.find(e => e.path[0] === 'sprite')?.message ?? ''
 				});
 			}
 		}
@@ -79,14 +85,15 @@ const FormAvatar = () => {
 	const handleChange = () => {
 		setErrors({
 			name: '',
-			region: ''
+			region: '',
+			sprite: ''
 		});
 	};
 
 	return (
 		<div>
 			<h2>Upload Avatar</h2>
-			<form onSubmit={onsubmit}>
+			<form onSubmit={handleSubmit}>
 				<label htmlFor="avatar">Avatar Name</label>
 				<input
 					type="text"
@@ -110,6 +117,15 @@ const FormAvatar = () => {
 					<option value="Other">Other</option>
 				</select>
 				{errors.region && <span>{errors.region}</span>}
+				<label htmlFor="sprite">Sprite</label>
+				<input
+					type="text"
+					name="sprite"
+					id="sprite"
+					placeholder="Sprite"
+					onChange={handleChange}
+				/>
+				{errors.sprite && <span>{errors.sprite}</span>}
 				<button>Add</button>
 			</form>
 		</div>
