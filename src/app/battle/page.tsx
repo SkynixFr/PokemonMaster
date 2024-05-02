@@ -4,20 +4,19 @@ import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 
 // Classes
-import PokemonClass from '../../back/classes/pokemon';
-import BattleClass from '../../back/classes/battle';
+import Pokemon from '../../back/classes/pokemon';
+import Battle from '../../back/classes/battle';
 import Move from '../../back/classes/move';
 import Status from '../../back/classes/status';
 
 // Interfaces
 interface BattleProps {
-	battle: BattleClass;
+	battle: Battle;
 }
 
-const Battle = ({ battle }: BattleProps) => {
-	const [playerPokemon, setPlayerPokemon] = useState<PokemonClass | null>();
-	const [opponentPokemon, setOpponentPokemon] =
-		useState<PokemonClass | null>();
+const BattlePage = ({ battle }: BattleProps) => {
+	const [playerPokemon, setPlayerPokemon] = useState<Pokemon | null>();
+	const [opponentPokemon, setOpponentPokemon] = useState<Pokemon | null>();
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
 	const [opponentReady, setOpponentReady] = useState<boolean>(false);
 	const [playerSelectedMove, setPlayerSelectedMove] = useState<Move>();
@@ -26,6 +25,8 @@ const Battle = ({ battle }: BattleProps) => {
 	const [playerMovesShowed, setPlayerMovesShowed] = useState<boolean>(false);
 	const [opponentMovesShowed, setOpponentMovesShowed] =
 		useState<boolean>(false);
+	const [playerStateCounter, setPlayerStateCounter] = useState<number>(0);
+	const [opponentStateCounter, setOpponentStateCounter] = useState<number>(0);
 
 	// Récupération des pokémons depuis le localStorage ou la room
 	useEffect(() => {
@@ -41,7 +42,7 @@ const Battle = ({ battle }: BattleProps) => {
 				localStorage.getItem('opponentPokemon')
 			);
 			setPlayerPokemon(
-				new PokemonClass(
+				new Pokemon(
 					parsedPlayerPokemon.name,
 					parsedPlayerPokemon.stats,
 					parsedPlayerPokemon.moves,
@@ -49,7 +50,7 @@ const Battle = ({ battle }: BattleProps) => {
 				)
 			);
 			setOpponentPokemon(
-				new PokemonClass(
+				new Pokemon(
 					parsedOpponentPokemon.name,
 					parsedOpponentPokemon.stats,
 					parsedOpponentPokemon.moves,
@@ -69,22 +70,22 @@ const Battle = ({ battle }: BattleProps) => {
 			playerPokemon.getStat('speed').value >
 			opponentPokemon.getStat('speed').value
 		) {
-			handlePlayerAttack();
-			handleOpponentAttack();
+			handleAttack(playerPokemon, opponentPokemon);
+			handleAttack(opponentPokemon, playerPokemon);
 		} else if (
 			playerPokemon.getStat('speed').value <
 			opponentPokemon.getStat('speed').value
 		) {
-			handleOpponentAttack();
-			handlePlayerAttack();
+			handleAttack(opponentPokemon, playerPokemon);
+			handleAttack(playerPokemon, opponentPokemon);
 		} else {
 			const random = Math.random();
 			if (random < 0.5) {
-				handlePlayerAttack();
-				handleOpponentAttack();
+				handleAttack(playerPokemon, opponentPokemon);
+				handleAttack(opponentPokemon, playerPokemon);
 			} else {
-				handleOpponentAttack();
-				handlePlayerAttack();
+				handleAttack(opponentPokemon, playerPokemon);
+				handleAttack(playerPokemon, opponentPokemon);
 			}
 		}
 		setPlayerReady(false);
@@ -107,8 +108,8 @@ const Battle = ({ battle }: BattleProps) => {
 		return <div>Loading...</div>;
 	}
 
-	// Gestion du move du joueur
-	const handlePlayerAttack = () => {
+	// Gestion du move d'un joueur
+	const handleAttack = (playerPokemon: Pokemon, opponentPokemon: Pokemon) => {
 		const updatedOpponentPokemon = playerPokemon.attack(
 			opponentPokemon,
 			playerSelectedMove
@@ -117,19 +118,6 @@ const Battle = ({ battle }: BattleProps) => {
 		localStorage.setItem(
 			'opponentPokemon',
 			JSON.stringify(updatedOpponentPokemon)
-		);
-	};
-
-	// Gestion du move de l'adversaire
-	const handleOpponentAttack = () => {
-		const updatedPlayerPokemon = opponentPokemon.attack(
-			playerPokemon,
-			opponentSelectedMove
-		);
-		setPlayerPokemon(updatedPlayerPokemon);
-		localStorage.setItem(
-			'playerPokemon',
-			JSON.stringify(updatedPlayerPokemon)
 		);
 	};
 
@@ -228,7 +216,7 @@ const Battle = ({ battle }: BattleProps) => {
 		</div>
 	);
 };
-export default Battle;
+export default BattlePage;
 
 // 'use client';
 // import { useSelector } from 'react-redux';

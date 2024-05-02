@@ -8,7 +8,7 @@ import Stat from '../../back/classes/stat';
 import Move from '../../back/classes/move';
 
 // Pages
-import Battle from '../../app/battle/page';
+import BattlePage from '../../app/battle/page';
 
 const BattleProvider = ({ children }: { children: ReactNode }) => {
 	const [battle, setBattle] = useState<BattleClass>(null);
@@ -48,7 +48,7 @@ const BattleProvider = ({ children }: { children: ReactNode }) => {
 		}
 	}, []);
 
-	return <Battle battle={battle} />;
+	return <BattlePage battle={battle} />;
 };
 
 export default BattleProvider;

@@ -43,22 +43,22 @@ class Pokemon implements IPokemon {
 			move.meta?.ailment === 'sleep' &&
 			!statusList.includes(target.status.name)
 		) {
-			updatedStatus = new Status('SLP', 'The Pokémon has fallen asleep');
+			updatedStatus = new Status('SLP', `${this.name} is asleep`);
 		}
 		if (
 			move.meta?.ailment === 'poison' &&
 			!statusList.includes(target.status.name)
 		) {
-			updatedStatus = new Status('PSN', 'The Pokémon has been poisoned');
+			updatedStatus = new Status('PSN', `${this.name} is poisoned`);
 		}
 		if (
 			move.meta?.ailment === 'freeze' &&
 			!statusList.includes(target.status.name)
 		) {
-			updatedStatus = new Status('FRZ', 'The Pokémon has been frozen');
+			updatedStatus = new Status('FRZ', `${this.name} is frozen`);
 		}
 		if (updatedHp.value <= 0) {
-			updatedStatus = new Status('KO', 'The Pokémon has fainted');
+			updatedStatus = new Status('KO', `${this.name} has fainted`);
 		}
 		target = target.changeStatus(updatedStatus);
 		return new Pokemon(
