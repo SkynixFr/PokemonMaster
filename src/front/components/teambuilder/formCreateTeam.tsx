@@ -1,5 +1,11 @@
+import { FormEventHandler, useState } from 'react';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+
 // Components
 import Avatar from './avatar';
+import CustomImage from '../customImage';
 
 // Interfaces
 import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
@@ -8,20 +14,115 @@ interface FormCreateTeamProps {
 	setOpenForm: (openForm: boolean) => void;
 }
 
+// Icons
+import { X } from 'lucide-react';
+
+// Actions
+import { createTeam } from '../../actions/team.actions';
+
+const teamSchema = z.object({
+	name: z
+		.string()
+		.min(1, { message: 'Name is required' })
+		.max(20, { message: 'Name is too long' })
+		.regex(new RegExp('^[\\w -]+$'), {
+			message:
+				'Name is invalid. Only letters, numbers, spaces and hyphens are allowed.'
+		})
+});
+
 const formCreateTeam = ({ avatars, setOpenForm }: FormCreateTeamProps) => {
+	const router = useRouter();
+	const [avatarSelected, setAvatarSelected] = useState<AvatarEntity>(
+		avatars[0]
+	);
+	const [errors, setErrors] = useState<{
+		name: string;
+	}>({
+		name: ''
+	});
+
+	const handleSubmit: FormEventHandler<HTMLFormElement> = async event => {
+		event.preventDefault();
+		const form = event.currentTarget;
+		try {
+			teamSchema.parse({
+				name: form.team.value
+			});
+			const formData = new FormData(form);
+
+			toast.promise(createTeam(formData, avatarSelected.id), {
+				loading: 'Creating team...',
+				success: response => {
+					if (response.status) {
+						throw new Error(response.message);
+					}
+					form.reset();
+					router.refresh();
+					setOpenForm(false);
+					return `${response.name} created successfully!`;
+				},
+				error: error => {
+					return error.message;
+				}
+			});
+		} catch (error) {
+			if (error instanceof z.ZodError) {
+				setErrors({
+					name: error.errors.find(e => e.path[0] === 'name')?.message ?? ''
+				});
+			}
+		}
+	};
+
+	const handleChange = () => {
+		setErrors({
+			name: ''
+		});
+	};
+
 	return (
-		<div>
-			<form>
-				<input type="text" name="name" placeholder="Team name" />
-				<button>Create</button>
+		<div className={'form-create-team'}>
+			<div className={'bg-form'}>
+				<CustomImage
+					src="/images/other/bg-form-team.png"
+					alt="Background form team"
+					fill={true}
+					sizes="(max-width: 640px) 150px, 344px"
+				/>
+			</div>
+			<h2>New team</h2>
+			<button className={'close-btn'} onClick={() => setOpenForm(false)}>
+				<X width={30} height={30} />
+			</button>
+			<form className={'create-team'} onSubmit={handleSubmit}>
+				<input
+					type="text"
+					name="team"
+					id="team"
+					placeholder="Team name"
+					onChange={handleChange}
+				/>
+				{errors.name && <div className={'error'}>{errors.name}</div>}
 				{avatars && avatars.length > 0 ? (
-					avatars.map(avatar => <Avatar avatar={avatar} key={avatar.id} />)
+					<div className={'avatars-container'}>
+						<h3>Choose your avatar</h3>
+						<div className={'avatars-list'}>
+							{avatars.map(avatar => (
+								<Avatar
+									avatar={avatar}
+									key={avatar.id}
+									avatarSelected={avatarSelected}
+									setAvatarSelected={setAvatarSelected}
+								/>
+							))}
+						</div>
+					</div>
 				) : (
 					<div>No avatars found</div>
 				)}
+				<button className={'btn-create-team btn-primary'}>Create</button>
 			</form>
-
-			<button onClick={() => setOpenForm(false)}>Close</button>
 		</div>
 	);
 };
