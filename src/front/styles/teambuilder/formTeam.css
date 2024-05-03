@@ -1,6 +1,6 @@
 .form-team-container {
     width: calc(100% - 20px);
-    height: 55px;
+    height: 40px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -28,20 +28,47 @@
     top: 50%;
     right: 20px;
     transform: translateY(-50%);
-    width: 35px;
-    height: 35px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.btn-add-team{
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.btn-create-team-container {
+    position: relative;
+}
+
+.btn-create-team-container .btn-create-team {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-create-team-container .hover-info {
+    position: absolute;
+    top: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    padding: 10px;
+    background-color: rgb(0, 0, 0, 0.5);
+    color: var(--white);
+    border-radius: 5px;
+    display: none;
+    justify-content: center;
+    align-content: center;
+    font-size: var(--fs-sm);
+}
+
+.btn-create-team-container:hover .hover-info {
+    display: flex;
 }
 
 .create-team-modal {

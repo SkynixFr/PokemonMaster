@@ -23,12 +23,17 @@ const FormTeam = ({ avatars }: FormTeamProps) => {
 					<Search width={20} height={20} />
 				</button>
 			</form>
-			<button
-				onClick={() => setOpenForm(!openForm)}
-				className={'btn-add-team btn-primary '}
-			>
-				<Plus />
-			</button>
+			<div className={'btn-create-team-container'}>
+				<div className={'hover-info'}>
+					<span>Create a team</span>
+				</div>
+				<button
+					onClick={() => setOpenForm(!openForm)}
+					className={'btn-create-team btn-primary '}
+				>
+					<Plus />
+				</button>
+			</div>
 			{openForm && (
 				<div className={'create-team-modal'}>
 					<FormCreateTeam avatars={avatars} setOpenForm={setOpenForm} />
