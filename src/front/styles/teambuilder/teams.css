@@ -1,0 +1,23 @@
+.teams-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    gap: 10px;
+}
+
+.teams-container > h3 {
+    font-family: var(--ff-base-bold), sans-serif;
+
+}
+
+.teams-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 10px;
+}

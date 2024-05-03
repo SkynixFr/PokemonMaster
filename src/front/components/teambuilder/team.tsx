@@ -1,35 +1,85 @@
-import Image from 'next/image';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 // Interfaces
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
 interface TeamListItemProps {
 	team: TeamEntity;
-	selectedTeam: (team: TeamEntity) => void;
+	selectedTeam: TeamEntity;
+	setSelectedTeam: (team: TeamEntity) => void;
+	resetSelectedTeam?: () => void;
 	option?: boolean;
 }
 
-const Team = ({ team, selectedTeam, option }: TeamListItemProps) => {
+// Components
+import CustomImage from '../customImage';
+
+// Icons
+import { PencilLine, SaveAll, Trash2 } from 'lucide-react';
+
+// Actions
+import { deleteTeam } from '../../actions/team.actions';
+
+const Team = ({
+	team,
+	selectedTeam,
+	setSelectedTeam,
+	option,
+	resetSelectedTeam
+}: TeamListItemProps) => {
+	const router = useRouter();
+
+	const handleDelete = async (teamId: string) => {
+		toast.promise(deleteTeam(teamId), {
+			loading: 'Deleting team...',
+			success: () => {
+				resetSelectedTeam();
+				router.refresh();
+				return 'Team deleted';
+			},
+			error: error => {
+				return error.message;
+			}
+		});
+	};
+
 	return (
-		<div>
-			<div onClick={() => selectedTeam(team)}>
-				<Image
-					src={team.avatar.sprite}
-					alt={team.avatar.name}
-					width={100}
-					height={100}
-					priority={true}
-					quality={100}
-					sizes={'100vw'}
-					style={{ objectFit: 'contain' }}
-				/>
-				{team.name}
+		<div className={'team-container'}>
+			<div
+				className={`team-infos ${selectedTeam.id === team.id ? 'selected' : ''}`}
+				onClick={() => setSelectedTeam(team)}
+			>
+				<div className={'bg-team'}>
+					<CustomImage
+						src={team.avatar.sprite}
+						alt={team.avatar.name}
+						fill={true}
+						sizes="(max-width: 768px) 116px, 116px"
+					/>
+				</div>
+				<span>{team.name}</span>
+				{team.pokemons && team.pokemons.length > 0 ? (
+					<div className={'team-pokemon'}>
+						{team.pokemons.map(pokemon => (
+							<div key={pokemon.pokedexId}>{pokemon.name}</div>
+						))}
+					</div>
+				) : (
+					<div>No pokemons</div>
+				)}
 			</div>
 
-			{option ? (
-				<div>
-					<button>Update</button>
-					<button>Delete</button>
-					<button>Copy</button>
+			{option && team.id === selectedTeam.id ? (
+				<div className={'team-options'}>
+					<button>
+						<PencilLine />
+					</button>
+					<button onClick={() => handleDelete(team.id)}>
+						<Trash2 />
+					</button>
+					<button disabled={true}>
+						<SaveAll />
+					</button>
 				</div>
 			) : null}
 		</div>

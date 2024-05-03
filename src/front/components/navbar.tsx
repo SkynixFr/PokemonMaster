@@ -39,13 +39,13 @@ const Navbar = () => {
 
 			<div className={'navbar-profil'}>
 				<button
-					className={'button-primary'}
+					className={'btn-primary'}
 					onClick={() => router.replace('/signin')}
 				>
 					Sign in
 				</button>
 				<button
-					className={'button-secondary'}
+					className={'btn-secondary'}
 					onClick={() => router.replace('/login')}
 				>
 					Log in

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 
 // Interfaces
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
@@ -21,14 +20,19 @@ const TeamBuilderPage = ({ teams, avatars }: TeamListProps) => {
 	const [selectedTeam, setSelectedTeam] = useState<TeamEntity>(teams[0]);
 
 	return (
-		<div>
-			<Link href={'/'}>Go back</Link>
-			<div>
+		<div className={'teambuilder-container'}>
+			<div className={'teambuilder-teams'}>
 				<FormTeam avatars={avatars} />
-				<Teams teams={teams} setSelectedTeam={setSelectedTeam} />
+				<Teams
+					teams={teams}
+					setSelectedTeam={setSelectedTeam}
+					selectedTeam={selectedTeam}
+				/>
 			</div>
 
-			{selectedTeam && <TeamDetails team={selectedTeam} />}
+			<div className={'teambuilder-team-details'}>
+				{selectedTeam && <TeamDetails team={selectedTeam} />}
+			</div>
 		</div>
 	);
 };
