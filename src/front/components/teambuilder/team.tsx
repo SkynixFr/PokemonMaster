@@ -77,7 +77,7 @@ const Team = ({
 					<button onClick={() => handleDelete(team.id)}>
 						<Trash2 />
 					</button>
-					<button>
+					<button disabled={true}>
 						<SaveAll />
 					</button>
 				</div>

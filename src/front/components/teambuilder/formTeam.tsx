@@ -18,7 +18,12 @@ const FormTeam = ({ avatars }: FormTeamProps) => {
 	return (
 		<div className={'form-team-container'}>
 			<form action="" className={'search-team'}>
-				<input type="search" name="search" placeholder="Search a team" />
+				<input
+					type="search"
+					name="search"
+					placeholder="Search a team"
+					disabled={true}
+				/>
 				<button className={'btn-search-team btn-primary'}>
 					<Search width={20} height={20} />
 				</button>
