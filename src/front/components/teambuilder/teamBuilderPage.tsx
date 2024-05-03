@@ -23,7 +23,11 @@ const TeamBuilderPage = ({ teams, avatars }: TeamListProps) => {
 		<div className={'teambuilder-container'}>
 			<div className={'teambuilder-teams'}>
 				<FormTeam avatars={avatars} />
-				<Teams teams={teams} setSelectedTeam={setSelectedTeam} />
+				<Teams
+					teams={teams}
+					setSelectedTeam={setSelectedTeam}
+					selectedTeam={selectedTeam}
+				/>
 			</div>
 
 			<div className={'teambuilder-team-details'}>

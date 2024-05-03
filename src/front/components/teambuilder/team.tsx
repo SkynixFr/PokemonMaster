@@ -1,35 +1,60 @@
-import Image from 'next/image';
-
 // Interfaces
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
 interface TeamListItemProps {
 	team: TeamEntity;
-	selectedTeam: (team: TeamEntity) => void;
+	selectedTeam: TeamEntity;
+	setSelectedTeam: (team: TeamEntity) => void;
 	option?: boolean;
 }
 
-const Team = ({ team, selectedTeam, option }: TeamListItemProps) => {
+// Components
+import CustomImage from '../customImage';
+
+// Icons
+import { PencilLine, SaveAll, Trash2 } from 'lucide-react';
+
+const Team = ({
+	team,
+	selectedTeam,
+	setSelectedTeam,
+	option
+}: TeamListItemProps) => {
 	return (
-		<div>
-			<div onClick={() => selectedTeam(team)}>
-				<Image
-					src={team.avatar.sprite}
-					alt={team.avatar.name}
-					width={100}
-					height={100}
-					priority={true}
-					quality={100}
-					sizes={'100vw'}
-					style={{ objectFit: 'contain' }}
-				/>
-				{team.name}
+		<div className={'team-container'}>
+			<div
+				className={`team-infos ${selectedTeam.id === team.id ? 'selected' : ''}`}
+				onClick={() => setSelectedTeam(team)}
+			>
+				<div className={'bg-team'}>
+					<CustomImage
+						src={team.avatar.sprite}
+						alt={team.avatar.name}
+						fill={true}
+					/>
+				</div>
+				<span>{team.name}</span>
+				{team.pokemons && team.pokemons.length > 0 ? (
+					<div className={'team-pokemon'}>
+						{team.pokemons.map(pokemon => (
+							<div key={pokemon.pokedexId}>{pokemon.name}</div>
+						))}
+					</div>
+				) : (
+					<div>No pokemons</div>
+				)}
 			</div>
 
-			{option ? (
-				<div>
-					<button>Update</button>
-					<button>Delete</button>
-					<button>Copy</button>
+			{option && team.id === selectedTeam.id ? (
+				<div className={'team-options'}>
+					<button>
+						<PencilLine />
+					</button>
+					<button>
+						<Trash2 />
+					</button>
+					<button>
+						<SaveAll />
+					</button>
 				</div>
 			) : null}
 		</div>

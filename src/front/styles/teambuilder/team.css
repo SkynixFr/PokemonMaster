@@ -1,0 +1,75 @@
+.team-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    height: 85px;
+    overflow: hidden;
+}
+
+.bg-team {
+    position: absolute;
+    top: 5px;
+    left: 0;
+    width: 116px;
+    height: 250px;
+    z-index: -1;
+    opacity: 0.5;
+}
+
+.team-infos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-width: calc(85% - 40px);
+    height: calc(100% - 20px);
+    padding: 10px 20px;
+    gap: 10px;
+    border-radius: 10px;
+    transition: all 0.3s ease-in-out;
+    background-color: var(--grey);
+    z-index: 2;
+}
+
+.team-infos.selected {
+    background-color: var(--red);
+    color: var(--white);
+}
+
+.team-infos > span {
+    font-family: var(--ff-base-bold), sans-serif;
+}
+
+.team-infos > div {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    font-size: var(--fs-sm);
+}
+
+.team-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    min-width: 40px;
+    height: 100%;
+    z-index: 2;
+}
+
+.team-options > button {
+    width: 25px;
+    height: 25px;
+    border: none;
+    background-color: var(--red);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--white);
+}
