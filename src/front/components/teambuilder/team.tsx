@@ -1,9 +1,13 @@
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+
 // Interfaces
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
 interface TeamListItemProps {
 	team: TeamEntity;
 	selectedTeam: TeamEntity;
 	setSelectedTeam: (team: TeamEntity) => void;
+	resetSelectedTeam?: () => void;
 	option?: boolean;
 }
 
@@ -13,12 +17,32 @@ import CustomImage from '../customImage';
 // Icons
 import { PencilLine, SaveAll, Trash2 } from 'lucide-react';
 
+// Actions
+import { deleteTeam } from '../../actions/team.actions';
+
 const Team = ({
 	team,
 	selectedTeam,
 	setSelectedTeam,
-	option
+	option,
+	resetSelectedTeam
 }: TeamListItemProps) => {
+	const router = useRouter();
+
+	const handleDelete = async (teamId: string) => {
+		toast.promise(deleteTeam(teamId), {
+			loading: 'Deleting team...',
+			success: () => {
+				resetSelectedTeam();
+				router.refresh();
+				return 'Team deleted';
+			},
+			error: error => {
+				return error.message;
+			}
+		});
+	};
+
 	return (
 		<div className={'team-container'}>
 			<div
@@ -30,6 +54,7 @@ const Team = ({
 						src={team.avatar.sprite}
 						alt={team.avatar.name}
 						fill={true}
+						sizes="(max-width: 768px) 116px, 116px"
 					/>
 				</div>
 				<span>{team.name}</span>
@@ -49,7 +74,7 @@ const Team = ({
 					<button>
 						<PencilLine />
 					</button>
-					<button>
+					<button onClick={() => handleDelete(team.id)}>
 						<Trash2 />
 					</button>
 					<button>

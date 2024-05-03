@@ -26,3 +26,9 @@ export const createTeam = async (formData: FormData, avatarId: string) => {
 	});
 	return response.json();
 };
+
+export const deleteTeam = async (teamId: string) => {
+	await fetch(`http://localhost:8080/api/v1/teams/${teamId}`, {
+		method: 'DELETE'
+	});
+};

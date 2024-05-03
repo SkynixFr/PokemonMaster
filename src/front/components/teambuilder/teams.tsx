@@ -14,6 +14,11 @@ const Teams = ({ teams, selectedTeam, setSelectedTeam }: TeamsProps) => {
 	const handleSelectedTeam = (team: TeamEntity) => {
 		setSelectedTeam(team);
 	};
+
+	const resetSelectedTeam = () => {
+		setSelectedTeam(teams.filter(team => team.id !== selectedTeam.id)[0]);
+	};
+
 	return (
 		<div className={'teams-container'}>
 			{teams && teams.length > 0 ? (
@@ -26,6 +31,7 @@ const Teams = ({ teams, selectedTeam, setSelectedTeam }: TeamsProps) => {
 								key={team.id}
 								selectedTeam={selectedTeam}
 								setSelectedTeam={() => handleSelectedTeam(team)}
+								resetSelectedTeam={resetSelectedTeam}
 								option={true}
 							/>
 						))}
