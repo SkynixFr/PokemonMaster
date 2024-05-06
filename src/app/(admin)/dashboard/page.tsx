@@ -5,7 +5,7 @@ import { getAvatars } from '../../../front/actions/avatar.actions';
 
 // Components
 import UpdateData from '../../../front/components/dashboard/updateData';
-import AvatarList from '../../../front/components/dashboard/avatarList';
+import Avatars from '../../../front/components/dashboard/avatars';
 import FormAvatar from '../../../front/components/dashboard/formAvatar';
 
 const Dasboard = async () => {
@@ -18,7 +18,7 @@ const Dasboard = async () => {
 			<UpdateData />
 			<FormAvatar />
 			{avatars.length > 0 && avatars ? (
-				<AvatarList avatars={avatars} />
+				<Avatars avatars={avatars} />
 			) : (
 				<div>No avatars found</div>
 			)}

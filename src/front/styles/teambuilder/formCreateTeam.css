@@ -1,0 +1,82 @@
+.form-create-team {
+    position: relative;
+    width: calc(50% - 50px);
+    max-height: calc(65% - 50px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 15px;
+    background-color: var(--white);
+    border-radius: 5px;
+    padding: 25px;
+    z-index: 2;
+}
+
+.bg-form {
+    position: absolute;
+    top: 20px;
+    right: 50px;
+    width: 344px;
+    height: 250px;
+    z-index: -1;
+}
+
+.form-create-team > h2 {
+    font-family: var(--ff-base-bold), sans-serif;
+}
+
+.create-team {
+    width: calc(100% - 102px);
+    height: calc(100% - 42px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 21px 51px;
+}
+
+.create-team > input[type="text"] {
+    width: 350px;
+    min-height: 40px;
+    background-color: var(--grey);
+    border: none;
+    border-radius: 5px;
+    padding: 0 20px;
+}
+
+.avatars-container {
+    width: calc(100% - 20px);
+    height: calc(100% - 30px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px 10px;
+}
+
+.avatars-container > h3 {
+    font-family: var(--ff-base-bold), sans-serif;
+}
+
+.avatars-list {
+    display: flex;
+    height: calc(100% - 20px);
+    justify-content: center;
+    align-content: flex-start;
+    flex-flow: row wrap;
+    padding: 10px 0;
+    gap: 20px;
+}
+
+.btn-create-team {
+    font-family: var(--ff-base-bold), sans-serif;
+    width: 67px;
+    min-height: 29px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+

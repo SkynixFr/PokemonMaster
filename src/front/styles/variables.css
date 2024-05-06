@@ -34,23 +34,23 @@
 	--water: #6493eb;
 
 	/* font-family */
-	--ff-base: 'Spiegel Regular', sans-serif;
-	--ff-base-italic: 'Spiegel Regular Italic', sans-serif;
-	--ff-base-bold: 'Spiegel Bold', sans-serif;
-	--ff-base-bold-italic: 'Spiegel Bold Italic', sans-serif;
-	--ff-base-semibold: 'Spiegel Semibold', sans-serif;
-	--ff-base-semibold-italic: 'Spiegel Semibold Italic', sans-serif;
+	--ff-base: 'Spiegel Regular';
+	--ff-base-italic: 'Spiegel Regular Italic';
+	--ff-base-bold: 'Spiegel Bold';
+	--ff-base-bold-italic: 'Spiegel Bold Italic';
+	--ff-base-semibold: 'Spiegel Semibold';
+	--ff-base-semibold-italic: 'Spiegel Semibold Italic';
 
 	--ff-title: 'Beaufort for LOL Regular', sans-serif;
 	--ff-title-bold: 'Beaufort for LOL Bold', sans-serif;
-	--ff-title-bold-italic: 'Beaufort for LOL Bold Italic', sans-serif;
+	--ff-title-bold-italic: 'Beaufort for LOL Bold Italic';
 	--ff-title-light: 'Beaufort for LOL Light', sans-serif;
-	--ff-title-light-italic: 'Beaufort for LOL Light Italic', sans-serif;
+	--ff-title-light-italic: 'Beaufort for LOL Light Italic';
 	--ff-title-heavy: 'Beaufort for LOL Heavy', sans-serif;
-	--ff-title-heavy-italic: 'Beaufort for LOL Heavy Italic', sans-serif;
+	--ff-title-heavy-italic: 'Beaufort for LOL Heavy Italic';
 	--ff-title-medium: 'Beaufort for LOL Medium', sans-serif;
-	--ff-title-medium-italic: 'Beaufort for LOL Medium Italic', sans-serif;
-	--ff-title-italic: 'Beaufort for LOL Italic', sans-serif;
+	--ff-title-medium-italic: 'Beaufort for LOL Medium Italic';
+	--ff-title-italic: 'Beaufort for LOL Italic';
 
 	/* font-size */
 	--fs-xxs: 0.625rem;
@@ -72,31 +72,4 @@
 	--success: #468129;
 	--warning: #ffc107;
 	--error: #9c3541;
-
-	/* toast notifications */
-	--toastify-color-light: #fff;
-	--toastify-color-dark: #121212;
-	--toastify-color-info: #3498db;
-	--toastify-color-success: #07bc0c;
-	--toastify-color-warning: #f1c40f;
-	--toastify-color-error: #e74c3c;
-	--toastify-color-transparent: rgba(255, 255, 255, 0.7);
-	--toastify-icon-color-info: var(--toastify-color-info);
-	--toastify-icon-color-success: var(--toastify-color-success);
-	--toastify-icon-color-warning: var(--toastify-color-warning);
-	--toastify-icon-color-error: var(--toastify-color-error);
-	--toastify-toast-width: 320px;
-	--toastify-toast-background: #fff;
-	--toastify-toast-min-height: 64px;
-	--toastify-toast-max-height: 800px;
-	--toastify-font-family: sans-serif;
-	--toastify-z-index: 9999;
-	--toastify-text-color-light: #757575;
-	--toastify-text-color-dark: #fff;
-	--toastify-text-color-info: #fff;
-	--toastify-text-color-success: #fff;
-	--toastify-text-color-warning: #fff;
-	--toastify-text-color-error: #fff;
-	--toastify-spinner-color: #616161;
-	--toastify-spinner-color-empty-area: #e0e0e0;
 }
