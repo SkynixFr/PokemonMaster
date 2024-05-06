@@ -14,6 +14,10 @@ interface BattleProps {
 	battle: BattleClass;
 }
 
+// Constants
+const MAX_TURNS_ASLEEP = 3;
+const THAW_CHANCE = 0.2;
+
 const Battle = ({ battle }: BattleProps) => {
 	const [playerPokemon, setPlayerPokemon] = useState<PokemonClass | null>();
 	const [opponentPokemon, setOpponentPokemon] =
@@ -28,6 +32,12 @@ const Battle = ({ battle }: BattleProps) => {
 		useState<boolean>(false);
 	const [playerSleepCounter, setPlayerSleepCounter] = useState<number>(0);
 	const [opponentSleepCounter, setOpponentSleepCounter] = useState<number>(0);
+	const [playerThawChance, setPlayerThawChance] = useState<number>(0);
+	const [opponentThawChance, setOpponentThawChance] = useState<number>(0);
+	const [playerMultiTurnAttack, setPlayerMultiTurnAttack] =
+		useState<boolean>(false);
+	const [opponentMultiTurnAttack, setOpponentMultiTurnAttack] =
+		useState<boolean>(false);
 
 	// Récupération des pokémons depuis le localStorage ou la room
 	useEffect(() => {
@@ -78,23 +88,27 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	}, [playerSleepCounter, opponentSleepCounter]);
 
-	// Déclenchement des attaques des Pokémon
+	// Reset du status freeze avec une chance de 20%
+	useEffect(() => {
+		if (
+			playerPokemon?.status.name === 'FRZ' &&
+			playerThawChance < THAW_CHANCE
+		) {
+			setPlayerPokemon(playerPokemon.changeStatus(new Status('', '')));
+		}
+		if (
+			opponentPokemon?.status.name === 'FRZ' &&
+			opponentThawChance < THAW_CHANCE
+		) {
+			setOpponentPokemon(opponentPokemon.changeStatus(new Status('', '')));
+		}
+	}, [playerThawChance, opponentThawChance]);
+
+	// Déroulement d'un tour de jeu
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
-		if (playerPokemon.status.name === 'SLP') {
-			setPlayerSleepCounter(
-				playerSleepCounter !== 0
-					? playerSleepCounter - 1
-					: Math.ceil(Math.random() * 7)
-			);
-		}
-		if (opponentPokemon.status.name === 'SLP') {
-			setOpponentSleepCounter(
-				opponentSleepCounter !== 0
-					? opponentSleepCounter - 1
-					: Math.ceil(Math.random() * 7)
-			);
-		}
+		handleSleepStatus();
+		handleFreezeStatus();
 		handleAttacksByPriority();
 		setPlayerReady(false);
 		setOpponentReady(false);
@@ -114,6 +128,28 @@ const Battle = ({ battle }: BattleProps) => {
 	if (!battle || !playerPokemon || !opponentPokemon) {
 		return <div>Loading...</div>;
 	}
+
+	const handleSleepStatus = () => {
+		if (playerPokemon.status.name === 'SLP') {
+			setPlayerSleepCounter(
+				playerSleepCounter !== 0
+					? playerSleepCounter - 1
+					: Math.ceil(Math.random() * MAX_TURNS_ASLEEP)
+			);
+		}
+		if (opponentPokemon.status.name === 'SLP') {
+			setOpponentSleepCounter(
+				opponentSleepCounter !== 0
+					? opponentSleepCounter - 1
+					: Math.ceil(Math.random() * MAX_TURNS_ASLEEP)
+			);
+		}
+	};
+
+	const handleFreezeStatus = () => {
+		setPlayerThawChance(Math.random());
+		setOpponentThawChance(Math.random());
+	};
 
 	const handleAttacksByPriority = () => {
 		if (
