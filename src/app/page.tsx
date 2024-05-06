@@ -11,6 +11,12 @@ const Home = () => {
 				<li>
 					<Link href={'/teambuilder'}>Team builder</Link>
 				</li>
+				<li>
+					<Link href={'/login'}>Login</Link>
+				</li>
+				<li>
+					<Link href={'/register'}>Register</Link>
+				</li>
 			</ul>
 		</div>
 	);
