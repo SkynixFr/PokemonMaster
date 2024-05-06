@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import FormLogin from '../../../front/components/Login/formLogin';
+import FormLogin from '../../../../front/components/Login/formLogin';
 
 const Login = () => {
 	return (
