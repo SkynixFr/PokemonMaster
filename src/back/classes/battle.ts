@@ -1,10 +1,6 @@
-// Interfaces
-import IBattle from '../../interfaces/IBattle';
-
-// Classes
 import Pokemon from './pokemon';
 
-class Battle implements IBattle {
+class Battle {
 	readonly playerPokemon: Pokemon;
 	readonly opponentPokemon: Pokemon;
 

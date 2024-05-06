@@ -1,6 +1,4 @@
-import IStatus from '../../interfaces/IStatus';
-
-class Status implements IStatus {
+class Status {
 	readonly name: string;
 	readonly description: string;
 
