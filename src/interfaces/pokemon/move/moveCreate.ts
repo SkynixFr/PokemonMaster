@@ -1,4 +1,5 @@
 import { MetaEntity } from './metaEntity';
+import { StatChangeEntity } from '../statChange/statChangeEntity';
 
 export interface MoveCreate {
 	name: string;
@@ -10,4 +11,6 @@ export interface MoveCreate {
 	category: string;
 	description: string;
 	learnedBy: string[];
+	statsChange: StatChangeEntity[];
+	target: string;
 }

@@ -201,7 +201,22 @@ const fetchMoves = async (offset: number, limit: number) => {
 					)?.short_effect || 'No description available',
 				learnedBy: moveData.learned_by_pokemon.map(
 					(pokemon: { name: string; url: string }) => pokemon.name
-				)
+				),
+				statsChange:
+					moveData.stat_changes.length > 0
+						? moveData.stat_changes.map(
+								(statChange: {
+									change: number;
+									stat: { name: string };
+								}) => {
+									return {
+										stat: statChange.stat.name,
+										change: statChange.change
+									};
+								}
+							)
+						: null,
+				target: moveData.target.name
 			};
 
 			return moveCreate;
