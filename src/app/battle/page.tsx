@@ -147,8 +147,12 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handleFreezeStatus = () => {
-		setPlayerThawChance(Math.random());
-		setOpponentThawChance(Math.random());
+		if (playerPokemon.status.name === 'FRZ') {
+			setPlayerThawChance(Math.random());
+		}
+		if (opponentPokemon.status.name === 'FRZ') {
+			setOpponentThawChance(Math.random());
+		}
 	};
 
 	const handleAttacksByPriority = () => {
