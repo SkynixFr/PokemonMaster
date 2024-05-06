@@ -8,7 +8,7 @@ import Stat from '../../back/classes/stat';
 import Move from '../../back/classes/move';
 
 // Pages
-import BattlePage from '../../app/battle/page';
+import Battle from '../../app/battle/page';
 
 const BattleProvider = ({ children }: { children: ReactNode }) => {
 	const [battle, setBattle] = useState<BattleClass>(null);
@@ -29,7 +29,8 @@ const BattleProvider = ({ children }: { children: ReactNode }) => {
 						(stat: Stat) => new Stat(stat.name, stat.value, stat.max)
 					),
 					storedPlayerPokemon.moves.map(
-						(move: Move) => new Move(move.name, move.power)
+						(move: Move) =>
+							new Move(move.name, move.power, move.pp, move.meta)
 					)
 				),
 				new Pokemon(
@@ -38,7 +39,8 @@ const BattleProvider = ({ children }: { children: ReactNode }) => {
 						(stat: Stat) => new Stat(stat.name, stat.value, stat.max)
 					),
 					storedOpponentPokemon.moves.map(
-						(move: Move) => new Move(move.name, move.power)
+						(move: Move) =>
+							new Move(move.name, move.power, move.pp, move.meta)
 					)
 				)
 			);
@@ -48,7 +50,7 @@ const BattleProvider = ({ children }: { children: ReactNode }) => {
 		}
 	}, []);
 
-	return <BattlePage battle={battle} />;
+	return <Battle battle={battle} />;
 };
 
 export default BattleProvider;

@@ -1,22 +1,23 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 // Classes
-import Pokemon from '../../back/classes/pokemon';
-import Battle from '../../back/classes/battle';
+import PokemonClass from '../../back/classes/pokemon';
+import BattleClass from '../../back/classes/battle';
 import Move from '../../back/classes/move';
 import Status from '../../back/classes/status';
 
 // Interfaces
 interface BattleProps {
-	battle: Battle;
+	battle: BattleClass;
 }
 
-const BattlePage = ({ battle }: BattleProps) => {
-	const [playerPokemon, setPlayerPokemon] = useState<Pokemon | null>();
-	const [opponentPokemon, setOpponentPokemon] = useState<Pokemon | null>();
+const Battle = ({ battle }: BattleProps) => {
+	const [playerPokemon, setPlayerPokemon] = useState<PokemonClass | null>();
+	const [opponentPokemon, setOpponentPokemon] =
+		useState<PokemonClass | null>();
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
 	const [opponentReady, setOpponentReady] = useState<boolean>(false);
 	const [playerSelectedMove, setPlayerSelectedMove] = useState<Move>();
@@ -25,8 +26,8 @@ const BattlePage = ({ battle }: BattleProps) => {
 	const [playerMovesShowed, setPlayerMovesShowed] = useState<boolean>(false);
 	const [opponentMovesShowed, setOpponentMovesShowed] =
 		useState<boolean>(false);
-	const [playerStateCounter, setPlayerStateCounter] = useState<number>(0);
-	const [opponentStateCounter, setOpponentStateCounter] = useState<number>(0);
+	const [playerSleepCounter, setPlayerSleepCounter] = useState<number>(0);
+	const [opponentSleepCounter, setOpponentSleepCounter] = useState<number>(0);
 
 	// Récupération des pokémons depuis le localStorage ou la room
 	useEffect(() => {
@@ -42,7 +43,7 @@ const BattlePage = ({ battle }: BattleProps) => {
 				localStorage.getItem('opponentPokemon')
 			);
 			setPlayerPokemon(
-				new Pokemon(
+				new PokemonClass(
 					parsedPlayerPokemon.name,
 					parsedPlayerPokemon.stats,
 					parsedPlayerPokemon.moves,
@@ -50,7 +51,7 @@ const BattlePage = ({ battle }: BattleProps) => {
 				)
 			);
 			setOpponentPokemon(
-				new Pokemon(
+				new PokemonClass(
 					parsedOpponentPokemon.name,
 					parsedOpponentPokemon.stats,
 					parsedOpponentPokemon.moves,
@@ -63,31 +64,38 @@ const BattlePage = ({ battle }: BattleProps) => {
 		}
 	}, [battle]);
 
-	// Déclenchement des attaques en fonction de la vitesse des Pokémon
+	// Reset du status sleep quand le compteur arrive à zéro
+	useEffect(() => {
+		setPlayerPokemon(playerPokemon?.updateStatusCounter(playerSleepCounter));
+		setOpponentPokemon(
+			opponentPokemon?.updateStatusCounter(opponentSleepCounter)
+		);
+		if (playerSleepCounter === 0) {
+			setPlayerPokemon(playerPokemon?.changeStatus(new Status('', '')));
+		}
+		if (opponentSleepCounter === 0) {
+			setOpponentPokemon(opponentPokemon?.changeStatus(new Status('', '')));
+		}
+	}, [playerSleepCounter, opponentSleepCounter]);
+
+	// Déclenchement des attaques des Pokémon
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
-		if (
-			playerPokemon.getStat('speed').value >
-			opponentPokemon.getStat('speed').value
-		) {
-			handleAttack(playerPokemon, opponentPokemon);
-			handleAttack(opponentPokemon, playerPokemon);
-		} else if (
-			playerPokemon.getStat('speed').value <
-			opponentPokemon.getStat('speed').value
-		) {
-			handleAttack(opponentPokemon, playerPokemon);
-			handleAttack(playerPokemon, opponentPokemon);
-		} else {
-			const random = Math.random();
-			if (random < 0.5) {
-				handleAttack(playerPokemon, opponentPokemon);
-				handleAttack(opponentPokemon, playerPokemon);
-			} else {
-				handleAttack(opponentPokemon, playerPokemon);
-				handleAttack(playerPokemon, opponentPokemon);
-			}
+		if (playerPokemon.status.name === 'SLP') {
+			setPlayerSleepCounter(
+				playerSleepCounter !== 0
+					? playerSleepCounter - 1
+					: Math.ceil(Math.random() * 7)
+			);
 		}
+		if (opponentPokemon.status.name === 'SLP') {
+			setOpponentSleepCounter(
+				opponentSleepCounter !== 0
+					? opponentSleepCounter - 1
+					: Math.ceil(Math.random() * 7)
+			);
+		}
+		handleAttacksByPriority();
 		setPlayerReady(false);
 		setOpponentReady(false);
 	}, [playerReady, opponentReady]);
@@ -104,12 +112,44 @@ const BattlePage = ({ battle }: BattleProps) => {
 
 	// Affichage du loader
 	if (!battle || !playerPokemon || !opponentPokemon) {
-		console.log('Battle loading...');
 		return <div>Loading...</div>;
 	}
 
-	// Gestion du move d'un joueur
-	const handleAttack = (playerPokemon: Pokemon, opponentPokemon: Pokemon) => {
+	const handleAttacksByPriority = () => {
+		if (
+			playerPokemon.getStat('speed').value >
+			opponentPokemon.getStat('speed').value
+		) {
+			const updatedOpponent = handlePlayerAttack();
+			if (updatedOpponent.status.name !== 'KO') {
+				handleOpponentAttack();
+			}
+		} else if (
+			playerPokemon.getStat('speed').value <
+			opponentPokemon.getStat('speed').value
+		) {
+			const updatedPlayer = handleOpponentAttack();
+			if (updatedPlayer.status.name !== 'KO') {
+				handlePlayerAttack();
+			}
+		} else {
+			const random = Math.random();
+			if (random < 0.5) {
+				const updatedOpponent = handlePlayerAttack();
+				if (updatedOpponent.status.name !== 'KO') {
+					handleOpponentAttack();
+				}
+			} else {
+				const updatedPlayer = handleOpponentAttack();
+				if (updatedPlayer.status.name !== 'KO') {
+					handlePlayerAttack();
+				}
+			}
+		}
+	};
+
+	// Gestion du move du joueur
+	const handlePlayerAttack = () => {
 		const updatedOpponentPokemon = playerPokemon.attack(
 			opponentPokemon,
 			playerSelectedMove
@@ -119,6 +159,21 @@ const BattlePage = ({ battle }: BattleProps) => {
 			'opponentPokemon',
 			JSON.stringify(updatedOpponentPokemon)
 		);
+		return updatedOpponentPokemon;
+	};
+
+	// Gestion du move de l'adversaire
+	const handleOpponentAttack = () => {
+		const updatedPlayerPokemon = opponentPokemon.attack(
+			playerPokemon,
+			opponentSelectedMove
+		);
+		setPlayerPokemon(updatedPlayerPokemon);
+		localStorage.setItem(
+			'playerPokemon',
+			JSON.stringify(updatedPlayerPokemon)
+		);
+		return updatedPlayerPokemon;
 	};
 
 	const handlePlayerReady = () => {
@@ -216,7 +271,7 @@ const BattlePage = ({ battle }: BattleProps) => {
 		</div>
 	);
 };
-export default BattlePage;
+export default Battle;
 
 // 'use client';
 // import { useSelector } from 'react-redux';

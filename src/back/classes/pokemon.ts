@@ -10,13 +10,21 @@ class Pokemon implements IPokemon {
 	readonly name: string;
 	readonly stats: Stat[];
 	readonly moves: Move[];
-	readonly status?: Status;
+	readonly status: Status;
+	readonly statusCounter: number;
 
-	constructor(name: string, stat: Stat[], moves: Move[], status?: Status) {
+	constructor(
+		name: string,
+		stat: Stat[],
+		moves: Move[],
+		status?: Status,
+		statusCounter?: number
+	) {
 		this.name = name;
 		this.stats = stat;
 		this.moves = moves;
 		this.status = status ? status : new Status('', '');
+		this.statusCounter = statusCounter ? statusCounter : 0;
 	}
 
 	getStat(statName: string): Stat {
@@ -26,6 +34,7 @@ class Pokemon implements IPokemon {
 
 	attack(target: Pokemon, move: Move): Pokemon {
 		let updatedStatus = target.status;
+		let updatedStatusCounter = target.statusCounter;
 		let statusList = ['PSN', 'SLP', 'FRZ', 'KO', 'BRN', 'PAR'];
 		if (
 			this.status.name === 'KO' ||
@@ -44,6 +53,7 @@ class Pokemon implements IPokemon {
 			!statusList.includes(target.status.name)
 		) {
 			updatedStatus = new Status('SLP', `${this.name} is asleep`);
+			updatedStatusCounter = Math.ceil(Math.random() * 7);
 		}
 		if (
 			move.meta?.ailment === 'poison' &&
@@ -61,11 +71,13 @@ class Pokemon implements IPokemon {
 			updatedStatus = new Status('KO', `${this.name} has fainted`);
 		}
 		target = target.changeStatus(updatedStatus);
+		target = target.updateStatusCounter(updatedStatusCounter);
 		return new Pokemon(
 			target.name,
 			target.stats,
 			target.moves,
-			target.status
+			target.status,
+			target.statusCounter
 		);
 	}
 
@@ -81,7 +93,23 @@ class Pokemon implements IPokemon {
 	}
 
 	changeStatus(status: Status): Pokemon {
-		return new Pokemon(this.name, this.stats, this.moves, status);
+		return new Pokemon(
+			this.name,
+			this.stats,
+			this.moves,
+			status,
+			this.statusCounter
+		);
+	}
+
+	updateStatusCounter(statusCounter: number): Pokemon {
+		return new Pokemon(
+			this.name,
+			this.stats,
+			this.moves,
+			this.status,
+			statusCounter
+		);
 	}
 }
 
