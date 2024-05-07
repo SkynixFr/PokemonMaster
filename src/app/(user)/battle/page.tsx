@@ -41,7 +41,6 @@ const Battle = ({ battle }: BattleProps) => {
 
 	// Récupération des pokémons depuis le localStorage ou la room
 	useEffect(() => {
-		console.log('1231456' + battle);
 		if (!battle) return;
 		if (
 			localStorage.getItem('playerPokemon') &&
@@ -73,9 +72,6 @@ const Battle = ({ battle }: BattleProps) => {
 			setPlayerPokemon(battle.playerPokemon);
 			setOpponentPokemon(battle.opponentPokemon);
 		}
-
-		console.log('player' + playerPokemon);
-		console.log('opponent' + opponentPokemon);
 	}, [battle]);
 
 	// Reset du status sleep quand le compteur arrive à zéro
@@ -235,10 +231,7 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	return (
-		<div style={{ margin: '50px 0 0 0' }}>
-			<Link href={'/rooms'}>Go back</Link>
-			<h1>Battle</h1>
-
+		<div style={{ margin: '100px 0 0 10px' }}>
 			{/* Affichage des informations du Pokemon de l'adversaire */}
 			<p>
 				<span>Opponent : </span>

@@ -142,9 +142,7 @@ const Rooms = () => {
 		localStorage.setItem('opponentPokemon', JSON.stringify(opponentPokemon));
 	}, []);
 	return (
-		<div style={{ margin: '50px 0 0 0' }}>
-			<Link href={'/'}>Go back</Link>
-			<h1>Rooms</h1>
+		<div style={{ margin: '100px 0 0 10px' }}>
 			<button onClick={() => router.push('/battle')}>Battle</button>
 		</div>
 	);
