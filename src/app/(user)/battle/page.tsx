@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 
 // Classes
@@ -8,6 +8,7 @@ import PokemonClass from '../../../back/classes/pokemon';
 import BattleClass from '../../../back/classes/battle';
 import Move from '../../../back/classes/move';
 import Status from '../../../back/classes/status';
+import { set } from 'zod';
 
 // Interfaces
 interface BattleProps {
@@ -17,6 +18,7 @@ interface BattleProps {
 // Constants
 const MAX_TURNS_ASLEEP = 3;
 const THAW_CHANCE = 0.2;
+const PARALYSIS_CHANCE_TO_MOVE = 0.25;
 
 const Battle = ({ battle }: BattleProps) => {
 	const [playerPokemon, setPlayerPokemon] = useState<PokemonClass | null>();
@@ -34,10 +36,14 @@ const Battle = ({ battle }: BattleProps) => {
 	const [opponentSleepCounter, setOpponentSleepCounter] = useState<number>(0);
 	const [playerThawChance, setPlayerThawChance] = useState<number>(0);
 	const [opponentThawChance, setOpponentThawChance] = useState<number>(0);
-	const [playerMultiTurnAttack, setPlayerMultiTurnAttack] =
+	const [poisonDamagesStep, setPoisonDamagesStep] = useState<boolean>(false);
+	const [burnDamagesStep, setBurnDamagesStep] = useState<boolean>(false);
+	const [playerAbleToMoveWhileParalyzed, setPlayerAbleToMoveWhileParalyzed] =
 		useState<boolean>(false);
-	const [opponentMultiTurnAttack, setOpponentMultiTurnAttack] =
-		useState<boolean>(false);
+	const [
+		opponentAbleToMoveWhileParalyzed,
+		setOpponentAbleToMoveWhileParalyzed
+	] = useState<boolean>(false);
 
 	// Récupération des pokémons depuis le localStorage ou la room
 	useEffect(() => {
@@ -80,11 +86,21 @@ const Battle = ({ battle }: BattleProps) => {
 		setOpponentPokemon(
 			opponentPokemon?.updateStatusCounter(opponentSleepCounter)
 		);
-		if (playerSleepCounter === 0) {
-			setPlayerPokemon(playerPokemon?.changeStatus(new Status('', '')));
+		if (playerSleepCounter === 0 && playerPokemon?.status.name === 'SLP') {
+			let updatedPokemon = playerPokemon?.changeStatus(new Status('', ''));
+			setPlayerPokemon(updatedPokemon);
+			localStorage.setItem('playerPokemon', JSON.stringify(updatedPokemon));
 		}
-		if (opponentSleepCounter === 0) {
-			setOpponentPokemon(opponentPokemon?.changeStatus(new Status('', '')));
+		if (
+			opponentSleepCounter === 0 &&
+			opponentPokemon?.status.name === 'SLP'
+		) {
+			let updatedPokemon = opponentPokemon?.changeStatus(new Status('', ''));
+			setOpponentPokemon(updatedPokemon);
+			localStorage.setItem(
+				'opponentPokemon',
+				JSON.stringify(updatedPokemon)
+			);
 		}
 	}, [playerSleepCounter, opponentSleepCounter]);
 
@@ -94,33 +110,62 @@ const Battle = ({ battle }: BattleProps) => {
 			playerPokemon?.status.name === 'FRZ' &&
 			playerThawChance < THAW_CHANCE
 		) {
-			setPlayerPokemon(playerPokemon.changeStatus(new Status('', '')));
+			let updatedPokemon = playerPokemon.changeStatus(new Status('', ''));
+			setPlayerPokemon(updatedPokemon);
+			localStorage.setItem('playerPokemon', JSON.stringify(updatedPokemon));
 		}
 		if (
 			opponentPokemon?.status.name === 'FRZ' &&
 			opponentThawChance < THAW_CHANCE
 		) {
-			setOpponentPokemon(opponentPokemon.changeStatus(new Status('', '')));
+			let updatedPokemon = opponentPokemon.changeStatus(new Status('', ''));
+			setOpponentPokemon(updatedPokemon);
+			localStorage.setItem(
+				'opponentPokemon',
+				JSON.stringify(updatedPokemon)
+			);
 		}
 	}, [playerThawChance, opponentThawChance]);
+
+	// Déclenchement des dégâts de poison
+	useEffect(() => {
+		if (!poisonDamagesStep && !burnDamagesStep) return;
+		if (playerPokemon.status.name === 'PSN' || 'BRN') {
+			const updatedPlayerPokemon = playerPokemon.sufferFromStatus();
+			setPlayerPokemon(updatedPlayerPokemon);
+			localStorage.setItem(
+				'playerPokemon',
+				JSON.stringify(updatedPlayerPokemon)
+			);
+		}
+		if (opponentPokemon.status.name === 'PSN' || 'BRN') {
+			const updatedOpponentPokemon = opponentPokemon.sufferFromStatus();
+			setOpponentPokemon(updatedOpponentPokemon);
+			localStorage.setItem(
+				'opponentPokemon',
+				JSON.stringify(updatedOpponentPokemon)
+			);
+		}
+		setPoisonDamagesStep(false);
+	}, [poisonDamagesStep, burnDamagesStep]);
 
 	// Déroulement d'un tour de jeu
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
 		handleSleepStatus();
 		handleFreezeStatus();
+		handleParalyzisStatus();
 		handleAttacksByPriority();
-		setPlayerReady(false);
-		setOpponentReady(false);
+		handlePoisonAndBurnStatus();
 	}, [playerReady, opponentReady]);
 
 	// Détermination du gagnant
 	useEffect(() => {
 		if (playerPokemon?.status.name === 'KO') {
-			setBattleWinner('Opponent');
+			setBattleWinner('Opponent wins!');
 		}
 		if (opponentPokemon?.status.name === 'KO') {
-			setBattleWinner('Player');
+			setBattleWinner('Player wins!');
 		}
 	}, [playerPokemon, opponentPokemon]);
 
@@ -161,6 +206,21 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	};
 
+	const handleParalyzisStatus = () => {
+		if (playerPokemon.status.name === 'PAR') {
+			const random = Math.random();
+			if (random >= PARALYSIS_CHANCE_TO_MOVE) {
+				setPlayerAbleToMoveWhileParalyzed(true);
+			}
+		}
+		if (opponentPokemon.status.name === 'PAR') {
+			const random = Math.random();
+			if (random >= PARALYSIS_CHANCE_TO_MOVE) {
+				setOpponentAbleToMoveWhileParalyzed(true);
+			}
+		}
+	};
+
 	const handleAttacksByPriority = () => {
 		if (
 			playerPokemon.getStat('speed').value >
@@ -192,10 +252,19 @@ const Battle = ({ battle }: BattleProps) => {
 				}
 			}
 		}
+		setPlayerReady(false);
+		setOpponentReady(false);
+		setPlayerAbleToMoveWhileParalyzed(false);
+		setOpponentAbleToMoveWhileParalyzed(false);
 	};
 
 	// Gestion du move du joueur
 	const handlePlayerAttack = () => {
+		if (
+			playerPokemon.status.name === 'PAR' &&
+			!playerAbleToMoveWhileParalyzed
+		)
+			return opponentPokemon;
 		const updatedOpponentPokemon = playerPokemon.attack(
 			opponentPokemon,
 			playerSelectedMove
@@ -210,6 +279,11 @@ const Battle = ({ battle }: BattleProps) => {
 
 	// Gestion du move de l'adversaire
 	const handleOpponentAttack = () => {
+		if (
+			opponentPokemon.status.name === 'PAR' &&
+			!opponentAbleToMoveWhileParalyzed
+		)
+			return playerPokemon;
 		const updatedPlayerPokemon = opponentPokemon.attack(
 			playerPokemon,
 			opponentSelectedMove
@@ -230,11 +304,21 @@ const Battle = ({ battle }: BattleProps) => {
 		setOpponentReady(true);
 	};
 
+	const handlePoisonAndBurnStatus = () => {
+		if (
+			['PSN', 'BRN'].includes(playerPokemon.status.name) ||
+			['PSN', 'BRN'].includes(opponentPokemon.status.name)
+		) {
+			setPoisonDamagesStep(true);
+			setBurnDamagesStep(true);
+		}
+	};
+
 	return (
 		<div style={{ margin: '100px 0 0 10px' }}>
 			{/* Affichage des informations du Pokemon de l'adversaire */}
 			<p>
-				<span>Opponent : </span>
+				{opponentPokemon.name + ' '}
 				{opponentPokemon.getStat('hp').value +
 					'/' +
 					opponentPokemon.getStat('hp').max}
@@ -272,7 +356,6 @@ const Battle = ({ battle }: BattleProps) => {
 
 			{/* Affichage des informations du Pokemon du joueur */}
 			<p>
-				<span>Player : </span>
 				{playerPokemon.name + ' '}
 				{playerPokemon.getStat('hp').value +
 					'/' +
@@ -310,7 +393,7 @@ const Battle = ({ battle }: BattleProps) => {
 			)}
 
 			{/* Affichage du vainqueur */}
-			{battleWinner && <h1>{battleWinner} wins!!!</h1>}
+			{battleWinner && <h1>{battleWinner}</h1>}
 		</div>
 	);
 };

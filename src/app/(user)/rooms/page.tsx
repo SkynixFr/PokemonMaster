@@ -15,7 +15,31 @@ const Rooms = () => {
 				{ name: 'speed', value: 280, max: 280 }
 			],
 			moves: [
-				{ name: 'surf', power: 95 },
+				{
+					name: 'thunder-wave',
+					power: 0,
+					accuracy: 90,
+					pp: 20,
+					meta: {
+						ailment: 'paralysis',
+						drain: 0,
+						healing: 0,
+						critRate: 0,
+						priority: 0,
+						effectChance: 0,
+						flinchChance: 0,
+						statChance: 0,
+						minHits: 0,
+						maxHits: 0,
+						minTurns: 0,
+						maxTurns: 0
+					},
+					type: 'electric',
+					category: 'status',
+					description: 'Paralyzes the target.',
+					learnedBy: ['rattata'],
+					target: 'selected-pokemon'
+				},
 				{
 					name: 'blizzard',
 					power: 110,
@@ -80,7 +104,31 @@ const Rooms = () => {
 				{ name: 'speed', value: 328, max: 328 }
 			],
 			moves: [
-				{ name: 'flamethrower', power: 95 },
+				{
+					name: 'flamethrower',
+					power: 90,
+					accuracy: 100,
+					pp: 15,
+					meta: {
+						ailment: 'burn',
+						drain: 0,
+						healing: 0,
+						critRate: 0,
+						priority: 0,
+						effectChance: 10,
+						flinchChance: 0,
+						statChance: 0,
+						minHits: 0,
+						maxHits: 0,
+						minTurns: 0,
+						maxTurns: 0
+					},
+					type: 'fire',
+					category: 'special',
+					description: 'Has a 10% chance to burn the target.',
+					learnedBy: ['charmander', 'charmeleon', 'charizard'],
+					target: 'selected-pokemon'
+				},
 				{
 					name: 'hypnosis',
 					power: 0,

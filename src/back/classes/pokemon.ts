@@ -64,6 +64,18 @@ class Pokemon {
 		) {
 			updatedStatus = new Status('FRZ', `${this.name} is frozen`);
 		}
+		if (
+			move.meta?.ailment === 'burn' &&
+			!statusList.includes(target.status.name)
+		) {
+			updatedStatus = new Status('BRN', `${this.name} is burned`);
+		}
+		if (
+			move.meta?.ailment === 'paralysis' &&
+			!statusList.includes(target.status.name)
+		) {
+			updatedStatus = new Status('PAR', `${this.name} is paralyzed`);
+		}
 		if (updatedHp.value <= 0) {
 			updatedStatus = new Status('KO', `${this.name} has fainted`);
 		}
@@ -78,34 +90,48 @@ class Pokemon {
 		);
 	}
 
-	heal(): Pokemon {
-		if (this.status.name === 'KO') {
-			return this;
-		}
-		const hp = this.getStat('hp');
-		const updatedHp = hp.increase(30);
-		const index = this.stats.findIndex(stat => stat.name === 'hp');
-		this.stats[index] = updatedHp;
-		return new Pokemon(this.name, this.stats, this.moves);
-	}
-
-	changeStatus(status: Status): Pokemon {
+	changeStatus(updatedStatus: Status): Pokemon {
 		return new Pokemon(
 			this.name,
 			this.stats,
 			this.moves,
-			status,
+			updatedStatus,
 			this.statusCounter
 		);
 	}
 
-	updateStatusCounter(statusCounter: number): Pokemon {
+	updateStatusCounter(updatedStatusCounter: number): Pokemon {
 		return new Pokemon(
 			this.name,
 			this.stats,
 			this.moves,
 			this.status,
-			statusCounter
+			updatedStatusCounter
+		);
+	}
+
+	sufferFromStatus(): Pokemon {
+		let updatedStatus = this.status;
+		let damage = 0;
+		if (this.status.name === 'PSN') {
+			damage = Math.ceil(this.getStat('hp').max / 8);
+		}
+		if (this.status.name === 'BRN') {
+			damage = Math.ceil(this.getStat('hp').max / 16);
+		}
+		const updatedHp = this.getStat('hp').decrease(damage);
+		const index = this.stats.findIndex(stat => stat.name === 'hp');
+		this.stats[index] = updatedHp;
+		if (updatedHp.value <= 0) {
+			updatedStatus = new Status('KO', `${this.name} has fainted`);
+		}
+
+		return new Pokemon(
+			this.name,
+			this.stats,
+			this.moves,
+			updatedStatus,
+			this.statusCounter
 		);
 	}
 }
