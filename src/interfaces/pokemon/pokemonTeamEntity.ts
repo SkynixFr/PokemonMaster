@@ -10,7 +10,7 @@ export interface PokemonTeamEntity {
 	name: string;
 	types: TypeEntity[];
 	level: number;
-	abilities: AbilityEntity[];
+	ability: AbilityEntity;
 	nature: NatureEntity;
 	gender: 'Male' | 'Female' | 'Neutral';
 	isShiny: boolean;
