@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 const Navbar = () => {
 	const router = useRouter();
 	const pathname = usePathname();
-	return (
+	return pathname.includes('/pokemonbuilder') ? null : (
 		<nav className={'navbar'}>
 			<div className={'navbar-logo'}>
 				<Link href={'/'}>

@@ -11,6 +11,17 @@ export const getTeams = async () => {
 	return response.json();
 };
 
+export const getTeam = async (teamId: string) => {
+	const response = await fetch(
+		`http://localhost:8080/api/v1/teams/${teamId}`,
+		{
+			method: 'GET',
+			cache: 'no-store'
+		}
+	);
+	return response.json();
+};
+
 export const createTeam = async (formData: FormData, avatarId: string) => {
 	const team: TeamCreate = {
 		name: formData.get('team').toString(),

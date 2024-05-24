@@ -71,7 +71,7 @@ const Team = ({
 
 			{option && team.id === selectedTeam.id ? (
 				<div className={'team-options'}>
-					<button>
+					<button onClick={() => router.push(`pokemonbuilder/${team.id}`)}>
 						<PencilLine />
 					</button>
 					<button onClick={() => handleDelete(team.id)}>

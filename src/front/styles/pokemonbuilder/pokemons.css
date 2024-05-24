@@ -1,0 +1,28 @@
+@import  url("pokemonDetails.css");
+@import  url("pokedex.css");
+
+.pokemons-infos {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    width: 100%;
+    height: 100%;
+    gap: 30px;
+}
+
+.pokemons {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 20px;
+    height: 100%;
+}
+
+.team-pokemons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 70px;
+    background-color: red;
+}
+
