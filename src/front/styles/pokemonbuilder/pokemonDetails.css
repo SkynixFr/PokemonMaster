@@ -1,3 +1,7 @@
+@import url("pokemonCompetitiveInfos.css");
+@import url("pokemonMoves.css");
+@import url("pokemonStats.css");
+
 .pokemon-details {
     display: flex;
     flex-direction: column;
@@ -7,7 +11,7 @@
     height: calc(100% - 40px);
     border-radius: 20px;
     padding: 20px 40px;
-    gap: 50px;
+    gap: 35px;
     background-color: var(--white);
 }
 
@@ -44,14 +48,6 @@
     font-family: var(--ff-base-bold), sans-serif;
     background-color: var(--normal);
     border: none;
-}
-
-.pokemon-shiny {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    background-color: var(--electric);
 }
 
 .pokemon-infos .middle {
@@ -122,11 +118,5 @@
     color: white
 }
 
-.pokemon-competitive-infos {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    gap: 10px;
-}
+
+
