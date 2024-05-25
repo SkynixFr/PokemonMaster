@@ -112,7 +112,7 @@ const fetchPokemons = async (offset: number, limit: number) => {
 							max: stat.base_stat,
 							ev: 0,
 							iv: 0,
-							total: 0
+							total: stat.base_stat
 						};
 					}
 				),
