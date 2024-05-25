@@ -1,9 +1,12 @@
 .type {
     display: flex;
-    padding: 2px 5px;
+    padding: 5px 7px;
     border-radius: 5px;
     font-family: var(--ff-base-bold), sans-serif;
-    font-size: var(--fs-xxs);
+    font-size: var(--fs-sm);
+    color: var(--white);
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .grass {

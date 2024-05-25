@@ -2,7 +2,6 @@
 
 // Utils
 import { firstLetterMaj } from '../../utils/formatString';
-import { PokemonImgByPokemonId } from '../../utils/pokemonImgByPokemonId';
 
 // Components
 import CustomImage from '../customImage';
@@ -35,7 +34,6 @@ const Pokedex = ({
 						<div className={'bg-pokemon'}>
 							<CustomImage
 								src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
-								// src={PokemonImgByPokemonId[pokemon.pokedexId]}
 								alt={pokemon.name}
 								fill={true}
 								sizes="(max-width: 768px) 150px, 150px"
@@ -49,7 +47,7 @@ const Pokedex = ({
 								</div>
 							</div>
 							<div className={'pokemon-types'}>
-								<PokemonType types={pokemon.types} />
+								<PokemonType types={pokemon.types} isImg={true} />
 							</div>
 						</div>
 					</div>

@@ -45,9 +45,9 @@ const PokemonStats = ({ statsActive }: PokemonStatsProps) => {
 						<div key={index} className={'stat-details'}>
 							<div className={'stat-infos'}>
 								<div className={'stat-name'}>
-									{firstLetterMaj(stat.name) === 'Special-defense'
+									{firstLetterMaj(stat.name) === 'Special Defense'
 										? 'Sp.Defense'
-										: firstLetterMaj(stat.name) === 'Special-attack'
+										: firstLetterMaj(stat.name) === 'Special Attack'
 											? 'Sp.Attack'
 											: firstLetterMaj(stat.name) === 'Hp'
 												? 'HP'
@@ -95,42 +95,6 @@ const PokemonStats = ({ statsActive }: PokemonStatsProps) => {
 					))}
 				</div>
 				<div>Remaining Evs: {numberEvs}</div>
-				{/*<div className={'stats-details'}>*/}
-				{/*	<span>Base</span>*/}
-				{/*	{statsActive.map((stat, index) => (*/}
-				{/*		<div key={index} className={'stat-details'}>*/}
-				{/*			<div className={'stat-name'}>*/}
-				{/*				{firstLetterMaj(stat.name) === 'Special-defense'*/}
-				{/*					? 'Sp.Defense'*/}
-				{/*					: firstLetterMaj(stat.name) === 'Special-attack'*/}
-				{/*						? 'Sp.Attack'*/}
-				{/*						: firstLetterMaj(stat.name) === 'Hp'*/}
-				{/*							? 'HP'*/}
-				{/*							: firstLetterMaj(stat.name)}*/}
-				{/*			</div>*/}
-				{/*			<div className={'stat-value'}>{stat.value}</div>*/}
-				{/*			<div className={'stat-progress'}>*/}
-				{/*				<div*/}
-				{/*					className={'stat-progress-value'}*/}
-				{/*					style={{*/}
-				{/*						width: `${computeStatWidth(stat) * 100}%`,*/}
-				{/*						backgroundColor: `${computeStatWidth(stat) * 100 > 75 ? 'var(--grass)' : computeStatWidth(stat) * 100 > 50 ? 'var(--electric)' : computeStatWidth(stat) * 100 > 25 ? 'var(--fire)' : 'var(--fighting)'}`*/}
-				{/*					}}*/}
-				{/*				></div>*/}
-				{/*			</div>*/}
-				{/*		</div>*/}
-				{/*	))}*/}
-				{/*</div>*/}
-				{/*<div className={'other-stats'}>*/}
-				{/*	<div className={'other-stats-title'}>*/}
-				{/*		<span>EVs</span>*/}
-				{/*		<span>IVs</span>*/}
-				{/*		<span>Stats</span>*/}
-				{/*	</div>*/}
-				{/*	{statsActive.map((stat, index) => (*/}
-				{/*		<div key={index}></div>*/}
-				{/*	))}*/}
-				{/*</div>*/}
 			</div>
 		</div>
 	);
