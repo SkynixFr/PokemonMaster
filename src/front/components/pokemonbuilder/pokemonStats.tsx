@@ -38,7 +38,7 @@ const PokemonStats = ({ statsActive }: PokemonStatsProps) => {
 					<span className={'title-base'}>Base</span>
 					<span className={'title-ev'}>EVs</span>
 					<span className={'title-iv'}>IVs</span>
-					<span className={'title-stats'}>Stats</span>
+					<span className={'title-stats'}>Total</span>
 				</div>
 				<div className={'stats-details'}>
 					{statsActive.map((stat, index) => (

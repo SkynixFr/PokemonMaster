@@ -17,16 +17,16 @@ export const getPokemons = async () => {
 	const batchSize2 = 500;
 	let pokemons: PokemonCreate[] = [];
 
-	const pokemonBatche1 = await fetchPokemons(0, batchSize1);
-	pokemons = pokemons.concat(pokemonBatche1);
-	const pokemonBatche2 = await fetchPokemons(batchSize1, batchSize2);
-	pokemons = pokemons.concat(pokemonBatche2);
+	const pokemonBatch1 = await fetchPokemons(0, batchSize1);
+	pokemons = pokemons.concat(pokemonBatch1);
+	const pokemonBatch2 = await fetchPokemons(batchSize1, batchSize2);
+	pokemons = pokemons.concat(pokemonBatch2);
 	const remainingPokemons = totalPokemons - batchSize1 - batchSize2;
-	const pokemonBatche3 = await fetchPokemons(
+	const pokemonBatch3 = await fetchPokemons(
 		batchSize1 + batchSize2,
 		remainingPokemons
 	);
-	pokemons = pokemons.concat(pokemonBatche3);
+	pokemons = pokemons.concat(pokemonBatch3);
 
 	return pokemons;
 };
@@ -109,7 +109,10 @@ const fetchPokemons = async (offset: number, limit: number) => {
 						return {
 							name: stat.stat.name,
 							value: stat.base_stat,
-							max: stat.base_stat
+							max: stat.base_stat,
+							ev: 0,
+							iv: 0,
+							total: 0
 						};
 					}
 				),
