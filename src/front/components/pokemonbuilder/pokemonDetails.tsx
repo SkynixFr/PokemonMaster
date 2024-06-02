@@ -98,7 +98,10 @@ const PokemonDetails = ({ pokemon }: PokemonDetailsProps) => {
 				itemActive={itemActive}
 			/>
 			<PokemonMoves movesActive={movesActive} />
-			<PokemonStats statsActive={statsActive} />
+			<PokemonStats
+				statsActive={statsActive}
+				setStatsActive={setStatsActive}
+			/>
 
 			<div className={'add-pokemon'}>
 				<button>

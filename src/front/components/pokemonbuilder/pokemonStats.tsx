@@ -1,17 +1,24 @@
+import React, { FormEvent, FocusEvent, useState } from 'react';
+import { toast } from 'sonner';
+
 // Interfaces
 import { StatEntity } from '../../../interfaces/pokemon/stat/statEntity';
 import { firstLetterMaj } from '../../utils/formatString';
 interface PokemonStatsProps {
 	statsActive: StatEntity[];
+	setStatsActive: (stats: StatEntity[]) => void;
 }
 
-const PokemonStats = ({ statsActive }: PokemonStatsProps) => {
-	let numberEvs = 510;
+const PokemonStats = ({ statsActive, setStatsActive }: PokemonStatsProps) => {
+	const [totalEvs, setTotalEvs] = useState<number>(
+		statsActive.reduce((acc, stat) => acc + stat.ev, 0)
+	);
+	const [numberEvs, setNumberEvs] = useState<number>(510 - totalEvs);
+	const [prevEv, setPrevEv] = useState<number>(0);
 	const maxEvsPerStat = 252;
 	const maxIvsPerStat = 31;
 
 	const computeStatWidth = (stat: StatEntity) => {
-		console.log(stat.name, stat.value);
 		switch (stat.name) {
 			case 'hp':
 				return stat.value / (507 - 252);
@@ -30,6 +37,47 @@ const PokemonStats = ({ statsActive }: PokemonStatsProps) => {
 		}
 	};
 
+	const handleChange = (e: FormEvent<HTMLInputElement>) => {
+		e.preventDefault();
+		const ev = e.currentTarget.valueAsNumber;
+		if (ev > maxEvsPerStat) {
+			toast.warning('You can not have more than 252 Evs per stat');
+			e.currentTarget.value = maxEvsPerStat.toString();
+			return;
+		}
+		if (ev < 0) {
+			toast.warning('You can not have less than 0 Evs per stat');
+			e.currentTarget.value = '0';
+		}
+	};
+
+	const handleFocus = (e: FocusEvent<HTMLInputElement>, stat: StatEntity) => {
+		e.preventDefault();
+		setPrevEv(stat.ev);
+		e.currentTarget.value = '';
+	};
+
+	const handleBlur = (e: FocusEvent<HTMLInputElement>, stat: StatEntity) => {
+		e.preventDefault();
+		if (e.currentTarget.value === '') {
+			e.currentTarget.value = prevEv.toString();
+		}
+		const ev = e.currentTarget.valueAsNumber;
+		const totalEvs = statsActive.reduce((acc, stat) => acc + stat.ev, 0);
+		const diffStatEv = ev - statsActive.find(s => s.name === stat.name)?.ev;
+		if (totalEvs + diffStatEv > 510) {
+			toast.warning('You can not have more than 510 Evs');
+			e.currentTarget.value = prevEv.toString();
+			return;
+		}
+		const newStats = statsActive.map(s =>
+			s.name === stat.name ? { ...s, ev } : s
+		);
+		const newTotalEvs = newStats.reduce((acc, stat) => acc + stat.ev, 0);
+		setTotalEvs(newTotalEvs);
+		setStatsActive(newStats);
+		setNumberEvs(numberEvs + prevEv - ev);
+	};
 	return (
 		<div className="pokemon-stats">
 			<h3>Stats</h3>
@@ -72,29 +120,47 @@ const PokemonStats = ({ statsActive }: PokemonStatsProps) => {
 								</div>
 							</div>
 							<div className={'stat-evs'}>
-								<input
-									type="number"
-									min={0}
-									defaultValue={0}
-									max={maxEvsPerStat}
-									onChange={e => {
-										numberEvs = numberEvs - Number(e.target.value);
-									}}
-								/>
+								<form>
+									<input
+										type="number"
+										name="ev"
+										id="ev"
+										min={0}
+										defaultValue={stat.ev}
+										max={maxEvsPerStat}
+										onFocus={e => {
+											handleFocus(e, stat);
+										}}
+										onChange={e => {
+											handleChange(e);
+										}}
+										onBlur={e => {
+											handleBlur(e, stat);
+										}}
+									/>
+								</form>
 							</div>
 							<div className={'stat-ivs'}>
-								<input
-									type="number"
-									min={0}
-									defaultValue={0}
-									max={maxIvsPerStat}
-								/>
+								<form>
+									<input
+										type="number"
+										name="iv"
+										id="iv"
+										min={0}
+										defaultValue={stat.iv}
+										max={maxIvsPerStat}
+									/>
+								</form>
 							</div>
-							<div className={'stat-tot'}>{stat.value}</div>
+							<div className={'stat-tot'}>{stat.total}</div>
 						</div>
 					))}
 				</div>
-				<div>Remaining Evs: {numberEvs}</div>
+				<div className={'remaining-evs'}>
+					{numberEvs === 0
+						? 'No remaining Evs'
+						: `Remaining Evs: ${numberEvs}`}
+				</div>
 			</div>
 		</div>
 	);
