@@ -41,6 +41,8 @@
 }
 
 .pokemon-level {
+    width: 30px;
+    height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,6 +50,8 @@
     font-family: var(--ff-base-bold), sans-serif;
     background-color: var(--normal);
     border: none;
+    border-radius: 5px;
+    text-align: center;
 }
 
 .pokemon-infos .middle {

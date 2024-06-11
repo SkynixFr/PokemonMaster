@@ -52,7 +52,7 @@ const PokemonDetails = ({ pokemon }: PokemonDetailsProps) => {
 		<div className={'pokemon-details'}>
 			<div className={'pokemon-infos'}>
 				<div className={'left'}>
-					<button className={'pokemon-level'}>LVL {levelActive}</button>
+					<div className={'pokemon-level'}>LVL {levelActive}</div>
 				</div>
 				<div className={'middle'}>
 					<div className={'pokemon-img'}>
