@@ -1,22 +1,39 @@
-import React, { FormEvent, FocusEvent, useState } from 'react';
+import React, { FormEvent, FocusEvent, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
 // Interfaces
 import { StatEntity } from '../../../interfaces/pokemon/stat/statEntity';
 import { firstLetterMaj } from '../../utils/formatString';
+import { PokemonEntity } from '../../../interfaces/pokemon/pokemonEntity';
 interface PokemonStatsProps {
 	statsActive: StatEntity[];
 	setStatsActive: (stats: StatEntity[]) => void;
+	levelActive: number;
+	pokemon: PokemonEntity;
 }
 
-const PokemonStats = ({ statsActive, setStatsActive }: PokemonStatsProps) => {
+const PokemonStats = ({
+	statsActive,
+	setStatsActive,
+	levelActive,
+	pokemon
+}: PokemonStatsProps) => {
+	const [localStats, setLocalStats] = useState<StatEntity[]>(statsActive);
 	const [totalEvs, setTotalEvs] = useState<number>(
 		statsActive.reduce((acc, stat) => acc + stat.ev, 0)
 	);
 	const [numberEvs, setNumberEvs] = useState<number>(510 - totalEvs);
 	const [prevEv, setPrevEv] = useState<number>(0);
+	const [prevIv, setPrevIv] = useState<number>(0);
 	const maxEvsPerStat = 252;
 	const maxIvsPerStat = 31;
+
+	useEffect(() => {
+		setLocalStats(pokemon.stats);
+		const totalEvs = pokemon.stats.reduce((acc, stat) => acc + stat.ev, 0);
+		setTotalEvs(totalEvs);
+		setNumberEvs(510 - totalEvs);
+	}, [pokemon]);
 
 	const computeStatWidth = (stat: StatEntity) => {
 		switch (stat.name) {
@@ -37,7 +54,23 @@ const PokemonStats = ({ statsActive, setStatsActive }: PokemonStatsProps) => {
 		}
 	};
 
-	const handleChange = (e: FormEvent<HTMLInputElement>) => {
+	const computeBaseStats = (stats: StatEntity[], level: number) => {
+		return stats.map(stat => {
+			const baseStat = Math.floor((2 * stat.value * level) / 100);
+			return stat.name === 'hp' ? baseStat + level + 10 : baseStat + 5;
+		});
+	};
+
+	const computeBaseStatsWithEvIv = (stats: StatEntity[], level: number) => {
+		return stats.map(stat => {
+			const baseStat = Math.floor(
+				((2 * stat.value + stat.iv + Math.floor(stat.ev / 4)) * level) / 100
+			);
+			return stat.name === 'hp' ? baseStat + level + 10 : baseStat + 5;
+		});
+	};
+
+	const handleChangeEv = (e: FormEvent<HTMLInputElement>) => {
 		e.preventDefault();
 		const ev = e.currentTarget.valueAsNumber;
 		if (ev > maxEvsPerStat) {
@@ -51,13 +84,16 @@ const PokemonStats = ({ statsActive, setStatsActive }: PokemonStatsProps) => {
 		}
 	};
 
-	const handleFocus = (e: FocusEvent<HTMLInputElement>, stat: StatEntity) => {
+	const handleFocusEv = (
+		e: FocusEvent<HTMLInputElement>,
+		stat: StatEntity
+	) => {
 		e.preventDefault();
 		setPrevEv(stat.ev);
 		e.currentTarget.value = '';
 	};
 
-	const handleBlur = (e: FocusEvent<HTMLInputElement>, stat: StatEntity) => {
+	const handleBlurEv = (e: FocusEvent<HTMLInputElement>, stat: StatEntity) => {
 		e.preventDefault();
 		if (e.currentTarget.value === '') {
 			e.currentTarget.value = prevEv.toString();
@@ -71,13 +107,54 @@ const PokemonStats = ({ statsActive, setStatsActive }: PokemonStatsProps) => {
 			return;
 		}
 		const newStats = statsActive.map(s =>
-			s.name === stat.name ? { ...s, ev } : s
+			s.name === stat.name ? { ...s, ev, total: s.value + s.ev } : s
 		);
 		const newTotalEvs = newStats.reduce((acc, stat) => acc + stat.ev, 0);
 		setTotalEvs(newTotalEvs);
 		setStatsActive(newStats);
 		setNumberEvs(numberEvs + prevEv - ev);
 	};
+
+	const handleChangeIv = (e: FormEvent<HTMLInputElement>) => {
+		e.preventDefault();
+		const iv = e.currentTarget.valueAsNumber;
+		if (iv > maxIvsPerStat) {
+			toast.warning('You can not have more than 31 Ivs per stat');
+			e.currentTarget.value = maxIvsPerStat.toString();
+			return;
+		}
+		if (iv < 0) {
+			toast.warning('You can not have less than 0 Ivs per stat');
+			e.currentTarget.value = '0';
+		}
+	};
+
+	const handleBlurIv = (e: FocusEvent<HTMLInputElement>, stat: StatEntity) => {
+		e.preventDefault();
+		if (e.currentTarget.value === '') {
+			e.currentTarget.value = prevIv.toString();
+		}
+		const iv = e.currentTarget.valueAsNumber;
+		const newStats = statsActive.map(s =>
+			s.name === stat.name
+				? {
+						...s,
+						iv
+					}
+				: s
+		);
+		setStatsActive(newStats);
+	};
+
+	const handleFocusIv = (
+		e: FocusEvent<HTMLInputElement>,
+		stat: StatEntity
+	) => {
+		e.preventDefault();
+		setPrevIv(stat.iv);
+		e.currentTarget.value = '';
+	};
+
 	return (
 		<div className="pokemon-stats">
 			<h3>Stats</h3>
@@ -89,7 +166,7 @@ const PokemonStats = ({ statsActive, setStatsActive }: PokemonStatsProps) => {
 					<span className={'title-stats'}>Total</span>
 				</div>
 				<div className={'stats-details'}>
-					{statsActive.map((stat, index) => (
+					{localStats.map((stat, index) => (
 						<div key={index} className={'stat-details'}>
 							<div className={'stat-infos'}>
 								<div className={'stat-name'}>
@@ -101,12 +178,14 @@ const PokemonStats = ({ statsActive, setStatsActive }: PokemonStatsProps) => {
 												? 'HP'
 												: firstLetterMaj(stat.name)}
 								</div>
-								<div className={'stat-value'}>{stat.value}</div>
+								<div className={'stat-value'}>
+									{computeBaseStats(statsActive, levelActive)[index]}
+								</div>
 								<div className={'stat-progress'}>
 									<div
 										className={'stat-progress-value'}
 										style={{
-											width: `${computeStatWidth(stat) * 100}%`,
+											width: `${computeStatWidth(statsActive[index]) * 100}%`,
 											backgroundColor:
 												computeStatWidth(stat) * 100 > 75
 													? 'var(--grass)'
@@ -122,6 +201,7 @@ const PokemonStats = ({ statsActive, setStatsActive }: PokemonStatsProps) => {
 							<div className={'stat-evs'}>
 								<form>
 									<input
+										key={`${pokemon.pokedexId}-${stat.name}-ev`}
 										type="number"
 										name="ev"
 										id="ev"
@@ -129,13 +209,13 @@ const PokemonStats = ({ statsActive, setStatsActive }: PokemonStatsProps) => {
 										defaultValue={stat.ev}
 										max={maxEvsPerStat}
 										onFocus={e => {
-											handleFocus(e, stat);
+											handleFocusEv(e, stat);
 										}}
 										onChange={e => {
-											handleChange(e);
+											handleChangeEv(e);
 										}}
 										onBlur={e => {
-											handleBlur(e, stat);
+											handleBlurEv(e, stat);
 										}}
 									/>
 								</form>
@@ -143,16 +223,32 @@ const PokemonStats = ({ statsActive, setStatsActive }: PokemonStatsProps) => {
 							<div className={'stat-ivs'}>
 								<form>
 									<input
+										key={`${pokemon.pokedexId}-${stat.name}-iv`}
 										type="number"
 										name="iv"
 										id="iv"
 										min={0}
 										defaultValue={stat.iv}
 										max={maxIvsPerStat}
+										onFocus={e => {
+											handleFocusIv(e, stat);
+										}}
+										onBlur={e => {
+											handleBlurIv(e, stat);
+										}}
+										onChange={e => {
+											handleChangeIv(e);
+										}}
 									/>
 								</form>
 							</div>
-							<div className={'stat-tot'}>{stat.total}</div>
+							<div className={'stat-tot'}>
+								{
+									computeBaseStatsWithEvIv(statsActive, levelActive)[
+										index
+									]
+								}
+							</div>
 						</div>
 					))}
 				</div>

@@ -22,10 +22,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVenus, faMars } from '@fortawesome/free-solid-svg-icons';
 import { Plus } from 'lucide-react';
 import { firstLetterMaj } from '../../utils/formatString';
+import { StatEntity } from '../../../interfaces/pokemon/stat/statEntity';
+import { MoveEntity } from '../../../interfaces/pokemon/move/moveEntity';
 
 const PokemonDetails = ({ pokemon }: PokemonDetailsProps) => {
 	const [genderActive, setGenderActive] = useState<string>('Neutral');
-	const [levelActive, setLevelActive] = useState<number>(pokemon.level);
+	const [levelActive, setLevelActive] = useState<number>(100);
 	const [itemActive, setItemActive] = useState<ItemEntity>(pokemon.item);
 	const [natureActive, setNatureActive] = useState<NatureEntity>(
 		pokemon.nature
@@ -33,32 +35,24 @@ const PokemonDetails = ({ pokemon }: PokemonDetailsProps) => {
 	const [abilityActive, setAbilityActive] = useState<AbilityEntity>(
 		pokemon.ability
 	);
-	const [movesActive, setMovesActive] = useState(pokemon.moves);
-	const [statsActive, setStatsActive] = useState(pokemon.stats);
+	const [movesActive, setMovesActive] = useState<MoveEntity[]>(pokemon.moves);
+	const [statsActive, setStatsActive] = useState<StatEntity[]>(pokemon.stats);
 
 	useEffect(() => {
 		setGenderActive('Neutral');
-		setLevelActive(pokemon.level);
+		setLevelActive(100);
 		setItemActive(pokemon.item);
 		setNatureActive(pokemon.nature);
 		setAbilityActive(pokemon.ability);
 		setMovesActive(pokemon.moves);
 		setStatsActive(pokemon.stats);
 	}, [pokemon]);
+
 	return (
 		<div className={'pokemon-details'}>
 			<div className={'pokemon-infos'}>
 				<div className={'left'}>
-					<button
-						className={'pokemon-level'}
-						onClick={() =>
-							setLevelActive(
-								levelActive === 1 ? 50 : levelActive === 50 ? 100 : 1
-							)
-						}
-					>
-						LVL {levelActive}
-					</button>
+					<button className={'pokemon-level'}>LVL {levelActive}</button>
 				</div>
 				<div className={'middle'}>
 					<div className={'pokemon-img'}>
@@ -101,6 +95,8 @@ const PokemonDetails = ({ pokemon }: PokemonDetailsProps) => {
 			<PokemonStats
 				statsActive={statsActive}
 				setStatsActive={setStatsActive}
+				levelActive={levelActive}
+				pokemon={pokemon}
 			/>
 
 			<div className={'add-pokemon'}>
