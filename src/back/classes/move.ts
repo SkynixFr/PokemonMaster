@@ -3,6 +3,7 @@ import MetaEntity from './meta';
 class Move {
 	readonly name: string;
 	readonly power: number;
+	readonly accuracy: number;
 	readonly pp: number;
 	readonly meta: MetaEntity;
 	readonly target: string;
@@ -10,12 +11,14 @@ class Move {
 	constructor(
 		name: string,
 		power: number,
+		accuracy: number,
 		pp: number,
 		meta: MetaEntity,
 		target: string
 	) {
 		this.name = name;
 		this.power = power;
+		this.accuracy = accuracy;
 		this.pp = pp;
 		this.meta = meta;
 		this.target = target;
@@ -23,7 +26,14 @@ class Move {
 
 	decreasePP(): Move {
 		const updatedPP = this.pp - 1;
-		return new Move(this.name, this.power, updatedPP, this.meta, this.target);
+		return new Move(
+			this.name,
+			this.power,
+			this.accuracy,
+			updatedPP,
+			this.meta,
+			this.target
+		);
 	}
 }
 

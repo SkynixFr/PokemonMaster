@@ -23,8 +23,6 @@ const Battle = ({ battle }: BattleProps) => {
 	const [opponentPokemon, setOpponentPokemon] = useState<Pokemon | null>();
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
 	const [opponentReady, setOpponentReady] = useState<boolean>(false);
-	const [playerSelectedMove, setPlayerSelectedMove] = useState<Move>();
-	const [opponentSelectedMove, setOpponentSelectedMove] = useState<Move>();
 	const [battleWinner, setBattleWinner] = useState<string>('');
 	const [playerMovesShowed, setPlayerMovesShowed] = useState<boolean>(false);
 	const [opponentMovesShowed, setOpponentMovesShowed] =
@@ -62,6 +60,7 @@ const Battle = ({ battle }: BattleProps) => {
 			parsedPokemon.name,
 			parsedPokemon.stats,
 			parsedPokemon.moves,
+			parsedPokemon.activeMove,
 			status,
 			volatileStatus
 		);
@@ -95,6 +94,8 @@ const Battle = ({ battle }: BattleProps) => {
 			setOpponentPokemon(battle.opponentPokemon);
 		}
 	}, [battle]);
+
+	//
 
 	// Déroulement des attaques une fois les 2 joueurs prêts
 	useEffect(() => {
@@ -254,46 +255,50 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	};
 
-	// Gestion du move du joueur
+	const handlePlayerMoveSelection = (move: Move) => {
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		playerUpdatedPokemon = playerUpdatedPokemon.changeActiveMove(move);
+		storePlayerPokemon(playerUpdatedPokemon);
+	};
+
+	const handleOpponentMoveSelection = (move: Move) => {
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+		opponentUpdatedPokemon = opponentUpdatedPokemon.changeActiveMove(move);
+		storeOpponentPokemon(opponentUpdatedPokemon);
+	};
+
 	const handlePlayerAttack = () => {
 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
 
 		if (!playerUpdatedPokemon.status.ableToMove) return;
 
-		if (playerSelectedMove.target === 'user') {
-			const updatedPokemon = playerUpdatedPokemon.attack(
-				playerUpdatedPokemon,
-				playerSelectedMove
-			);
+		if (playerUpdatedPokemon.activeMove.target === 'user') {
+			const updatedPokemon =
+				playerUpdatedPokemon.attack(playerUpdatedPokemon);
 			storePlayerPokemon(updatedPokemon);
 		} else {
 			const updatedPokemon = playerUpdatedPokemon.attack(
-				opponentUpdatedPokemon,
-				playerSelectedMove
+				opponentUpdatedPokemon
 			);
 			storeOpponentPokemon(updatedPokemon);
 		}
 	};
 
-	// Gestion du move de l'adversaire
 	const handleOpponentAttack = () => {
 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
 
 		if (!opponentUpdatedPokemon.status.ableToMove) return;
 
-		if (opponentSelectedMove.target === 'user') {
+		if (opponentUpdatedPokemon.activeMove.target === 'user') {
 			const updatedPokemon = opponentUpdatedPokemon.attack(
-				opponentUpdatedPokemon,
-				opponentSelectedMove
+				opponentUpdatedPokemon
 			);
 			storeOpponentPokemon(updatedPokemon);
 		} else {
-			const updatedPokemon = opponentUpdatedPokemon.attack(
-				playerUpdatedPokemon,
-				opponentSelectedMove
-			);
+			const updatedPokemon =
+				opponentUpdatedPokemon.attack(playerUpdatedPokemon);
 			storePlayerPokemon(updatedPokemon);
 		}
 	};
@@ -339,7 +344,7 @@ const Battle = ({ battle }: BattleProps) => {
 						<button
 							key={move.name}
 							onClick={() => {
-								setOpponentSelectedMove(move);
+								handleOpponentMoveSelection(move);
 								handleOpponentReady();
 							}}
 						>
@@ -380,7 +385,7 @@ const Battle = ({ battle }: BattleProps) => {
 						<button
 							key={move.name}
 							onClick={() => {
-								setPlayerSelectedMove(move);
+								handlePlayerMoveSelection(move);
 								handlePlayerReady();
 							}}
 						>
