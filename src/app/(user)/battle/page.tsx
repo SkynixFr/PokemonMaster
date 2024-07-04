@@ -14,6 +14,11 @@ interface BattleProps {
 }
 
 const Battle = ({ battle }: BattleProps) => {
+	// Constants
+	const THAW_CHANCE = 0.2;
+	const PARALYSIS_CHANCE = 0.75;
+
+	// States
 	const [playerPokemon, setPlayerPokemon] = useState<Pokemon | null>();
 	const [opponentPokemon, setOpponentPokemon] = useState<Pokemon | null>();
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
@@ -35,12 +40,30 @@ const Battle = ({ battle }: BattleProps) => {
 		localStorage.setItem('opponentPokemon', JSON.stringify(updatedPokemon));
 	}
 	function recreatePokemonFromParsed(parsedPokemon: any) {
+		const status = parsedPokemon.status
+			? new Status(
+					parsedPokemon.status.name,
+					parsedPokemon.status.description,
+					parsedPokemon.status.counter,
+					parsedPokemon.status.ableToMove
+				)
+			: new Status('', '', 0, true);
+
+		const volatileStatus = parsedPokemon.volatileStatus
+			? new Status(
+					parsedPokemon.volatileStatus.name,
+					parsedPokemon.volatileStatus.description,
+					parsedPokemon.volatileStatus.counter,
+					parsedPokemon.volatileStatus.ableToMove
+				)
+			: new Status('', '', 0, true);
+
 		return new Pokemon(
 			parsedPokemon.name,
 			parsedPokemon.stats,
 			parsedPokemon.moves,
-			parsedPokemon.status,
-			parsedPokemon.volatileStatus
+			status,
+			volatileStatus
 		);
 	}
 	function getPlayerFromStore() {
@@ -76,6 +99,9 @@ const Battle = ({ battle }: BattleProps) => {
 	// Déroulement des attaques une fois les 2 joueurs prêts
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
+		handleSleeping();
+		handleFreezing();
+		handleParalysis();
 		handleAttacksByPriority();
 	}, [playerReady, opponentReady]);
 
@@ -88,6 +114,87 @@ const Battle = ({ battle }: BattleProps) => {
 			setBattleWinner('Player wins!');
 		}
 	}, [playerPokemon, opponentPokemon]);
+
+	const handleSleeping = () => {
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+
+		if (playerUpdatedPokemon.status.name === 'SLP') {
+			let updatedStatus = playerUpdatedPokemon.status.setCounter(
+				playerUpdatedPokemon.status.counter - 1
+			);
+			if (updatedStatus.counter === 0) {
+				updatedStatus = new Status('', '', 0, true);
+			}
+			const updatedPokemon =
+				playerUpdatedPokemon.changeStatus(updatedStatus);
+			storePlayerPokemon(updatedPokemon);
+		}
+
+		if (opponentUpdatedPokemon.status.name === 'SLP') {
+			let updatedStatus = opponentUpdatedPokemon.status.setCounter(
+				opponentUpdatedPokemon.status.counter - 1
+			);
+			if (updatedStatus.counter === 0) {
+				updatedStatus = new Status('', '', 0, true);
+			}
+			const updatedPokemon =
+				opponentUpdatedPokemon.changeStatus(updatedStatus);
+			storeOpponentPokemon(updatedPokemon);
+		}
+	};
+
+	const handleFreezing = () => {
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+
+		if (playerUpdatedPokemon.status.name === 'FRZ') {
+			const random = Math.random();
+			if (random < THAW_CHANCE) {
+				const updatedStatus = new Status('', '', 0, true);
+				playerUpdatedPokemon =
+					playerUpdatedPokemon.changeStatus(updatedStatus);
+				storePlayerPokemon(playerUpdatedPokemon);
+			}
+		}
+
+		if (opponentUpdatedPokemon.status.name === 'FRZ') {
+			const random = Math.random();
+			if (random < THAW_CHANCE) {
+				const updatedStatus = new Status('', '', 0, true);
+				opponentUpdatedPokemon =
+					opponentUpdatedPokemon.changeStatus(updatedStatus);
+				storeOpponentPokemon(opponentUpdatedPokemon);
+			}
+		}
+	};
+
+	const handleParalysis = () => {
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+
+		if (playerUpdatedPokemon.status.name === 'PAR') {
+			let updatedStatus = playerUpdatedPokemon.status.setAbleToMove(false);
+			const random = Math.random();
+			if (random < PARALYSIS_CHANCE) {
+				updatedStatus = updatedStatus.setAbleToMove(true);
+			}
+			playerUpdatedPokemon =
+				playerUpdatedPokemon.changeStatus(updatedStatus);
+			storePlayerPokemon(playerUpdatedPokemon);
+		}
+
+		if (opponentUpdatedPokemon.status.name === 'PAR') {
+			let updatedStatus = opponentUpdatedPokemon.status.setAbleToMove(false);
+			const random = Math.random();
+			if (random < PARALYSIS_CHANCE) {
+				updatedStatus = updatedStatus.setAbleToMove(true);
+			}
+			opponentUpdatedPokemon =
+				opponentUpdatedPokemon.changeStatus(updatedStatus);
+			storeOpponentPokemon(opponentUpdatedPokemon);
+		}
+	};
 
 	const handleAttacksByPriority = () => {
 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
