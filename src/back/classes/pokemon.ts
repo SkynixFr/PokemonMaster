@@ -8,20 +8,22 @@ class Pokemon {
 	readonly stats: Stat[];
 	readonly moves: Move[];
 	readonly status: Status;
-	readonly statusCounter: number;
+	readonly volatileStatus: Status;
 
 	constructor(
 		name: string,
 		stat: Stat[],
 		moves: Move[],
 		status?: Status,
-		statusCounter?: number
+		volatileStatus?: Status
 	) {
 		this.name = name;
 		this.stats = stat;
 		this.moves = moves;
-		this.status = status ? status : new Status('', '');
-		this.statusCounter = statusCounter ? statusCounter : 0;
+		this.status = status ? status : new Status('', '', 0, true);
+		this.volatileStatus = volatileStatus
+			? volatileStatus
+			: new Status('', '', 0, true);
 	}
 
 	getStat(statName: string): Stat {
@@ -30,16 +32,12 @@ class Pokemon {
 	}
 
 	attack(target: Pokemon, move: Move): Pokemon {
-		let updatedStatus = target.status;
-		let updatedStatusCounter = target.statusCounter;
-		let statusList = ['PSN', 'SLP', 'FRZ', 'KO', 'BRN', 'PAR'];
-		if (
-			this.status.name === 'KO' ||
-			this.status.name === 'SLP' ||
-			this.status.name === 'FRZ'
-		) {
+		if (!this.status.ableToMove) {
 			return target;
 		}
+		let updatedStatus: Status = target.status;
+		let updatedVolatileStatus: Status = target.volatileStatus;
+		const statusList = ['PSN', 'SLP', 'FRZ', 'KO', 'BRN', 'PAR'];
 		const damage = move.power;
 		const opponentHp = target.getStat('hp');
 		const updatedHp = opponentHp.decrease(damage);
@@ -49,44 +47,61 @@ class Pokemon {
 			move.meta?.ailment === 'sleep' &&
 			!statusList.includes(target.status.name)
 		) {
-			updatedStatus = new Status('SLP', `${this.name} is asleep`);
-			updatedStatusCounter = Math.ceil(Math.random() * 7);
+			updatedStatus = new Status(
+				'SLP',
+				`${this.name} is asleep`,
+				Math.ceil(Math.random() * 3),
+				false
+			);
 		}
 		if (
 			move.meta?.ailment === 'poison' &&
 			!statusList.includes(target.status.name)
 		) {
-			updatedStatus = new Status('PSN', `${this.name} is poisoned`);
+			updatedStatus = new Status('PSN', `${this.name} is poisoned`, 0, true);
 		}
 		if (
 			move.meta?.ailment === 'freeze' &&
 			!statusList.includes(target.status.name)
 		) {
-			updatedStatus = new Status('FRZ', `${this.name} is frozen`);
+			updatedStatus = new Status('FRZ', `${this.name} is frozen`, 0, false);
 		}
 		if (
 			move.meta?.ailment === 'burn' &&
 			!statusList.includes(target.status.name)
 		) {
-			updatedStatus = new Status('BRN', `${this.name} is burned`);
+			updatedStatus = new Status('BRN', `${this.name} is burned`, 0, true);
 		}
 		if (
 			move.meta?.ailment === 'paralysis' &&
 			!statusList.includes(target.status.name)
 		) {
-			updatedStatus = new Status('PAR', `${this.name} is paralyzed`);
+			updatedStatus = new Status(
+				'PAR',
+				`${this.name} is paralyzed`,
+				0,
+				false
+			);
+		}
+		if (move.meta?.ailment === 'confusion') {
+			updatedVolatileStatus = new Status(
+				'CNF',
+				`${this.name} is confused`,
+				Math.ceil(Math.random() * 4),
+				false
+			);
 		}
 		if (updatedHp.value <= 0) {
-			updatedStatus = new Status('KO', `${this.name} has fainted`);
+			updatedStatus = new Status('KO', `${this.name} has fainted`, 0, false);
 		}
 		target = target.changeStatus(updatedStatus);
-		target = target.updateStatusCounter(updatedStatusCounter);
+		target = target.changeVolatileStatus(updatedVolatileStatus);
 		return new Pokemon(
 			target.name,
 			target.stats,
 			target.moves,
 			target.status,
-			target.statusCounter
+			target.volatileStatus
 		);
 	}
 
@@ -96,17 +111,7 @@ class Pokemon {
 			this.stats,
 			this.moves,
 			updatedStatus,
-			this.statusCounter
-		);
-	}
-
-	updateStatusCounter(updatedStatusCounter: number): Pokemon {
-		return new Pokemon(
-			this.name,
-			this.stats,
-			this.moves,
-			this.status,
-			updatedStatusCounter
+			this.volatileStatus
 		);
 	}
 
@@ -123,7 +128,7 @@ class Pokemon {
 		const index = this.stats.findIndex(stat => stat.name === 'hp');
 		this.stats[index] = updatedHp;
 		if (updatedHp.value <= 0) {
-			updatedStatus = new Status('KO', `${this.name} has fainted`);
+			updatedStatus = new Status('KO', `${this.name} has fainted`, 0, false);
 		}
 
 		return new Pokemon(
@@ -131,7 +136,17 @@ class Pokemon {
 			this.stats,
 			this.moves,
 			updatedStatus,
-			this.statusCounter
+			this.volatileStatus
+		);
+	}
+
+	changeVolatileStatus(updatedVolatileStatus: Status): Pokemon {
+		return new Pokemon(
+			this.name,
+			this.stats,
+			this.moves,
+			this.status,
+			updatedVolatileStatus
 		);
 	}
 }

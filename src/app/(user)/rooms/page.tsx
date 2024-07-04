@@ -151,11 +151,33 @@ const Rooms = () => {
 					type: 'psychic',
 					category: 'status',
 					description: 'Puts the target to sleep.',
-					learnedBy: ['vulpix', 'ninetales', 'zubat'],
-					_class:
-						'org.example.pokemonmasterapi.repositories.model.MoveEntity'
+					learnedBy: ['vulpix', 'ninetales', 'zubat']
 				},
-				{ name: 'wing attack', power: 60 },
+				{
+					name: 'supersonic',
+					power: 0,
+					accuracy: 100,
+					pp: 20,
+					meta: {
+						ailment: 'confusion',
+						drain: 0,
+						healing: 0,
+						critRate: 0,
+						priority: 0,
+						effectChance: 0,
+						flinchChance: 0,
+						statChance: 0,
+						minHits: 0,
+						maxHits: 0,
+						minTurns: 2,
+						maxTurns: 5
+					},
+					type: 'normal',
+					category: 'status',
+					description: 'Confuses the target.',
+					learnedBy: ['butterfree'],
+					target: 'selected-pokemon'
+				},
 				{
 					name: 'toxic',
 					power: 0,

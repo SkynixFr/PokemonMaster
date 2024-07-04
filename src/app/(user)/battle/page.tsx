@@ -1,9 +1,9 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Classes
-import PokemonClass from '../../../back/classes/pokemon';
+import Pokemon from '../../../back/classes/pokemon';
 import BattleClass from '../../../back/classes/battle';
 import Move from '../../../back/classes/move';
 import Status from '../../../back/classes/status';
@@ -13,15 +13,9 @@ interface BattleProps {
 	battle: BattleClass;
 }
 
-// Constants
-const MAX_TURNS_ASLEEP = 3;
-const THAW_CHANCE = 0.2;
-const PARALYSIS_MOVE_CHANCE = 0.25;
-
 const Battle = ({ battle }: BattleProps) => {
-	const [playerPokemon, setPlayerPokemon] = useState<PokemonClass | null>();
-	const [opponentPokemon, setOpponentPokemon] =
-		useState<PokemonClass | null>();
+	const [playerPokemon, setPlayerPokemon] = useState<Pokemon | null>();
+	const [opponentPokemon, setOpponentPokemon] = useState<Pokemon | null>();
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
 	const [opponentReady, setOpponentReady] = useState<boolean>(false);
 	const [playerSelectedMove, setPlayerSelectedMove] = useState<Move>();
@@ -30,22 +24,39 @@ const Battle = ({ battle }: BattleProps) => {
 	const [playerMovesShowed, setPlayerMovesShowed] = useState<boolean>(false);
 	const [opponentMovesShowed, setOpponentMovesShowed] =
 		useState<boolean>(false);
-	const [playerSleepCounter, setPlayerSleepCounter] = useState<number>(0);
-	const [opponentSleepCounter, setOpponentSleepCounter] = useState<number>(0);
-	const [playerThawChance, setPlayerThawChance] = useState<number>(0);
-	const [opponentThawChance, setOpponentThawChance] = useState<number>(0);
-	const [poisonDamagesStep, setPoisonDamagesStep] = useState<boolean>(false);
-	const [burnDamagesStep, setBurnDamagesStep] = useState<boolean>(false);
-	const [playerMoveWhileParalyzedChance, setPlayerMoveWhileParalyzedChance] =
-		useState<number>(0);
-	const [
-		opponentMoveWhileParalyzedChance,
-		setOpponentMoveWhileParalyzedChance
-	] = useState<number>(0);
-	const [playerMoveWhileParalyzed, setPlayerMoveWhileParalyzed] =
-		useState<boolean>(false);
-	const [opponentMoveWhileParalyzed, setOpponentMoveWhileParalyzed] =
-		useState<boolean>(false);
+
+	// Utilitaires
+	function storePlayerPokemon(updatedPokemon: Pokemon) {
+		setPlayerPokemon(updatedPokemon);
+		localStorage.setItem('playerPokemon', JSON.stringify(updatedPokemon));
+	}
+	function storeOpponentPokemon(updatedPokemon: Pokemon) {
+		setOpponentPokemon(updatedPokemon);
+		localStorage.setItem('opponentPokemon', JSON.stringify(updatedPokemon));
+	}
+	function recreatePokemonFromParsed(parsedPokemon: any) {
+		return new Pokemon(
+			parsedPokemon.name,
+			parsedPokemon.stats,
+			parsedPokemon.moves,
+			parsedPokemon.status,
+			parsedPokemon.volatileStatus
+		);
+	}
+	function getPlayerFromStore() {
+		const parsedPlayerPokemon = JSON.parse(
+			localStorage.getItem('playerPokemon')
+		);
+		const playerPokemon = recreatePokemonFromParsed(parsedPlayerPokemon);
+		return playerPokemon;
+	}
+	function getOpponentFromStore() {
+		const parsedOpponentPokemon = JSON.parse(
+			localStorage.getItem('opponentPokemon')
+		);
+		const opponentPokemon = recreatePokemonFromParsed(parsedOpponentPokemon);
+		return opponentPokemon;
+	}
 
 	// Récupération des pokémons depuis le localStorage ou la room
 	useEffect(() => {
@@ -54,129 +65,18 @@ const Battle = ({ battle }: BattleProps) => {
 			localStorage.getItem('playerPokemon') &&
 			localStorage.getItem('opponentPokemon')
 		) {
-			const parsedPlayerPokemon = JSON.parse(
-				localStorage.getItem('playerPokemon')
-			);
-			const parsedOpponentPokemon = JSON.parse(
-				localStorage.getItem('opponentPokemon')
-			);
-			setPlayerPokemon(
-				new PokemonClass(
-					parsedPlayerPokemon.name,
-					parsedPlayerPokemon.stats,
-					parsedPlayerPokemon.moves,
-					parsedPlayerPokemon.status
-				)
-			);
-			setOpponentPokemon(
-				new PokemonClass(
-					parsedOpponentPokemon.name,
-					parsedOpponentPokemon.stats,
-					parsedOpponentPokemon.moves,
-					parsedOpponentPokemon.status
-				)
-			);
+			setPlayerPokemon(getPlayerFromStore());
+			setOpponentPokemon(getOpponentFromStore());
 		} else {
 			setPlayerPokemon(battle.playerPokemon);
 			setOpponentPokemon(battle.opponentPokemon);
 		}
 	}, [battle]);
 
-	// Reset du status sleep quand le compteur arrive à zéro
-	useEffect(() => {
-		setPlayerPokemon(playerPokemon?.updateStatusCounter(playerSleepCounter));
-		setOpponentPokemon(
-			opponentPokemon?.updateStatusCounter(opponentSleepCounter)
-		);
-		if (playerSleepCounter === 0 && playerPokemon?.status.name === 'SLP') {
-			let updatedPokemon = playerPokemon?.changeStatus(new Status('', ''));
-			setPlayerPokemon(updatedPokemon);
-			localStorage.setItem('playerPokemon', JSON.stringify(updatedPokemon));
-		}
-		if (
-			opponentSleepCounter === 0 &&
-			opponentPokemon?.status.name === 'SLP'
-		) {
-			let updatedPokemon = opponentPokemon?.changeStatus(new Status('', ''));
-			setOpponentPokemon(updatedPokemon);
-			localStorage.setItem(
-				'opponentPokemon',
-				JSON.stringify(updatedPokemon)
-			);
-		}
-	}, [playerSleepCounter, opponentSleepCounter]);
-
-	// Reset du status freeze avec une chance de 20%
-	useEffect(() => {
-		if (
-			playerPokemon?.status.name === 'FRZ' &&
-			playerThawChance < THAW_CHANCE
-		) {
-			let updatedPokemon = playerPokemon.changeStatus(new Status('', ''));
-			setPlayerPokemon(updatedPokemon);
-			localStorage.setItem('playerPokemon', JSON.stringify(updatedPokemon));
-		}
-		if (
-			opponentPokemon?.status.name === 'FRZ' &&
-			opponentThawChance < THAW_CHANCE
-		) {
-			let updatedPokemon = opponentPokemon.changeStatus(new Status('', ''));
-			setOpponentPokemon(updatedPokemon);
-			localStorage.setItem(
-				'opponentPokemon',
-				JSON.stringify(updatedPokemon)
-			);
-		}
-	}, [playerThawChance, opponentThawChance]);
-
-	// 25% de chances d'attaquer sous statut Paralysie
-	useEffect(() => {
-		setPlayerMoveWhileParalyzed(false);
-		setOpponentMoveWhileParalyzed(false);
-		if (
-			playerPokemon?.status.name === 'PAR' &&
-			playerMoveWhileParalyzedChance > PARALYSIS_MOVE_CHANCE
-		) {
-			setPlayerMoveWhileParalyzed(true);
-		}
-		if (
-			opponentPokemon?.status.name === 'PAR' &&
-			opponentMoveWhileParalyzedChance > PARALYSIS_MOVE_CHANCE
-		) {
-			setOpponentMoveWhileParalyzed(true);
-		}
-	}, [playerMoveWhileParalyzedChance, opponentMoveWhileParalyzedChance]);
-
-	// Déclenchement des dégâts de poison et/ou de brûlure
-	useEffect(() => {
-		if (!poisonDamagesStep && !burnDamagesStep) return;
-		if (playerPokemon.status.name === 'PSN' || 'BRN') {
-			const updatedPlayerPokemon = playerPokemon.sufferFromStatus();
-			setPlayerPokemon(updatedPlayerPokemon);
-			localStorage.setItem(
-				'playerPokemon',
-				JSON.stringify(updatedPlayerPokemon)
-			);
-		}
-		if (opponentPokemon.status.name === 'PSN' || 'BRN') {
-			const updatedOpponentPokemon = opponentPokemon.sufferFromStatus();
-			setOpponentPokemon(updatedOpponentPokemon);
-			localStorage.setItem(
-				'opponentPokemon',
-				JSON.stringify(updatedOpponentPokemon)
-			);
-		}
-		setPoisonDamagesStep(false);
-	}, [poisonDamagesStep, burnDamagesStep]);
-
 	// Déroulement des attaques une fois les 2 joueurs prêts
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
-		handleSleepStatus();
-		handleFreezeStatus();
-		handleParalyzisStatus();
 		handleAttacksByPriority();
-		handlePoisonAndBurnStatus();
 	}, [playerReady, opponentReady]);
 
 	// Détermination du gagnant
@@ -189,81 +89,26 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	}, [playerPokemon, opponentPokemon]);
 
-	// Affichage du loader
-	if (!battle) {
-		return <div>Loading...</div>;
-	}
-	if (!playerPokemon) {
-		return <div>Loading2...</div>;
-	}
-	if (!opponentPokemon) {
-		return <div>Loading3...</div>;
-	}
-
-	const handleSleepStatus = () => {
-		if (playerPokemon.status.name === 'SLP') {
-			setPlayerSleepCounter(
-				playerSleepCounter !== 0
-					? playerSleepCounter - 1
-					: Math.ceil(Math.random() * MAX_TURNS_ASLEEP)
-			);
-		}
-		if (opponentPokemon.status.name === 'SLP') {
-			setOpponentSleepCounter(
-				opponentSleepCounter !== 0
-					? opponentSleepCounter - 1
-					: Math.ceil(Math.random() * MAX_TURNS_ASLEEP)
-			);
-		}
-	};
-
-	const handleFreezeStatus = () => {
-		if (playerPokemon.status.name === 'FRZ') {
-			setPlayerThawChance(Math.random());
-		}
-		if (opponentPokemon.status.name === 'FRZ') {
-			setOpponentThawChance(Math.random());
-		}
-	};
-
-	const handleParalyzisStatus = () => {
-		if (playerPokemon.status.name === 'PAR') {
-			setPlayerMoveWhileParalyzedChance(Math.random());
-		}
-		if (opponentPokemon.status.name === 'PAR') {
-			setOpponentMoveWhileParalyzedChance(Math.random());
-		}
-	};
-
 	const handleAttacksByPriority = () => {
-		if (
-			playerPokemon.getStat('speed').value >
-			opponentPokemon.getStat('speed').value
-		) {
-			const updatedOpponent = handlePlayerAttack();
-			if (updatedOpponent.status.name !== 'KO') {
-				handleOpponentAttack();
-			}
-		} else if (
-			playerPokemon.getStat('speed').value <
-			opponentPokemon.getStat('speed').value
-		) {
-			const updatedPlayer = handleOpponentAttack();
-			if (updatedPlayer.status.name !== 'KO') {
-				handlePlayerAttack();
-			}
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+		const playerSpeed = playerUpdatedPokemon?.getStat('speed').value;
+		const opponentSpeed = opponentUpdatedPokemon?.getStat('speed').value;
+
+		if (playerSpeed > opponentSpeed) {
+			handlePlayerAttack();
+			handleOpponentAttack();
+		} else if (playerSpeed < opponentSpeed) {
+			handleOpponentAttack();
+			handlePlayerAttack();
 		} else {
 			const random = Math.random();
 			if (random < 0.5) {
-				const updatedOpponent = handlePlayerAttack();
-				if (updatedOpponent.status.name !== 'KO') {
-					handleOpponentAttack();
-				}
+				handlePlayerAttack();
+				handleOpponentAttack();
 			} else {
-				const updatedPlayer = handleOpponentAttack();
-				if (updatedPlayer.status.name !== 'KO') {
-					handlePlayerAttack();
-				}
+				handleOpponentAttack();
+				handlePlayerAttack();
 			}
 		}
 		setPlayerReady(false);
@@ -272,34 +117,46 @@ const Battle = ({ battle }: BattleProps) => {
 
 	// Gestion du move du joueur
 	const handlePlayerAttack = () => {
-		if (playerPokemon.status.name === 'PAR' && !playerMoveWhileParalyzed)
-			return opponentPokemon;
-		const updatedOpponentPokemon = playerPokemon.attack(
-			opponentPokemon,
-			playerSelectedMove
-		);
-		setOpponentPokemon(updatedOpponentPokemon);
-		localStorage.setItem(
-			'opponentPokemon',
-			JSON.stringify(updatedOpponentPokemon)
-		);
-		return updatedOpponentPokemon;
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+
+		if (!playerUpdatedPokemon.status.ableToMove) return;
+
+		if (playerSelectedMove.target === 'user') {
+			const updatedPokemon = playerUpdatedPokemon.attack(
+				playerUpdatedPokemon,
+				playerSelectedMove
+			);
+			storePlayerPokemon(updatedPokemon);
+		} else {
+			const updatedPokemon = playerUpdatedPokemon.attack(
+				opponentUpdatedPokemon,
+				playerSelectedMove
+			);
+			storeOpponentPokemon(updatedPokemon);
+		}
 	};
 
 	// Gestion du move de l'adversaire
 	const handleOpponentAttack = () => {
-		if (opponentPokemon.status.name === 'PAR' && !opponentMoveWhileParalyzed)
-			return playerPokemon;
-		const updatedPlayerPokemon = opponentPokemon.attack(
-			playerPokemon,
-			opponentSelectedMove
-		);
-		setPlayerPokemon(updatedPlayerPokemon);
-		localStorage.setItem(
-			'playerPokemon',
-			JSON.stringify(updatedPlayerPokemon)
-		);
-		return updatedPlayerPokemon;
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+
+		if (!opponentUpdatedPokemon.status.ableToMove) return;
+
+		if (opponentSelectedMove.target === 'user') {
+			const updatedPokemon = opponentUpdatedPokemon.attack(
+				opponentUpdatedPokemon,
+				opponentSelectedMove
+			);
+			storeOpponentPokemon(updatedPokemon);
+		} else {
+			const updatedPokemon = opponentUpdatedPokemon.attack(
+				playerUpdatedPokemon,
+				opponentSelectedMove
+			);
+			storePlayerPokemon(updatedPokemon);
+		}
 	};
 
 	const handlePlayerReady = () => {
@@ -310,27 +167,20 @@ const Battle = ({ battle }: BattleProps) => {
 		setOpponentReady(true);
 	};
 
-	const handlePoisonAndBurnStatus = () => {
-		if (
-			['PSN', 'BRN'].includes(playerPokemon.status.name) ||
-			['PSN', 'BRN'].includes(opponentPokemon.status.name)
-		) {
-			setPoisonDamagesStep(true);
-			setBurnDamagesStep(true);
-		}
-	};
-
 	return (
 		<div style={{ margin: '100px 0 0 10px' }}>
 			{/* Affichage des informations du Pokemon de l'adversaire */}
 			<p>
-				{opponentPokemon.name + ' '}
-				{opponentPokemon.getStat('hp').value +
+				{opponentPokemon?.name + ' '}
+				{opponentPokemon?.getStat('hp').value +
 					'/' +
-					opponentPokemon.getStat('hp').max}
+					opponentPokemon?.getStat('hp').max}
 				<br />
-				{'status ' + opponentPokemon.status.name
-					? opponentPokemon.status.name
+				{'status ' + opponentPokemon?.status.name
+					? opponentPokemon?.status.name
+					: ''}
+				{'volatileStatus' + opponentPokemon?.volatileStatus.name
+					? opponentPokemon?.volatileStatus.name
 					: ''}
 			</p>
 
@@ -362,13 +212,16 @@ const Battle = ({ battle }: BattleProps) => {
 
 			{/* Affichage des informations du Pokemon du joueur */}
 			<p>
-				{playerPokemon.name + ' '}
-				{playerPokemon.getStat('hp').value +
+				{playerPokemon?.name + ' '}
+				{playerPokemon?.getStat('hp').value +
 					'/' +
-					playerPokemon.getStat('hp').max}
+					playerPokemon?.getStat('hp').max}
 				<br />
-				{'status ' + playerPokemon.status.name
-					? playerPokemon.status.name
+				{'status ' + playerPokemon?.status.name
+					? playerPokemon?.status.name
+					: ''}
+				{'volatileStatus' + playerPokemon?.volatileStatus.name
+					? playerPokemon?.volatileStatus.name
 					: ''}
 			</p>
 
