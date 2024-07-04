@@ -100,9 +100,11 @@ const Battle = ({ battle }: BattleProps) => {
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
 		handleSleeping();
-		handleFreezing();
 		handleParalysis();
 		handleAttacksByPriority();
+		handleFreezing();
+		handlePoisoning();
+		handleBurning();
 	}, [playerReady, opponentReady]);
 
 	// Détermination du gagnant
@@ -141,31 +143,6 @@ const Battle = ({ battle }: BattleProps) => {
 			const updatedPokemon =
 				opponentUpdatedPokemon.changeStatus(updatedStatus);
 			storeOpponentPokemon(updatedPokemon);
-		}
-	};
-
-	const handleFreezing = () => {
-		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
-		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
-
-		if (playerUpdatedPokemon.status.name === 'FRZ') {
-			const random = Math.random();
-			if (random < THAW_CHANCE) {
-				const updatedStatus = new Status('', '', 0, true);
-				playerUpdatedPokemon =
-					playerUpdatedPokemon.changeStatus(updatedStatus);
-				storePlayerPokemon(playerUpdatedPokemon);
-			}
-		}
-
-		if (opponentUpdatedPokemon.status.name === 'FRZ') {
-			const random = Math.random();
-			if (random < THAW_CHANCE) {
-				const updatedStatus = new Status('', '', 0, true);
-				opponentUpdatedPokemon =
-					opponentUpdatedPokemon.changeStatus(updatedStatus);
-				storeOpponentPokemon(opponentUpdatedPokemon);
-			}
 		}
 	};
 
@@ -220,6 +197,61 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 		setPlayerReady(false);
 		setOpponentReady(false);
+	};
+
+	const handleFreezing = () => {
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+
+		if (playerUpdatedPokemon.status.name === 'FRZ') {
+			const random = Math.random();
+			if (random < THAW_CHANCE) {
+				const updatedStatus = new Status('', '', 0, true);
+				playerUpdatedPokemon =
+					playerUpdatedPokemon.changeStatus(updatedStatus);
+				storePlayerPokemon(playerUpdatedPokemon);
+			}
+		}
+
+		if (opponentUpdatedPokemon.status.name === 'FRZ') {
+			const random = Math.random();
+			if (random < THAW_CHANCE) {
+				const updatedStatus = new Status('', '', 0, true);
+				opponentUpdatedPokemon =
+					opponentUpdatedPokemon.changeStatus(updatedStatus);
+				storeOpponentPokemon(opponentUpdatedPokemon);
+			}
+		}
+	};
+
+	const handlePoisoning = () => {
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+
+		if (playerUpdatedPokemon.status.name === 'PSN') {
+			const updatedPokemon = playerUpdatedPokemon.sufferFromStatus();
+			storePlayerPokemon(updatedPokemon);
+		}
+
+		if (opponentUpdatedPokemon.status.name === 'PSN') {
+			const updatedPokemon = opponentUpdatedPokemon.sufferFromStatus();
+			storeOpponentPokemon(updatedPokemon);
+		}
+	};
+
+	const handleBurning = () => {
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+
+		if (playerUpdatedPokemon.status.name === 'BRN') {
+			const updatedPokemon = playerUpdatedPokemon.sufferFromStatus();
+			storePlayerPokemon(updatedPokemon);
+		}
+
+		if (opponentUpdatedPokemon.status.name === 'BRN') {
+			const updatedPokemon = opponentUpdatedPokemon.sufferFromStatus();
+			storeOpponentPokemon(updatedPokemon);
+		}
 	};
 
 	// Gestion du move du joueur
