@@ -7,6 +7,7 @@ import Pokemon from '../../../back/classes/pokemon';
 import BattleClass from '../../../back/classes/battle';
 import Move from '../../../back/classes/move';
 import Status from '../../../back/classes/status';
+import { THAW_CHANCE, PARALYSIS_CHANCE, CONFUSED_MOVE } from './constants';
 
 // Interfaces
 interface BattleProps {
@@ -14,10 +15,6 @@ interface BattleProps {
 }
 
 const Battle = ({ battle }: BattleProps) => {
-	// Constants
-	const THAW_CHANCE = 0.2;
-	const PARALYSIS_CHANCE = 0.75;
-
 	// States
 	const [playerPokemon, setPlayerPokemon] = useState<Pokemon | null>();
 	const [opponentPokemon, setOpponentPokemon] = useState<Pokemon | null>();
@@ -101,6 +98,7 @@ const Battle = ({ battle }: BattleProps) => {
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
 		handleSleeping();
+		handleConfusion();
 		handleParalysis();
 		handleAttacksByPriority();
 		handleFreezing();
@@ -144,6 +142,29 @@ const Battle = ({ battle }: BattleProps) => {
 			const updatedPokemon =
 				opponentUpdatedPokemon.changeStatus(updatedStatus);
 			storeOpponentPokemon(updatedPokemon);
+		}
+	};
+
+	const handleConfusion = () => {
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+
+		if (playerUpdatedPokemon.volatileStatus.name === 'CNF') {
+			const random = Math.random();
+			if (random < 0.5) {
+				playerUpdatedPokemon =
+					playerUpdatedPokemon.changeActiveMove(CONFUSED_MOVE);
+				storePlayerPokemon(playerUpdatedPokemon);
+			}
+		}
+
+		if (opponentUpdatedPokemon.volatileStatus.name === 'CNF') {
+			const random = Math.random();
+			if (random < 0.5) {
+				opponentUpdatedPokemon =
+					opponentUpdatedPokemon.changeActiveMove(CONFUSED_MOVE);
+				storeOpponentPokemon(opponentUpdatedPokemon);
+			}
 		}
 	};
 

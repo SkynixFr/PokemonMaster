@@ -52,7 +52,6 @@ class Pokemon {
 		let updatedStatus: Status = target.status;
 		let updatedVolatileStatus: Status = target.volatileStatus;
 		const statusList = ['PSN', 'SLP', 'FRZ', 'KO', 'BRN', 'PAR'];
-
 		const missChance = Math.random();
 		let damage = this.activeMove.power;
 		if (missChance > this.activeMove.accuracy / 100) {
@@ -61,8 +60,8 @@ class Pokemon {
 		}
 		const opponentHp = target.getStat('hp');
 		const updatedHp = opponentHp.decrease(damage);
-		const index = target.stats.findIndex(stat => stat.name === 'hp');
-		target.stats[index] = updatedHp;
+		const hpIndex = target.stats.findIndex(stat => stat.name === 'hp');
+		target.stats[hpIndex] = updatedHp;
 		if (
 			this.activeMove.meta?.ailment === 'sleep' &&
 			!statusList.includes(target.status.name)
@@ -108,7 +107,7 @@ class Pokemon {
 				'CNF',
 				`${this.name} is confused`,
 				Math.ceil(Math.random() * 4),
-				false
+				true
 			);
 		}
 		if (updatedHp.value <= 0) {
