@@ -45,6 +45,17 @@ class Pokemon {
 		);
 	}
 
+	updateMoves(updatedMoves: Move[]): Pokemon {
+		return new Pokemon(
+			this.name,
+			this.stats,
+			updatedMoves,
+			this.activeMove,
+			this.status,
+			this.volatileStatus
+		);
+	}
+
 	attack(target: Pokemon): Pokemon {
 		if (!this.status.ableToMove) {
 			return target;

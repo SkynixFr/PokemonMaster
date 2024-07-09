@@ -93,7 +93,7 @@ const Rooms = () => {
 					_class:
 						'org.example.pokemonmasterapi.repositories.model.MoveEntity'
 				},
-				{ name: 'bite', power: 60 }
+				{ name: 'bite', power: 60, pp: 25, accuracy: 100, type: 'dark' }
 			]
 		};
 		const opponentPokemon = {

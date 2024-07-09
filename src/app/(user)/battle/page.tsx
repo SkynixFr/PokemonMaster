@@ -53,11 +53,31 @@ const Battle = ({ battle }: BattleProps) => {
 				)
 			: new Status('', '', 0, true);
 
+		const moves = parsedPokemon.moves.map((move: Move) => {
+			return new Move(
+				move.name,
+				move.power,
+				move.accuracy,
+				move.pp,
+				move.meta,
+				move.target
+			);
+		});
+
 		return new Pokemon(
 			parsedPokemon.name,
 			parsedPokemon.stats,
-			parsedPokemon.moves,
-			parsedPokemon.activeMove,
+			moves,
+			parsedPokemon.activeMove
+				? new Move(
+						parsedPokemon.activeMove.name,
+						parsedPokemon.activeMove.power,
+						parsedPokemon.activeMove.accuracy,
+						parsedPokemon.activeMove.pp,
+						parsedPokemon.meta,
+						parsedPokemon.activeMove.target
+					)
+				: null,
 			status,
 			volatileStatus
 		);
@@ -101,6 +121,7 @@ const Battle = ({ battle }: BattleProps) => {
 		handleConfusion();
 		handleParalysis();
 		handleAttacksByPriority();
+		handleActiveMovesPpReduction();
 		handleFreezing();
 		handlePoisoning();
 		handleBurning();
@@ -219,6 +240,29 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 		setPlayerReady(false);
 		setOpponentReady(false);
+	};
+
+	const handleActiveMovesPpReduction = () => {
+		let updatedPlayerPokemon: Pokemon = getPlayerFromStore();
+		let updatedOpponentPokemon: Pokemon = getOpponentFromStore();
+		let updatedPlayerMoves: Move[] = updatedPlayerPokemon.moves;
+		let updatedOpponentMoves: Move[] = updatedOpponentPokemon.moves;
+		updatedPlayerMoves = updatedPlayerMoves.map((move: Move) =>
+			move.name === updatedPlayerPokemon.activeMove.name
+				? move.decreasePP()
+				: move
+		);
+		updatedOpponentMoves = updatedOpponentMoves.map((move: Move) =>
+			move.name === updatedOpponentPokemon.activeMove.name
+				? move.decreasePP()
+				: move
+		);
+		updatedPlayerPokemon =
+			updatedPlayerPokemon.updateMoves(updatedPlayerMoves);
+		updatedOpponentPokemon =
+			updatedOpponentPokemon.updateMoves(updatedOpponentMoves);
+		storePlayerPokemon(updatedPlayerPokemon);
+		storeOpponentPokemon(updatedOpponentPokemon);
 	};
 
 	const handleFreezing = () => {
