@@ -1,13 +1,16 @@
+'use client';
+
 import { useState } from 'react';
 
 // Components
-import PokemonNatures from './pokemonNatures';
+import NaturesModal from './naturesModal';
 
 // Interfaces
 import { AbilityEntity } from '../../../interfaces/pokemon/ability/abilityEntity';
 import { NatureEntity } from '../../../interfaces/pokemon/nature/natureEntity';
 import { ItemEntity } from '../../../interfaces/pokemon/item/itemEntity';
 import { PokemonTeamEntity } from '../../../interfaces/pokemon/pokemonTeamEntity';
+
 interface PokemonCompetitiveInfosProps {
 	abilityActive: AbilityEntity;
 	natureActive: NatureEntity;
@@ -18,8 +21,7 @@ interface PokemonCompetitiveInfosProps {
 const PokemonCompetitiveInfos = ({
 	abilityActive,
 	natureActive,
-	itemActive,
-	pokemon
+	itemActive
 }: PokemonCompetitiveInfosProps) => {
 	const [openNature, setOpenNature] = useState<boolean>(false);
 
@@ -35,7 +37,7 @@ const PokemonCompetitiveInfos = ({
 					{natureActive ? natureActive.name : 'No nature'}
 				</button>
 			</div>
-			{openNature && <PokemonNatures pokemon={pokemon} />}
+			{openNature && <NaturesModal setOpenNature={setOpenNature} />}
 			<div className="pokemon-ability">
 				<h3>Ability</h3>
 				<button>{abilityActive ? abilityActive.name : 'No ability'}</button>
