@@ -52,10 +52,6 @@
     padding: 15px 10px;
 }
 
-.avatars-container > h3 {
-    font-family: var(--ff-base-bold), sans-serif;
-}
-
 .avatars-list {
     display: flex;
     height: calc(100% - 20px);
