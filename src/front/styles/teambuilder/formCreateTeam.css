@@ -22,10 +22,6 @@
     z-index: -1;
 }
 
-.form-create-team > h2 {
-    font-family: var(--ff-base-bold), sans-serif;
-}
-
 .create-team {
     width: calc(100% - 102px);
     height: calc(100% - 42px);
