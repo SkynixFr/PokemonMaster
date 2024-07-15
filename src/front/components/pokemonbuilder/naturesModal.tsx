@@ -36,6 +36,9 @@ const NaturesModal = ({
 		const fetchNatures = async () => {
 			try {
 				const fetchedNatures = await getNatures();
+				fetchedNatures.sort((a: NatureEntity, b: NatureEntity) =>
+					a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+				);
 				setNatures(fetchedNatures);
 			} catch (error) {
 				console.error(error);
