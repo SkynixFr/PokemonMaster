@@ -2,31 +2,46 @@ import React, { useEffect, useState } from 'react';
 
 // Interfaces
 import { NatureEntity } from '../../../interfaces/pokemon/nature/natureEntity';
-import { PokemonTeamEntity } from '../../../interfaces/pokemon/pokemonTeamEntity';
 interface NaturesModalProps {
 	setOpenNature: (openNature: boolean) => void;
+	natureActive: NatureEntity;
+	setNatureActive: (nature: NatureEntity) => void;
 }
 
 // Actions
 import { getNatures } from '../../actions/nature.actions';
-import { X } from 'lucide-react';
 
-const NaturesModal = ({ setOpenNature }: NaturesModalProps) => {
+// Icons
+import { ChevronsDown, ChevronsUp, Search, X } from 'lucide-react';
+
+// Utils
+import { firstLetterMaj } from '../../utils/formatString';
+
+const NaturesModal = ({
+	setOpenNature,
+	natureActive,
+	setNatureActive
+}: NaturesModalProps) => {
 	const [natures, setNatures] = useState<NatureEntity[]>([]);
-
-	async function getNaturesFromServer() {
-		const natures = await getNatures();
-		return natures;
-	}
+	const statistics = [
+		{ name: 'hp' },
+		{ name: 'attack' },
+		{ name: 'defense' },
+		{ name: 'special-attack' },
+		{ name: 'special-defense' },
+		{ name: 'speed' }
+	];
 
 	useEffect(() => {
 		const fetchNatures = async () => {
-			const natures = await getNaturesFromServer();
+			try {
+				const fetchedNatures = await getNatures();
+				setNatures(fetchedNatures);
+			} catch (error) {
+				console.error(error);
+			}
 		};
-		fetchNatures().then(
-			() => setNatures(natures),
-			() => console.log('Error fetching natures')
-		);
+		fetchNatures().then();
 	}, []);
 
 	return (
@@ -41,16 +56,90 @@ const NaturesModal = ({ setOpenNature }: NaturesModalProps) => {
 				>
 					<X width={30} height={30} />
 				</button>
+				<div className={'natures-searchbar'}>
+					<form>
+						<input type="text" placeholder="Search for a nature..." />
+						<button className={'btn-search-nature btn-primary'}>
+							<Search width={20} height={20} />
+						</button>
+					</form>
+				</div>
 				<div className="natures-modal-body">
-					<ul>
+					<div className={'natures-table-title'}>
+						<div className={'natures-table-title-name'}>Name</div>
+						<div className={'natures-table-tile-statistics'}>
+							Statistics
+						</div>
+					</div>
+					<div className={'natures-list'}>
 						{natures ? (
 							natures.map(nature => (
-								<li key={nature.id}>{nature.name}</li>
+								<div
+									key={nature.id}
+									className={`natures-list-item ${natureActive ? (natureActive.name === nature.name ? 'active' : '') : ''}`}
+									onClick={() => setNatureActive(nature)}
+								>
+									<div className={'nature-name'}>
+										{firstLetterMaj(nature.name)}
+									</div>
+									<div className={'nature-statistics'}>
+										{statistics.map(statistic =>
+											nature.increasedStat === statistic.name ? (
+												<div
+													key={statistic.name}
+													className={`nature-statistic nature-increased ${statistic.name}`}
+												>
+													{statistic.name === 'special-attack'
+														? 'Sp. Attack'
+														: statistic.name === 'special-defense'
+															? 'Sp. Defense'
+															: statistic.name === 'hp'
+																? 'HP'
+																: firstLetterMaj(
+																		statistic.name
+																	)}
+													<ChevronsUp width={15} height={15} />
+												</div>
+											) : nature.decreasedStat === statistic.name ? (
+												<div
+													key={statistic.name}
+													className={`nature-statistic nature-decreased ${statistic.name}`}
+												>
+													{statistic.name === 'special-attack'
+														? 'Sp. Attack'
+														: statistic.name === 'special-defense'
+															? 'Sp. Defense'
+															: statistic.name === 'hp'
+																? 'HP'
+																: firstLetterMaj(
+																		statistic.name
+																	)}
+													<ChevronsDown width={15} height={15} />
+												</div>
+											) : (
+												<div
+													key={statistic.name}
+													className={`nature-statistic ${statistic.name}`}
+												>
+													{statistic.name === 'special-attack'
+														? 'Sp. Attack'
+														: statistic.name === 'special-defense'
+															? 'Sp. Defense'
+															: statistic.name === 'hp'
+																? 'HP'
+																: firstLetterMaj(
+																		statistic.name
+																	)}
+												</div>
+											)
+										)}
+									</div>
+								</div>
 							))
 						) : (
-							<h3>No natures available</h3>
+							<div>Loading...</div>
 						)}
-					</ul>
+					</div>
 				</div>
 			</div>
 		</div>

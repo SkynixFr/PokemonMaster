@@ -89,6 +89,7 @@ const PokemonDetails = ({ pokemon }: PokemonDetailsProps) => {
 			<PokemonCompetitiveInfos
 				abilityActive={abilityActive}
 				natureActive={natureActive}
+				setNatureActive={setNatureActive}
 				itemActive={itemActive}
 				pokemon={pokemon}
 			/>

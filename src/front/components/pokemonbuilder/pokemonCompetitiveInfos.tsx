@@ -10,10 +10,12 @@ import { AbilityEntity } from '../../../interfaces/pokemon/ability/abilityEntity
 import { NatureEntity } from '../../../interfaces/pokemon/nature/natureEntity';
 import { ItemEntity } from '../../../interfaces/pokemon/item/itemEntity';
 import { PokemonTeamEntity } from '../../../interfaces/pokemon/pokemonTeamEntity';
+import { firstLetterMaj } from '../../utils/formatString';
 
 interface PokemonCompetitiveInfosProps {
 	abilityActive: AbilityEntity;
 	natureActive: NatureEntity;
+	setNatureActive: (nature: NatureEntity) => void;
 	itemActive: ItemEntity;
 	pokemon: PokemonTeamEntity;
 }
@@ -21,6 +23,7 @@ interface PokemonCompetitiveInfosProps {
 const PokemonCompetitiveInfos = ({
 	abilityActive,
 	natureActive,
+	setNatureActive,
 	itemActive
 }: PokemonCompetitiveInfosProps) => {
 	const [openNature, setOpenNature] = useState<boolean>(false);
@@ -34,10 +37,16 @@ const PokemonCompetitiveInfos = ({
 			<div className="pokemon-nature">
 				<h3>Nature</h3>
 				<button onClick={() => setOpenNature(!openNature)}>
-					{natureActive ? natureActive.name : 'No nature'}
+					{natureActive ? firstLetterMaj(natureActive.name) : 'No nature'}
 				</button>
 			</div>
-			{openNature && <NaturesModal setOpenNature={setOpenNature} />}
+			{openNature && (
+				<NaturesModal
+					setOpenNature={setOpenNature}
+					natureActive={natureActive}
+					setNatureActive={setNatureActive}
+				/>
+			)}
 			<div className="pokemon-ability">
 				<h3>Ability</h3>
 				<button>{abilityActive ? abilityActive.name : 'No ability'}</button>
