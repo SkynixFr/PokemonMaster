@@ -48,7 +48,7 @@ const NaturesModal = ({
 	}, []);
 
 	return (
-		<div className={'natures-modal'}>
+		<div className={'natures-modal pokemon-infos-modal-container'}>
 			<div className={'natures-modal-container'}>
 				<div className="natures-modal-header">
 					<h2>Natures</h2>
@@ -62,7 +62,7 @@ const NaturesModal = ({
 				<div className={'natures-searchbar'}>
 					<form>
 						<input type="text" placeholder="Search for a nature..." />
-						<button className={'btn-search-nature btn-primary'}>
+						<button className={'btn-search-natures btn-primary'}>
 							<Search width={20} height={20} />
 						</button>
 					</form>
