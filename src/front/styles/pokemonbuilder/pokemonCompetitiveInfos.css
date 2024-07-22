@@ -1,4 +1,6 @@
-@import  url("natureModal.css");
+@import  url("pokemonInfosModal.css");
+@import  url("naturesModal.css");
+@import  url("abilitiesModal.css");
 
 .pokemon-competitive-infos {
     width: 100%;

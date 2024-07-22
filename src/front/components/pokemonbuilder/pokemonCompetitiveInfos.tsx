@@ -11,9 +11,11 @@ import { NatureEntity } from '../../../interfaces/pokemon/nature/natureEntity';
 import { ItemEntity } from '../../../interfaces/pokemon/item/itemEntity';
 import { PokemonTeamEntity } from '../../../interfaces/pokemon/pokemonTeamEntity';
 import { firstLetterMaj } from '../../utils/formatString';
+import AbilitiesModal from './abilitiesModal';
 
 interface PokemonCompetitiveInfosProps {
 	abilityActive: AbilityEntity;
+	setAbilityActive: (ability: AbilityEntity) => void;
 	natureActive: NatureEntity;
 	setNatureActive: (nature: NatureEntity) => void;
 	itemActive: ItemEntity;
@@ -22,11 +24,14 @@ interface PokemonCompetitiveInfosProps {
 
 const PokemonCompetitiveInfos = ({
 	abilityActive,
+	setAbilityActive,
 	natureActive,
 	setNatureActive,
-	itemActive
+	itemActive,
+	pokemon
 }: PokemonCompetitiveInfosProps) => {
 	const [openNature, setOpenNature] = useState<boolean>(false);
+	const [openAbilities, setOpenAbilities] = useState<boolean>(false);
 
 	return (
 		<div className={'pokemon-competitive-infos'}>
@@ -49,8 +54,20 @@ const PokemonCompetitiveInfos = ({
 			)}
 			<div className="pokemon-ability">
 				<h3>Ability</h3>
-				<button>{abilityActive ? abilityActive.name : 'No ability'}</button>
+				<button onClick={() => setOpenAbilities(!openAbilities)}>
+					{abilityActive
+						? firstLetterMaj(abilityActive.name)
+						: 'No ability'}
+				</button>
 			</div>
+			{openAbilities && (
+				<AbilitiesModal
+					setOpenAbilities={setOpenAbilities}
+					abilityActive={abilityActive}
+					setAbilityActive={setAbilityActive}
+					pokemon={pokemon}
+				/>
+			)}
 		</div>
 	);
 };

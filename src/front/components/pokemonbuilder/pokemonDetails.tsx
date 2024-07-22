@@ -88,6 +88,7 @@ const PokemonDetails = ({ pokemon }: PokemonDetailsProps) => {
 			</div>
 			<PokemonCompetitiveInfos
 				abilityActive={abilityActive}
+				setAbilityActive={setAbilityActive}
 				natureActive={natureActive}
 				setNatureActive={setNatureActive}
 				itemActive={itemActive}
