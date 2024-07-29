@@ -105,8 +105,8 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 											<CustomImage
 												src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
 												alt={pokemon.name}
-												width={50}
-												height={50}
+												width={80}
+												height={80}
 											/>
 										</div>
 										<button

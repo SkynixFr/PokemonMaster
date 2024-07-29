@@ -15,6 +15,7 @@
 .natures-modal-container, .abilities-modal-container, .moves-modal-container {
     position: relative;
     width: calc(50% - 100px);
+    min-height: calc(65% - 50px);
     max-height: calc(65% - 50px);
     display: flex;
     flex-direction: column;
@@ -25,6 +26,12 @@
     border-radius: 5px;
     padding: 25px 50px;
     z-index: 2;
+    animation: bounceIn 1s ease-in-out;
+}
+
+.abilities-modal-container {
+    min-height: max-content;
+    max-height: calc(65% - 50px);
 }
 
 .natures-modal-container h2, .abilities-modal-container h2, .moves-modal-container h2 {
@@ -71,4 +78,42 @@
     border-radius: 5px;
     cursor: pointer;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.modal-exit {
+    animation: bounceOut 1s ease-in-out;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: translateX(100%) ;
+        opacity: 0;
+    }
+    60% {
+        transform: translateX(-10%) ;
+        opacity: 1;
+    }
+    80% {
+        transform: translateX(5%) ;
+    }
+    100% {
+        transform: translateX(0) ;
+    }
+}
+
+@keyframes bounceOut {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    20% {
+        transform: translateX(5%);
+    }
+    40% {
+        transform: translateX(-10%);
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
 }

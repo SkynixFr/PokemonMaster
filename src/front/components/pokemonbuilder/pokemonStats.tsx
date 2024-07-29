@@ -303,7 +303,7 @@ const PokemonStats = ({
 								</div>
 							</div>
 							<div className={'stat-evs'}>
-								<form>
+								<form onSubmit={e => e.preventDefault()}>
 									<input
 										key={`${pokemon.pokedexId}-${stat.name}-ev`}
 										type="number"
@@ -325,7 +325,7 @@ const PokemonStats = ({
 								</form>
 							</div>
 							<div className={'stat-ivs'}>
-								<form>
+								<form onSubmit={e => e.preventDefault()}>
 									<input
 										key={`${pokemon.pokedexId}-${stat.name}-iv`}
 										type="number"
