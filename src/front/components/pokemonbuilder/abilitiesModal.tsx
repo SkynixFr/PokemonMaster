@@ -47,6 +47,20 @@ const AbilitiesModal = ({
 		fetchAbilities().then();
 	}, []);
 
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				setOpenAbilities(false);
+			}
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [setOpenAbilities]);
+
 	return (
 		<div className={'abilities-modal pokemon-infos-modal-container'}>
 			<div className={'abilities-modal-container'}>
@@ -80,6 +94,7 @@ const AbilitiesModal = ({
 									}`}
 									onClick={() => {
 										setAbilityActive(ability);
+										setOpenAbilities(false);
 									}}
 								>
 									<div className={'ability-name'}>
@@ -91,7 +106,7 @@ const AbilitiesModal = ({
 								</div>
 							))
 						) : (
-							<div>Loading...</div>
+							<div className={'abilities-list-item'}>Loading...</div>
 						)}
 					</div>
 				</div>

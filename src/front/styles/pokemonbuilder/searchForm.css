@@ -1,7 +1,56 @@
 .search-pokemons {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     align-items: center;
     height: 70px;
-    background-color: violet;
+    gap: 25px;
+}
+
+.search-pokemons-bar form {
+    width: 650px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    height: 50px;
+}
+
+.search-pokemons-bar form > input[type="text"] {
+    width: 650px;
+    height: 100%;
+    padding: 0 20px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background-color: var(--white);
+}
+
+.filter-pokemons form {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 70px;
+    gap: 25px;
+}
+
+.filter-pokemons form > select {
+    width: auto;
+    height: 34px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background-color: var(--white);
+    padding: 0 40px 0 20px;
+    line-height: 34px;
+    text-align: center;
+    appearance: none;
+    background-image: url('/images/icons/chevron-down-outline.svg');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px 16px;
+}
+
+.filter-pokemons form > select option {
+    text-align: left;
 }

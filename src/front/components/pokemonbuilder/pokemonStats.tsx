@@ -1,22 +1,33 @@
-import React, { FormEvent, FocusEvent, useState, useEffect } from 'react';
+import React, { FocusEvent, FormEvent, useEffect, useState } from 'react';
 import { toast } from 'sonner';
+
+// Utils
+import { firstLetterMaj } from '../../utils/formatString';
 
 // Interfaces
 import { StatEntity } from '../../../interfaces/pokemon/stat/statEntity';
-import { firstLetterMaj } from '../../utils/formatString';
 import { PokemonEntity } from '../../../interfaces/pokemon/pokemonEntity';
+import { NatureEntity } from '../../../interfaces/pokemon/nature/natureEntity';
+import { ChevronsDown, ChevronsUp } from 'lucide-react';
+
 interface PokemonStatsProps {
 	statsActive: StatEntity[];
 	setStatsActive: (stats: StatEntity[]) => void;
 	levelActive: number;
 	pokemon: PokemonEntity;
+	natureActive: NatureEntity;
+	isFromTeam: boolean;
+	getNatureMultipliers: (nature: NatureEntity) => any;
 }
 
 const PokemonStats = ({
 	statsActive,
 	setStatsActive,
 	levelActive,
-	pokemon
+	pokemon,
+	natureActive,
+	isFromTeam,
+	getNatureMultipliers
 }: PokemonStatsProps) => {
 	const [localStats, setLocalStats] = useState<StatEntity[]>(statsActive);
 	const [totalEvs, setTotalEvs] = useState<number>(
@@ -35,38 +46,106 @@ const PokemonStats = ({
 		setNumberEvs(510 - totalEvs);
 	}, [pokemon]);
 
+	useEffect(() => {
+		if (!isFromTeam) {
+			const computedBaseStats = computeBaseStats(
+				statsActive,
+				levelActive,
+				natureActive
+			);
+			const newStatsActive = computedBaseStats.map((stat, index) => ({
+				...statsActive[index],
+				value: stat
+			}));
+			setStatsActive(newStatsActive);
+		}
+	}, []);
+
+	useEffect(() => {
+		if (isFromTeam) {
+			const computedBaseStats = computeBaseStatsWithoutLevel(
+				statsActive,
+				levelActive,
+				natureActive
+			);
+			const newStatsActive = computedBaseStats.map((stat, index) => ({
+				...statsActive[index],
+				value: stat
+			}));
+			setStatsActive(newStatsActive);
+		}
+	}, [natureActive]);
+
 	const computeStatWidth = (stat: StatEntity) => {
+		let modifiedStat;
+		if (!isFromTeam) {
+			modifiedStat = computeBaseStats([stat], levelActive, natureActive)[0];
+		} else {
+			modifiedStat = stat.value;
+		}
+
 		switch (stat.name) {
 			case 'hp':
-				return stat.value / (507 - 252);
+				return modifiedStat / 620;
 			case 'attack':
-				return stat.value / (432 - 252);
+				return modifiedStat / 385;
 			case 'defense':
-				return stat.value / (452 - 252);
+				return modifiedStat / 465;
 			case 'special-attack':
-				return stat.value / (432 - 252);
+				return modifiedStat / 393;
 			case 'special-defense':
-				return stat.value / (452 - 252);
+				return modifiedStat / 465;
 			case 'speed':
-				return stat.value / (452 - 252);
+				return modifiedStat / 365;
 			default:
 				return 0;
 		}
 	};
 
-	const computeBaseStats = (stats: StatEntity[], level: number) => {
+	const computeBaseStats = (
+		stats: StatEntity[],
+		level: number,
+		nature: NatureEntity
+	) => {
+		const natureMultipliers = getNatureMultipliers(nature);
 		return stats.map(stat => {
 			const baseStat = Math.floor((2 * stat.value * level) / 100);
-			return stat.name === 'hp' ? baseStat + level + 10 : baseStat + 5;
+			const adjustedStat = Math.floor(
+				baseStat * natureMultipliers[stat.name]
+			);
+			return stat.name === 'hp' ? baseStat + level + 10 : adjustedStat + 5;
 		});
 	};
 
-	const computeBaseStatsWithEvIv = (stats: StatEntity[], level: number) => {
+	const computeBaseStatsWithoutLevel = (
+		stats: StatEntity[],
+		level: number,
+		nature: NatureEntity
+	) => {
+		const natureMultipliers = getNatureMultipliers(nature);
+		return stats.map(stat => {
+			const baseStat = Math.floor(2 * stat.base);
+			const adjustedStat = Math.floor(
+				baseStat * natureMultipliers[stat.name]
+			);
+			return stat.name === 'hp' ? baseStat + level + 10 : adjustedStat + 5;
+		});
+	};
+
+	const computeBaseStatsWithEvIv = (
+		stats: StatEntity[],
+		level: number,
+		nature: NatureEntity
+	) => {
+		const natureMultipliers = getNatureMultipliers(nature);
 		return stats.map(stat => {
 			const baseStat = Math.floor(
 				((2 * stat.value + stat.iv + Math.floor(stat.ev / 4)) * level) / 100
 			);
-			return stat.name === 'hp' ? baseStat + level + 10 : baseStat + 5;
+			const adjustedStat = Math.floor(
+				baseStat * natureMultipliers[stat.name]
+			);
+			return stat.name === 'hp' ? baseStat + level + 10 : adjustedStat + 5;
 		});
 	};
 
@@ -112,7 +191,7 @@ const PokemonStats = ({
 		const newTotalEvs = newStats.reduce((acc, stat) => acc + stat.ev, 0);
 		setTotalEvs(newTotalEvs);
 		setStatsActive(newStats);
-		setNumberEvs(numberEvs + prevEv - ev);
+		setNumberEvs(510 - newTotalEvs);
 	};
 
 	const handleChangeIv = (e: FormEvent<HTMLInputElement>) => {
@@ -169,7 +248,17 @@ const PokemonStats = ({
 					{localStats.map((stat, index) => (
 						<div key={index} className={'stat-details'}>
 							<div className={'stat-infos'}>
-								<div className={'stat-name'}>
+								<div
+									className={`stat-name ${
+										natureActive &&
+										natureActive.increasedStat === stat.name
+											? 'nature-increased'
+											: natureActive &&
+												  natureActive.decreasedStat === stat.name
+												? 'nature-decreased'
+												: ''
+									}`}
+								>
 									{firstLetterMaj(stat.name) === 'Special Defense'
 										? 'Sp.Defense'
 										: firstLetterMaj(stat.name) === 'Special Attack'
@@ -177,9 +266,24 @@ const PokemonStats = ({
 											: firstLetterMaj(stat.name) === 'Hp'
 												? 'HP'
 												: firstLetterMaj(stat.name)}
+									{natureActive &&
+									natureActive.increasedStat === stat.name ? (
+										<ChevronsUp width={15} height={15} />
+									) : natureActive &&
+									  natureActive.decreasedStat === stat.name ? (
+										<ChevronsDown width={15} height={15} />
+									) : (
+										''
+									)}
 								</div>
 								<div className={'stat-value'}>
-									{computeBaseStats(statsActive, levelActive)[index]}
+									{isFromTeam
+										? statsActive[index].value
+										: computeBaseStats(
+												statsActive,
+												levelActive,
+												natureActive
+											)[index]}
 								</div>
 								<div className={'stat-progress'}>
 									<div
@@ -243,11 +347,13 @@ const PokemonStats = ({
 								</form>
 							</div>
 							<div className={'stat-tot'}>
-								{
-									computeBaseStatsWithEvIv(statsActive, levelActive)[
-										index
-									]
-								}
+								{isFromTeam
+									? stat.total
+									: computeBaseStatsWithEvIv(
+											statsActive,
+											levelActive,
+											natureActive
+										)[index]}
 							</div>
 						</div>
 					))}

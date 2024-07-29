@@ -122,5 +122,25 @@
     color: white
 }
 
+.add-pokemon {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
+.add-pokemon button {
+    width: 100px;
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--red);
+    font-size: var(--fs-md);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
 

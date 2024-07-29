@@ -11,25 +11,45 @@ import SearchForm from './searchForm';
 // Interfaces
 import { PokemonEntity } from '../../../interfaces/pokemon/pokemonEntity';
 interface PokedexProps {
+	pokemons: PokemonEntity[];
 	currentPokemons: PokemonEntity[];
+	setCurrentPokemons: (pokemons: PokemonEntity[]) => void;
 	pokemonActive: PokemonEntity;
 	setPokemonActive: (pokemon: PokemonEntity) => void;
+	isFromTeam: boolean;
+	setIsFromTeam: (isFromTeam: boolean) => void;
 }
 
 const Pokedex = ({
+	pokemons,
 	currentPokemons,
+	setCurrentPokemons,
 	pokemonActive,
-	setPokemonActive
+	setPokemonActive,
+	isFromTeam,
+	setIsFromTeam
 }: PokedexProps) => {
 	return (
 		<div className={'pokedex'}>
-			<SearchForm />
+			<SearchForm
+				savedPokemons={pokemons}
+				currentPokemons={currentPokemons}
+				setCurrentPokemons={setCurrentPokemons}
+			/>
 			<div className={'pokedex-pokemons'}>
 				{currentPokemons.map(pokemon => (
 					<div
 						key={pokemon.pokedexId}
-						className={`pokedex-pokemon ${pokemonActive.pokedexId === pokemon.pokedexId ? 'active' : ''}`}
-						onClick={() => setPokemonActive(pokemon)}
+						className={`pokedex-pokemon ${
+							!isFromTeam &&
+							pokemonActive.pokedexId === pokemon.pokedexId
+								? 'active'
+								: ''
+						}`}
+						onClick={() => {
+							setIsFromTeam(false);
+							setPokemonActive(pokemon);
+						}}
 					>
 						<div className={'bg-pokemon'}>
 							<CustomImage

@@ -37,7 +37,9 @@ const PokemonCompetitiveInfos = ({
 		<div className={'pokemon-competitive-infos'}>
 			<div className="pokemon-item">
 				<h3>Item</h3>
-				<button>{itemActive ? itemActive.name : 'No item'}</button>
+				<button style={{ cursor: 'not-allowed' }} disabled>
+					{itemActive ? itemActive.name : 'No item'}
+				</button>
 			</div>
 			<div className="pokemon-nature">
 				<h3>Nature</h3>

@@ -5,6 +5,7 @@
     justify-content: center;
     align-items: flex-start;
     gap: 10px;
+    flex-grow: 1;
 }
 
 .stats {
@@ -95,7 +96,14 @@
     align-items: center;
     min-width: 85px;
     height: 20px;
-    color: var(--grey-dark)
+}
+
+.stat-name.nature-increased {
+    color: var(--red);
+}
+
+.stat-name.nature-decreased {
+    color: var(--blue);
 }
 
 .stat-value {

@@ -12,7 +12,7 @@ export interface PokemonTeamEntity {
 	level: number;
 	ability: AbilityEntity;
 	nature: NatureEntity;
-	gender: 'Male' | 'Female' | 'Neutral';
+	gender: 'male' | 'female' | 'neutral';
 	isShiny: boolean;
 	moves: MoveEntity[];
 	item: ItemEntity;

@@ -5,4 +5,5 @@ export interface StatEntity {
 	ev: number;
 	iv: number;
 	total: number;
+	base: number;
 }

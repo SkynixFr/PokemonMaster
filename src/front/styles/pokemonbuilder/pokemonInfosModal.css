@@ -12,7 +12,7 @@
     z-index: 10;
 }
 
-.natures-modal-container, .abilities-modal-container  {
+.natures-modal-container, .abilities-modal-container, .moves-modal-container {
     position: relative;
     width: calc(50% - 100px);
     max-height: calc(65% - 50px);
@@ -27,11 +27,11 @@
     z-index: 2;
 }
 
-.natures-modal-container h2, .abilities-modal-container h2 {
+.natures-modal-container h2, .abilities-modal-container h2, .moves-modal-container h2 {
     font-family: var(--ff-base-bold), sans-serif;
 }
 
-.natures-searchbar {
+.natures-searchbar, .moves-searchbar {
     width: 100%;
     height: 50px;
     display: flex;
@@ -39,7 +39,7 @@
     justify-content: flex-start;
 }
 
-.natures-searchbar form {
+.natures-searchbar form, .moves-searchbar form {
     position: relative;
     width: 475px;
     height: 50px;
@@ -48,7 +48,7 @@
     justify-content: flex-start;
 }
 
-.natures-searchbar form > input[type="text"]{
+.natures-searchbar form > input[type="text"], .moves-searchbar form > input[type="text"] {
     width: 475px;
     height: 100%;
     padding: 0 20px;
@@ -58,7 +58,7 @@
     background-color: var(--grey);
 }
 
-.btn-search-natures {
+.btn-search-natures, .btn-search-moves{
     position: absolute;
     top: 50%;
     right: 20px;

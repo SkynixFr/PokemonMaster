@@ -2,6 +2,7 @@
 
 // Interfaces
 import { TeamCreate } from '../../interfaces/team/teamCreate';
+import { TeamUpdate } from '../../interfaces/team/teamUpdate';
 
 export const getTeams = async () => {
 	const response = await fetch('http://localhost:8080/api/v1/teams', {
@@ -42,4 +43,18 @@ export const deleteTeam = async (teamId: string) => {
 	await fetch(`http://localhost:8080/api/v1/teams/${teamId}`, {
 		method: 'DELETE'
 	});
+};
+
+export const addPokemonToTeam = async (teamId: string, team: TeamUpdate) => {
+	const response = await fetch(
+		`http://localhost:8080/api/v1/teams/${teamId}`,
+		{
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(team)
+		}
+	);
+	return response.json();
 };
