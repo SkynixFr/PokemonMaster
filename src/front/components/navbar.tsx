@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { isConnected } from './authProvider/authProvider';
-import { FormEventHandler, MouseEventHandler } from 'react';
+import { MouseEventHandler } from 'react';
 import { toast } from 'sonner';
 const Navbar = () => {
 	const router = useRouter();
@@ -13,8 +13,8 @@ const Navbar = () => {
 		localStorage.removeItem('refreshToken');
 		toast('Logging out...');
 		toast.success('User log out successfully!');
-		router.refresh();
 		router.push('/');
+		router.refresh();
 	};
 	return (
 		<nav className={'navbar'}>
@@ -48,6 +48,12 @@ const Navbar = () => {
 			</ul>
 			{isConnected() ? (
 				<div className={'navbar-profil'}>
+					<button
+						className={'btn-primary'}
+						onClick={() => router.replace('/profile')}
+					>
+						Profile
+					</button>
 					<button className={'btn-secondary'} onClick={logout}>
 						Log out
 					</button>
