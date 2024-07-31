@@ -2,10 +2,20 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-
+import { isConnected } from './authProvider/authProvider';
+import { FormEventHandler, MouseEventHandler } from 'react';
+import { toast } from 'sonner';
 const Navbar = () => {
 	const router = useRouter();
 	const pathname = usePathname();
+	const logout: MouseEventHandler<HTMLButtonElement> = async event => {
+		localStorage.removeItem('accessToken');
+		localStorage.removeItem('refreshToken');
+		toast('Logging out...');
+		toast.success('User log out successfully!');
+		router.refresh();
+		router.push('/');
+	};
 	return (
 		<nav className={'navbar'}>
 			<div className={'navbar-logo'}>
@@ -36,21 +46,28 @@ const Navbar = () => {
 					</Link>
 				</li>
 			</ul>
-
-			<div className={'navbar-profil'}>
-				<button
-					className={'btn-primary'}
-					onClick={() => router.replace('/signin')}
-				>
-					Sign in
-				</button>
-				<button
-					className={'btn-secondary'}
-					onClick={() => router.replace('/login')}
-				>
-					Log in
-				</button>
-			</div>
+			{isConnected() ? (
+				<div className={'navbar-profil'}>
+					<button className={'btn-secondary'} onClick={logout}>
+						Log out
+					</button>
+				</div>
+			) : (
+				<div className={'navbar-profil'}>
+					<button
+						className={'btn-primary'}
+						onClick={() => router.replace('/signin')}
+					>
+						Sign in
+					</button>
+					<button
+						className={'btn-secondary'}
+						onClick={() => router.replace('/login')}
+					>
+						Log in
+					</button>
+				</div>
+			)}
 		</nav>
 	);
 };
