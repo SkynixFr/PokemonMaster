@@ -60,7 +60,8 @@ const Battle = ({ battle }: BattleProps) => {
 				move.accuracy,
 				move.pp,
 				move.meta,
-				move.target
+				move.target,
+				move.type
 			);
 		});
 
@@ -71,7 +72,8 @@ const Battle = ({ battle }: BattleProps) => {
 					parsedPokemon.activeMove.accuracy,
 					parsedPokemon.activeMove.pp,
 					parsedPokemon.activeMove.meta,
-					parsedPokemon.activeMove.target
+					parsedPokemon.activeMove.target,
+					parsedPokemon.activeMove.type
 				)
 			: moves[0];
 
@@ -81,7 +83,8 @@ const Battle = ({ battle }: BattleProps) => {
 			moves,
 			activeMove,
 			status,
-			volatileStatus
+			volatileStatus,
+			parsedPokemon.types
 		);
 	}
 	function getPlayerFromStore() {
@@ -394,6 +397,7 @@ const Battle = ({ battle }: BattleProps) => {
 				{'status ' + opponentPokemon?.status.name
 					? opponentPokemon?.status.name
 					: ''}
+				<br />
 				{'volatileStatus' + opponentPokemon?.volatileStatus.name
 					? opponentPokemon?.volatileStatus.name
 					: ''}
@@ -434,6 +438,7 @@ const Battle = ({ battle }: BattleProps) => {
 				{'status ' + playerPokemon?.status.name
 					? playerPokemon?.status.name
 					: ''}
+				<br />
 				{'volatileStatus' + playerPokemon?.volatileStatus.name
 					? playerPokemon?.volatileStatus.name
 					: ''}

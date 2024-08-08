@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Type } from '../../../../src/back/classes/typeEffectiveness';
 
 const Rooms = () => {
 	const router = useRouter();
@@ -34,7 +35,7 @@ const Rooms = () => {
 						minTurns: 0,
 						maxTurns: 0
 					},
-					type: 'electric',
+					type: Type.Electric,
 					category: 'status',
 					description: 'Paralyzes the target.',
 					learnedBy: ['rattata'],
@@ -59,7 +60,7 @@ const Rooms = () => {
 						minTurns: 0,
 						maxTurns: 0
 					},
-					type: 'ice',
+					type: Type.Ice,
 					category: 'special',
 					description: 'Has a 10% chance to freeze the target.',
 					learnedBy: ['squirtle', 'wartortle', 'blastoise'],
@@ -85,7 +86,7 @@ const Rooms = () => {
 						minTurns: 15,
 						maxTurns: 15
 					},
-					type: 'poison',
+					type: Type.Poison,
 					category: 'status',
 					description:
 						'Badly poisons the target, inflicting more damage every turn.',
@@ -93,8 +94,9 @@ const Rooms = () => {
 					_class:
 						'org.example.pokemonmasterapi.repositories.model.MoveEntity'
 				},
-				{ name: 'bite', power: 60, pp: 25, accuracy: 100, type: 'dark' }
-			]
+				{ name: 'bite', power: 60, pp: 25, accuracy: 100, type: Type.Dark }
+			],
+			types: [Type.Water, Type.Ice]
 		};
 		const opponentPokemon = {
 			name: 'Charizard',
@@ -123,7 +125,7 @@ const Rooms = () => {
 						minTurns: 0,
 						maxTurns: 0
 					},
-					type: 'fire',
+					type: Type.Fire,
 					category: 'special',
 					description: 'Has a 10% chance to burn the target.',
 					learnedBy: ['charmander', 'charmeleon', 'charizard'],
@@ -148,7 +150,7 @@ const Rooms = () => {
 						minTurns: 2,
 						maxTurns: 4
 					},
-					type: 'psychic',
+					type: Type.Psychic,
 					category: 'status',
 					description: 'Puts the target to sleep.',
 					learnedBy: ['vulpix', 'ninetales', 'zubat']
@@ -172,7 +174,7 @@ const Rooms = () => {
 						minTurns: 2,
 						maxTurns: 5
 					},
-					type: 'normal',
+					type: Type.Normal,
 					category: 'status',
 					description: 'Confuses the target.',
 					learnedBy: ['butterfree'],
@@ -197,7 +199,7 @@ const Rooms = () => {
 						minTurns: 15,
 						maxTurns: 15
 					},
-					type: 'poison',
+					type: Type.Poison,
 					category: 'status',
 					description:
 						'Badly poisons the target, inflicting more damage every turn.',
@@ -205,7 +207,8 @@ const Rooms = () => {
 					_class:
 						'org.example.pokemonmasterapi.repositories.model.MoveEntity'
 				}
-			]
+			],
+			types: [Type.Fire, Type.Flying]
 		};
 
 		localStorage.setItem('playerPokemon', JSON.stringify(playerPokemon));

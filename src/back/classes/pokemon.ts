@@ -2,6 +2,8 @@
 import Move from './move';
 import Stat from './stat';
 import Status from './status';
+import { Type } from './typeEffectiveness';
+import { TypeEffectiveness } from './typeEffectiveness';
 
 class Pokemon {
 	readonly name: string;
@@ -10,14 +12,16 @@ class Pokemon {
 	readonly activeMove: Move;
 	readonly status: Status;
 	readonly volatileStatus: Status;
+	readonly types: Type[];
 
 	constructor(
 		name: string,
 		stat: Stat[],
 		moves: Move[],
 		activeMove: Move,
-		status?: Status,
-		volatileStatus?: Status
+		status: Status,
+		volatileStatus: Status,
+		types: Type[]
 	) {
 		this.name = name;
 		this.stats = stat;
@@ -27,6 +31,7 @@ class Pokemon {
 		this.volatileStatus = volatileStatus
 			? volatileStatus
 			: new Status('', '', 0, true);
+		this.types = types;
 	}
 
 	getStat(statName: string): Stat {
@@ -41,7 +46,8 @@ class Pokemon {
 			this.moves,
 			move,
 			this.status,
-			this.volatileStatus
+			this.volatileStatus,
+			this.types
 		);
 	}
 
@@ -52,7 +58,8 @@ class Pokemon {
 			updatedMoves,
 			this.activeMove,
 			this.status,
-			this.volatileStatus
+			this.volatileStatus,
+			this.types
 		);
 	}
 
@@ -64,7 +71,11 @@ class Pokemon {
 		let updatedVolatileStatus: Status = target.volatileStatus;
 		const statusList = ['PSN', 'SLP', 'FRZ', 'KO', 'BRN', 'PAR'];
 		const missChance = Math.random();
-		let damage = this.activeMove.power;
+		const effectiveness = TypeEffectiveness.calculateEffectiveness(
+			this.activeMove.type,
+			target.types
+		);
+		let damage = this.activeMove.power * effectiveness;
 		if (missChance > this.activeMove.accuracy / 100) {
 			damage = 0;
 			console.log('The attack missed!');
@@ -134,7 +145,8 @@ class Pokemon {
 			target.moves,
 			target.activeMove,
 			target.status,
-			target.volatileStatus
+			target.volatileStatus,
+			target.types
 		);
 	}
 
@@ -145,7 +157,8 @@ class Pokemon {
 			this.moves,
 			this.activeMove,
 			updatedStatus,
-			this.volatileStatus
+			this.volatileStatus,
+			this.types
 		);
 	}
 
@@ -171,7 +184,8 @@ class Pokemon {
 			this.moves,
 			this.activeMove,
 			updatedStatus,
-			this.volatileStatus
+			this.volatileStatus,
+			this.types
 		);
 	}
 
@@ -182,7 +196,8 @@ class Pokemon {
 			this.moves,
 			this.activeMove,
 			this.status,
-			updatedVolatileStatus
+			updatedVolatileStatus,
+			this.types
 		);
 	}
 }

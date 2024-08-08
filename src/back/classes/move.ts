@@ -1,4 +1,5 @@
 import Meta from './meta';
+import { Type } from './typeEffectiveness';
 
 class Move {
 	readonly name: string;
@@ -7,6 +8,7 @@ class Move {
 	readonly pp: number;
 	readonly meta: Meta;
 	readonly target: string;
+	readonly type: Type;
 
 	constructor(
 		name: string,
@@ -14,7 +16,8 @@ class Move {
 		accuracy: number,
 		pp: number,
 		meta: Meta,
-		target: string
+		target: string,
+		type: Type
 	) {
 		this.name = name;
 		this.power = power;
@@ -22,6 +25,7 @@ class Move {
 		this.pp = pp;
 		this.meta = meta;
 		this.target = target;
+		this.type = type;
 	}
 
 	decreasePP(): Move {
@@ -32,7 +36,8 @@ class Move {
 			this.accuracy,
 			updatedPP,
 			this.meta,
-			this.target
+			this.target,
+			this.type
 		);
 	}
 }
