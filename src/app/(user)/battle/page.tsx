@@ -64,20 +64,22 @@ const Battle = ({ battle }: BattleProps) => {
 			);
 		});
 
+		const activeMove = parsedPokemon.activeMove
+			? new Move(
+					parsedPokemon.activeMove.name,
+					parsedPokemon.activeMove.power,
+					parsedPokemon.activeMove.accuracy,
+					parsedPokemon.activeMove.pp,
+					parsedPokemon.activeMove.meta,
+					parsedPokemon.activeMove.target
+				)
+			: moves[0];
+
 		return new Pokemon(
 			parsedPokemon.name,
 			parsedPokemon.stats,
 			moves,
-			parsedPokemon.activeMove
-				? new Move(
-						parsedPokemon.activeMove.name,
-						parsedPokemon.activeMove.power,
-						parsedPokemon.activeMove.accuracy,
-						parsedPokemon.activeMove.pp,
-						parsedPokemon.meta,
-						parsedPokemon.activeMove.target
-					)
-				: null,
+			activeMove,
 			status,
 			volatileStatus
 		);
@@ -122,7 +124,7 @@ const Battle = ({ battle }: BattleProps) => {
 		handleParalysis();
 		handleAttacksByPriority();
 		handleActiveMovesPpReduction();
-		handleFreezing();
+		handleThawing();
 		handlePoisoning();
 		handleBurning();
 	}, [playerReady, opponentReady]);
@@ -265,31 +267,6 @@ const Battle = ({ battle }: BattleProps) => {
 		storeOpponentPokemon(updatedOpponentPokemon);
 	};
 
-	const handleFreezing = () => {
-		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
-		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
-
-		if (playerUpdatedPokemon.status.name === 'FRZ') {
-			const random = Math.random();
-			if (random < THAW_CHANCE) {
-				const updatedStatus = new Status('', '', 0, true);
-				playerUpdatedPokemon =
-					playerUpdatedPokemon.changeStatus(updatedStatus);
-				storePlayerPokemon(playerUpdatedPokemon);
-			}
-		}
-
-		if (opponentUpdatedPokemon.status.name === 'FRZ') {
-			const random = Math.random();
-			if (random < THAW_CHANCE) {
-				const updatedStatus = new Status('', '', 0, true);
-				opponentUpdatedPokemon =
-					opponentUpdatedPokemon.changeStatus(updatedStatus);
-				storeOpponentPokemon(opponentUpdatedPokemon);
-			}
-		}
-	};
-
 	const handlePoisoning = () => {
 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
@@ -321,15 +298,44 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handlePlayerMoveSelection = (move: Move) => {
+		if (move.pp === 0) return;
 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
 		playerUpdatedPokemon = playerUpdatedPokemon.changeActiveMove(move);
 		storePlayerPokemon(playerUpdatedPokemon);
+		handlePlayerReady();
 	};
 
 	const handleOpponentMoveSelection = (move: Move) => {
+		if (move.pp === 0) return;
 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
 		opponentUpdatedPokemon = opponentUpdatedPokemon.changeActiveMove(move);
 		storeOpponentPokemon(opponentUpdatedPokemon);
+		handleOpponentReady();
+	};
+
+	const handleThawing = () => {
+		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+
+		if (playerUpdatedPokemon.status.name === 'FRZ') {
+			const random = Math.random();
+			if (random < THAW_CHANCE) {
+				const updatedStatus = new Status('', '', 0, true);
+				playerUpdatedPokemon =
+					playerUpdatedPokemon.changeStatus(updatedStatus);
+				storePlayerPokemon(playerUpdatedPokemon);
+			}
+		}
+
+		if (opponentUpdatedPokemon.status.name === 'FRZ') {
+			const random = Math.random();
+			if (random < THAW_CHANCE) {
+				const updatedStatus = new Status('', '', 0, true);
+				opponentUpdatedPokemon =
+					opponentUpdatedPokemon.changeStatus(updatedStatus);
+				storeOpponentPokemon(opponentUpdatedPokemon);
+			}
+		}
 	};
 
 	const handlePlayerAttack = () => {
@@ -410,7 +416,6 @@ const Battle = ({ battle }: BattleProps) => {
 							key={move.name}
 							onClick={() => {
 								handleOpponentMoveSelection(move);
-								handleOpponentReady();
 							}}
 						>
 							{move.name}
@@ -451,7 +456,6 @@ const Battle = ({ battle }: BattleProps) => {
 							key={move.name}
 							onClick={() => {
 								handlePlayerMoveSelection(move);
-								handlePlayerReady();
 							}}
 						>
 							{move.name}

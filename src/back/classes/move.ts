@@ -1,11 +1,11 @@
-import MetaEntity from './meta';
+import Meta from './meta';
 
 class Move {
 	readonly name: string;
 	readonly power: number;
 	readonly accuracy: number;
 	readonly pp: number;
-	readonly meta: MetaEntity;
+	readonly meta: Meta;
 	readonly target: string;
 
 	constructor(
@@ -13,7 +13,7 @@ class Move {
 		power: number,
 		accuracy: number,
 		pp: number,
-		meta: MetaEntity,
+		meta: Meta,
 		target: string
 	) {
 		this.name = name;

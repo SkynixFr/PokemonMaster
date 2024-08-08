@@ -1,4 +1,4 @@
-export default class MetaEntity {
+export default class Meta {
 	ailment: string;
 	drain?: number;
 	healing?: number;
