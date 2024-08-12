@@ -65,17 +65,23 @@ const NaturesModal = ({
 		};
 	}, [setOpenNature]);
 
-	const handleNaturesSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const searchValue = e.target.value;
-		setSearchTerm(searchValue);
+	useEffect(() => {
+		filterNatures();
+	}, [searchTerm]);
 
+	const handleNaturesSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const searchValue = e.target.value.toLowerCase();
+		setSearchTerm(searchValue);
+	};
+
+	const filterNatures = () => {
 		if (searchTerm === '') {
 			setNatures(defaultNatures);
 			return;
 		}
 
 		const filteredNatures = defaultNatures.filter(nature =>
-			nature.name.toLowerCase().includes(searchValue)
+			firstLetterMaj(nature.name).toLowerCase().includes(searchTerm)
 		);
 
 		if (filteredNatures.length === 0) {

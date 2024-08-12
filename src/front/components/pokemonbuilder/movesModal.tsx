@@ -64,6 +64,10 @@ const MovesModal = ({
 		};
 	}, [setOpenMoveIndex]);
 
+	useEffect(() => {
+		filterMoves();
+	}, [searchTerm]);
+
 	const handleMoves = (move: MoveEntity) => {
 		if (movesActive.find(m => m.name === move.name)) {
 			const newMoves = movesActive.filter(m => m.name !== move.name);
@@ -82,16 +86,18 @@ const MovesModal = ({
 	};
 
 	const handleMovesSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const searchValue = e.target.value;
+		const searchValue = e.target.value.toLowerCase();
 		setSearchTerm(searchValue);
+	};
 
+	const filterMoves = () => {
 		if (searchTerm === '') {
 			setMoves(defaultMoves);
 			return;
 		}
 
 		const filteredMoves = defaultMoves.filter(move =>
-			move.name.toLowerCase().includes(searchValue)
+			firstLetterMaj(move.name).toLowerCase().includes(searchTerm)
 		);
 
 		if (filteredMoves.length === 0) {
