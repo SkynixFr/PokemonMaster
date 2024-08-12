@@ -150,7 +150,7 @@
 
 @media screen and (max-width: 1920px) {
     .pokemon-details {
-        height: calc(100% - 40px);
-
+        height: calc(90% - 40px);
+        gap: 25px;
     }
 }
