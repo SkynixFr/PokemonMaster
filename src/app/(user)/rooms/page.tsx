@@ -8,7 +8,7 @@ const Rooms = () => {
 	const router = useRouter();
 
 	useEffect(() => {
-		const playerPokemon = {
+		const blastoise = {
 			name: 'Blastoise',
 			stats: [
 				{ name: 'hp', value: 362, max: 362 },
@@ -98,7 +98,7 @@ const Rooms = () => {
 			],
 			types: [Type.Water, Type.Ice]
 		};
-		const opponentPokemon = {
+		const charizard = {
 			name: 'Charizard',
 			stats: [
 				{ name: 'hp', value: 360, max: 360 },
@@ -211,8 +211,13 @@ const Rooms = () => {
 			types: [Type.Fire, Type.Flying]
 		};
 
-		localStorage.setItem('playerPokemon', JSON.stringify(playerPokemon));
-		localStorage.setItem('opponentPokemon', JSON.stringify(opponentPokemon));
+		const playerTeam = [blastoise, charizard];
+		const opponentTeam = [charizard, blastoise];
+
+		localStorage.setItem('playerPokemon', JSON.stringify(blastoise));
+		localStorage.setItem('opponentPokemon', JSON.stringify(charizard));
+		localStorage.setItem('playerTeam', JSON.stringify(playerTeam));
+		localStorage.setItem('opponentTeam', JSON.stringify(opponentTeam));
 	}, []);
 	return (
 		<div style={{ margin: '100px 0 0 10px' }}>

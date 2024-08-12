@@ -8,6 +8,7 @@ import BattleClass from '../../../back/classes/battle';
 import Move from '../../../back/classes/move';
 import Status from '../../../back/classes/status';
 import { THAW_CHANCE, PARALYSIS_CHANCE, CONFUSED_MOVE } from './constants';
+import { set } from 'zod';
 
 // Interfaces
 interface BattleProps {
@@ -16,6 +17,10 @@ interface BattleProps {
 
 const Battle = ({ battle }: BattleProps) => {
 	// States
+	const [playerTeam, setPlayerTeam] = useState<Pokemon[]>([]);
+	const [opponentTeam, setOpponentTeam] = useState<Pokemon[]>([]);
+	const [playerTeamShowed, setPlayerTeamShowed] = useState<boolean>(false);
+	const [opponentTeamShowed, setOpponentTeamShowed] = useState<boolean>(false);
 	const [playerPokemon, setPlayerPokemon] = useState<Pokemon | null>();
 	const [opponentPokemon, setOpponentPokemon] = useState<Pokemon | null>();
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
@@ -28,11 +33,23 @@ const Battle = ({ battle }: BattleProps) => {
 	// Utilitaires
 	function storePlayerPokemon(updatedPokemon: Pokemon) {
 		setPlayerPokemon(updatedPokemon);
+		updateTeamWithNewPokemon(updatedPokemon, setPlayerTeam);
 		localStorage.setItem('playerPokemon', JSON.stringify(updatedPokemon));
 	}
 	function storeOpponentPokemon(updatedPokemon: Pokemon) {
 		setOpponentPokemon(updatedPokemon);
+		updateTeamWithNewPokemon(updatedPokemon, setOpponentTeam);
 		localStorage.setItem('opponentPokemon', JSON.stringify(updatedPokemon));
+	}
+	function updateTeamWithNewPokemon(
+		updatedPokemon: Pokemon,
+		setTeam: Function
+	) {
+		setTeam((team: Pokemon[]) =>
+			team.map(pokemon =>
+				pokemon.name === updatedPokemon.name ? updatedPokemon : pokemon
+			)
+		);
 	}
 	function recreatePokemonFromParsed(parsedPokemon: any) {
 		const status = parsedPokemon.status
@@ -94,12 +111,28 @@ const Battle = ({ battle }: BattleProps) => {
 		const playerPokemon = recreatePokemonFromParsed(parsedPlayerPokemon);
 		return playerPokemon;
 	}
+	function getPlayerTeamFromStore() {
+		const parsedPlayerTeam = JSON.parse(localStorage.getItem('playerTeam'));
+		const playerTeam = parsedPlayerTeam.map((parsedPokemon: Pokemon) => {
+			return recreatePokemonFromParsed(parsedPokemon);
+		});
+		return playerTeam;
+	}
 	function getOpponentFromStore() {
 		const parsedOpponentPokemon = JSON.parse(
 			localStorage.getItem('opponentPokemon')
 		);
 		const opponentPokemon = recreatePokemonFromParsed(parsedOpponentPokemon);
 		return opponentPokemon;
+	}
+	function getOpponentTeamFromStore() {
+		const parsedOpponentTeam = JSON.parse(
+			localStorage.getItem('opponentTeam')
+		);
+		const opponentTeam = parsedOpponentTeam.map((parsedPokemon: Pokemon) => {
+			return recreatePokemonFromParsed(parsedPokemon);
+		});
+		return opponentTeam;
 	}
 
 	// Récupération des pokémons depuis le localStorage ou la room
@@ -114,6 +147,16 @@ const Battle = ({ battle }: BattleProps) => {
 		} else {
 			setPlayerPokemon(battle.playerPokemon);
 			setOpponentPokemon(battle.opponentPokemon);
+		}
+		if (
+			localStorage.getItem('playerTeam') &&
+			localStorage.getItem('opponentTeam')
+		) {
+			setPlayerTeam(getPlayerTeamFromStore());
+			setOpponentTeam(getOpponentTeamFromStore());
+		} else {
+			setPlayerTeam([battle.playerPokemon]);
+			setOpponentTeam([battle.opponentPokemon]);
 		}
 	}, [battle]);
 
@@ -130,6 +173,8 @@ const Battle = ({ battle }: BattleProps) => {
 		handleThawing();
 		handlePoisoning();
 		handleBurning();
+		setPlayerReady(false);
+		setOpponentReady(false);
 	}, [playerReady, opponentReady]);
 
 	// Détermination du gagnant
@@ -316,6 +361,17 @@ const Battle = ({ battle }: BattleProps) => {
 		handleOpponentReady();
 	};
 
+	const handlePlayerPokemonSelection = (pokemon: Pokemon) => {
+		setPlayerPokemon(pokemon);
+		storePlayerPokemon(pokemon);
+	};
+
+	// Sélection du Pokémon de l'adversaire
+	const handleOpponentPokemonSelection = (pokemon: Pokemon) => {
+		setOpponentPokemon(pokemon);
+		storeOpponentPokemon(pokemon);
+	};
+
 	const handleThawing = () => {
 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
@@ -403,6 +459,31 @@ const Battle = ({ battle }: BattleProps) => {
 					: ''}
 			</p>
 
+			{/* Bouton Team de l'adversaire */}
+			<button
+				onClick={() => {
+					setOpponentTeamShowed(!opponentTeamShowed);
+				}}
+			>
+				Team
+			</button>
+
+			{/* Affichage des Pokémons de l'adversaire */}
+			{opponentTeamShowed && (
+				<div>
+					{opponentTeam.map((pokemon: Pokemon) => (
+						<button
+							key={pokemon.name}
+							onClick={() => {
+								handleOpponentPokemonSelection(pokemon);
+							}}
+						>
+							{pokemon.name}
+						</button>
+					))}
+				</div>
+			)}
+
 			{/* Bouton Attack de l'adversaire */}
 			<button
 				onClick={() => {
@@ -443,6 +524,31 @@ const Battle = ({ battle }: BattleProps) => {
 					? playerPokemon?.volatileStatus.name
 					: ''}
 			</p>
+
+			{/* Bouton Team du joueur */}
+			<button
+				onClick={() => {
+					setPlayerTeamShowed(!playerTeamShowed);
+				}}
+			>
+				Team
+			</button>
+
+			{/* Affichage des Pokémons du joueur */}
+			{playerTeamShowed && (
+				<div>
+					{playerTeam.map((pokemon: Pokemon) => (
+						<button
+							key={pokemon.name}
+							onClick={() => {
+								handlePlayerPokemonSelection(pokemon);
+							}}
+						>
+							{pokemon.name}
+						</button>
+					))}
+				</div>
+			)}
 
 			{/* Bouton Attack du joueur */}
 			<button
