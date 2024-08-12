@@ -7,7 +7,7 @@ import Pokedex from './pokedex';
 import PokemonDetails from './pokemonDetails';
 
 // Icons
-import { HardDriveDownload, X } from 'lucide-react';
+import { SaveAll, X } from 'lucide-react';
 
 // Interfaces
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
@@ -23,7 +23,7 @@ interface PokemonsProps {
 }
 
 // Utils
-const NUMBER_OF_POKEMONS = 15;
+const NUMBER_OF_POKEMONS = 12;
 
 const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 	const router = useRouter();
@@ -144,7 +144,7 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 						className={'team-pokemons-save'}
 						onClick={() => handleSaveTeam(teamActive)}
 					>
-						<HardDriveDownload width={20} height={20} />
+						<SaveAll width={20} height={20} />
 					</button>
 				</div>
 				<Pokedex
