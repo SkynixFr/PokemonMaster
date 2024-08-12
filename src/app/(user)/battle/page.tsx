@@ -462,10 +462,21 @@ const Battle = ({ battle }: BattleProps) => {
 			{/* Bouton Team de l'adversaire */}
 			<button
 				onClick={() => {
+					setOpponentMovesShowed(false);
 					setOpponentTeamShowed(!opponentTeamShowed);
 				}}
 			>
 				Team
+			</button>
+
+			{/* Bouton Attack de l'adversaire */}
+			<button
+				onClick={() => {
+					setOpponentTeamShowed(false);
+					setOpponentMovesShowed(!opponentMovesShowed);
+				}}
+			>
+				Attack
 			</button>
 
 			{/* Affichage des Pokémons de l'adversaire */}
@@ -483,15 +494,6 @@ const Battle = ({ battle }: BattleProps) => {
 					))}
 				</div>
 			)}
-
-			{/* Bouton Attack de l'adversaire */}
-			<button
-				onClick={() => {
-					setOpponentMovesShowed(!opponentMovesShowed);
-				}}
-			>
-				Attack
-			</button>
 
 			{/* Affichage des moves de l'adversaire */}
 			{opponentMovesShowed && (
@@ -528,10 +530,21 @@ const Battle = ({ battle }: BattleProps) => {
 			{/* Bouton Team du joueur */}
 			<button
 				onClick={() => {
+					setPlayerMovesShowed(false);
 					setPlayerTeamShowed(!playerTeamShowed);
 				}}
 			>
 				Team
+			</button>
+
+			{/* Bouton Attack du joueur */}
+			<button
+				onClick={() => {
+					setPlayerTeamShowed(false);
+					setPlayerMovesShowed(!playerMovesShowed);
+				}}
+			>
+				Attack
 			</button>
 
 			{/* Affichage des Pokémons du joueur */}
@@ -549,15 +562,6 @@ const Battle = ({ battle }: BattleProps) => {
 					))}
 				</div>
 			)}
-
-			{/* Bouton Attack du joueur */}
-			<button
-				onClick={() => {
-					setPlayerMovesShowed(!playerMovesShowed);
-				}}
-			>
-				Attack
-			</button>
 
 			{/* Affichage des moves du joueur */}
 			{playerMovesShowed && (
