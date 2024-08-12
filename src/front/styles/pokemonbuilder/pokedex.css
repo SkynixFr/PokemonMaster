@@ -9,9 +9,9 @@
 .pokedex-pokemons {
     display: flex;
     flex-flow: row wrap;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-    flex: 1;
+    height: 100%;
     gap: 20px;
     padding: 50px 125px;
 }
@@ -26,11 +26,23 @@
     background-color: var(--white);
     border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.pokedex-pokemon:hover {
+    background-color: var(--red);
+    color:  var(--white);
+    transform: scale(1.1)
+}
+
+.pokedex-pokemon:hover .pokemon-id {
+    color: var(--red-dark);
+    opacity: 1;
 }
 
 .pokedex-pokemon.active {
     background-color: var(--red);
+
 }
 
 .pokedex-pokemon.active .pokemon-name {
@@ -58,11 +70,11 @@
 
 .bg-pokemon {
     position: absolute;
-    top: 0;
+    top: -8px;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
 }
 
 .pokedex-pokemon .pokemon-infos {
@@ -89,6 +101,7 @@
     font-size: var(--fs-sm);
     font-weight: var(--fw-bold);
     opacity: 0.31;
+
 }
 
 .pokemon-name {

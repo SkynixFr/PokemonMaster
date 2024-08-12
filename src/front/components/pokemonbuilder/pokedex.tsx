@@ -10,6 +10,8 @@ import SearchForm from './searchForm';
 
 // Interfaces
 import { PokemonEntity } from '../../../interfaces/pokemon/pokemonEntity';
+import Pagination from '../pagination';
+import React from 'react';
 interface PokedexProps {
 	pokemons: PokemonEntity[];
 	currentPokemons: PokemonEntity[];
@@ -18,6 +20,9 @@ interface PokedexProps {
 	setPokemonActive: (pokemon: PokemonEntity) => void;
 	isFromTeam: boolean;
 	setIsFromTeam: (isFromTeam: boolean) => void;
+	totalPages: number;
+	currentPage: number;
+	setCurrentPage: (currentPage: number) => void;
 }
 
 const Pokedex = ({
@@ -27,7 +32,10 @@ const Pokedex = ({
 	pokemonActive,
 	setPokemonActive,
 	isFromTeam,
-	setIsFromTeam
+	setIsFromTeam,
+	totalPages,
+	currentPage,
+	setCurrentPage
 }: PokedexProps) => {
 	return (
 		<div className={'pokedex'}>
@@ -73,6 +81,13 @@ const Pokedex = ({
 					</div>
 				))}
 			</div>
+			{totalPages > 1 && (
+				<Pagination
+					currentPage={currentPage}
+					setCurrentPage={setCurrentPage}
+					totalPages={totalPages}
+				/>
+			)}
 		</div>
 	);
 };

@@ -92,10 +92,14 @@ const SearchForm = ({ setCurrentPokemons, savedPokemons }: SearchFormProps) => {
 		setPokemonGeneration(generation);
 	};
 
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+	};
+
 	return (
 		<div className={'search-pokemons'}>
 			<div className={'search-pokemons-bar'}>
-				<form action="">
+				<form onSubmit={handleSubmit}>
 					<input
 						type="text"
 						name="search"

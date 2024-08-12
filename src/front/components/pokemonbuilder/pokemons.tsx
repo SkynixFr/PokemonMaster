@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 // Components
 import Pokedex from './pokedex';
 import PokemonDetails from './pokemonDetails';
-import Pagination from '../../pagination';
 
 // Icons
 import { HardDriveDownload, X } from 'lucide-react';
@@ -24,7 +23,7 @@ interface PokemonsProps {
 }
 
 // Utils
-const NUMBER_OF_POKEMONS = 12;
+const NUMBER_OF_POKEMONS = 15;
 
 const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 	const router = useRouter();
@@ -39,6 +38,9 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 	);
 	const [teamActive, setTeamActive] = useState<TeamEntity>(team);
 	const [isFromTeam, setIsFromTeam] = useState<boolean>(false);
+	const [activePokemonIndex, setActivePokemonIndex] = useState<number | null>(
+		null
+	);
 
 	useEffect(() => {
 		const currentIndex = (currentPage - 1) * NUMBER_OF_POKEMONS;
@@ -52,14 +54,6 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 		newTeam.pokemons.splice(index, 1);
 		setTeamActive(newTeam);
 		setPokemonActive(displayPokemons[0]);
-	};
-
-	const handlePokemonActive = (
-		pokemon: PokemonEntity,
-		isFromTeam: boolean
-	) => {
-		setPokemonActive(pokemon);
-		setIsFromTeam(isFromTeam);
 	};
 
 	const handleSaveTeam = (team: TeamEntity) => {
@@ -76,15 +70,28 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 					throw new Error(response.message);
 				}
 				setTeamActive(response);
+				router.push('/teambuilder');
+				router.refresh();
 				return `${response.name} saved !`;
 			},
 			error: error => {
 				return error.message;
 			}
 		});
+	};
 
-		router.push('/teambuilder');
-		router.refresh();
+	const handlePokemonActive = (
+		pokemon: PokemonEntity,
+		isFromTeam: boolean,
+		index: number | null
+	) => {
+		setPokemonActive(pokemon);
+		setIsFromTeam(isFromTeam);
+		if (isFromTeam) {
+			setActivePokemonIndex(index);
+		} else {
+			setActivePokemonIndex(null);
+		}
 	};
 
 	return (
@@ -97,8 +104,10 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 								const pokemon = teamActive.pokemons[index];
 								return pokemon ? (
 									<div
-										className={'team-pokemon'}
-										onClick={() => handlePokemonActive(pokemon, true)}
+										className={`team-pokemon ${isFromTeam && activePokemonIndex === index ? 'active' : ''}`}
+										onClick={() =>
+											handlePokemonActive(pokemon, true, index)
+										}
 										key={pokemon.name}
 									>
 										<div className={'team-pokemon-img'}>
@@ -146,14 +155,10 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 					setPokemonActive={setPokemonActive}
 					isFromTeam={isFromTeam}
 					setIsFromTeam={setIsFromTeam}
+					totalPages={totalPages}
+					currentPage={currentPage}
+					setCurrentPage={setCurrentPage}
 				/>
-				{totalPages > 1 && (
-					<Pagination
-						currentPage={currentPage}
-						setCurrentPage={setCurrentPage}
-						totalPages={totalPages}
-					/>
-				)}
 			</div>
 			<PokemonDetails
 				pokemon={pokemonActive}

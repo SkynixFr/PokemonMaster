@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { NatureEntity } from '../../../interfaces/pokemon/nature/natureEntity';
 import { ItemEntity } from '../../../interfaces/pokemon/item/itemEntity';
@@ -19,7 +19,7 @@ import PokemonCompetitiveInfos from './pokemonCompetitiveInfos';
 // Icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMars, faVenus } from '@fortawesome/free-solid-svg-icons';
-import { Plus } from 'lucide-react';
+import { Copy, Plus, SquarePen } from 'lucide-react';
 
 // Utils
 import { firstLetterMaj } from '../../utils/formatString';
@@ -165,12 +165,54 @@ const PokemonDetails = ({
 			return;
 		}
 
+		if (teamActive.pokemons.length >= 6) {
+			toast.warning('You can only have 6 pokemons in your team');
+			return;
+		}
+
 		const newTeam = {
 			...teamActive,
 			pokemons: [...teamActive.pokemons, newPokemon]
 		};
 
 		setTeamActive(newTeam);
+	};
+
+	const handleUpdatePokemon = (pokemon: PokemonTeamEntity, index) => {
+		const updatedPokemon: PokemonTeamEntity = {
+			...pokemon,
+			level: levelActive,
+			ability: abilityActive,
+			nature: natureActive,
+			item: itemActive,
+			moves: movesActive,
+			stats: statsActive
+		};
+
+		const newTeam = {
+			...teamActive,
+			pokemons: teamActive.pokemons.map((p, i) =>
+				i === index ? updatedPokemon : p
+			)
+		};
+
+		setTeamActive(newTeam);
+		toast.success('Pokémon updated successfully!');
+	};
+
+	const handleCopyPokemon = (team: TeamEntity, pokemon: PokemonTeamEntity) => {
+		if (teamActive.pokemons.length >= 6) {
+			toast.warning('You can only have 6 pokemons in your team');
+			return;
+		}
+
+		const newTeam = {
+			...teamActive,
+			pokemons: [...teamActive.pokemons, pokemon]
+		};
+
+		setTeamActive(newTeam);
+		toast.success('Pokémon copied successfully!');
 	};
 
 	return (
@@ -182,7 +224,7 @@ const PokemonDetails = ({
 				<div className={'middle'}>
 					<div className={'pokemon-img'}>
 						<CustomImage
-							src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
+							src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon?.pokedexId}.png`}
 							alt={pokemon.name}
 							fill={true}
 							sizes="(max-width: 768px) 150px, 300px"
@@ -234,11 +276,30 @@ const PokemonDetails = ({
 				getNatureMultipliers={getNatureMultipliers}
 			/>
 
-			<div className={'add-pokemon'}>
-				<button onClick={() => handleAddPokemon(team, pokemon)}>
-					Add <Plus />
-				</button>
-			</div>
+			{teamActive.pokemons.some(p => p.pokedexId === pokemon.pokedexId) &&
+			isFromTeam ? (
+				<div className={'add-pokemon'}>
+					<button onClick={() => handleCopyPokemon(team, pokemon)}>
+						Copy <Copy />
+					</button>
+					<button
+						onClick={() =>
+							handleUpdatePokemon(
+								pokemon,
+								teamActive.pokemons.indexOf(pokemon)
+							)
+						}
+					>
+						Update <SquarePen width={25} height={25} />
+					</button>
+				</div>
+			) : (
+				<div className={'add-pokemon'}>
+					<button onClick={() => handleAddPokemon(team, pokemon)}>
+						Add <Plus />
+					</button>
+				</div>
+			)}
 		</div>
 	);
 };
