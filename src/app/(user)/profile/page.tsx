@@ -34,7 +34,9 @@ const Profile = () => {
 
 		fetchData();
 	}, [router]);
-	return (
+	return loading ? (
+		<div>Loading...</div>
+	) : (
 		<div>
 			<Link href={'/'}>Go Back</Link>
 			<h1>Page de Profil</h1>
