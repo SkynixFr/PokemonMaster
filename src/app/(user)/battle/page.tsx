@@ -138,20 +138,20 @@ const Battle = ({ battle }: BattleProps) => {
 	// Récupération des pokémons depuis le localStorage ou la room
 	useEffect(() => {
 		if (!battle) return;
-		if (
-			localStorage.getItem('playerPokemon') &&
-			localStorage.getItem('opponentPokemon')
-		) {
+		const playerStoredPokemon = localStorage.getItem('playerPokemon');
+		const opponentStoredPokemon = localStorage.getItem('opponentPokemon');
+		const playerStoredTeam = localStorage.getItem('playerTeam');
+		const opponentStoredTeam = localStorage.getItem('opponentTeam');
+
+		if (playerStoredPokemon && opponentStoredPokemon) {
 			setPlayerPokemon(getPlayerFromStore());
 			setOpponentPokemon(getOpponentFromStore());
 		} else {
 			setPlayerPokemon(battle.playerPokemon);
 			setOpponentPokemon(battle.opponentPokemon);
 		}
-		if (
-			localStorage.getItem('playerTeam') &&
-			localStorage.getItem('opponentTeam')
-		) {
+
+		if (playerStoredTeam && opponentStoredTeam) {
 			setPlayerTeam(getPlayerTeamFromStore());
 			setOpponentTeam(getOpponentTeamFromStore());
 		} else {
