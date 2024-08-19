@@ -1,5 +1,6 @@
 @import  url("pokemonDetails.css");
 @import  url("pokedex.css");
+@import  url("saveModal.css");
 
 .pokemons-infos {
     display: flex;

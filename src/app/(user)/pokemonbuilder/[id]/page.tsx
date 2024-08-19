@@ -11,7 +11,6 @@ const PokemonBuilder = async ({ params }: { params: { id: string } }) => {
 	const pokemons = await getPokemons();
 	return (
 		<div className={'pokemonbuilder-container'}>
-			<Team teamName={team.name} />
 			<Pokemons pokemons={pokemons} team={team} />
 		</div>
 	);

@@ -16,6 +16,7 @@ import CustomImage from '../customImage';
 import { TeamUpdate } from '../../../interfaces/team/teamUpdate';
 import { toast } from 'sonner';
 import { addPokemonToTeam } from '../../actions/team.actions';
+import Team from './team';
 
 interface PokemonsProps {
 	team: TeamEntity;
@@ -95,79 +96,82 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 	};
 
 	return (
-		<div className={'pokemons-infos'}>
-			<div className={'pokemons'}>
-				<div className={'team-pokemons'}>
-					<div className={'list-team-pokemons'}>
-						{teamActive.pokemons && teamActive.pokemons.length > 0 ? (
-							Array.from({ length: 6 }).map((_, index) => {
-								const pokemon = teamActive.pokemons[index];
-								return pokemon ? (
-									<div
-										className={`team-pokemon ${isFromTeam && activePokemonIndex === index ? 'active' : ''}`}
-										onClick={() =>
-											handlePokemonActive(pokemon, true, index)
-										}
-										key={pokemon.name}
-									>
-										<div className={'team-pokemon-img'}>
+		<>
+			<Team teamActive={teamActive} saveTeam={handleSaveTeam} />
+			<div className={'pokemons-infos'}>
+				<div className={'pokemons'}>
+					<div className={'team-pokemons'}>
+						<div className={'list-team-pokemons'}>
+							{teamActive.pokemons && teamActive.pokemons.length > 0 ? (
+								Array.from({ length: 6 }).map((_, index) => {
+									const pokemon = teamActive.pokemons[index];
+									return pokemon ? (
+										<div
+											className={`team-pokemon ${isFromTeam && activePokemonIndex === index ? 'active' : ''}`}
+											onClick={() =>
+												handlePokemonActive(pokemon, true, index)
+											}
+											key={pokemon.name}
+										>
+											<div className={'team-pokemon-img'}>
+												<CustomImage
+													src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
+													alt={pokemon.name}
+													width={80}
+													height={80}
+												/>
+											</div>
+											<button
+												className={'remove-pokemon'}
+												onClick={() => handleDeletePokemon(index)}
+											>
+												<X width={30} height={30} />
+											</button>
+										</div>
+									) : (
+										<div key={index}>
 											<CustomImage
-												src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
-												alt={pokemon.name}
-												width={80}
-												height={80}
+												src={'/images/other/pokeball.png'}
+												alt={'pokeball close'}
+												width={60}
+												height={60}
 											/>
 										</div>
-										<button
-											className={'remove-pokemon'}
-											onClick={() => handleDeletePokemon(index)}
-										>
-											<X width={30} height={30} />
-										</button>
-									</div>
-								) : (
-									<div key={index}>
-										<CustomImage
-											src={'/images/other/pokeball.png'}
-											alt={'pokeball close'}
-											width={60}
-											height={60}
-										/>
-									</div>
-								);
-							})
-						) : (
-							<h3>No pokemons in your team</h3>
-						)}
+									);
+								})
+							) : (
+								<h3>No pokemons in your team</h3>
+							)}
+						</div>
+						<button
+							className={'team-pokemons-save'}
+							onClick={() => handleSaveTeam(teamActive)}
+						>
+							<SaveAll width={20} height={20} />
+						</button>
 					</div>
-					<button
-						className={'team-pokemons-save'}
-						onClick={() => handleSaveTeam(teamActive)}
-					>
-						<SaveAll width={20} height={20} />
-					</button>
+					<Pokedex
+						pokemons={pokemons}
+						currentPokemons={displayPokemons}
+						setCurrentPokemons={setCurrentPokemons}
+						pokemonActive={pokemonActive}
+						setPokemonActive={setPokemonActive}
+						isFromTeam={isFromTeam}
+						setIsFromTeam={setIsFromTeam}
+						totalPages={totalPages}
+						currentPage={currentPage}
+						setCurrentPage={setCurrentPage}
+					/>
 				</div>
-				<Pokedex
-					pokemons={pokemons}
-					currentPokemons={displayPokemons}
-					setCurrentPokemons={setCurrentPokemons}
-					pokemonActive={pokemonActive}
-					setPokemonActive={setPokemonActive}
+				<PokemonDetails
+					pokemon={pokemonActive}
+					team={team}
+					teamActive={teamActive}
+					setTeamActive={setTeamActive}
 					isFromTeam={isFromTeam}
-					setIsFromTeam={setIsFromTeam}
-					totalPages={totalPages}
-					currentPage={currentPage}
-					setCurrentPage={setCurrentPage}
 				/>
 			</div>
-			<PokemonDetails
-				pokemon={pokemonActive}
-				team={team}
-				teamActive={teamActive}
-				setTeamActive={setTeamActive}
-				isFromTeam={isFromTeam}
-			/>
-		</div>
+		</>
 	);
 };
 
