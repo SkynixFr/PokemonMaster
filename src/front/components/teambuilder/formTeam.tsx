@@ -14,18 +14,18 @@ import { toast } from 'sonner';
 interface FormTeamProps {
 	avatars: AvatarEntity[];
 	setSelectedTeam: (team: TeamEntity) => void;
-	teams: TeamEntity[];
-	setcurrentTeams: (teams: TeamEntity[]) => void;
+	setCurrentTeams: (teams: TeamEntity[]) => void;
+	currentTeams: TeamEntity[];
 }
 
 const FormTeam = ({
 	avatars,
 	setSelectedTeam,
-	teams,
-	setcurrentTeams
+	currentTeams,
+	setCurrentTeams
 }: FormTeamProps) => {
 	const [openForm, setOpenForm] = useState(false);
-	const [defaultTeams, setDefaultTeams] = useState<TeamEntity[]>(teams);
+	const [defaultTeams] = useState<TeamEntity[]>(currentTeams);
 	const [searchTerm, setSearchTerm] = useState<string>('');
 
 	useEffect(() => {
@@ -43,7 +43,7 @@ const FormTeam = ({
 
 	const filterTeams = () => {
 		if (searchTerm === '') {
-			setcurrentTeams(defaultTeams);
+			setCurrentTeams(defaultTeams);
 			return;
 		}
 
@@ -56,7 +56,7 @@ const FormTeam = ({
 			return;
 		}
 
-		setcurrentTeams(filteredTeams);
+		setCurrentTeams(filteredTeams);
 	};
 
 	return (
@@ -89,7 +89,8 @@ const FormTeam = ({
 						avatars={avatars}
 						setOpenForm={setOpenForm}
 						setSelectedTeam={setSelectedTeam}
-						setCurrentTeams={setcurrentTeams}
+						setCurrentTeams={setCurrentTeams}
+						currentTeams={currentTeams}
 					/>
 				</div>
 			)}

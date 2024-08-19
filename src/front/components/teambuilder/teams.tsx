@@ -20,7 +20,7 @@ const Teams = ({
 	setSelectedTeam,
 	avatars
 }: TeamsProps) => {
-	const [currentTeams, setcurrentTeams] = useState<TeamEntity[]>([]);
+	const [currentTeams, setCurrentTeams] = useState<TeamEntity[]>([]);
 
 	const handleSelectedTeam = (team: TeamEntity) => {
 		setSelectedTeam(team);
@@ -33,7 +33,7 @@ const Teams = ({
 	useEffect(() => {
 		if (teams && teams.length > 0) {
 			setSelectedTeam(teams[0]);
-			setcurrentTeams(teams);
+			setCurrentTeams(teams);
 		}
 	}, []);
 
@@ -42,8 +42,8 @@ const Teams = ({
 			<FormTeam
 				avatars={avatars}
 				setSelectedTeam={setSelectedTeam}
-				teams={teams}
-				setcurrentTeams={setcurrentTeams}
+				setCurrentTeams={setCurrentTeams}
+				currentTeams={currentTeams}
 			/>
 
 			<div className={'teams-container'}>
@@ -58,6 +58,8 @@ const Teams = ({
 									selectedTeam={selectedTeam}
 									setSelectedTeam={() => handleSelectedTeam(team)}
 									resetSelectedTeam={resetSelectedTeam}
+									setCurrentTeams={setCurrentTeams}
+									currentTeams={currentTeams}
 									option={true}
 								/>
 							))}

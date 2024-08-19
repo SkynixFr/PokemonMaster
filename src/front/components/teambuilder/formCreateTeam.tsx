@@ -14,6 +14,7 @@ interface FormCreateTeamProps {
 	setOpenForm: (openForm: boolean) => void;
 	setSelectedTeam: (team: TeamEntity) => void;
 	setCurrentTeams: (teams: TeamEntity[]) => void;
+	currentTeams: TeamEntity[];
 }
 
 // Icons
@@ -37,7 +38,9 @@ const teamSchema = z.object({
 const formCreateTeam = ({
 	avatars,
 	setOpenForm,
-	setSelectedTeam
+	setSelectedTeam,
+	setCurrentTeams,
+	currentTeams
 }: FormCreateTeamProps) => {
 	const router = useRouter();
 	const [avatarSelected, setAvatarSelected] = useState<AvatarEntity>(
@@ -80,6 +83,7 @@ const formCreateTeam = ({
 					}
 					form.reset();
 					setSelectedTeam(response);
+					setCurrentTeams([...currentTeams, response]);
 					router.refresh();
 					setOpenForm(false);
 					return `${response.name} created successfully!`;

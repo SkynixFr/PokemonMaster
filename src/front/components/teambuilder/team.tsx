@@ -7,6 +7,8 @@ interface TeamListItemProps {
 	team: TeamEntity;
 	selectedTeam: TeamEntity;
 	setSelectedTeam: (team: TeamEntity) => void;
+	setCurrentTeams: (teams: TeamEntity[]) => void;
+	currentTeams: TeamEntity[];
 	resetSelectedTeam?: () => void;
 	option?: boolean;
 }
@@ -25,7 +27,9 @@ const Team = ({
 	selectedTeam,
 	setSelectedTeam,
 	option,
-	resetSelectedTeam
+	resetSelectedTeam,
+	setCurrentTeams,
+	currentTeams
 }: TeamListItemProps) => {
 	const router = useRouter();
 
@@ -34,6 +38,7 @@ const Team = ({
 			loading: 'Deleting team...',
 			success: () => {
 				resetSelectedTeam();
+				setCurrentTeams(currentTeams.filter(team => team.id !== teamId));
 				router.refresh();
 				return 'Team deleted';
 			},
