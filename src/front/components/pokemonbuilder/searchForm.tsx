@@ -106,7 +106,6 @@ const SearchForm = ({ setCurrentPokemons, savedPokemons }: SearchFormProps) => {
 						id="search"
 						placeholder="Search pokemons"
 						onChange={handleSearchPokemon}
-						value={searchTerm}
 					/>
 					<button type="button" className={'btn-search-moves btn-primary'}>
 						<Search width={20} height={20} />
