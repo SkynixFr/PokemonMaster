@@ -46,7 +46,7 @@ const Team = ({
 	return (
 		<div className={'team-container'}>
 			<div
-				className={`team-infos ${selectedTeam.id === team.id ? 'selected' : ''}`}
+				className={`team-infos ${selectedTeam?.id === team.id ? 'selected' : ''}`}
 				onClick={() => setSelectedTeam(team)}
 			>
 				<div className={'bg-team'}>
@@ -61,7 +61,12 @@ const Team = ({
 				{team.pokemons && team.pokemons.length > 0 ? (
 					<div className={'team-pokemon'}>
 						{team.pokemons.map(pokemon => (
-							<div key={pokemon.pokedexId}>{pokemon.name}</div>
+							<CustomImage
+								src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
+								alt={pokemon.name}
+								width={40}
+								height={40}
+							/>
 						))}
 					</div>
 				) : (
@@ -69,7 +74,7 @@ const Team = ({
 				)}
 			</div>
 
-			{option && team.id === selectedTeam.id ? (
+			{option && team.id === selectedTeam?.id ? (
 				<div className={'team-options'}>
 					<button onClick={() => router.push(`pokemonbuilder/${team.id}`)}>
 						<PencilLine />
@@ -77,7 +82,7 @@ const Team = ({
 					<button onClick={() => handleDelete(team.id)}>
 						<Trash2 />
 					</button>
-					<button disabled={true}>
+					<button disabled style={{ cursor: 'not-allowed' }}>
 						<SaveAll />
 					</button>
 				</div>

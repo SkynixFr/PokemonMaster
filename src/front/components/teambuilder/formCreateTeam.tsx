@@ -1,4 +1,4 @@
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -12,6 +12,8 @@ import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
 interface FormCreateTeamProps {
 	avatars: AvatarEntity[];
 	setOpenForm: (openForm: boolean) => void;
+	setSelectedTeam: (team: TeamEntity) => void;
+	setCurrentTeams: (teams: TeamEntity[]) => void;
 }
 
 // Icons
@@ -19,6 +21,7 @@ import { X } from 'lucide-react';
 
 // Actions
 import { createTeam } from '../../actions/team.actions';
+import { TeamEntity } from '../../../interfaces/team/teamEntity';
 
 const teamSchema = z.object({
 	name: z
@@ -31,7 +34,11 @@ const teamSchema = z.object({
 		})
 });
 
-const formCreateTeam = ({ avatars, setOpenForm }: FormCreateTeamProps) => {
+const formCreateTeam = ({
+	avatars,
+	setOpenForm,
+	setSelectedTeam
+}: FormCreateTeamProps) => {
 	const router = useRouter();
 	const [avatarSelected, setAvatarSelected] = useState<AvatarEntity>(
 		avatars[0]
@@ -41,6 +48,20 @@ const formCreateTeam = ({ avatars, setOpenForm }: FormCreateTeamProps) => {
 	}>({
 		name: ''
 	});
+
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				setOpenForm(false);
+			}
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [setOpenForm]);
 
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async event => {
 		event.preventDefault();
@@ -58,6 +79,7 @@ const formCreateTeam = ({ avatars, setOpenForm }: FormCreateTeamProps) => {
 						throw new Error(response.message);
 					}
 					form.reset();
+					setSelectedTeam(response);
 					router.refresh();
 					setOpenForm(false);
 					return `${response.name} created successfully!`;
