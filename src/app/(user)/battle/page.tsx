@@ -8,7 +8,6 @@ import BattleClass from '../../../back/classes/battle';
 import Move from '../../../back/classes/move';
 import Status from '../../../back/classes/status';
 import { THAW_CHANCE, PARALYSIS_CHANCE, CONFUSED_MOVE } from './constants';
-import { set } from 'zod';
 
 // Interfaces
 interface BattleProps {
@@ -23,6 +22,10 @@ const Battle = ({ battle }: BattleProps) => {
 	const [opponentTeamShowed, setOpponentTeamShowed] = useState<boolean>(false);
 	const [playerPokemon, setPlayerPokemon] = useState<Pokemon | null>();
 	const [opponentPokemon, setOpponentPokemon] = useState<Pokemon | null>();
+	const [temporaryPlayerPokemon, setTemporaryPlayerPokemon] =
+		useState<Pokemon | null>();
+	const [temporaryOpponentPokemon, setTemporaryOpponentPokemon] =
+		useState<Pokemon | null>();
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
 	const [opponentReady, setOpponentReady] = useState<boolean>(false);
 	const [battleWinner, setBattleWinner] = useState<string>('');
@@ -165,6 +168,7 @@ const Battle = ({ battle }: BattleProps) => {
 	// Déroulement des attaques une fois les 2 joueurs prêts
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
+		handlePokemonSelection();
 		handleSleeping();
 		handleConfusion();
 		handleParalysis();
@@ -288,8 +292,6 @@ const Battle = ({ battle }: BattleProps) => {
 				handlePlayerAttack();
 			}
 		}
-		setPlayerReady(false);
-		setOpponentReady(false);
 	};
 
 	const handleActiveMovesPpReduction = () => {
@@ -361,15 +363,15 @@ const Battle = ({ battle }: BattleProps) => {
 		handleOpponentReady();
 	};
 
-	const handlePlayerPokemonSelection = (pokemon: Pokemon) => {
-		setPlayerPokemon(pokemon);
-		storePlayerPokemon(pokemon);
-	};
-
-	// Sélection du Pokémon de l'adversaire
-	const handleOpponentPokemonSelection = (pokemon: Pokemon) => {
-		setOpponentPokemon(pokemon);
-		storeOpponentPokemon(pokemon);
+	const handlePokemonSelection = () => {
+		if (temporaryPlayerPokemon) {
+			setPlayerPokemon(temporaryPlayerPokemon);
+			storePlayerPokemon(temporaryPlayerPokemon);
+		}
+		if (temporaryOpponentPokemon) {
+			setOpponentPokemon(temporaryOpponentPokemon);
+			storeOpponentPokemon(temporaryOpponentPokemon);
+		}
 	};
 
 	const handleThawing = () => {
@@ -486,7 +488,8 @@ const Battle = ({ battle }: BattleProps) => {
 						<button
 							key={pokemon.name}
 							onClick={() => {
-								handleOpponentPokemonSelection(pokemon);
+								setTemporaryOpponentPokemon(pokemon);
+								setOpponentReady(true);
 							}}
 						>
 							{pokemon.name}
@@ -554,7 +557,8 @@ const Battle = ({ battle }: BattleProps) => {
 						<button
 							key={pokemon.name}
 							onClick={() => {
-								handlePlayerPokemonSelection(pokemon);
+								setTemporaryPlayerPokemon(pokemon);
+								setPlayerReady(true);
 							}}
 						>
 							{pokemon.name}
