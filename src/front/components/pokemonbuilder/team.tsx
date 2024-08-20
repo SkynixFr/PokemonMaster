@@ -6,14 +6,16 @@ import { useEffect, useState } from 'react';
 interface TeamProps {
 	teamActive: TeamEntity;
 	saveTeam: (team: TeamEntity) => void;
+	setTeamActive: (team: TeamEntity) => void;
 }
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
 
 // Icons
-import { MoveLeft, X } from 'lucide-react';
+import { Edit3, MoveLeft, SaveAll, X } from 'lucide-react';
 
-const Team = ({ teamActive, saveTeam }: TeamProps) => {
+const Team = ({ teamActive, saveTeam, setTeamActive }: TeamProps) => {
 	const [openModal, setOpenModal] = useState(false);
+	const [isEditing, setIsEditing] = useState(false);
 	const router = useRouter();
 
 	useEffect(() => {
@@ -30,6 +32,20 @@ const Team = ({ teamActive, saveTeam }: TeamProps) => {
 		};
 	}, [setOpenModal]);
 
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				setIsEditing(false);
+			}
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [setIsEditing]);
+
 	return (
 		<>
 			{openModal && (
@@ -41,7 +57,6 @@ const Team = ({ teamActive, saveTeam }: TeamProps) => {
 								className={'team-modal-button btn-primary'}
 								onClick={() => {
 									saveTeam(teamActive);
-									router.push('/teambuilder');
 								}}
 							>
 								Yes
@@ -70,7 +85,28 @@ const Team = ({ teamActive, saveTeam }: TeamProps) => {
 					<MoveLeft />
 					Back
 				</div>
-				<h1>{teamActive.name.toUpperCase()}</h1>
+				<div className={'team-name-edit'}>
+					{isEditing ? (
+						<input
+							type={'text'}
+							value={teamActive.name}
+							onChange={e =>
+								setTeamActive({ ...teamActive, name: e.target.value })
+							}
+							onBlur={() => setIsEditing(false)}
+							autoFocus
+						/>
+					) : (
+						<h2>{teamActive.name}</h2>
+					)}
+					<button onClick={() => setIsEditing(!isEditing)}>
+						{isEditing ? (
+							<SaveAll width={20} height={20} />
+						) : (
+							<Edit3 width={20} height={20} />
+						)}
+					</button>
+				</div>
 				<div></div>
 			</div>
 		</>

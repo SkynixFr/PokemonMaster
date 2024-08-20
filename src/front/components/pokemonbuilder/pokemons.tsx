@@ -97,7 +97,11 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 
 	return (
 		<>
-			<Team teamActive={teamActive} saveTeam={handleSaveTeam} />
+			<Team
+				teamActive={teamActive}
+				saveTeam={handleSaveTeam}
+				setTeamActive={setTeamActive}
+			/>
 			<div className={'pokemons-infos'}>
 				<div className={'pokemons'}>
 					<div className={'team-pokemons'}>
