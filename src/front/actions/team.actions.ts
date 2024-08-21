@@ -3,6 +3,7 @@
 // Interfaces
 import { TeamCreate } from '../../interfaces/team/teamCreate';
 import { TeamUpdate } from '../../interfaces/team/teamUpdate';
+import { TeamEntity } from '../../interfaces/team/teamEntity';
 
 export const getTeams = async () => {
 	const response = await fetch('http://localhost:8080/api/v1/teams', {
@@ -30,6 +31,17 @@ export const createTeam = async (formData: FormData, avatarId: string) => {
 	};
 
 	const response = await fetch('http://localhost:8080/api/v1/teams', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(team)
+	});
+	return response.json();
+};
+
+export const copyTeam = async (team: TeamEntity) => {
+	const response = await fetch('http://localhost:8080/api/v1/teams/copy', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'

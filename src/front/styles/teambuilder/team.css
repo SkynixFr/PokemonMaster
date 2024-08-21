@@ -41,6 +41,13 @@
     min-width: calc(85% - 40px);
 }
 
+.team-container .team-infos:hover {
+    background-color: var(--red);
+    color: var(--white);
+    min-width: calc(85% - 40px);
+    transition: all .5s ease-in-out;
+}
+
 .team-container .team-infos > span {
     font-family: var(--ff-base-bold), sans-serif;
 }
@@ -52,10 +59,7 @@
     font-size: var(--fs-sm);
 }
 
-.team-container .team-infos:hover {
-    background-color: var(--red);
-    color: var(--white);
-}
+
 
 .team-infos .team-pokemon {
     display: flex;

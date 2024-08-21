@@ -20,7 +20,7 @@ import CustomImage from '../customImage';
 import { PencilLine, SaveAll, Trash2 } from 'lucide-react';
 
 // Actions
-import { deleteTeam } from '../../actions/team.actions';
+import { copyTeam, deleteTeam } from '../../actions/team.actions';
 
 const Team = ({
 	team,
@@ -41,6 +41,45 @@ const Team = ({
 				setCurrentTeams(currentTeams.filter(team => team.id !== teamId));
 				router.refresh();
 				return 'Team deleted';
+			},
+			error: error => {
+				return error.message;
+			}
+		});
+	};
+
+	const handleCopy = (team: TeamEntity) => {
+		const getNextCopyName = (name: string) => {
+			let copyNumber = 1;
+			let newName = `${name} (${copyNumber})`;
+
+			while (currentTeams.some(team => team.name === newName)) {
+				copyNumber++;
+				newName = `${name} (${copyNumber})`;
+			}
+			return newName;
+		};
+
+		const newTeam = { ...team };
+		newTeam.id = `${team.id}-${Date.now()}`;
+		newTeam.name = getNextCopyName(team.name);
+
+		if (currentTeams.length >= 15) {
+			return toast.error('You have reached the limit of 15 teams');
+		}
+
+		setCurrentTeams([...currentTeams, newTeam]);
+
+		toast.promise(copyTeam(newTeam), {
+			loading: 'Creating team...',
+			success: response => {
+				if (response.status) {
+					throw new Error(response.message);
+				}
+				setSelectedTeam(response);
+				setCurrentTeams([...currentTeams, response]);
+				router.refresh();
+				return `${response.name} copied successfully!`;
 			},
 			error: error => {
 				return error.message;
@@ -87,7 +126,7 @@ const Team = ({
 					<button onClick={() => handleDelete(team.id)}>
 						<Trash2 />
 					</button>
-					<button disabled style={{ cursor: 'not-allowed' }}>
+					<button onClick={() => handleCopy(team)}>
 						<SaveAll />
 					</button>
 				</div>

@@ -27,6 +27,9 @@ const TeamBuilderPage = ({ teams, avatars }: TeamListProps) => {
 					setSelectedTeam={setSelectedTeam}
 					selectedTeam={selectedTeam}
 				/>
+				<div className={'teams-number'}>
+					<h3>{teams.length}/15</h3>
+				</div>
 			</div>
 
 			<div className={'teambuilder-team-details'}>

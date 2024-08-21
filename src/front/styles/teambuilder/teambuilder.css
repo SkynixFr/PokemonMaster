@@ -19,14 +19,14 @@
 .teambuilder-teams {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
     justify-content: flex-start;
-    width: calc(25% - 40px);
-    height: calc(90% - 40px);
-    padding: 20px;
+    width: 25%;
+    min-height: 90%;
     background-color: var(--white);
     border-radius: 10px;
     gap: 10px;
+    overflow-y: auto;
 }
 
 .teambuilder-team-details {
@@ -39,4 +39,23 @@
     padding: 50px 0;
     background-color: var(--grey);
     border-radius: 10px;
+}
+
+.teams-number {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: max-content;
+    min-height: max-content;
+    padding: 10px 15px;
+    border-radius: 10px 0 0 0;
+    background: var(--red-light);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    font-size: var(--fs-sm);
 }

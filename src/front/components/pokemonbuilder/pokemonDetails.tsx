@@ -40,7 +40,9 @@ const PokemonDetails = ({
 	setTeamActive,
 	isFromTeam
 }: PokemonDetailsProps) => {
-	const [genderActive, setGenderActive] = useState<string>('Neutral');
+	const [genderActive, setGenderActive] = useState<
+		'neutral' | 'male' | 'female'
+	>(pokemon.gender);
 	const [levelActive, setLevelActive] = useState<number>(100);
 	const [itemActive, setItemActive] = useState<ItemEntity>(pokemon?.item);
 	const [natureActive, setNatureActive] = useState<NatureEntity>(
@@ -53,7 +55,7 @@ const PokemonDetails = ({
 	const [statsActive, setStatsActive] = useState<StatEntity[]>(pokemon?.stats);
 
 	useEffect(() => {
-		setGenderActive('Neutral');
+		setGenderActive(pokemon.gender);
 		setLevelActive(100);
 		setItemActive(pokemon.item);
 		setNatureActive(pokemon.nature);
@@ -145,7 +147,7 @@ const PokemonDetails = ({
 			pokedexId: pokemon.pokedexId,
 			name: pokemon.name,
 			types: pokemon.types,
-			gender: 'neutral',
+			gender: genderActive,
 			isShiny: false,
 			ability: abilityActive,
 			nature: natureActive,
@@ -186,7 +188,8 @@ const PokemonDetails = ({
 			nature: natureActive,
 			item: itemActive,
 			moves: movesActive,
-			stats: statsActive
+			stats: statsActive,
+			gender: genderActive
 		};
 
 		const newTeam = {
@@ -240,14 +243,14 @@ const PokemonDetails = ({
 				</div>
 				<div className={'right'}>
 					<button
-						className={`pokemon-female ${genderActive === 'Female' ? 'active' : ''}`}
-						onClick={() => setGenderActive('Female')}
+						className={`pokemon-female ${genderActive === 'female' ? 'active' : ''}`}
+						onClick={() => setGenderActive('female')}
 					>
 						<FontAwesomeIcon icon={faVenus} />
 					</button>
 					<button
-						className={`pokemon-male ${genderActive === 'Male' ? 'active' : ''}`}
-						onClick={() => setGenderActive('Male')}
+						className={`pokemon-male ${genderActive === 'male' ? 'active' : ''}`}
+						onClick={() => setGenderActive('male')}
 					>
 						<FontAwesomeIcon icon={faMars} />
 					</button>
