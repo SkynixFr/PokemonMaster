@@ -9,7 +9,12 @@
 :root {
 	/* default value theme light : A bouger plus tard quand le theme sera mis en place */
 	--red: #9c3541;
+	--red-dark: #451D20;
+	--red-light: rgba(156, 53, 65, 0.2);
+	--blue: #1967b2;
+	--blue-light: rgba(25, 103, 178, 0.15);
 	--grey: #f1f1f1;
+	--grey-dark: #B7B9D0;
 	--white: #ffffff;
 	--black: #000000;
 
