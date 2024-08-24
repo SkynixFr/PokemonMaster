@@ -45,7 +45,7 @@
     background-color: var(--red);
     color: var(--white);
     min-width: calc(85% - 40px);
-    transition: all .5s ease-in-out;
+    transition: all .33s ease-in-out;
 }
 
 .team-container .team-infos > span {
@@ -58,8 +58,6 @@
     align-items: center;
     font-size: var(--fs-sm);
 }
-
-
 
 .team-infos .team-pokemon {
     display: flex;

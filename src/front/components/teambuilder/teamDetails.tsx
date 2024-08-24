@@ -6,6 +6,7 @@ import { firstLetterMaj } from '../../utils/formatString';
 import { Stars } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMars, faVenus } from '@fortawesome/free-solid-svg-icons';
+import CustomImage from '../customImage';
 interface TeamDetailsProps {
 	team: TeamEntity;
 }
@@ -30,6 +31,7 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 				<div className={'team-details-pokemons'}>
 					{team.pokemons.map((pokemon, index) => (
 						<div key={index} className={`team-details-pokemon ${index}`}>
+							<div></div>
 							<div className={'team-details-pokemon-bg'}>
 								<Image
 									src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
@@ -121,18 +123,60 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 									</div>
 								</div>
 								<div className={'pokemon-moves'}>
-									{pokemon.moves.map((move, index) => (
-										<div key={index}>{move.name}</div>
-									))}
+									<h3>Moves</h3>
+									<div className={'pokemon-moves-container'}>
+										{pokemon.moves.map(move => (
+											<div className={'pokemon-move-fullfilled'}>
+												<CustomImage
+													src={`/images/types/${move.type}.png`}
+													alt={move.type}
+													width={20}
+													height={20}
+												/>
+
+												<div
+													className={
+														'pokemon-move-fullfilled infos'
+													}
+												>
+													<div>{firstLetterMaj(move.name)}</div>
+													<div>
+														{move.pp}/{move.pp}
+													</div>
+												</div>
+											</div>
+										))}
+									</div>
 								</div>
-								{/*<div className={'pokemon-stats'}>*/}
-								{/*	{pokemon.stats.map((stat, index) => (*/}
-								{/*		<div key={index}>*/}
-								{/*			<p>{stat.name}</p>*/}
-								{/*			<p>{stat.total}</p>*/}
-								{/*		</div>*/}
-								{/*	))}*/}
-								{/*</div>*/}
+								<div className={'pokemon-stats'}>
+									<h3>Stats</h3>
+									<div className={'pokemon-stats-container'}>
+										{pokemon.stats.map((stat, index) => (
+											<div
+												key={index}
+												className={`pokemon-stat ${stat.name}`}
+											>
+												<div className={'pokemon-stat-name'}>
+													{stat.name === 'special-attack'
+														? 'SPA'
+														: stat.name === 'special-defense'
+															? 'SPD'
+															: stat.name === 'attack'
+																? 'ATK'
+																: stat.name === 'speed'
+																	? 'SPE'
+																	: stat.name === 'defense'
+																		? 'DEF'
+																		: stat.name.toUpperCase()}
+												</div>
+
+												<div className={'pokemon-stat-total'}>
+													{stat.total}
+												</div>
+											</div>
+										))}
+									</div>
+								</div>
 							</div>
 						</div>
 					))}

@@ -25,12 +25,16 @@ const FormTeam = ({
 	setCurrentTeams
 }: FormTeamProps) => {
 	const [openForm, setOpenForm] = useState(false);
-	const [defaultTeams] = useState<TeamEntity[]>(currentTeams);
+	const [defaultTeams, setDefaultTeams] = useState<TeamEntity[]>([]);
 	const [searchTerm, setSearchTerm] = useState<string>('');
 
 	useEffect(() => {
 		filterTeams();
 	}, [searchTerm]);
+
+	useEffect(() => {
+		setDefaultTeams(currentTeams);
+	}, []);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -47,9 +51,9 @@ const FormTeam = ({
 			return;
 		}
 
-		const filteredTeams = defaultTeams.filter(team =>
-			team.name.toLowerCase().includes(searchTerm)
-		);
+		const filteredTeams = defaultTeams.filter(team => {
+			return team.name.toLowerCase().includes(searchTerm);
+		});
 
 		if (filteredTeams.length === 0) {
 			toast.error('No teams found, bad name');

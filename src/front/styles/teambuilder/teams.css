@@ -4,10 +4,11 @@
     align-items: flex-start;
     justify-content: flex-start;
     width: calc(100% - 50px);
-    min-height: calc(100% - 25px);
+    height: calc(100% - 25px);
     gap: 10px;
     padding: 25px 25px 0 25px;
     flex-grow: 1;
+    overflow-y: auto;
 }
 
 .teams-container > h3 {
@@ -21,4 +22,5 @@
     justify-content: flex-start;
     width: 100%;
     gap: 10px;
+    padding-bottom: 10px;
 }

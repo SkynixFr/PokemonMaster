@@ -8,7 +8,6 @@
     height: calc(100% - 50px);
     padding: 25px;
     gap: 25px;
-    z-index: 1;
     overflow: hidden;
 }
 
@@ -18,7 +17,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     opacity: 0.5;
-    z-index: -1;
+
 }
 
 .team-details-pokemons {
@@ -28,6 +27,7 @@
     align-items: center;
     width: 100%;
     height: 100%;
+    gap: 10px;
 }
 
 .team-details-pokemon {
@@ -36,12 +36,10 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    margin: 10px;
     background-color: var(--white);
     border-radius: 20px;
     width: 100px;
-    height: 500px;
-    z-index: 1;
+    height: 550px;
     overflow: hidden;
     transition: all 0.75s ease-in-out;
 }
@@ -56,7 +54,6 @@
 
 .team-details-pokemon-bg {
     position: absolute;
-    z-index: -1;
 }
 
 .team-details-pokemon-bg img {
@@ -71,7 +68,7 @@
 .team-details-pokemon:hover .team-details-pokemon-bg {
     top: -50px;
     left: -50px;
-    z-index: 2;
+
 }
 
 .team-details-pokemon:hover .team-details-pokemon-bg img {
@@ -81,11 +78,13 @@
 
 
 .team-details-pokemon .team-details-pokemon-info {
-    width: calc(100% - 30px);
-    height: calc(50 - 30px);
     display: none;
+    opacity: 0;
+    animation: opacity .75s ease-in-out;
     flex-direction: column;
     padding: 15px;
+    gap: 10px;
+    height: 100%;
 }
 
 .team-details-pokemon:hover .team-details-pokemon-info {
@@ -247,6 +246,7 @@
     padding: 7px 10px;
     background-color: var(--grey);
     border-radius: 5px;
+    min-width: max-content;
 }
 
 .team-details-pokemon-info .pokemon-item {
@@ -267,4 +267,138 @@
     padding: 0 10px;
     background-color: var(--grey);
     border-radius: 5px;
+}
+
+.team-details-pokemon-info .pokemon-moves {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.team-details-pokemon-info .pokemon-moves h3 {
+    align-self: flex-start;
+}
+
+.team-details-pokemon-info .pokemon-moves .pokemon-moves-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+.pokemon-moves-container .pokemon-move-fullfilled {
+    cursor: default;
+}
+
+.team-details-pokemon-info .pokemon-stats {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+}
+
+.team-details-pokemon-info .pokemon-stats-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.team-details-pokemon-info .pokemon-stats .pokemon-stat {
+    width: calc(35px - 4px);
+    height: calc(65px - 8px);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: var(--fs-sm);
+    color: white;
+    padding: 4px 2px;
+    gap: 5px;
+}
+
+.team-details-pokemon-info .pokemon-stats .pokemon-stat .pokemon-stat-name {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--fs-xs);
+}
+
+.team-details-pokemon-info .pokemon-stats .pokemon-stat .pokemon-stat-total {
+
+}
+
+@keyframes opacity {
+    0% {
+        opacity: 0;
+    }
+    100% {
+         opacity: 1;
+    }
+}
+.pokemon-stat.hp {
+    background-color: rgba(220, 39, 39, 0.67);
+}
+.pokemon-stat.hp .pokemon-stat-name {
+    background-color: #DC2727;
+}
+
+.pokemon-stat.attack {
+    background-color: rgba(245, 125, 49, 0.67);
+}
+.pokemon-stat.attack .pokemon-stat-name {
+    background-color: #F57D31;
+}
+
+.pokemon-stat.defense {
+    background-color: rgba(100, 147, 235, 0.67)
+}
+.pokemon-stat.defense .pokemon-stat-name {
+    background-color: #6493EB;
+}
+
+.pokemon-stat.special-attack {
+    background-color: rgba(249, 207, 48, 0.67)
+}
+.pokemon-stat.special-attack .pokemon-stat-name {
+    background-color: #F9CF30;
+}
+
+.pokemon-stat.special-defense {
+    background-color: rgba(167, 183, 35, 0.67)
+}
+.pokemon-stat.special-defense .pokemon-stat-name {
+    background-color: #A7B723;
+}
+
+.pokemon-stat.speed {
+    background-color: rgba(112, 55, 255, 0.67)
+}
+.pokemon-stat.speed .pokemon-stat-name {
+    background-color: #7037FF;
+}
+
+@media screen and (min-width: 1920px) {
+    .team-details-pokemon {
+        height: 600px;
+    }
+    .team-details-pokemon .team-details-pokemon-bg img {
+        height: 600px;
+    }
+
+    .team-details-avatar img {
+        height: 1000px;
+    }
+
 }

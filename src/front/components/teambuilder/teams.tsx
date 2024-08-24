@@ -43,7 +43,7 @@ const Teams = ({
 				avatars={avatars}
 				setSelectedTeam={setSelectedTeam}
 				setCurrentTeams={setCurrentTeams}
-				currentTeams={currentTeams}
+				currentTeams={teams}
 			/>
 
 			<div className={'teams-container'}>
