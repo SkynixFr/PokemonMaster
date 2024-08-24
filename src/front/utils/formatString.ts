@@ -1,6 +1,10 @@
 export function firstLetterMaj(str: string): string {
-	const strLower = str.toLowerCase();
-	return strLower.charAt(0).toUpperCase() + strLower.slice(1);
+	if (str.length === 0) return str;
+	const words = str.split('-');
+	const capitalizedWords = words.map(
+		word => word.charAt(0).toUpperCase() + word.slice(1)
+	);
+	return capitalizedWords.join(' ');
 }
 
 export function toLowerCaseWithoutSpaceAndSpecialChar(str: string): string {

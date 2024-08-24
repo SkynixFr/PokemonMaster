@@ -20,35 +20,54 @@
     opacity: 0.5;
 }
 
-.team-infos {
+.team-container .team-infos {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    min-width: calc(85% - 40px);
+    min-width: calc(100% - 40px);
     height: calc(100% - 20px);
     padding: 10px 20px;
     gap: 10px;
     border-radius: 10px;
-    transition: all 0.3s ease-in-out;
+    transition: all .5s ease-in-out;
     background-color: var(--grey);
     z-index: 2;
 }
 
-.team-infos.selected {
+.team-container .team-infos.selected {
     background-color: var(--red);
     color: var(--white);
+    min-width: calc(85% - 40px);
 }
 
-.team-infos > span {
+.team-container .team-infos:hover {
+    background-color: var(--red);
+    color: var(--white);
+    min-width: calc(85% - 40px);
+    transition: all .33s ease-in-out;
+}
+
+.team-container .team-infos > span {
     font-family: var(--ff-base-bold), sans-serif;
 }
 
-.team-infos > div {
+.team-container .team-infos > div {
     display: flex;
     flex-grow: 1;
     align-items: center;
     font-size: var(--fs-sm);
+}
+
+.team-infos .team-pokemon {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
 }
 
 .team-options {

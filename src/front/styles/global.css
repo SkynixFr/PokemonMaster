@@ -4,10 +4,13 @@
 
 /* Global components styles */
 @import url('navbar.css');
+@import url('pokemonType.css');
+@import url('pagination.css');
 
 /* Page styles */
 @import url('battle.css');
 @import url('teambuilder/teambuilder.css');
+@import url('pokemonbuilder/pokemonbuilder.css');
 
 /* Global styles */
 body {

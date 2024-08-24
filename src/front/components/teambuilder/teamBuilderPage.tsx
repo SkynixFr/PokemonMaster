@@ -8,7 +8,6 @@ import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
 
 // Components
 import TeamDetails from './teamDetails';
-import FormTeam from './formTeam';
 import Teams from './teams';
 
 interface TeamListProps {
@@ -22,12 +21,15 @@ const TeamBuilderPage = ({ teams, avatars }: TeamListProps) => {
 	return (
 		<div className={'teambuilder-container'}>
 			<div className={'teambuilder-teams'}>
-				<FormTeam avatars={avatars} />
 				<Teams
+					avatars={avatars}
 					teams={teams}
 					setSelectedTeam={setSelectedTeam}
 					selectedTeam={selectedTeam}
 				/>
+				<div className={'teams-number'}>
+					<h3>{teams.length}/15</h3>
+				</div>
 			</div>
 
 			<div className={'teambuilder-team-details'}>
