@@ -389,6 +389,26 @@
     background-color: #7037FF;
 }
 
+.team-details-container .battle-btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.battle-btn-container .battle-btn {
+    width: 150px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--fs-xl);
+    font-family: var(--ff-base-bold), sans-serif;
+    padding: 5px;
+    border-radius: 5px;
+    gap: 10px;
+}
+
 @media screen and (min-width: 1920px) {
     .team-details-pokemon {
         height: 600px;

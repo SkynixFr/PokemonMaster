@@ -5,11 +5,14 @@
 	height: 100dvh;
 }
 
+.battle-container.night {
+	color: var(--white);
+}
+
 .battle-background {
 	z-index: -10;
 }
 
-/* Theme */
 .battle-theme {
 	grid-column: 1 / 2;
 	grid-row: 1 / 2;
@@ -26,7 +29,7 @@
 	justify-content: center;
 	align-items: center;
 	font-size: var(--fs-xxl);
-	font-family: var(--ff-base-bold);
+	font-family: var(--ff-base-bold), sans-serif;
 }
 
 /* Toast */
@@ -59,7 +62,7 @@
 	justify-content: center;
 	align-items: center;
 	font-size: var(--fs-lg);
-	font-family: var(--ff-base-bold);
+	font-family: var(--ff-base-bold), sans-serif;
 	color: var(--red);
 }
 
@@ -79,21 +82,30 @@
 	font-size: var(--fs-xs);
 }
 
-/* Player */
+
 .battle-team.player {
 	grid-column: 1 / 3;
 	grid-row: 8 / 12;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background-color: red;
 }
-/* Opponent */
+
 .battle-team.opponent {
 	grid-column: 11 / 13;
 	grid-row: 2 / 6;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background-color: blue;
+}
+
+.battle-team-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--white);
 }
 
 /* Player Pokemon */
@@ -144,7 +156,7 @@
 	border: none;
 	border-radius: 5px;
 	font-size: var(--fs-lg);
-	font-family: var(--ff-base-bold);
+	font-family: var(--ff-base-bold), sans-serif;
 	color: var(--red);
 	overflow: hidden;
 	z-index: 1;

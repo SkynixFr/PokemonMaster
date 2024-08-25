@@ -77,9 +77,6 @@ const FormTeam = ({
 				</button>
 			</form>
 			<div className={'btn-create-team-container'}>
-				<div className={'hover-info'}>
-					<span>Create a team</span>
-				</div>
 				<button
 					onClick={() => setOpenForm(!openForm)}
 					className={'btn-create-team btn-primary '}

@@ -7,11 +7,17 @@ import { Stars } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMars, faVenus } from '@fortawesome/free-solid-svg-icons';
 import CustomImage from '../customImage';
+import { useRouter } from 'next/navigation';
 interface TeamDetailsProps {
 	team: TeamEntity;
 }
 
 const TeamDetails = ({ team }: TeamDetailsProps) => {
+	const router = useRouter();
+	const handleBattle = (team: TeamEntity) => {
+		console.log(team);
+	};
+
 	return (
 		team && (
 			<div className={'team-details-container'}>
@@ -125,8 +131,11 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 								<div className={'pokemon-moves'}>
 									<h3>Moves</h3>
 									<div className={'pokemon-moves-container'}>
-										{pokemon.moves.map(move => (
-											<div className={'pokemon-move-fullfilled'}>
+										{pokemon.moves.map((move, index) => (
+											<div
+												className={'pokemon-move-fullfilled'}
+												key={index}
+											>
 												<CustomImage
 													src={`/images/types/${move.type}.png`}
 													alt={move.type}
@@ -180,6 +189,20 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 							</div>
 						</div>
 					))}
+				</div>
+				<div className={'battle-btn-container'}>
+					<button
+						className={'battle-btn btn-primary'}
+						onClick={() => handleBattle(team)}
+					>
+						Battle
+						<CustomImage
+							src={'/images/other/pikachu-battle.png'}
+							alt={'pikachu battle'}
+							width={40}
+							height={40}
+						/>
+					</button>
 				</div>
 			</div>
 		)
