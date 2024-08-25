@@ -28,14 +28,6 @@ const Navbar = () => {
 						Team Builder
 					</Link>
 				</li>
-				<li>
-					<Link
-						href={'/rooms'}
-						className={`link ${pathname === '/rooms' ? 'active' : ''} `}
-					>
-						Rooms
-					</Link>
-				</li>
 			</ul>
 
 			<div className={'navbar-profil'}>
