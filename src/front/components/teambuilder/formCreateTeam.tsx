@@ -15,6 +15,7 @@ interface FormCreateTeamProps {
 	setSelectedTeam: (team: TeamEntity) => void;
 	setCurrentTeams: (teams: TeamEntity[]) => void;
 	currentTeams: TeamEntity[];
+	setCurrentLength: (length: number) => void;
 }
 
 // Icons
@@ -40,7 +41,8 @@ const formCreateTeam = ({
 	setOpenForm,
 	setSelectedTeam,
 	setCurrentTeams,
-	currentTeams
+	currentTeams,
+	setCurrentLength
 }: FormCreateTeamProps) => {
 	const router = useRouter();
 	const [avatarSelected, setAvatarSelected] = useState<AvatarEntity>(
@@ -75,6 +77,10 @@ const formCreateTeam = ({
 			});
 			const formData = new FormData(form);
 
+			if (currentTeams.length >= 15) {
+				return toast.error('You have reached the limit of 15 teams');
+			}
+
 			toast.promise(createTeam(formData, avatarSelected.id), {
 				loading: 'Creating team...',
 				success: response => {
@@ -84,6 +90,7 @@ const formCreateTeam = ({
 					form.reset();
 					setSelectedTeam(response);
 					setCurrentTeams([...currentTeams, response]);
+					setCurrentLength(currentTeams.length + 1);
 					router.refresh();
 					setOpenForm(false);
 					return `${response.name} created successfully!`;

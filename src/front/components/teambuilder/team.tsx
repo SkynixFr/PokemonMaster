@@ -11,13 +11,14 @@ interface TeamListItemProps {
 	currentTeams: TeamEntity[];
 	resetSelectedTeam?: () => void;
 	option?: boolean;
+	setCurrentLength?: (length: number) => void;
 }
 
 // Components
 import CustomImage from '../customImage';
 
 // Icons
-import { PencilLine, SaveAll, Trash2 } from 'lucide-react';
+import { Copy, PencilLine, Trash2 } from 'lucide-react';
 
 // Actions
 import { copyTeam, deleteTeam } from '../../actions/team.actions';
@@ -29,7 +30,8 @@ const Team = ({
 	option,
 	resetSelectedTeam,
 	setCurrentTeams,
-	currentTeams
+	currentTeams,
+	setCurrentLength
 }: TeamListItemProps) => {
 	const router = useRouter();
 
@@ -39,6 +41,7 @@ const Team = ({
 			success: () => {
 				resetSelectedTeam();
 				setCurrentTeams(currentTeams.filter(team => team.id !== teamId));
+				setCurrentLength(currentTeams.length - 1);
 				router.refresh();
 				return 'Team deleted';
 			},
@@ -78,6 +81,7 @@ const Team = ({
 				}
 				setSelectedTeam(response);
 				setCurrentTeams([...currentTeams, response]);
+				setCurrentLength(currentTeams.length + 1);
 				router.refresh();
 				return `${response.name} copied successfully!`;
 			},
@@ -104,12 +108,13 @@ const Team = ({
 				<span>{team.name}</span>
 				{team.pokemons && team.pokemons.length > 0 ? (
 					<div className={'team-pokemon'}>
-						{team.pokemons.map(pokemon => (
+						{team.pokemons.map((pokemon, index) => (
 							<CustomImage
 								src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
 								alt={pokemon.name}
 								width={40}
 								height={40}
+								key={index}
 							/>
 						))}
 					</div>
@@ -127,7 +132,7 @@ const Team = ({
 						<Trash2 />
 					</button>
 					<button onClick={() => handleCopy(team)}>
-						<SaveAll />
+						<Copy />
 					</button>
 				</div>
 			) : null}

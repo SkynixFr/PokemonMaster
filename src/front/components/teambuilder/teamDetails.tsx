@@ -15,7 +15,7 @@ interface TeamDetailsProps {
 const TeamDetails = ({ team }: TeamDetailsProps) => {
 	const router = useRouter();
 	const handleBattle = (team: TeamEntity) => {
-		console.log(team);
+		router.push(`/battle?playerTeamId=${team.id}`);
 	};
 
 	return (

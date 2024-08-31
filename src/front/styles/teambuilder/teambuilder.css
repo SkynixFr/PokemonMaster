@@ -24,6 +24,7 @@
     width: 25%;
     max-height: 90%;
     height: max-content;
+    min-height: 90%;
     background-color: var(--white);
     border-radius: 10px;
     gap: 10px;
