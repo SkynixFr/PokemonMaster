@@ -17,7 +17,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
     opacity: 0.5;
+}
 
+.team-details-avatar img {
+    width: 100%;
+    height: 100%;
 }
 
 .team-details-pokemons {
@@ -68,7 +72,6 @@
 .team-details-pokemon:hover .team-details-pokemon-bg {
     top: -50px;
     left: -50px;
-
 }
 
 .team-details-pokemon:hover .team-details-pokemon-bg img {

@@ -101,8 +101,9 @@ const Team = ({
 					<CustomImage
 						src={team.avatar.sprite}
 						alt={team.avatar.name}
-						fill={true}
-						sizes="(max-width: 768px) 116px, 116px"
+						width={500}
+						height={500}
+						sizes={'100vw'}
 					/>
 				</div>
 				<span>{team.name}</span>
