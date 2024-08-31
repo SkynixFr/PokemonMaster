@@ -8,7 +8,7 @@
 @import url('pagination.css');
 
 /* Page styles */
-@import url('battle.css');
+@import url('battle/battle.css');
 @import url('teambuilder/teambuilder.css');
 @import url('pokemonbuilder/pokemonbuilder.css');
 

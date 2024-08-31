@@ -13,6 +13,7 @@ import { Moon, Sun } from 'lucide-react';
 import Team from '../../../back/classes/team';
 import Pokemon from '../../../back/classes/pokemon';
 import BattleClass from '../../../back/classes/battle';
+import BattlePokemonCard from '../../../front/components/battle/battlePokemonCard';
 
 // Interfaces
 interface BattleProps {
@@ -35,6 +36,7 @@ const Battle = ({ battle }: BattleProps) => {
 		setOpponentTeam(battle.opponentTeam);
 		setActivePlayerPokemon(battle.playerTeam.pokemons[0]);
 		setActiveOpponentPokemon(battle.opponentTeam.pokemons[0]);
+		console.log(battle);
 	}, [battle]);
 
 	if (
@@ -51,13 +53,14 @@ const Battle = ({ battle }: BattleProps) => {
 				<CustomImage
 					src={`/images/compressed/backgrounds/bg-battle-${activeTheme}.jpg`}
 					alt={'background arena'}
-					fill={true}
-					sizes={'100vw'}
+					width={10000}
+					height={10000}
 				/>
 			</div>
 
 			<div className={'battle-theme'}>
 				<button
+					className={`theme-btn btn-primary ${activeTheme}`}
 					onClick={() =>
 						activeTheme === 'day'
 							? setActiveTheme('night')
@@ -86,6 +89,14 @@ const Battle = ({ battle }: BattleProps) => {
 					activePokemon={activeOpponentPokemon}
 					setActivePokemon={setActiveOpponentPokemon}
 				/>
+			</div>
+
+			<div className={'battle-pokemon player'}>
+				<BattlePokemonCard activePokemon={activePlayerPokemon} />
+			</div>
+
+			<div className={'battle-pokemon opponent'}>
+				<BattlePokemonCard activePokemon={activeOpponentPokemon} />
 			</div>
 		</div>
 	);

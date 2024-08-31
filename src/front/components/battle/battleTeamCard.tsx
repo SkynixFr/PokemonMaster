@@ -1,7 +1,11 @@
+// Classes
 import Pokemon from '../../../back/classes/pokemon';
 import Team from '../../../back/classes/team';
+
+// Components
 import CustomImage from '../customImage';
 
+//Interfaces
 interface TeamCardProps {
 	team: Team;
 	activePokemon: Pokemon;
@@ -23,22 +27,27 @@ const BattleTeamCard = ({
 					height={250}
 				/>
 			</div>
-			<div className={'battle-team-pokemons'}>
-				{team.pokemons.map((pokemon: Pokemon) => (
-					<div
-						key={pokemon.name}
-						className={`battle-team-pokemon ${
-							pokemon.name === activePokemon.name ? 'active' : ''
-						}`}
-					>
-						<CustomImage
-							src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
-							alt={pokemon.name}
-							width={30}
-							height={30}
-						/>
-					</div>
-				))}
+			<div className={'battle-team-infos'}>
+				<h2>{team.name}</h2>
+				<div className={'battle-team-pokemons'}>
+					{team.pokemons.map((pokemon: Pokemon) => (
+						<div
+							key={pokemon.name}
+							className={`battle-team-pokemon ${
+								pokemon.name === activePokemon.name ? 'active' : ''
+							}`}
+							onClick={() => setActivePokemon(pokemon)}
+						>
+							<CustomImage
+								src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${pokemon.pokedexId}.gif`}
+								alt={pokemon.name}
+								width={40}
+								height={40}
+								unoptimized={true}
+							/>
+						</div>
+					))}
+				</div>
 			</div>
 		</div>
 	);
