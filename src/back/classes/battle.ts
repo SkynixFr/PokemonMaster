@@ -1,12 +1,12 @@
-import Pokemon from './pokemon';
+import Team from './team';
 
 class Battle {
-	readonly playerPokemon: Pokemon;
-	readonly opponentPokemon: Pokemon;
+	readonly playerTeam: Team;
+	readonly opponentTeam: Team;
 
-	constructor(playerPokemon: Pokemon, opponentPokemon: Pokemon) {
-		this.playerPokemon = playerPokemon;
-		this.opponentPokemon = opponentPokemon;
+	constructor(playerTeam: Team, opponentTeam: Team) {
+		this.playerTeam = playerTeam;
+		this.opponentTeam = opponentTeam;
 	}
 }
 
