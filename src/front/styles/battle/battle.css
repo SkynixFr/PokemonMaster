@@ -9,7 +9,7 @@
 	position: relative;
 }
 
-.battle-container.night {
+.battle-container.night .battle-turn {
 	color: var(--white);
 }
 
@@ -191,4 +191,11 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+}
+
+@media screen and (max-width: 1920px) {
+	.battle-theme .theme-btn {
+		width: 30px;
+		height: 30px;
+	}
 }

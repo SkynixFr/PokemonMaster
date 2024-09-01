@@ -92,11 +92,17 @@ const Battle = ({ battle }: BattleProps) => {
 			</div>
 
 			<div className={'battle-pokemon player'}>
-				<BattlePokemonCard activePokemon={activePlayerPokemon} />
+				<BattlePokemonCard
+					activePokemon={activePlayerPokemon}
+					player={true}
+				/>
 			</div>
 
 			<div className={'battle-pokemon opponent'}>
-				<BattlePokemonCard activePokemon={activeOpponentPokemon} />
+				<BattlePokemonCard
+					activePokemon={activeOpponentPokemon}
+					player={false}
+				/>
 			</div>
 		</div>
 	);
