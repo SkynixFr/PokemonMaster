@@ -70,7 +70,7 @@ const BattlePokemonCard = ({
 				<div
 					className={`pokemon-shadow ${player ? 'player' : 'opponent'}`}
 					style={{
-						backgroundImage: `url(https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${activePokemon.pokedexId}.png`
+						backgroundImage: `url(https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${activePokemon.pokedexId}.png)`
 					}}
 				></div>
 			</div>

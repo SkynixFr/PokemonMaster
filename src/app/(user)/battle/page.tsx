@@ -32,11 +32,46 @@ const Battle = ({ battle }: BattleProps) => {
 
 	useEffect(() => {
 		if (!battle) return;
-		setPlayerTeam(battle.playerTeam);
-		setOpponentTeam(battle.opponentTeam);
-		setActivePlayerPokemon(battle.playerTeam.pokemons[0]);
-		setActiveOpponentPokemon(battle.opponentTeam.pokemons[0]);
-		console.log(battle);
+		const localStoragePlayerTeam = JSON.parse(
+			localStorage.getItem('playerTeam')
+		);
+		const localStorageOpponentTeam = JSON.parse(
+			localStorage.getItem('opponentTeam')
+		);
+
+		if (localStoragePlayerTeam && localStorageOpponentTeam) {
+			setPlayerTeam(JSON.parse(localStoragePlayerTeam));
+			setOpponentTeam(JSON.parse(localStorageOpponentTeam));
+
+			localStoragePlayerTeam.pokemons.map((pokemon: Pokemon) => {
+				if (pokemon.stats[0].value > 0) {
+					setActivePlayerPokemon(pokemon);
+					return;
+				}
+			});
+
+			localStorageOpponentTeam.pokemons.map((pokemon: Pokemon) => {
+				if (pokemon.stats[0].value > 0) {
+					setActiveOpponentPokemon(pokemon);
+					return;
+				}
+			});
+		} else {
+			setPlayerTeam(battle.playerTeam);
+			setOpponentTeam(battle.opponentTeam);
+
+			battle.playerTeam.pokemons.map((pokemon: Pokemon) => {
+				if (pokemon.stats[0].value > 0) {
+					setActivePlayerPokemon(pokemon);
+				}
+			});
+
+			battle.opponentTeam.pokemons.map((pokemon: Pokemon) => {
+				if (pokemon.stats[0].value > 0) {
+					setActiveOpponentPokemon(pokemon);
+				}
+			});
+		}
 	}, [battle]);
 
 	if (

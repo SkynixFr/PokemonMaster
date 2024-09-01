@@ -5,6 +5,7 @@
     align-items: center;
     height: 100%;
     width: 350px;
+    position: relative;
 }
 
 .battle-pokemon-infos {
@@ -16,7 +17,7 @@
     height: calc(65px - 20px);
     width: calc(100% - 10px);
     background: var(--white);
-    border-radius: 25px;
+    border-radius: 10px;
     padding: 10px 5px;
 }
 
@@ -92,4 +93,25 @@
     justify-content: flex-end;
     align-items: center;
     font-size: var(--fs-xs);
+}
+
+.pokemon-shadow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-size: cover;
+    filter: grayscale(1) opacity(0.4) brightness(0) blur(5px);
+    z-index: -1;
+}
+
+.pokemon-shadow.player{
+    transform: scaleX(-1) rotate(168.25deg);
+    top: 245px;
+    right: 110px;
+}
+
+.pokemon-shadow.opponent{
+    transform: scaleY(-1) rotate(15deg);
+    top: 237px;
+    right: 60px;
 }
