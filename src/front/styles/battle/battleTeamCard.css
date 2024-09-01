@@ -17,7 +17,6 @@
     left: 63px;
 }
 
-
 .battle-team-infos {
     display: flex;
     flex-direction: column;
@@ -52,3 +51,34 @@
 .battle-team-pokemon img {
     object-fit: contain;
 }
+
+
+@media screen and (max-width: 1920px) {
+    .battle-team-container {
+        width: 200px;
+        height: 300px;
+    }
+
+    .battle-team-infos {
+        height: 160px;
+        font-size: var(--fs-sm);
+    }
+
+    .battle-team-avatar {
+        top: -75px;
+        left: 60px;
+    }
+
+    .battle-team-avatar img {
+        width: 100px;
+        height: 200px;
+    }
+
+    .battle-team-pokemon img {
+        width: 30px;
+        height: 30px;
+    }
+
+}
+
+
