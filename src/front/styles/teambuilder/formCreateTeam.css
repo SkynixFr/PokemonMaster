@@ -2,15 +2,17 @@
     position: relative;
     width: calc(50% - 50px);
     min-height: calc(65% - 50px);
+    height: max-content;
+    max-height: calc(65% - 50px);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 15px;
     background-color: var(--white);
     border-radius: 5px;
     padding: 25px;
     z-index: 2;
+    overflow-y: auto;
 }
 
 .bg-form {
@@ -27,15 +29,12 @@
 }
 
 .create-team {
-    width: calc(100% - 102px);
-    height: calc(100% - 42px);
     display: flex;
     flex-direction: column;
     align-items: center;
     flex-grow: 1;
-    justify-content: space-between;
     gap: 15px;
-    padding: 21px 51px;
+    padding-top: 21px;
 }
 
 .create-team > input[type="text"] {
@@ -49,11 +48,10 @@
 
 .avatars-container {
     width: calc(100% - 20px);
-    height: calc(100% - 30px);
+    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 15px 10px;
+    gap: 25px;
 }
 
 .avatars-container > h3 {
@@ -62,8 +60,6 @@
 
 .avatars-list {
     display: flex;
-    height: calc(100% - 20px);
-    width: calc(100% - 150px);
     justify-content: center;
     align-content: center;
     flex-flow: row wrap;
@@ -81,4 +77,20 @@
     border-radius: 5px;
     font-size: var(--fs-lg);
 }
+
+.btn-create-team-container-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+
+@media screen and (max-width: 1920px) {
+    .btn-create-team {
+        min-height: 35px;
+        font-size: var(--fs-md);
+    }
+}
+
 

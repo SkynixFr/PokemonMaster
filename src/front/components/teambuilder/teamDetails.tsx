@@ -20,12 +20,12 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 		team && (
 			<div className={'team-details-container'}>
 				<h1>{team.name}</h1>
-				<div className={'team-details-avatar'}>
+				<div className={`team-details-avatar ${team.avatar.name}`}>
 					<CustomImage
 						src={team.avatar.sprite}
 						alt={team.avatar.name}
 						width={1000}
-						height={700}
+						height={800}
 						sizes={'100vw'}
 					/>
 				</div>
@@ -94,6 +94,13 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 												) : (
 													''
 												)}
+												{pokemon.item != null ? (
+													<div className={'pokemon-item'}>
+														<div>{pokemon.item.name}</div>
+													</div>
+												) : (
+													''
+												)}
 											</div>
 										</div>
 										<div className={'pokemon-ability-nature'}>
@@ -113,13 +120,6 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 									</div>
 								</div>
 
-								<div className={'pokemon-item'}>
-									<div>
-										{pokemon.item != null
-											? pokemon.item.name
-											: 'No item'}
-									</div>
-								</div>
 								<div className={'pokemon-moves'}>
 									<h3>Moves</h3>
 									<div className={'pokemon-moves-container'}>

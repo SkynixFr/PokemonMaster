@@ -150,11 +150,15 @@ const formCreateTeam = ({
 								/>
 							))}
 						</div>
+						<div className={'btn-create-team-container-modal'}>
+							<button className={'btn-create-team btn-primary'}>
+								Create
+							</button>
+						</div>
 					</div>
 				) : (
 					<div>No avatars found</div>
 				)}
-				<button className={'btn-create-team btn-primary'}>Create</button>
 			</form>
 		</div>
 	);
