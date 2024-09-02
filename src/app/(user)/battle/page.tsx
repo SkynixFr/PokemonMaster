@@ -21,58 +21,76 @@ interface BattleProps {
 }
 
 const Battle = ({ battle }: BattleProps) => {
+	const [isInitialized, setIsInitialized] = useState<boolean>(false);
 	const [activeTheme, setActiveTheme] = useState<string>('day');
-	const [activeTurn, setActiveTurn] = useState<number>(1);
+	const [activeTurn, setActiveTurn] = useState<number>(null);
 	const [playerTeam, setPlayerTeam] = useState<Team>(null);
 	const [opponentTeam, setOpponentTeam] = useState<Team>(null);
 	const [activePlayerPokemon, setActivePlayerPokemon] =
 		useState<Pokemon>(null);
 	const [activeOpponentPokemon, setActiveOpponentPokemon] =
 		useState<Pokemon>(null);
+	const syncBattleToLocalStorage = (
+		playerTeam: Team,
+		opponentTeam: Team,
+		activePlayerPokemon: Pokemon,
+		activeOpponentPokemon: Pokemon,
+		activeTurn: number
+	) => {
+		const localStorageBattle = {
+			playerTeam,
+			opponentTeam,
+			activePlayerPokemon,
+			activeOpponentPokemon,
+			turn: activeTurn
+		};
+		localStorage.setItem('battle', JSON.stringify(localStorageBattle));
+	};
 
 	useEffect(() => {
 		if (!battle) return;
-		const localStoragePlayerTeam = JSON.parse(
-			localStorage.getItem('playerTeam')
-		);
-		const localStorageOpponentTeam = JSON.parse(
-			localStorage.getItem('opponentTeam')
-		);
-
-		if (localStoragePlayerTeam && localStorageOpponentTeam) {
-			setPlayerTeam(JSON.parse(localStoragePlayerTeam));
-			setOpponentTeam(JSON.parse(localStorageOpponentTeam));
-
-			localStoragePlayerTeam.pokemons.map((pokemon: Pokemon) => {
-				if (pokemon.stats[0].value > 0) {
-					setActivePlayerPokemon(pokemon);
-					return;
-				}
-			});
-
-			localStorageOpponentTeam.pokemons.map((pokemon: Pokemon) => {
-				if (pokemon.stats[0].value > 0) {
-					setActiveOpponentPokemon(pokemon);
-					return;
-				}
-			});
-		} else {
+		const localStorageBattle = JSON.parse(localStorage.getItem('battle'));
+		if (localStorageBattle) {
+			setPlayerTeam(localStorageBattle.playerTeam);
+			setOpponentTeam(localStorageBattle.opponentTeam);
+			setActivePlayerPokemon(localStorageBattle.activePlayerPokemon);
+			setActiveOpponentPokemon(localStorageBattle.activeOpponentPokemon);
+			setActiveTurn(localStorageBattle.turn);
+		} else if (battle) {
 			setPlayerTeam(battle.playerTeam);
 			setOpponentTeam(battle.opponentTeam);
-
-			battle.playerTeam.pokemons.map((pokemon: Pokemon) => {
-				if (pokemon.stats[0].value > 0) {
-					setActivePlayerPokemon(pokemon);
-				}
-			});
-
-			battle.opponentTeam.pokemons.map((pokemon: Pokemon) => {
-				if (pokemon.stats[0].value > 0) {
-					setActiveOpponentPokemon(pokemon);
-				}
-			});
+			setActivePlayerPokemon(battle.activePlayerPokemon);
+			setActiveOpponentPokemon(battle.activeOpponentPokemon);
+			setActiveTurn(battle.turn);
+			syncBattleToLocalStorage(
+				battle.playerTeam,
+				battle.opponentTeam,
+				battle.activePlayerPokemon,
+				battle.activeOpponentPokemon,
+				battle.turn
+			);
 		}
+
+		setIsInitialized(true);
 	}, [battle]);
+
+	useEffect(() => {
+		if (!isInitialized) return;
+		syncBattleToLocalStorage(
+			playerTeam,
+			opponentTeam,
+			activePlayerPokemon,
+			activeOpponentPokemon,
+			activeTurn
+		);
+	}, [
+		isInitialized,
+		playerTeam,
+		opponentTeam,
+		activePlayerPokemon,
+		activeOpponentPokemon,
+		activeTurn
+	]);
 
 	if (
 		!playerTeam ||
@@ -80,7 +98,7 @@ const Battle = ({ battle }: BattleProps) => {
 		!activePlayerPokemon ||
 		!activeOpponentPokemon
 	)
-		return <div>Loading...</div>;
+		return null;
 
 	return (
 		<div className={`battle-container ${activeTheme}`}>
@@ -229,6 +247,7 @@ export default Battle;
 // 			return new Move(
 // 				move.name,
 // 				move.power,
+// 				move.accuracy,
 // 				move.accuracy,
 // 				move.pp,
 // 				move.meta,
