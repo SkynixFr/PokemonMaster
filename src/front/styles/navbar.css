@@ -1,14 +1,6 @@
-.navbar {
+.navbar-container {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.navbar-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -23,6 +15,9 @@
     margin-top: 15px;
     gap: 25px;
     border: 2px solid var(--white);
+    z-index: 1000;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .navbar-container .navbar-logo {
