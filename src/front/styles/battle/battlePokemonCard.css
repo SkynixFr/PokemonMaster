@@ -8,18 +8,28 @@
     position: relative;
 }
 
+.battle-pokemon-container.player {
+    animation: fadeInToRight 1s ease-in-out;
+}
+
+.battle-pokemon-container.opponent {
+    animation: fadeInToLeft 1s ease-in-out;
+}
+
 .battle-pokemon-infos {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap: 5px;
-    height: calc(65px - 20px);
+    gap: 8px;
+    height: calc(75px - 20px);
     width: calc(100% - 10px);
     background: var(--white);
     border-radius: 10px;
     padding: 10px 5px;
 }
+
+
 
 .battle-pokemon-infos .battle-pokemon-stat-top {
     display: flex;
@@ -29,6 +39,7 @@
     gap: 5px;
     height: 100%;
     width: calc(100% - 50px);
+    font-size: var(--fs-md);
 }
 
 .battle-pokemon-infos .battle-pokemon-stat-top .battle-pokemon-gender {
@@ -56,7 +67,7 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    font-size: var(--fs-xs);
+    font-size: var(--fs-sm);
     flex-grow: 1;
 }
 
@@ -92,7 +103,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    font-size: var(--fs-xs);
+    font-size: var(--fs-sm);
 }
 
 .pokemon-shadow {

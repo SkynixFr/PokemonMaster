@@ -3,10 +3,10 @@
 import { useEffect, useState } from 'react';
 
 // Components
-import Battle from '../../app/(user)/battle/page';
+import Battle from '../../../app/(user)/battle/page';
 
 //Classes
-import BattleClass from '../../back/classes/battle';
+import BattleClass from '../../../back/classes/battle';
 
 const BattleLoader = () => {
 	const [battle, setBattle] = useState<BattleClass>();

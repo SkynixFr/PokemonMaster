@@ -16,8 +16,10 @@ const BattlePokemonCard = ({
 	player
 }: BattlePokemonCardProps) => {
 	return (
-		<div className={'battle-pokemon-container'}>
-			<div className={'battle-pokemon-infos'}>
+		<div
+			className={`battle-pokemon-container ${player ? 'player' : 'opponent'}`}
+		>
+			<div className={`battle-pokemon-infos`}>
 				<div className={'battle-pokemon-stat-top'}>
 					<h3>{firstLetterMaj(activePokemon.name)}</h3>
 					{activePokemon.gender === 'male' ? (

@@ -80,14 +80,14 @@
 	align-items: center;
 }
 
-.battle-global-infos {
-	grid-column: 9 / 11;
-	grid-row: 1 / 2;
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-	gap: 5px;
-}
+/*.battle-global-infos {*/
+/*	grid-column: 9 / 11;*/
+/*	grid-row: 1 / 2;*/
+/*	display: flex;*/
+/*	justify-content: flex-start;*/
+/*	align-items: center;*/
+/*	gap: 5px;*/
+/*}*/
 
 /*.battle-global-infos > .rain {*/
 /*	position: relative;*/
@@ -136,27 +136,17 @@
 }
 
 
-
-/* Toast */
-.battle-toast {
-	grid-column: 1 / 5;
-	grid-row: 3 / 5;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #f1c40f;
-}
-
-/* Actions */
 .battle-actions {
 	grid-column: 5 / 9;
 	grid-row: 11 / 13;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	position: relative;
 }
 
-.battle-actions > div:first-child {
+.battle-actions  .battle-actions-btn {
+
 	width: 400px;
 	height: 145px;
 	display: flex;
@@ -167,7 +157,7 @@
 	row-gap: 0;
 }
 
-.battle-actions > div:first-child > button {
+.battle-actions .battle-actions-btn .btn-action {
 	position: relative;
 	display: flex;
 	justify-content: flex-start;
@@ -176,7 +166,7 @@
 	background-color: var(--white);
 	border: none;
 	border-radius: 5px;
-	font-size: var(--fs-lg);
+	font-size: var(--fs-xl);
 	font-family: var(--ff-base-bold), sans-serif;
 	color: var(--red);
 	overflow: hidden;
@@ -184,18 +174,120 @@
 	cursor: pointer;
 }
 
-/* Timer */
-.battle-timer {
-	grid-column: 11/ 13;
-	grid-row: 12 / 13;
+.battle-actions .battle-actions-btn .btn-action img {
+	position: absolute;
+	top: -5px;
+	right: 5px;
+	z-index: -1;
+}
+
+
+/*!* Toast *!*/
+/*.battle-toast {*/
+/*	grid-column: 1 / 5;*/
+/*	grid-row: 3 / 5;*/
+/*	display: flex;*/
+/*	justify-content: center;*/
+/*	align-items: center;*/
+/*	background-color: #f1c40f;*/
+/*}*/
+
+/*!* Timer *!*/
+/*.battle-timer {*/
+/*	grid-column: 11/ 13;*/
+/*	grid-row: 12 / 13;*/
+/*	display: flex;*/
+/*	justify-content: center;*/
+/*	align-items: center;*/
+/*}*/
+
+.modal-running-container{
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 100;
 }
+
+.modal-running-content {
+	position: relative;
+	width: 300px;
+	height: 150px;
+	background-color: var(--white);
+	border-radius: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-flow: column wrap;
+	animation: bounceIn .75s ease-in-out;
+}
+
+.modal-running-btn-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+
+.modal-running-btn-container button {
+	width: 75px;
+	height: 35px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.pokemon-moves-modal-container{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: -35px;
+	left: 25%;
+	width: 600px;
+	height: 100px;
+	z-index: 100;
+	transform: translateX(-25%);
+}
+
+.pokemon-moves-modal-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-flow: row wrap;
+	gap: 10px;
+	transition: all 5s ease-in-out;
+}
+
+.pokemon-moves-modal-content.fadeInToTop{
+	animation: fadeInToTop .75s ease-in-out;
+}
+
+.pokemon-moves-modal-content .pokemon-move-fullfilled{
+	height: 40px;
+	width: 40%;
+	font-size: var(--fs-md);
+}
+
+.pokemon-move-fullfilled-name {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+
+}
+
 
 @media screen and (max-width: 1920px) {
 	.battle-theme .theme-btn {
-		width: 30px;
-		height: 30px;
+		width: 35px;
+		height: 35px;
+	}
+
+	.pokemon-moves-modal-container {
+		top: -55px;
 	}
 }

@@ -12,7 +12,7 @@
     z-index: 10;
 }
 
-.natures-modal-container, .abilities-modal-container, .moves-modal-container {
+.natures-modal-container, .abilities-modal-container, .moves-modal-container{
     position: relative;
     width: calc(50% - 100px);
     min-height: calc(65% - 50px);
@@ -80,19 +80,3 @@
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-@keyframes bounceIn {
-    0% {
-        transform: translateX(100%) ;
-        opacity: 0;
-    }
-    60% {
-        transform: translateX(-10%) ;
-        opacity: 1;
-    }
-    80% {
-        transform: translateX(5%) ;
-    }
-    100% {
-        transform: translateX(0) ;
-    }
-}

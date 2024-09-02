@@ -1,5 +1,5 @@
 // Components
-import BattleLoader from '../../../front/components/battleLoader';
+import BattleLoader from '../../../front/components/battle/battleLoader';
 
 const BattleLayout = () => {
 	return <BattleLoader />;

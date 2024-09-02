@@ -10,15 +10,19 @@ interface TeamCardProps {
 	team: Team;
 	activePokemon: Pokemon;
 	setActivePokemon: (pokemon: Pokemon) => void;
+	player?: boolean;
 }
 
 const BattleTeamCard = ({
 	team,
 	activePokemon,
-	setActivePokemon
+	setActivePokemon,
+	player
 }: TeamCardProps) => {
 	return (
-		<div className={'battle-team-container'}>
+		<div
+			className={`battle-team-container ${player ? 'player' : 'opponent'}`}
+		>
 			<div className={'battle-team-avatar'}>
 				<CustomImage
 					src={team.avatar.sprite}

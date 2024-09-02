@@ -12,6 +12,9 @@
 @import url('teambuilder/teambuilder.css');
 @import url('pokemonbuilder/pokemonbuilder.css');
 
+/* Animations */
+@import url('animations.css');
+
 /* Global styles */
 body {
 	font-family: var(--ff-base), sans-serif;

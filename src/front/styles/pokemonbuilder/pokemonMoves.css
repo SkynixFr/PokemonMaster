@@ -36,7 +36,6 @@
     min-width: calc(160px - 10px);
     height: 30px;
     display: flex;
-    justify-content: space-around;
     align-items: center;
     border: none;
     border-radius: 15px;
@@ -44,29 +43,16 @@
     font-size: var(--fs-sm);
     background-color: var(--grey);
     padding: 0 5px;
-    gap: 5px;
+    gap: 10px;
 }
 
 .pokemon-move-fullfilled.infos {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-grow: 1;
 }
 
 .pokemon-move-fullfilled.infos > div:nth-child(1) {
-    width: 100px;
+    flex-grow: 1;
 }
-
-/*.pokemon-move-fullfilled.name {*/
-/*    width: 100px;*/
-/*    display: flex;*/
-/*    justify-content: flex-start;*/
-/*    align-items: center;*/
-/*    background-color: red;*/
-/*}*/
-
-/*.pokemon-move-fullfilled.pp {*/
-/*    width: 40px;*/
-/*    background-color: green;*/
-
-/*}*/

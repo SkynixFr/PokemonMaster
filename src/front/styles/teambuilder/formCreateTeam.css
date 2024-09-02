@@ -13,6 +13,7 @@
     padding: 25px;
     z-index: 2;
     overflow-y: auto;
+    animation: bounceIn .75s ease-in-out;
 }
 
 .bg-form {
