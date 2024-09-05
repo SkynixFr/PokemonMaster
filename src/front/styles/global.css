@@ -83,3 +83,19 @@ a {
 	color: var(--red);
 	font-size: var(--fs-sm);
 }
+
+.fadeInToBottom {
+	animation: fadeInToBottom 1s ease-in-out;
+}
+
+.fadeInToTop {
+	animation: fadeInToTop 1s ease-in-out;
+}
+
+.fadeInToLeft {
+	animation: fadeInToLeft 1s ease-in-out;
+}
+
+.fadeInToRight {
+	animation: fadeInToRight 1s ease-in-out;
+}

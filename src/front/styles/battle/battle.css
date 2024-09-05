@@ -1,5 +1,6 @@
 @import url('battleTeamCard.css');
 @import url('battlePokemonCard.css');
+@import url('battleActions.css');
 
 .battle-container {
 	display: grid;
@@ -145,42 +146,6 @@
 	position: relative;
 }
 
-.battle-actions  .battle-actions-btn {
-
-	width: 400px;
-	height: 145px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-flow: row wrap;
-	gap: 15px;
-	row-gap: 0;
-}
-
-.battle-actions .battle-actions-btn .btn-action {
-	position: relative;
-	display: flex;
-	justify-content: flex-start;
-	width: 175px;
-	padding: 15px 20px;
-	background-color: var(--white);
-	border: none;
-	border-radius: 5px;
-	font-size: var(--fs-xl);
-	font-family: var(--ff-base-bold), sans-serif;
-	color: var(--red);
-	overflow: hidden;
-	z-index: 1;
-	cursor: pointer;
-}
-
-.battle-actions .battle-actions-btn .btn-action img {
-	position: absolute;
-	top: -5px;
-	right: 5px;
-	z-index: -1;
-}
-
 
 /*!* Toast *!*/
 /*.battle-toast {*/
@@ -201,84 +166,7 @@
 /*	align-items: center;*/
 /*}*/
 
-.modal-running-container{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	background-color: rgba(0, 0, 0, 0.5);
-	z-index: 100;
-}
 
-.modal-running-content {
-	position: relative;
-	width: 300px;
-	height: 150px;
-	background-color: var(--white);
-	border-radius: 5px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-flow: column wrap;
-	animation: bounceIn .75s ease-in-out;
-}
-
-.modal-running-btn-container {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 10px;
-}
-
-.modal-running-btn-container button {
-	width: 75px;
-	height: 35px;
-	border-radius: 5px;
-	cursor: pointer;
-}
-
-.pokemon-moves-modal-container{
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: absolute;
-	top: -35px;
-	left: 25%;
-	width: 600px;
-	height: 100px;
-	z-index: 100;
-	transform: translateX(-25%);
-}
-
-.pokemon-moves-modal-content {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-flow: row wrap;
-	gap: 10px;
-	transition: all 5s ease-in-out;
-}
-
-.pokemon-moves-modal-content.fadeInToTop{
-	animation: fadeInToTop .75s ease-in-out;
-}
-
-.pokemon-moves-modal-content .pokemon-move-fullfilled{
-	height: 40px;
-	width: 40%;
-	font-size: var(--fs-md);
-}
-
-.pokemon-move-fullfilled-name {
-	display: flex;
-	justify-content: flex-start;
-	align-items: center;
-
-}
 
 
 @media screen and (max-width: 1920px) {

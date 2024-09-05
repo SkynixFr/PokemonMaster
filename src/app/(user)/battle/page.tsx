@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 // Components
 import CustomImage from '../../../front/components/customImage';
@@ -15,16 +14,17 @@ import { Moon, Sun } from 'lucide-react';
 import Team from '../../../back/classes/team';
 import Pokemon from '../../../back/classes/pokemon';
 import BattleClass from '../../../back/classes/battle';
-import { firstLetterMaj } from '../../../front/utils/formatString';
+import Move from '../../../back/classes/move';
 
 // Interfaces
 interface BattleProps {
 	battle: BattleClass;
 }
 
-const Battle = ({ battle }: BattleProps) => {
-	const router = useRouter();
+// Utils
+import BattleActions from '../../../front/components/battle/battleActions';
 
+const Battle = ({ battle }: BattleProps) => {
 	const [isInitialized, setIsInitialized] = useState<boolean>(false);
 	const [activeTheme, setActiveTheme] = useState<string>('day');
 	const [activeTurn, setActiveTurn] = useState<number>(null);
@@ -35,12 +35,17 @@ const Battle = ({ battle }: BattleProps) => {
 	const [activeOpponentPokemon, setActiveOpponentPokemon] =
 		useState<Pokemon>(null);
 
-	const [openModalRunning, setOpenModalRunning] = useState<boolean>(false);
-	const [openPokemonMoves, setOpenPokemonMoves] = useState<boolean>(false);
+	const [playerReady, setPlayerReady] = useState<boolean>(false);
 
-	const handlePlayerRunning = () => {
-		localStorage.removeItem('battle');
-		router.push('/teambuilder');
+	const handlePlayerMoveSelection = (move: Move) => {
+		if (move.pp === 0) return;
+		let updatedPlayerPokemon = activePlayerPokemon.changeActiveMove(move);
+		setActivePlayerPokemon(updatedPlayerPokemon);
+		handlePlayerReady();
+	};
+
+	const handlePlayerReady = () => {
+		setPlayerReady(true);
 	};
 
 	const syncBattleToLocalStorage = (
@@ -105,21 +110,6 @@ const Battle = ({ battle }: BattleProps) => {
 		activeTurn
 	]);
 
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === 'Escape') {
-				setOpenModalRunning(false);
-				setOpenPokemonMoves(false);
-			}
-		};
-
-		document.addEventListener('keydown', handleKeyDown);
-
-		return () => {
-			document.removeEventListener('keydown', handleKeyDown);
-		};
-	}, [setOpenModalRunning, setOpenPokemonMoves]);
-
 	if (
 		!playerTeam ||
 		!opponentTeam ||
@@ -141,7 +131,7 @@ const Battle = ({ battle }: BattleProps) => {
 
 			<div className={'battle-theme'}>
 				<button
-					className={`theme-btn btn-primary ${activeTheme}`}
+					className={`theme-btn btn-primary ${activeTheme} fadeInToBottom`}
 					onClick={() =>
 						activeTheme === 'day'
 							? setActiveTheme('night')
@@ -188,91 +178,10 @@ const Battle = ({ battle }: BattleProps) => {
 				/>
 			</div>
 
-			<div className={'battle-actions'}>
-				<div className={'battle-actions-btn'}>
-					<button
-						className={'btn-action'}
-						onClick={() => setOpenPokemonMoves(!openPokemonMoves)}
-					>
-						Attack
-						<CustomImage
-							src={'/images/other/battle.png'}
-							alt={'battle icon'}
-							width={75}
-							height={75}
-						/>
-					</button>
-					<button
-						className={'btn-action'}
-						onClick={() => setOpenModalRunning(!openModalRunning)}
-					>
-						Run
-						<CustomImage
-							src={'/images/other/run.png'}
-							alt={'run icon'}
-							width={75}
-							height={75}
-						/>
-					</button>
-					{openPokemonMoves && (
-						<div className={'pokemon-moves-modal-container'}>
-							<div
-								className={`pokemon-moves-modal-content ${openPokemonMoves ? 'fadeInToTop' : 'fadeOutToBottom'}`}
-							>
-								{activePlayerPokemon.moves.map((move, index) => (
-									<button
-										className={'pokemon-move-fullfilled'}
-										key={index}
-										onClick={() => {
-											setActivePlayerPokemon(
-												activePlayerPokemon.changeActiveMove(move)
-											);
-										}}
-									>
-										<CustomImage
-											src={`/images/types/${move.type}.png`}
-											alt={'Move icon'}
-											width={25}
-											height={25}
-										/>
-										<div className={'pokemon-move-fullfilled infos'}>
-											<div
-												className={'pokemon-move-fullfilled-name'}
-											>
-												{firstLetterMaj(move.name)}
-											</div>
-											<div>
-												{move.pp}/{move.pp}
-											</div>
-										</div>
-									</button>
-								))}
-							</div>
-						</div>
-					)}
-				</div>
-			</div>
-			{openModalRunning && (
-				<div className={'modal-running-container'}>
-					<div className={'modal-running-content'}>
-						<p>Are you sure you want to run?</p>
-						<div className={'modal-running-btn-container'}>
-							<button
-								className={'btn-secondary'}
-								onClick={handlePlayerRunning}
-							>
-								Yes
-							</button>
-							<button
-								className={'btn-primary'}
-								onClick={() => setOpenModalRunning(false)}
-							>
-								No
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
+			<BattleActions
+				playerPokemon={activePlayerPokemon}
+				handlePlayerMoveSelection={handlePlayerMoveSelection}
+			/>
 		</div>
 	);
 };
