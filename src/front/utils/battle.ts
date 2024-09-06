@@ -7694,7 +7694,20 @@ export function createBattle(playerTeam): Battle {
 								)
 						),
 						pokemon.weight,
-						null,
+						new Move(
+							pokemon.moves[0].id,
+							pokemon.moves[0].name,
+							pokemon.moves[0].power,
+							pokemon.moves[0].accuracy,
+							pokemon.moves[0].pp,
+							pokemon.moves[0].meta,
+							pokemon.moves[0].type,
+							pokemon.moves[0].category,
+							pokemon.moves[0].description,
+							pokemon.moves[0].learnedBy,
+							pokemon.moves[0].statsChange,
+							pokemon.moves[0].target
+						),
 						null,
 						null
 					)
@@ -7759,7 +7772,20 @@ export function createBattle(playerTeam): Battle {
 								)
 						),
 						pokemon.weight,
-						null,
+						new Move(
+							pokemon.moves[0].id,
+							pokemon.moves[0].name,
+							pokemon.moves[0].power,
+							pokemon.moves[0].accuracy,
+							pokemon.moves[0].pp,
+							pokemon.moves[0].meta,
+							pokemon.moves[0].type,
+							pokemon.moves[0].category,
+							pokemon.moves[0].description,
+							pokemon.moves[0].learnedBy,
+							pokemon.moves[0].statsChange,
+							pokemon.moves[0].target
+						),
 						null,
 						null
 					)
@@ -7818,7 +7844,20 @@ export function createBattle(playerTeam): Battle {
 					)
 			),
 			playerTeam.pokemons[0].weight,
-			null,
+			new Move(
+				playerTeam.pokemons[0].moves[0].id,
+				playerTeam.pokemons[0].moves[0].name,
+				playerTeam.pokemons[0].moves[0].power,
+				playerTeam.pokemons[0].moves[0].accuracy,
+				playerTeam.pokemons[0].moves[0].pp,
+				playerTeam.pokemons[0].moves[0].meta,
+				playerTeam.pokemons[0].moves[0].type,
+				playerTeam.pokemons[0].moves[0].category,
+				playerTeam.pokemons[0].moves[0].description,
+				playerTeam.pokemons[0].moves[0].learnedBy,
+				playerTeam.pokemons[0].moves[0].statsChange,
+				playerTeam.pokemons[0].moves[0].target
+			),
 			null,
 			null
 		),
@@ -7875,7 +7914,20 @@ export function createBattle(playerTeam): Battle {
 					)
 			),
 			opponentTeam.pokemons[0].weight,
-			null,
+			new Move(
+				opponentTeam.pokemons[0].moves[0].id,
+				opponentTeam.pokemons[0].moves[0].name,
+				opponentTeam.pokemons[0].moves[0].power,
+				opponentTeam.pokemons[0].moves[0].accuracy,
+				opponentTeam.pokemons[0].moves[0].pp,
+				opponentTeam.pokemons[0].moves[0].meta,
+				opponentTeam.pokemons[0].moves[0].type,
+				opponentTeam.pokemons[0].moves[0].category,
+				opponentTeam.pokemons[0].moves[0].description,
+				opponentTeam.pokemons[0].moves[0].learnedBy,
+				opponentTeam.pokemons[0].moves[0].statsChange,
+				opponentTeam.pokemons[0].moves[0].target
+			),
 			null,
 			null
 		),

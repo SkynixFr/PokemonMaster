@@ -58,20 +58,6 @@ class Pokemon {
 			: new Status('', '', 0, true);
 	}
 
-	// constructor(
-	//
-	// ) {
-	// 	this.name = name;
-	// 	this.stats = stat;
-	// 	this.moves = moves;
-	// 	this.activeMove = activeMove;
-	// 	this.status = status ? status : new Status('', '', 0, true);
-	// 	this.volatileStatus = volatileStatus
-	// 		? volatileStatus
-	// 		: new Status('', '', 0, true);
-	// 	this.types = types;
-	// }
-
 	getStat(statName: string): Stat {
 		const searchedStat = this.stats.find(stat => stat.name === statName);
 		return new Stat(

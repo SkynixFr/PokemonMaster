@@ -31,7 +31,7 @@ const Navbar = () => {
 								Home
 							</Link>
 						</li>
-						<li>
+						<li onClick={() => console.log('clicked')}>
 							<Link
 								href={'/teambuilder'}
 								className={`link ${pathname === '/teambuilder' ? 'active' : ''} `}
