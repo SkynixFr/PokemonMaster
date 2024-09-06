@@ -1,10 +1,8 @@
-import { ReactNode } from 'react';
+// Components
+import BattleLoader from '../../../front/components/battle/battleLoader';
 
-// Provider
-import BattleProvider from '../../../front/components/battleProvider';
-
-const BattleLayout = ({ children }: { children: ReactNode }) => {
-	return <BattleProvider>{children}</BattleProvider>;
+const BattleLayout = () => {
+	return <BattleLoader />;
 };
 
 export default BattleLayout;

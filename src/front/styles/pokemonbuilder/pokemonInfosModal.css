@@ -1,0 +1,82 @@
+.pokemon-infos-modal-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+.natures-modal-container, .abilities-modal-container, .moves-modal-container{
+    position: relative;
+    width: calc(50% - 100px);
+    min-height: calc(65% - 50px);
+    max-height: calc(65% - 50px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 25px;
+    background-color: var(--white);
+    border-radius: 5px;
+    padding: 25px 50px;
+    z-index: 2;
+    animation: bounceIn .75s ease-in-out;
+}
+
+.abilities-modal-container {
+    min-height: max-content;
+    max-height: calc(65% - 50px);
+}
+
+.natures-modal-container h2, .abilities-modal-container h2, .moves-modal-container h2 {
+    font-family: var(--ff-base-bold), sans-serif;
+}
+
+.natures-searchbar, .moves-searchbar {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.natures-searchbar form, .moves-searchbar form {
+    position: relative;
+    width: 475px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.natures-searchbar form > input[type="text"], .moves-searchbar form > input[type="text"] {
+    width: 475px;
+    height: 100%;
+    padding: 0 20px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background-color: var(--grey);
+}
+
+.btn-search-natures, .btn-search-moves{
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+

@@ -1,668 +1,857 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+
+// Components
+import CustomImage from '../../../front/components/customImage';
+import BattleTeamCard from '../../../front/components/battle/battleTeamCard';
+import BattlePokemonCard from '../../../front/components/battle/battlePokemonCard';
+
+//Icons
+import { Moon, Sun } from 'lucide-react';
 
 // Classes
-import PokemonClass from '../../../back/classes/pokemon';
+import Team from '../../../back/classes/team';
+import Pokemon from '../../../back/classes/pokemon';
 import BattleClass from '../../../back/classes/battle';
 import Move from '../../../back/classes/move';
-import Status from '../../../back/classes/status';
 
 // Interfaces
 interface BattleProps {
 	battle: BattleClass;
 }
 
-// Constants
-const MAX_TURNS_ASLEEP = 3;
-const THAW_CHANCE = 0.2;
+// Utils
+import BattleActions from '../../../front/components/battle/battleActions';
 
 const Battle = ({ battle }: BattleProps) => {
-	const [playerPokemon, setPlayerPokemon] = useState<PokemonClass | null>();
-	const [opponentPokemon, setOpponentPokemon] =
-		useState<PokemonClass | null>();
+	const [isInitialized, setIsInitialized] = useState<boolean>(false);
+	const [activeTheme, setActiveTheme] = useState<string>('day');
+	const [activeTurn, setActiveTurn] = useState<number>(null);
+	const [playerTeam, setPlayerTeam] = useState<Team>(null);
+	const [opponentTeam, setOpponentTeam] = useState<Team>(null);
+	const [activePlayerPokemon, setActivePlayerPokemon] =
+		useState<Pokemon>(null);
+	const [activeOpponentPokemon, setActiveOpponentPokemon] =
+		useState<Pokemon>(null);
+
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
-	const [opponentReady, setOpponentReady] = useState<boolean>(false);
-	const [playerSelectedMove, setPlayerSelectedMove] = useState<Move>();
-	const [opponentSelectedMove, setOpponentSelectedMove] = useState<Move>();
-	const [battleWinner, setBattleWinner] = useState<string>('');
-	const [playerMovesShowed, setPlayerMovesShowed] = useState<boolean>(false);
-	const [opponentMovesShowed, setOpponentMovesShowed] =
-		useState<boolean>(false);
-	const [playerSleepCounter, setPlayerSleepCounter] = useState<number>(0);
-	const [opponentSleepCounter, setOpponentSleepCounter] = useState<number>(0);
-	const [playerThawChance, setPlayerThawChance] = useState<number>(0);
-	const [opponentThawChance, setOpponentThawChance] = useState<number>(0);
-	const [playerMultiTurnAttack, setPlayerMultiTurnAttack] =
-		useState<boolean>(false);
-	const [opponentMultiTurnAttack, setOpponentMultiTurnAttack] =
-		useState<boolean>(false);
 
-	// Récupération des pokémons depuis le localStorage ou la room
-	useEffect(() => {
-		if (!battle) return;
-		if (
-			localStorage.getItem('playerPokemon') &&
-			localStorage.getItem('opponentPokemon')
-		) {
-			const parsedPlayerPokemon = JSON.parse(
-				localStorage.getItem('playerPokemon')
-			);
-			const parsedOpponentPokemon = JSON.parse(
-				localStorage.getItem('opponentPokemon')
-			);
-			setPlayerPokemon(
-				new PokemonClass(
-					parsedPlayerPokemon.name,
-					parsedPlayerPokemon.stats,
-					parsedPlayerPokemon.moves,
-					parsedPlayerPokemon.status
-				)
-			);
-			setOpponentPokemon(
-				new PokemonClass(
-					parsedOpponentPokemon.name,
-					parsedOpponentPokemon.stats,
-					parsedOpponentPokemon.moves,
-					parsedOpponentPokemon.status
-				)
-			);
-		} else {
-			setPlayerPokemon(battle.playerPokemon);
-			setOpponentPokemon(battle.opponentPokemon);
-		}
-	}, [battle]);
-
-	// Reset du status sleep quand le compteur arrive à zéro
-	useEffect(() => {
-		setPlayerPokemon(playerPokemon?.updateStatusCounter(playerSleepCounter));
-		setOpponentPokemon(
-			opponentPokemon?.updateStatusCounter(opponentSleepCounter)
-		);
-		if (playerSleepCounter === 0) {
-			setPlayerPokemon(playerPokemon?.changeStatus(new Status('', '')));
-		}
-		if (opponentSleepCounter === 0) {
-			setOpponentPokemon(opponentPokemon?.changeStatus(new Status('', '')));
-		}
-	}, [playerSleepCounter, opponentSleepCounter]);
-
-	// Reset du status freeze avec une chance de 20%
-	useEffect(() => {
-		if (
-			playerPokemon?.status.name === 'FRZ' &&
-			playerThawChance < THAW_CHANCE
-		) {
-			setPlayerPokemon(playerPokemon.changeStatus(new Status('', '')));
-		}
-		if (
-			opponentPokemon?.status.name === 'FRZ' &&
-			opponentThawChance < THAW_CHANCE
-		) {
-			setOpponentPokemon(opponentPokemon.changeStatus(new Status('', '')));
-		}
-	}, [playerThawChance, opponentThawChance]);
-
-	// Déroulement d'un tour de jeu
-	useEffect(() => {
-		if (!playerReady || !opponentReady) return;
-		handleSleepStatus();
-		handleFreezeStatus();
-		handleAttacksByPriority();
-		setPlayerReady(false);
-		setOpponentReady(false);
-	}, [playerReady, opponentReady]);
-
-	// Détermination du gagnant
-	useEffect(() => {
-		if (playerPokemon?.status.name === 'KO') {
-			setBattleWinner('Opponent');
-		}
-		if (opponentPokemon?.status.name === 'KO') {
-			setBattleWinner('Player');
-		}
-	}, [playerPokemon, opponentPokemon]);
-
-	// Affichage du loader
-	if (!battle) {
-		return <div>Loading...</div>;
-	}
-	if (!playerPokemon) {
-		return <div>Loading2...</div>;
-	}
-	if (!opponentPokemon) {
-		return <div>Loading3...</div>;
-	}
-
-	const handleSleepStatus = () => {
-		if (playerPokemon.status.name === 'SLP') {
-			setPlayerSleepCounter(
-				playerSleepCounter !== 0
-					? playerSleepCounter - 1
-					: Math.ceil(Math.random() * MAX_TURNS_ASLEEP)
-			);
-		}
-		if (opponentPokemon.status.name === 'SLP') {
-			setOpponentSleepCounter(
-				opponentSleepCounter !== 0
-					? opponentSleepCounter - 1
-					: Math.ceil(Math.random() * MAX_TURNS_ASLEEP)
-			);
-		}
-	};
-
-	const handleFreezeStatus = () => {
-		if (playerPokemon.status.name === 'FRZ') {
-			setPlayerThawChance(Math.random());
-		}
-		if (opponentPokemon.status.name === 'FRZ') {
-			setOpponentThawChance(Math.random());
-		}
-	};
-
-	const handleAttacksByPriority = () => {
-		if (
-			playerPokemon.getStat('speed').value >
-			opponentPokemon.getStat('speed').value
-		) {
-			const updatedOpponent = handlePlayerAttack();
-			if (updatedOpponent.status.name !== 'KO') {
-				handleOpponentAttack();
-			}
-		} else if (
-			playerPokemon.getStat('speed').value <
-			opponentPokemon.getStat('speed').value
-		) {
-			const updatedPlayer = handleOpponentAttack();
-			if (updatedPlayer.status.name !== 'KO') {
-				handlePlayerAttack();
-			}
-		} else {
-			const random = Math.random();
-			if (random < 0.5) {
-				const updatedOpponent = handlePlayerAttack();
-				if (updatedOpponent.status.name !== 'KO') {
-					handleOpponentAttack();
-				}
-			} else {
-				const updatedPlayer = handleOpponentAttack();
-				if (updatedPlayer.status.name !== 'KO') {
-					handlePlayerAttack();
-				}
-			}
-		}
-	};
-
-	// Gestion du move du joueur
-	const handlePlayerAttack = () => {
-		const updatedOpponentPokemon = playerPokemon.attack(
-			opponentPokemon,
-			playerSelectedMove
-		);
-		setOpponentPokemon(updatedOpponentPokemon);
-		localStorage.setItem(
-			'opponentPokemon',
-			JSON.stringify(updatedOpponentPokemon)
-		);
-		return updatedOpponentPokemon;
-	};
-
-	// Gestion du move de l'adversaire
-	const handleOpponentAttack = () => {
-		const updatedPlayerPokemon = opponentPokemon.attack(
-			playerPokemon,
-			opponentSelectedMove
-		);
-		setPlayerPokemon(updatedPlayerPokemon);
-		localStorage.setItem(
-			'playerPokemon',
-			JSON.stringify(updatedPlayerPokemon)
-		);
-		return updatedPlayerPokemon;
+	const handlePlayerMoveSelection = (move: Move) => {
+		if (move.pp === 0) return;
+		let updatedPlayerPokemon = activePlayerPokemon.changeActiveMove(move);
+		setActivePlayerPokemon(updatedPlayerPokemon);
+		handlePlayerReady();
 	};
 
 	const handlePlayerReady = () => {
 		setPlayerReady(true);
 	};
 
-	const handleOpponentReady = () => {
-		setOpponentReady(true);
+	const syncBattleToLocalStorage = (
+		playerTeam: Team,
+		opponentTeam: Team,
+		activePlayerPokemon: Pokemon,
+		activeOpponentPokemon: Pokemon,
+		activeTurn: number
+	) => {
+		const localStorageBattle = {
+			playerTeam,
+			opponentTeam,
+			activePlayerPokemon,
+			activeOpponentPokemon,
+			turn: activeTurn
+		};
+		localStorage.setItem('battle', JSON.stringify(localStorageBattle));
 	};
 
+	useEffect(() => {
+		if (!battle) return;
+		const localStorageBattle = JSON.parse(localStorage.getItem('battle'));
+		if (localStorageBattle) {
+			setPlayerTeam(localStorageBattle.playerTeam);
+			setOpponentTeam(localStorageBattle.opponentTeam);
+			setActivePlayerPokemon(localStorageBattle.activePlayerPokemon);
+			setActiveOpponentPokemon(localStorageBattle.activeOpponentPokemon);
+			setActiveTurn(localStorageBattle.turn);
+		} else if (battle) {
+			setPlayerTeam(battle.playerTeam);
+			setOpponentTeam(battle.opponentTeam);
+			setActivePlayerPokemon(battle.activePlayerPokemon);
+			setActiveOpponentPokemon(battle.activeOpponentPokemon);
+			setActiveTurn(battle.turn);
+			syncBattleToLocalStorage(
+				battle.playerTeam,
+				battle.opponentTeam,
+				battle.activePlayerPokemon,
+				battle.activeOpponentPokemon,
+				battle.turn
+			);
+		}
+
+		setIsInitialized(true);
+	}, [battle]);
+
+	useEffect(() => {
+		if (!isInitialized) return;
+		syncBattleToLocalStorage(
+			playerTeam,
+			opponentTeam,
+			activePlayerPokemon,
+			activeOpponentPokemon,
+			activeTurn
+		);
+	}, [
+		isInitialized,
+		playerTeam,
+		opponentTeam,
+		activePlayerPokemon,
+		activeOpponentPokemon,
+		activeTurn
+	]);
+
+	if (
+		!playerTeam ||
+		!opponentTeam ||
+		!activePlayerPokemon ||
+		!activeOpponentPokemon
+	)
+		return null;
+
 	return (
-		<div style={{ margin: '100px 0 0 10px' }}>
-			{/* Affichage des informations du Pokemon de l'adversaire */}
-			<p>
-				<span>Opponent : </span>
-				{opponentPokemon.getStat('hp').value +
-					'/' +
-					opponentPokemon.getStat('hp').max}
-				<br />
-				{'status ' + opponentPokemon.status.name
-					? opponentPokemon.status.name
-					: ''}
-			</p>
+		<div className={`battle-container ${activeTheme}`}>
+			<div className={'battle-background'}>
+				<CustomImage
+					src={`/images/compressed/backgrounds/bg-battle-${activeTheme}.jpg`}
+					alt={'background arena'}
+					width={10000}
+					height={10000}
+				/>
+			</div>
 
-			{/* Bouton Attack de l'adversaire */}
-			<button
-				onClick={() => {
-					setOpponentMovesShowed(!opponentMovesShowed);
-				}}
-			>
-				Attack
-			</button>
+			<div className={'battle-theme'}>
+				<button
+					className={`theme-btn btn-primary ${activeTheme} fadeInToBottom`}
+					onClick={() =>
+						activeTheme === 'day'
+							? setActiveTheme('night')
+							: setActiveTheme('day')
+					}
+				>
+					{activeTheme === 'day' ? <Moon /> : <Sun />}
+				</button>
+			</div>
 
-			{/* Affichage des moves de l'adversaire */}
-			{opponentMovesShowed && (
-				<div>
-					{opponentPokemon.moves.map((move: Move) => (
-						<button
-							key={move.name}
-							onClick={() => {
-								setOpponentSelectedMove(move);
-								handleOpponentReady();
-							}}
-						>
-							{move.name}
-						</button>
-					))}
-				</div>
-			)}
+			<div className={'battle-turn'}>Turn {activeTurn}</div>
 
-			{/* Affichage des informations du Pokemon du joueur */}
-			<p>
-				<span>Player : </span>
-				{playerPokemon.name + ' '}
-				{playerPokemon.getStat('hp').value +
-					'/' +
-					playerPokemon.getStat('hp').max}
-				<br />
-				{'status ' + playerPokemon.status.name
-					? playerPokemon.status.name
-					: ''}
-			</p>
+			<div className={'battle-global-infos'}></div>
 
-			{/* Bouton Attack du joueur */}
-			<button
-				onClick={() => {
-					setPlayerMovesShowed(!playerMovesShowed);
-				}}
-			>
-				Attack
-			</button>
+			<div className={'battle-team player'}>
+				<BattleTeamCard
+					team={playerTeam}
+					activePokemon={activePlayerPokemon}
+					setActivePokemon={setActivePlayerPokemon}
+					player={true}
+				/>
+			</div>
 
-			{/* Affichage des moves du joueur */}
-			{playerMovesShowed && (
-				<div>
-					{playerPokemon.moves.map((move: Move) => (
-						<button
-							key={move.name}
-							onClick={() => {
-								setPlayerSelectedMove(move);
-								handlePlayerReady();
-							}}
-						>
-							{move.name}
-						</button>
-					))}
-				</div>
-			)}
+			<div className={'battle-team opponent'}>
+				<BattleTeamCard
+					team={opponentTeam}
+					activePokemon={activeOpponentPokemon}
+					setActivePokemon={setActiveOpponentPokemon}
+					player={false}
+				/>
+			</div>
 
-			{/* Affichage du vainqueur */}
-			{battleWinner && <h1>{battleWinner} wins!!!</h1>}
+			<div className={'battle-pokemon player'}>
+				<BattlePokemonCard
+					activePokemon={activePlayerPokemon}
+					player={true}
+				/>
+			</div>
+
+			<div className={'battle-pokemon opponent'}>
+				<BattlePokemonCard
+					activePokemon={activeOpponentPokemon}
+					player={false}
+				/>
+			</div>
+
+			<BattleActions
+				playerPokemon={activePlayerPokemon}
+				handlePlayerMoveSelection={handlePlayerMoveSelection}
+			/>
 		</div>
 	);
 };
+
 export default Battle;
 
 // 'use client';
-// import { useSelector } from 'react-redux';
-// import { RootState } from '../store/store';
+//
 // import { useEffect, useState } from 'react';
 //
-// // Icons
-// import { CloudRainWind, Timer } from 'lucide-react';
+// // Classes
+// import Pokemon from '../../../back/classes/pokemon';
+// import BattleClass from '../../../back/classes/battle';
+// import Move from '../../../back/classes/move';
+// import Status from '../../../back/classes/status';
+// import { THAW_CHANCE, PARALYSIS_CHANCE, CONFUSED_MOVE } from './constants';
+// import CustomImage from '../../../front/components/customImage';
+// import { Moon, Sun } from 'lucide-react';
 //
-// // Components
-// import CustomImage from '../components/customImage';
-// import BattleTeam from '../components/battleTeam';
-// import BattlePokemon from '../components/battlePokemon';
-// import CustomButton from '../components/customButton';
+// // Interfaces
+// interface BattleProps {
+// 	battle: BattleClass;
+// }
 //
-// // Types
-// import BattleEffect from '../../types/BattleEffect';
+// const Battle = ({ battle }: BattleProps) => {
+// 	const [activeTheme, setActiveTheme] = useState<string>('day');
+// 	const [activeTurn, setActiveTurn] = useState<number>(1);
 //
-// // POO
-// import PokemonClass from '../../classes/Pokemon';
-// import BattleClass from '../../classes/Battle';
-// import TeamClass from '../../classes/Team';
-// import StatsClass from '../../classes/Stats';
+// 	// States
+// 	const [playerTeam, setPlayerTeam] = useState<Pokemon[]>([]);
+// 	const [opponentTeam, setOpponentTeam] = useState<Pokemon[]>([]);
+// 	const [playerTeamShowed, setPlayerTeamShowed] = useState<boolean>(false);
+// 	const [opponentTeamShowed, setOpponentTeamShowed] = useState<boolean>(false);
+// 	const [playerPokemon, setPlayerPokemon] = useState<Pokemon | null>();
+// 	const [opponentPokemon, setOpponentPokemon] = useState<Pokemon | null>();
+// 	const [temporaryPlayerPokemon, setTemporaryPlayerPokemon] =
+// 		useState<Pokemon | null>();
+// 	const [temporaryOpponentPokemon, setTemporaryOpponentPokemon] =
+// 		useState<Pokemon | null>();
+// 	const [playerReady, setPlayerReady] = useState<boolean>(false);
+// 	const [opponentReady, setOpponentReady] = useState<boolean>(false);
+// 	const [battleWinner, setBattleWinner] = useState<string>('');
+// 	const [playerMovesShowed, setPlayerMovesShowed] = useState<boolean>(false);
+// 	const [opponentMovesShowed, setOpponentMovesShowed] =
+// 		useState<boolean>(false);
 //
-// const Battle = () => {
-// 	const [hostTeam, setHostTeam] = useState<TeamClass | null>(null);
-// 	const [guestTeam, setGuestTeam] = useState<TeamClass | null>(null);
-// 	const [currentHp, setCurrentHp] = useState<number>(guestTeam?.getActivePokemon().stats.currentHp);
-// 	const [hostTeamBattleEffects, setBattleEffectsTeamOne] = useState<
-// 		BattleEffect[]
-// 	>([
-// 		{ name: 'BRU', type: 'status' },
-// 		{ name: 'Atk', number: 0.67, type: 'debuff' },
-// 		{ name: 'Atk', number: 0.67, type: 'debuff' },
-// 		{ name: 'Atk', number: 0.67, type: 'debuff' },
-// 		{ name: 'Atk', number: 0.67, type: 'debuff' },
-// 		{ name: 'Atk', number: 0.67, type: 'debuff' },
-// 		{ name: 'Atk', number: 0.67, type: 'debuff' },
-// 		{ name: 'Atk', number: 0.67, type: 'debuff' },
-// 		{ name: 'Atk', number: 0.67, type: 'debuff' }
-// 	]);
-// 	const [guestTeamBattleEffects, setBattleEffectsTeamTwo] = useState<
-// 		BattleEffect[]
-// 	>([
-// 		{ name: 'SpD', number: 1.5, type: 'buff' },
-// 		{ name: 'PAR', type: 'status' }
-// 	]);
-// 	const [globalEffect, setGlobalEffect] = useState<BattleEffect[]>([
-// 		{ name: 'Rain', turns: 5 }
-// 	]);
-//
-// 	const [theme, setTheme] = useState<string>('day');
-// 	const toggleTheme = () => {
-// 		setTheme(theme === 'day' ? 'night' : 'day');
-// 	};
-//
-// 	useEffect(() => {
-//
-// 		const stats = new StatsClass({
-// 			hp: 45,
-// 			attack: 49,
-// 			defense: 49,
-// 			spAttack: 65,
-// 			spDefense: 65,
-// 			speed: 45,
-// 			ev: 0,
-// 			iv: 0,
-// 			currentHp: 45
-// 		});
-//
-// 		const bulbasaur = new PokemonClass({
-// 			id: 1,
-// 			name: 'Bulbasaur',
-// 			stats,
-// 			moves: [
-// 				{
-// 					name: 'Tackle',
-// 					type: { name: 'normal' },
-// 					category: 'physical',
-// 					power: 40,
-// 					accuracy: 100,
-// 					pp: 35,
-// 					description:
-// 						'A physical attack in which the user charges and slams into the target with its whole body.',
-// 					effect: 'no effect'
-// 				}
-// 			]
-// 		});
-// 		const squirtle = new PokemonClass({
-// 			id: 7,
-// 			name: 'Squirtle',
-// 			stats,
-// 			moves: [
-// 				{
-// 					name: 'Tackle',
-// 					type: { name: 'normal' },
-// 					category: 'physical',
-// 					power: 40,
-// 					accuracy: 100,
-// 					pp: 35,
-// 					description:
-// 						'A physical attack in which the user charges and slams into the target with its whole body.',
-// 					effect: 'no effect'
-// 				}
-// 			]
-// 		});
-//
-// 		const charmander = new PokemonClass({
-// 			id: 4,
-// 			name: 'Charmander',
-// 			stats,
-// 			moves: [
-// 				{
-// 					name: 'Tackle',
-// 					type: { name: 'normal' },
-// 					category: 'physical',
-// 					power: 40,
-// 					accuracy: 100,
-// 					pp: 35,
-// 					description:
-// 						'A physical attack in which the user charges and slams into the target with its whole body.',
-// 					effect: 'no effect'
-// 				}
-// 			]
-// 		});
-//
-// 		const mew = new PokemonClass({
-// 			id: 151,
-// 			name: 'Mew',
-// 			stats,
-// 			moves: [
-// 				{
-// 					name: 'Tackle',
-// 					type: { name: 'normal' },
-// 					category: 'physical',
-// 					power: 40,
-// 					accuracy: 100,
-// 					pp: 35,
-// 					description:
-// 						'A physical attack in which the user charges and slams into the target with its whole body.',
-// 					effect: 'no effect'
-// 				}
-// 			]
-// 		});
-//
-// 		const arcanine = new PokemonClass({
-// 			id: 59,
-// 			name: 'Arcanine',
-// 			stats,
-// 			moves: [
-// 				{
-// 					name: 'Tackle',
-// 					type: { name: 'normal' },
-// 					category: 'physical',
-// 					power: 40,
-// 					accuracy: 100,
-// 					pp: 35,
-// 					description:
-// 						'A physical attack in which the user charges and slams into the target with its whole body.',
-// 					effect: 'no effect'
-// 				}
-// 			]
-// 		});
-//
-// 		const ninetails = new PokemonClass({
-// 			id: 38,
-// 			name: 'Ninetails',
-// 			stats,
-// 			moves: [
-// 				{
-// 					name: 'Tackle',
-// 					type: { name: 'normal' },
-// 					category: 'physical',
-// 					power: 40,
-// 					accuracy: 100,
-// 					pp: 35,
-// 					description:
-// 						'A physical attack in which the user charges and slams into the target with its whole body.',
-// 					effect: 'no effect'
-// 				}
-// 			]
-// 		});
-//
-// 		const hostTeam = new TeamClass(
-// 			{
-// 				name: 'Host',
-// 				avatar: '/images/avatars/cynthia.png',
-// 				pokemons: [bulbasaur, squirtle, charmander, mew, arcanine, ninetails]
-// 			},
-// 			bulbasaur
-// 		);
-//
-// 		setHostTeam(hostTeam);
-//
-// 		const guestTeam = new TeamClass(
-// 			{
-// 				name: 'Guest',
-// 				avatar: '/images/avatars/red.png',
-// 				pokemons: [squirtle, charmander, bulbasaur, ninetails, mew, arcanine]
-// 			},
-// 			squirtle
-// 		);
-//
-// 		setGuestTeam(guestTeam);
-//
-// 		console.log(guestTeam.getActivePokemon());
-//
-// 		const battle = new BattleClass(hostTeam, guestTeam, 1);
-// 	}, []);
-//
-// 	if (
-// 		!guestTeam ||
-// 		!hostTeam ||
-// 		!guestTeam.getActivePokemon() ||
-// 		!hostTeam.getActivePokemon()
+// 	// Utilitaires
+// 	function storePlayerPokemon(updatedPokemon: Pokemon) {
+// 		setPlayerPokemon(updatedPokemon);
+// 		updateTeamWithNewPokemon(updatedPokemon, setPlayerTeam);
+// 		localStorage.setItem('playerPokemon', JSON.stringify(updatedPokemon));
+// 	}
+// 	function storeOpponentPokemon(updatedPokemon: Pokemon) {
+// 		setOpponentPokemon(updatedPokemon);
+// 		updateTeamWithNewPokemon(updatedPokemon, setOpponentTeam);
+// 		localStorage.setItem('opponentPokemon', JSON.stringify(updatedPokemon));
+// 	}
+// 	function updateTeamWithNewPokemon(
+// 		updatedPokemon: Pokemon,
+// 		setTeam: Function
 // 	) {
-// 		return <div>Loading...</div>;
+// 		setTeam((team: Pokemon[]) =>
+// 			team.map(pokemon =>
+// 				pokemon.name === updatedPokemon.name ? updatedPokemon : pokemon
+// 			)
+// 		);
+// 	}
+// 	function recreatePokemonFromParsed(parsedPokemon: any) {
+// 		const status = parsedPokemon.status
+// 			? new Status(
+// 					parsedPokemon.status.name,
+// 					parsedPokemon.status.description,
+// 					parsedPokemon.status.counter,
+// 					parsedPokemon.status.ableToMove
+// 				)
+// 			: new Status('', '', 0, true);
+//
+// 		const volatileStatus = parsedPokemon.volatileStatus
+// 			? new Status(
+// 					parsedPokemon.volatileStatus.name,
+// 					parsedPokemon.volatileStatus.description,
+// 					parsedPokemon.volatileStatus.counter,
+// 					parsedPokemon.volatileStatus.ableToMove
+// 				)
+// 			: new Status('', '', 0, true);
+//
+// 		const moves = parsedPokemon.moves.map((move: Move) => {
+// 			return new Move(
+// 				move.name,
+// 				move.power,
+// 				move.accuracy,
+// 				move.accuracy,
+// 				move.pp,
+// 				move.meta,
+// 				move.target,
+// 				move.type
+// 			);
+// 		});
+//
+// 		const activeMove = parsedPokemon.activeMove
+// 			? new Move(
+// 					parsedPokemon.activeMove.name,
+// 					parsedPokemon.activeMove.power,
+// 					parsedPokemon.activeMove.accuracy,
+// 					parsedPokemon.activeMove.pp,
+// 					parsedPokemon.activeMove.meta,
+// 					parsedPokemon.activeMove.target,
+// 					parsedPokemon.activeMove.type
+// 				)
+// 			: moves[0];
+//
+// 		return new Pokemon(
+// 			parsedPokemon.name,
+// 			parsedPokemon.stats,
+// 			moves,
+// 			activeMove,
+// 			status,
+// 			volatileStatus,
+// 			parsedPokemon.types
+// 		);
+// 	}
+// 	function getPlayerFromStore() {
+// 		const parsedPlayerPokemon = JSON.parse(
+// 			localStorage.getItem('playerPokemon')
+// 		);
+// 		const playerPokemon = recreatePokemonFromParsed(parsedPlayerPokemon);
+// 		return playerPokemon;
+// 	}
+// 	function getPlayerTeamFromStore() {
+// 		const parsedPlayerTeam = JSON.parse(localStorage.getItem('playerTeam'));
+// 		const playerTeam = parsedPlayerTeam.map((parsedPokemon: Pokemon) => {
+// 			return recreatePokemonFromParsed(parsedPokemon);
+// 		});
+// 		return playerTeam;
+// 	}
+// 	function getOpponentFromStore() {
+// 		const parsedOpponentPokemon = JSON.parse(
+// 			localStorage.getItem('opponentPokemon')
+// 		);
+// 		const opponentPokemon = recreatePokemonFromParsed(parsedOpponentPokemon);
+// 		return opponentPokemon;
+// 	}
+// 	function getOpponentTeamFromStore() {
+// 		const parsedOpponentTeam = JSON.parse(
+// 			localStorage.getItem('opponentTeam')
+// 		);
+// 		const opponentTeam = parsedOpponentTeam.map((parsedPokemon: Pokemon) => {
+// 			return recreatePokemonFromParsed(parsedPokemon);
+// 		});
+// 		return opponentTeam;
 // 	}
 //
+// 	// Récupération des pokémons depuis le localStorage ou la room
+// 	useEffect(() => {
+// 		if (!battle) return;
+// 		const playerStoredPokemon = localStorage.getItem('playerPokemon');
+// 		const opponentStoredPokemon = localStorage.getItem('opponentPokemon');
+// 		const playerStoredTeam = localStorage.getItem('playerTeam');
+// 		const opponentStoredTeam = localStorage.getItem('opponentTeam');
+//
+// 		if (playerStoredPokemon && opponentStoredPokemon) {
+// 			setPlayerPokemon(getPlayerFromStore());
+// 			setOpponentPokemon(getOpponentFromStore());
+// 		} else {
+// 			setPlayerPokemon(battle.playerPokemon);
+// 			setOpponentPokemon(battle.opponentPokemon);
+// 		}
+//
+// 		if (playerStoredTeam && opponentStoredTeam) {
+// 			setPlayerTeam(getPlayerTeamFromStore());
+// 			setOpponentTeam(getOpponentTeamFromStore());
+// 		} else {
+// 			setPlayerTeam([battle.playerPokemon]);
+// 			setOpponentTeam([battle.opponentPokemon]);
+// 		}
+// 	}, [battle]);
+//
+// 	//
+//
+// 	// Déroulement des attaques une fois les 2 joueurs prêts
+// 	useEffect(() => {
+// 		if (!playerReady || !opponentReady) return;
+// 		handlePokemonSelection();
+// 		handleSleeping();
+// 		handleConfusion();
+// 		handleParalysis();
+// 		handleAttacksByPriority();
+// 		handleActiveMovesPpReduction();
+// 		handleThawing();
+// 		handlePoisoning();
+// 		handleBurning();
+// 		setPlayerReady(false);
+// 		setOpponentReady(false);
+// 	}, [playerReady, opponentReady]);
+//
+// 	// Détermination du gagnant
+// 	useEffect(() => {
+// 		if (playerPokemon?.status.name === 'KO') {
+// 			setBattleWinner('Opponent wins!');
+// 		}
+// 		if (opponentPokemon?.status.name === 'KO') {
+// 			setBattleWinner('Player wins!');
+// 		}
+// 	}, [playerPokemon, opponentPokemon]);
+//
+// 	const handleSleeping = () => {
+// 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+// 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+//
+// 		if (playerUpdatedPokemon.status.name === 'SLP') {
+// 			let updatedStatus = playerUpdatedPokemon.status.setCounter(
+// 				playerUpdatedPokemon.status.counter - 1
+// 			);
+// 			if (updatedStatus.counter === 0) {
+// 				updatedStatus = new Status('', '', 0, true);
+// 			}
+// 			const updatedPokemon =
+// 				playerUpdatedPokemon.changeStatus(updatedStatus);
+// 			storePlayerPokemon(updatedPokemon);
+// 		}
+//
+// 		if (opponentUpdatedPokemon.status.name === 'SLP') {
+// 			let updatedStatus = opponentUpdatedPokemon.status.setCounter(
+// 				opponentUpdatedPokemon.status.counter - 1
+// 			);
+// 			if (updatedStatus.counter === 0) {
+// 				updatedStatus = new Status('', '', 0, true);
+// 			}
+// 			const updatedPokemon =
+// 				opponentUpdatedPokemon.changeStatus(updatedStatus);
+// 			storeOpponentPokemon(updatedPokemon);
+// 		}
+// 	};
+//
+// 	const handleConfusion = () => {
+// 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+// 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+//
+// 		if (playerUpdatedPokemon.volatileStatus.name === 'CNF') {
+// 			const random = Math.random();
+// 			if (random < 0.5) {
+// 				playerUpdatedPokemon =
+// 					playerUpdatedPokemon.changeActiveMove(CONFUSED_MOVE);
+// 				storePlayerPokemon(playerUpdatedPokemon);
+// 			}
+// 		}
+//
+// 		if (opponentUpdatedPokemon.volatileStatus.name === 'CNF') {
+// 			const random = Math.random();
+// 			if (random < 0.5) {
+// 				opponentUpdatedPokemon =
+// 					opponentUpdatedPokemon.changeActiveMove(CONFUSED_MOVE);
+// 				storeOpponentPokemon(opponentUpdatedPokemon);
+// 			}
+// 		}
+// 	};
+//
+// 	const handleParalysis = () => {
+// 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+// 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+//
+// 		if (playerUpdatedPokemon.status.name === 'PAR') {
+// 			let updatedStatus = playerUpdatedPokemon.status.setAbleToMove(false);
+// 			const random = Math.random();
+// 			if (random < PARALYSIS_CHANCE) {
+// 				updatedStatus = updatedStatus.setAbleToMove(true);
+// 			}
+// 			playerUpdatedPokemon =
+// 				playerUpdatedPokemon.changeStatus(updatedStatus);
+// 			storePlayerPokemon(playerUpdatedPokemon);
+// 		}
+//
+// 		if (opponentUpdatedPokemon.status.name === 'PAR') {
+// 			let updatedStatus = opponentUpdatedPokemon.status.setAbleToMove(false);
+// 			const random = Math.random();
+// 			if (random < PARALYSIS_CHANCE) {
+// 				updatedStatus = updatedStatus.setAbleToMove(true);
+// 			}
+// 			opponentUpdatedPokemon =
+// 				opponentUpdatedPokemon.changeStatus(updatedStatus);
+// 			storeOpponentPokemon(opponentUpdatedPokemon);
+// 		}
+// 	};
+//
+// 	const handleAttacksByPriority = () => {
+// 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+// 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+// 		const playerSpeed = playerUpdatedPokemon?.getStat('speed').value;
+// 		const opponentSpeed = opponentUpdatedPokemon?.getStat('speed').value;
+//
+// 		if (playerSpeed > opponentSpeed) {
+// 			handlePlayerAttack();
+// 			handleOpponentAttack();
+// 		} else if (playerSpeed < opponentSpeed) {
+// 			handleOpponentAttack();
+// 			handlePlayerAttack();
+// 		} else {
+// 			const random = Math.random();
+// 			if (random < 0.5) {
+// 				handlePlayerAttack();
+// 				handleOpponentAttack();
+// 			} else {
+// 				handleOpponentAttack();
+// 				handlePlayerAttack();
+// 			}
+// 		}
+// 	};
+//
+// 	const handleActiveMovesPpReduction = () => {
+// 		let updatedPlayerPokemon: Pokemon = getPlayerFromStore();
+// 		let updatedOpponentPokemon: Pokemon = getOpponentFromStore();
+// 		let updatedPlayerMoves: Move[] = updatedPlayerPokemon.moves;
+// 		let updatedOpponentMoves: Move[] = updatedOpponentPokemon.moves;
+// 		updatedPlayerMoves = updatedPlayerMoves.map((move: Move) =>
+// 			move.name === updatedPlayerPokemon.activeMove.name
+// 				? move.decreasePP()
+// 				: move
+// 		);
+// 		updatedOpponentMoves = updatedOpponentMoves.map((move: Move) =>
+// 			move.name === updatedOpponentPokemon.activeMove.name
+// 				? move.decreasePP()
+// 				: move
+// 		);
+// 		updatedPlayerPokemon =
+// 			updatedPlayerPokemon.updateMoves(updatedPlayerMoves);
+// 		updatedOpponentPokemon =
+// 			updatedOpponentPokemon.updateMoves(updatedOpponentMoves);
+// 		storePlayerPokemon(updatedPlayerPokemon);
+// 		storeOpponentPokemon(updatedOpponentPokemon);
+// 	};
+//
+// 	const handlePoisoning = () => {
+// 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+// 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+//
+// 		if (playerUpdatedPokemon.status.name === 'PSN') {
+// 			const updatedPokemon = playerUpdatedPokemon.sufferFromStatus();
+// 			storePlayerPokemon(updatedPokemon);
+// 		}
+//
+// 		if (opponentUpdatedPokemon.status.name === 'PSN') {
+// 			const updatedPokemon = opponentUpdatedPokemon.sufferFromStatus();
+// 			storeOpponentPokemon(updatedPokemon);
+// 		}
+// 	};
+//
+// 	const handleBurning = () => {
+// 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+// 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+//
+// 		if (playerUpdatedPokemon.status.name === 'BRN') {
+// 			const updatedPokemon = playerUpdatedPokemon.sufferFromStatus();
+// 			storePlayerPokemon(updatedPokemon);
+// 		}
+//
+// 		if (opponentUpdatedPokemon.status.name === 'BRN') {
+// 			const updatedPokemon = opponentUpdatedPokemon.sufferFromStatus();
+// 			storeOpponentPokemon(updatedPokemon);
+// 		}
+// 	};
+//
+// 	const handlePlayerMoveSelection = (move: Move) => {
+// 		if (move.pp === 0) return;
+// 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+// 		playerUpdatedPokemon = playerUpdatedPokemon.changeActiveMove(move);
+// 		storePlayerPokemon(playerUpdatedPokemon);
+// 		handlePlayerReady();
+// 	};
+//
+// 	const handleOpponentMoveSelection = (move: Move) => {
+// 		if (move.pp === 0) return;
+// 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+// 		opponentUpdatedPokemon = opponentUpdatedPokemon.changeActiveMove(move);
+// 		storeOpponentPokemon(opponentUpdatedPokemon);
+// 		handleOpponentReady();
+// 	};
+//
+// 	const handlePokemonSelection = () => {
+// 		if (temporaryPlayerPokemon) {
+// 			setPlayerPokemon(temporaryPlayerPokemon);
+// 			storePlayerPokemon(temporaryPlayerPokemon);
+// 		}
+// 		if (temporaryOpponentPokemon) {
+// 			setOpponentPokemon(temporaryOpponentPokemon);
+// 			storeOpponentPokemon(temporaryOpponentPokemon);
+// 		}
+// 	};
+//
+// 	const handleThawing = () => {
+// 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+// 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+//
+// 		if (playerUpdatedPokemon.status.name === 'FRZ') {
+// 			const random = Math.random();
+// 			if (random < THAW_CHANCE) {
+// 				const updatedStatus = new Status('', '', 0, true);
+// 				playerUpdatedPokemon =
+// 					playerUpdatedPokemon.changeStatus(updatedStatus);
+// 				storePlayerPokemon(playerUpdatedPokemon);
+// 			}
+// 		}
+//
+// 		if (opponentUpdatedPokemon.status.name === 'FRZ') {
+// 			const random = Math.random();
+// 			if (random < THAW_CHANCE) {
+// 				const updatedStatus = new Status('', '', 0, true);
+// 				opponentUpdatedPokemon =
+// 					opponentUpdatedPokemon.changeStatus(updatedStatus);
+// 				storeOpponentPokemon(opponentUpdatedPokemon);
+// 			}
+// 		}
+// 	};
+//
+// 	const handlePlayerAttack = () => {
+// 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+// 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+//
+// 		if (!playerUpdatedPokemon.status.ableToMove) return;
+//
+// 		if (playerUpdatedPokemon.activeMove.target === 'user') {
+// 			const updatedPokemon =
+// 				playerUpdatedPokemon.attack(playerUpdatedPokemon);
+// 			storePlayerPokemon(updatedPokemon);
+// 		} else {
+// 			const updatedPokemon = playerUpdatedPokemon.attack(
+// 				opponentUpdatedPokemon
+// 			);
+// 			storeOpponentPokemon(updatedPokemon);
+// 		}
+// 	};
+//
+// 	const handleOpponentAttack = () => {
+// 		let playerUpdatedPokemon: Pokemon = getPlayerFromStore();
+// 		let opponentUpdatedPokemon: Pokemon = getOpponentFromStore();
+//
+// 		if (!opponentUpdatedPokemon.status.ableToMove) return;
+//
+// 		if (opponentUpdatedPokemon.activeMove.target === 'user') {
+// 			const updatedPokemon = opponentUpdatedPokemon.attack(
+// 				opponentUpdatedPokemon
+// 			);
+// 			storeOpponentPokemon(updatedPokemon);
+// 		} else {
+// 			const updatedPokemon =
+// 				opponentUpdatedPokemon.attack(playerUpdatedPokemon);
+// 			storePlayerPokemon(updatedPokemon);
+// 		}
+// 	};
+//
+// 	const handlePlayerReady = () => {
+// 		setPlayerReady(true);
+// 	};
+//
+// 	const handleOpponentReady = () => {
+// 		setOpponentReady(true);
+// 	};
+//
 // 	return (
-// 		<div className="battle-container">
-// 			<CustomImage
-// 				src={`/images/backgrounds/bg-battle-${theme}-upscale-tiny.jpg`}
-// 				alt="Battle background"
-// 				fill={true}
-// 				priority={true}
-// 				objectFit="cover"
-// 				className="battle-background"
-// 			/>
-// 			<div className="battle-theme">
-// 				<CustomButton
-// 					icon={
-// 						theme === 'day'
-// 							? { name: 'Moon', size: 20 }
-// 							: { name: 'Sun', size: 20 }
+// 		<div className={`battle-container ${activeTheme}`}>
+// 			<div className={'battle-background'}>
+// 				<CustomImage
+// 					src={`/images/compressed/backgrounds/bg-battle-${activeTheme}.jpg`}
+// 					alt={'background arena'}
+// 					fill={true}
+// 					sizes={'100vw'}
+// 				/>
+// 			</div>
+//
+// 			<div className={'battle-theme'}>
+// 				<button
+// 					onClick={() =>
+// 						activeTheme === 'day'
+// 							? setActiveTheme('night')
+// 							: setActiveTheme('day')
 // 					}
-// 					onClick={toggleTheme}
-// 					className="theme-icon"
-// 				/>
-// 			</div>
-// 			<div className="battle-turn">Turn 1</div>
-//
-// 			<div className="battle-toast">Toast</div>
-//
-// 			<div className="battle-global-infos">
-// 				{globalEffect &&
-// 					globalEffect.map(effect => (
-// 						<>
-// 							{effect.name === 'Rain' && (
-// 								<div className="rain" key={effect.name}>
-// 									<CloudRainWind size={20} />
-// 									<span>{effect.turns}</span>
-// 								</div>
-// 							)}
-// 						</>
-// 					))}
+// 				>
+// 					{activeTheme === 'day' ? <Moon /> : <Sun />}
+// 				</button>
 // 			</div>
 //
-// 			<div className="battle-team player">
-// 				<BattleTeam team={hostTeam} />
-// 			</div>
+// 			<div className={'battle-turn'}>Turn {activeTurn}</div>
 //
-// 			<div className="battle-team opponent">
-// 				<BattleTeam team={guestTeam} />
-// 			</div>
+// 			<div className={'battle-global-infos'}></div>
 //
-// 			<div className="battle-pokemon player">
-// 				<BattlePokemon
-// 					activePokemon={hostTeam.getActivePokemon()}
-// 					battleEffects={hostTeamBattleEffects}
-// 					player={true}
-// 				/>
-// 			</div>
-//
-// 			<div className="battle-pokemon opponent">
-// 				<BattlePokemon
-// 					activePokemon={guestTeam.getActivePokemon()}
-// 					battleEffects={guestTeamBattleEffects}
-// 				/>
-// 			</div>
-//
-// 			<div className="battle-actions">
-// 				<div>
-// 					<CustomButton
-// 						text="Attack"
-// 						image={{
-// 							src: '/images/icons/battle.png',
-// 							alt: 'Battle icon',
-// 							width: 75,
-// 							height: 75,
-// 							priority: true,
-// 							className: 'battle-icon'
-// 						}}
-// 						onClick={() => {setCurrentHp(hostTeam.getActivePokemon().attack(guestTeam.getActivePokemon(), hostTeam.getActivePokemon().moves[0]))
-// 						guestTeam.getActivePokemon().stats.currentHp = currentHp;
-// 						console.log('guest:', guestTeam.getActivePokemon().stats.currentHp)
-// 						console.log('host:', hostTeam.getActivePokemon().stats.currentHp)
-// 					}}
-// 					/>
-// 					<CustomButton
-// 						text="Team"
-// 						image={{
-// 							src: '/images/icons/pokeball.png',
-// 							alt: 'Battle icon',
-// 							width: 75,
-// 							height: 75,
-// 							priority: true,
-// 							className: 'battle-icon'
-// 						}}
-// 					/>
-// 					<CustomButton
-// 						text="Chat"
-// 						image={{
-// 							src: '/images/icons/chat.png',
-// 							alt: 'Battle icon',
-// 							width: 75,
-// 							height: 75,
-// 							priority: true,
-// 							className: 'battle-icon'
-// 						}}
-// 					/>
-// 					<CustomButton
-// 						text="Surrender"
-// 						image={{
-// 							src: '/images/icons/run.png',
-// 							alt: 'Battle icon',
-// 							width: 75,
-// 							height: 75,
-// 							priority: true,
-// 							className: 'battle-icon run'
-// 						}}
-// 					/>
+// 			<div className={'battle-team player'}>
+// 				<div className={'battle-team-container'}>
+// 					<div className={'battle-team-avatar'}>Ici avatar du joueur</div>
+// 					<div className={'battle-team-pokemons'}>
+// 						{playerTeam.map((pokemon: Pokemon) => (
+// 							<div
+// 								key={pokemon.name}
+// 								className={`battle-team-pokemon ${
+// 									pokemon.name === playerPokemon?.name ? 'active' : ''
+// 								}`}
+// 							>
+// 								<CustomImage
+// 									src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
+// 									alt={pokemon.name}
+// 									width={30}
+// 									height={30}
+// 								/>
+// 							</div>
+// 						))}
+// 					</div>
 // 				</div>
 // 			</div>
 //
-// 			<div className="battle-timer">
-// 				<CustomButton
-// 					icon={{
-// 						name: 'Timer',
-// 						size: 20,
-// 						strokeWidth: 3
-// 					}}
-// 					text="Start the timer"
-// 					className="timer-icon"
-// 				/>
+// 			<div className={'battle-team opponent'}>
+// 				<div className={'battle-team-container'}>
+// 					<div className={'battle-team-avatar'}>Ici avatar du joueur</div>
+// 					<div className={'battle-team-pokemons'}>
+// 						{opponentTeam.map((pokemon: Pokemon) => (
+// 							<div
+// 								key={pokemon.name}
+// 								className={`battle-team-pokemon ${
+// 									pokemon.name === playerPokemon?.name ? 'active' : ''
+// 								}`}
+// 							>
+// 								<CustomImage
+// 									src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
+// 									alt={pokemon.name}
+// 									width={30}
+// 									height={30}
+// 								/>
+// 							</div>
+// 						))}
+// 					</div>
+// 				</div>
 // 			</div>
+// 			{/* Affichage des informations du Pokemon de l'adversaire */}
+// 			<p>
+// 				{opponentPokemon?.name + ' '}
+// 				{opponentPokemon?.getStat('hp').value +
+// 					'/' +
+// 					opponentPokemon?.getStat('hp').max}
+// 				<br />
+// 				{'status ' + opponentPokemon?.status.name
+// 					? opponentPokemon?.status.name
+// 					: ''}
+// 				<br />
+// 				{'volatileStatus' + opponentPokemon?.volatileStatus.name
+// 					? opponentPokemon?.volatileStatus.name
+// 					: ''}
+// 			</p>
+//
+// 			{/* Bouton Team de l'adversaire */}
+// 			<button
+// 				onClick={() => {
+// 					setOpponentMovesShowed(false);
+// 					setOpponentTeamShowed(!opponentTeamShowed);
+// 				}}
+// 			>
+// 				Team
+// 			</button>
+//
+// 			{/* Bouton Attack de l'adversaire */}
+// 			<button
+// 				onClick={() => {
+// 					setOpponentTeamShowed(false);
+// 					setOpponentMovesShowed(!opponentMovesShowed);
+// 				}}
+// 			>
+// 				Attack
+// 			</button>
+//
+// 			{/* Affichage des Pokémons de l'adversaire */}
+// 			{opponentTeamShowed && (
+// 				<div>
+// 					{opponentTeam.map((pokemon: Pokemon) => (
+// 						<button
+// 							key={pokemon.name}
+// 							onClick={() => {
+// 								setTemporaryOpponentPokemon(pokemon);
+// 								setOpponentReady(true);
+// 							}}
+// 						>
+// 							{pokemon.name}
+// 						</button>
+// 					))}
+// 				</div>
+// 			)}
+//
+// 			{/* Affichage des moves de l'adversaire */}
+// 			{opponentMovesShowed && (
+// 				<div>
+// 					{opponentPokemon.moves.map((move: Move) => (
+// 						<button
+// 							key={move.name}
+// 							onClick={() => {
+// 								handleOpponentMoveSelection(move);
+// 							}}
+// 						>
+// 							{move.name}
+// 						</button>
+// 					))}
+// 				</div>
+// 			)}
+//
+// 			{/* Affichage des informations du Pokemon du joueur */}
+// 			<p>
+// 				{playerPokemon?.name + ' '}
+// 				{playerPokemon?.getStat('hp').value +
+// 					'/' +
+// 					playerPokemon?.getStat('hp').max}
+// 				<br />
+// 				{'status ' + playerPokemon?.status.name
+// 					? playerPokemon?.status.name
+// 					: ''}
+// 				<br />
+// 				{'volatileStatus' + playerPokemon?.volatileStatus.name
+// 					? playerPokemon?.volatileStatus.name
+// 					: ''}
+// 			</p>
+//
+// 			{/* Bouton Team du joueur */}
+// 			<button
+// 				onClick={() => {
+// 					setPlayerMovesShowed(false);
+// 					setPlayerTeamShowed(!playerTeamShowed);
+// 				}}
+// 			>
+// 				Team
+// 			</button>
+//
+// 			{/* Bouton Attack du joueur */}
+// 			<button
+// 				onClick={() => {
+// 					setPlayerTeamShowed(false);
+// 					setPlayerMovesShowed(!playerMovesShowed);
+// 				}}
+// 			>
+// 				Attack
+// 			</button>
+//
+// 			{/* Affichage des Pokémons du joueur */}
+// 			{playerTeamShowed && (
+// 				<div>
+// 					{playerTeam.map((pokemon: Pokemon) => (
+// 						<button
+// 							key={pokemon.name}
+// 							onClick={() => {
+// 								setTemporaryPlayerPokemon(pokemon);
+// 								setPlayerReady(true);
+// 							}}
+// 						>
+// 							{pokemon.name}
+// 						</button>
+// 					))}
+// 				</div>
+// 			)}
+//
+// 			{/* Affichage des moves du joueur */}
+// 			{playerMovesShowed && (
+// 				<div>
+// 					{playerPokemon.moves.map((move: Move) => (
+// 						<button
+// 							key={move.name}
+// 							onClick={() => {
+// 								handlePlayerMoveSelection(move);
+// 							}}
+// 						>
+// 							{move.name}
+// 						</button>
+// 					))}
+// 				</div>
+// 			)}
+//
+// 			{/* Affichage du vainqueur */}
+// 			{battleWinner && <h1>{battleWinner}</h1>}
 // 		</div>
 // 	);
 // };
-//
 // export default Battle;

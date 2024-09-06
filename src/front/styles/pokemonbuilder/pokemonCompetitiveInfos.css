@@ -1,0 +1,28 @@
+@import  url("pokemonInfosModal.css");
+@import  url("naturesModal.css");
+@import  url("abilitiesModal.css");
+
+.pokemon-competitive-infos {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.pokemon-item, .pokemon-ability, .pokemon-nature {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.pokemon-item button, .pokemon-ability button, .pokemon-nature button {
+    width: 115px;
+    height: 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: var(--fs-sm);
+}
