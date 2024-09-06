@@ -11,10 +11,10 @@ const userSchema = z.object({
 	email: z.string().email({ message: 'Invalid email address' }),
 	password: z.string().refine(
 		password => {
-			const hasNumber = /\d/.test(password);
-			const hasUpperCase = /[A-Z]/.test(password);
-			const hasLowerCase = /[a-z]/.test(password);
-			return hasNumber && hasUpperCase && hasLowerCase;
+			const isValid = password.match(
+				'^(?=.*[A-Z])(?=.*\\d)(?=.*\\W)[A-Za-z\\d\\W]{8,}$'
+			);
+			return isValid;
 		},
 		{
 			message:
