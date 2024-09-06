@@ -1,4 +1,4 @@
-import { FormEventHandler, useState } from 'react';
+import { FormEventHandler, useEffect, useState } from 'react';
 import { z } from 'zod';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -12,6 +12,10 @@ import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
 interface FormCreateTeamProps {
 	avatars: AvatarEntity[];
 	setOpenForm: (openForm: boolean) => void;
+	setSelectedTeam: (team: TeamEntity) => void;
+	setCurrentTeams: (teams: TeamEntity[]) => void;
+	currentTeams: TeamEntity[];
+	setCurrentLength: (length: number) => void;
 }
 
 // Icons
@@ -19,6 +23,7 @@ import { X } from 'lucide-react';
 
 // Actions
 import { createTeam } from '../../actions/team.actions';
+import { TeamEntity } from '../../../interfaces/team/teamEntity';
 
 const teamSchema = z.object({
 	name: z
@@ -31,7 +36,14 @@ const teamSchema = z.object({
 		})
 });
 
-const formCreateTeam = ({ avatars, setOpenForm }: FormCreateTeamProps) => {
+const formCreateTeam = ({
+	avatars,
+	setOpenForm,
+	setSelectedTeam,
+	setCurrentTeams,
+	currentTeams,
+	setCurrentLength
+}: FormCreateTeamProps) => {
 	const router = useRouter();
 	const [avatarSelected, setAvatarSelected] = useState<AvatarEntity>(
 		avatars[0]
@@ -42,6 +54,20 @@ const formCreateTeam = ({ avatars, setOpenForm }: FormCreateTeamProps) => {
 		name: ''
 	});
 
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				setOpenForm(false);
+			}
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [setOpenForm]);
+
 	const handleSubmit: FormEventHandler<HTMLFormElement> = async event => {
 		event.preventDefault();
 		const form = event.currentTarget;
@@ -51,6 +77,10 @@ const formCreateTeam = ({ avatars, setOpenForm }: FormCreateTeamProps) => {
 			});
 			const formData = new FormData(form);
 
+			if (currentTeams.length >= 15) {
+				return toast.error('You have reached the limit of 15 teams');
+			}
+
 			toast.promise(createTeam(formData, avatarSelected.id), {
 				loading: 'Creating team...',
 				success: response => {
@@ -58,6 +88,9 @@ const formCreateTeam = ({ avatars, setOpenForm }: FormCreateTeamProps) => {
 						throw new Error(response.message);
 					}
 					form.reset();
+					setSelectedTeam(response);
+					setCurrentTeams([...currentTeams, response]);
+					setCurrentLength(currentTeams.length + 1);
 					router.refresh();
 					setOpenForm(false);
 					return `${response.name} created successfully!`;
@@ -117,11 +150,15 @@ const formCreateTeam = ({ avatars, setOpenForm }: FormCreateTeamProps) => {
 								/>
 							))}
 						</div>
+						<div className={'btn-create-team-container-modal'}>
+							<button className={'btn-create-team btn-primary'}>
+								Create
+							</button>
+						</div>
 					</div>
 				) : (
 					<div>No avatars found</div>
 				)}
-				<button className={'btn-create-team btn-primary'}>Create</button>
 			</form>
 		</div>
 	);

@@ -2,7 +2,10 @@ import { Metadata } from 'next';
 import React from 'react';
 import { Toaster } from 'sonner';
 
+// Styles
 import '../front/styles/global.css';
+
+// Components
 import Navbar from '../front/components/navbar';
 
 export const metadata: Metadata = {

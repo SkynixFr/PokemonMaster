@@ -1,0 +1,128 @@
+.battle-pokemon-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 350px;
+    position: relative;
+}
+
+.battle-pokemon-container.player {
+    animation: fadeInToRight 1s ease-in-out;
+}
+
+.battle-pokemon-container.opponent {
+    animation: fadeInToLeft 1s ease-in-out;
+}
+
+.battle-pokemon-infos {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    height: calc(75px - 20px);
+    width: calc(100% - 10px);
+    background: var(--white);
+    border-radius: 10px;
+    padding: 10px 5px;
+}
+
+
+
+.battle-pokemon-infos .battle-pokemon-stat-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    height: 100%;
+    width: calc(100% - 50px);
+    font-size: var(--fs-md);
+}
+
+.battle-pokemon-infos .battle-pokemon-stat-top .battle-pokemon-gender {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.battle-pokemon-infos .battle-pokemon-stat-top .battle-pokemon-gender svg {
+    width: 15px;
+    height: 15px;
+}
+
+.battle-pokemon-infos .battle-pokemon-stat-top .battle-pokemon-gender.male {
+    color: var(--blue);
+}
+
+.battle-pokemon-infos .battle-pokemon-stat-top .battle-pokemon-gender.female {
+    color: var(--red);
+}
+
+.battle-pokemon-infos .battle-pokemon-stat-top .battle-pokemon-level {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-size: var(--fs-sm);
+    flex-grow: 1;
+}
+
+.progress-bar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: calc(100% - 50px);
+}
+
+.battle-pokemon-progress-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10px;
+    background-color: var(--grey);
+    border-radius: 25px;
+}
+
+.battle-pokemon-progress-bar-fill {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    height:100%;
+    border-radius: 25px;
+    transition: width 0.3s ease-in-out;
+}
+
+.progress-bar-container span {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: var(--fs-sm);
+}
+
+.pokemon-shadow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-size: cover;
+    filter: grayscale(1) opacity(0.4) brightness(0) blur(5px);
+    z-index: -1;
+}
+
+.pokemon-shadow.player{
+    transform: scaleX(-1) rotate(168.25deg);
+    top: 245px;
+    right: 110px;
+}
+
+.pokemon-shadow.opponent{
+    transform: scaleY(-1) rotate(15deg);
+    top: 237px;
+    right: 60px;
+}

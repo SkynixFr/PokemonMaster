@@ -7,25 +7,31 @@ interface TeamListItemProps {
 	team: TeamEntity;
 	selectedTeam: TeamEntity;
 	setSelectedTeam: (team: TeamEntity) => void;
+	setCurrentTeams: (teams: TeamEntity[]) => void;
+	currentTeams: TeamEntity[];
 	resetSelectedTeam?: () => void;
 	option?: boolean;
+	setCurrentLength?: (length: number) => void;
 }
 
 // Components
 import CustomImage from '../customImage';
 
 // Icons
-import { PencilLine, SaveAll, Trash2 } from 'lucide-react';
+import { Copy, PencilLine, Trash2 } from 'lucide-react';
 
 // Actions
-import { deleteTeam } from '../../actions/team.actions';
+import { copyTeam, deleteTeam } from '../../actions/team.actions';
 
 const Team = ({
 	team,
 	selectedTeam,
 	setSelectedTeam,
 	option,
-	resetSelectedTeam
+	resetSelectedTeam,
+	setCurrentTeams,
+	currentTeams,
+	setCurrentLength
 }: TeamListItemProps) => {
 	const router = useRouter();
 
@@ -34,8 +40,50 @@ const Team = ({
 			loading: 'Deleting team...',
 			success: () => {
 				resetSelectedTeam();
+				setCurrentTeams(currentTeams.filter(team => team.id !== teamId));
+				setCurrentLength(currentTeams.length - 1);
 				router.refresh();
 				return 'Team deleted';
+			},
+			error: error => {
+				return error.message;
+			}
+		});
+	};
+
+	const handleCopy = (team: TeamEntity) => {
+		const getNextCopyName = (name: string) => {
+			let copyNumber = 1;
+			let newName = `${name} (${copyNumber})`;
+
+			while (currentTeams.some(team => team.name === newName)) {
+				copyNumber++;
+				newName = `${name} (${copyNumber})`;
+			}
+			return newName;
+		};
+
+		const newTeam = { ...team };
+		newTeam.id = `${team.id}-${Date.now()}`;
+		newTeam.name = getNextCopyName(team.name);
+
+		if (currentTeams.length >= 15) {
+			return toast.error('You have reached the limit of 15 teams');
+		}
+
+		setCurrentTeams([...currentTeams, newTeam]);
+
+		toast.promise(copyTeam(newTeam), {
+			loading: 'Creating team...',
+			success: response => {
+				if (response.status) {
+					throw new Error(response.message);
+				}
+				setSelectedTeam(response);
+				setCurrentTeams([...currentTeams, response]);
+				setCurrentLength(currentTeams.length + 1);
+				router.refresh();
+				return `${response.name} copied successfully!`;
 			},
 			error: error => {
 				return error.message;
@@ -46,22 +94,29 @@ const Team = ({
 	return (
 		<div className={'team-container'}>
 			<div
-				className={`team-infos ${selectedTeam.id === team.id ? 'selected' : ''}`}
+				className={`team-infos ${selectedTeam?.id === team.id ? 'selected' : ''}`}
 				onClick={() => setSelectedTeam(team)}
 			>
 				<div className={'bg-team'}>
 					<CustomImage
 						src={team.avatar.sprite}
 						alt={team.avatar.name}
-						fill={true}
-						sizes="(max-width: 768px) 116px, 116px"
+						width={500}
+						height={500}
+						sizes={'100vw'}
 					/>
 				</div>
 				<span>{team.name}</span>
 				{team.pokemons && team.pokemons.length > 0 ? (
 					<div className={'team-pokemon'}>
-						{team.pokemons.map(pokemon => (
-							<div key={pokemon.pokedexId}>{pokemon.name}</div>
+						{team.pokemons.map((pokemon, index) => (
+							<CustomImage
+								src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
+								alt={pokemon.name}
+								width={40}
+								height={40}
+								key={index}
+							/>
 						))}
 					</div>
 				) : (
@@ -69,16 +124,16 @@ const Team = ({
 				)}
 			</div>
 
-			{option && team.id === selectedTeam.id ? (
+			{option && team.id === selectedTeam?.id ? (
 				<div className={'team-options'}>
-					<button>
+					<button onClick={() => router.push(`pokemonbuilder/${team.id}`)}>
 						<PencilLine />
 					</button>
 					<button onClick={() => handleDelete(team.id)}>
 						<Trash2 />
 					</button>
-					<button disabled={true}>
-						<SaveAll />
+					<button onClick={() => handleCopy(team)}>
+						<Copy />
 					</button>
 				</div>
 			) : null}

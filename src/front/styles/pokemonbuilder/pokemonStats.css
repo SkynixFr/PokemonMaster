@@ -1,0 +1,143 @@
+.pokemon-stats {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    flex-grow: 1;
+}
+
+.stats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 10px;
+}
+
+.stats-title {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    height: 20px;
+}
+
+.title-base {
+    width: 70%;
+}
+
+.title-ev, .title-iv, .title-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10%;
+}
+
+.stats-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 15px;
+}
+
+.stat-details {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 25px;
+    font-size: var(--fs-sm);
+}
+
+.stat-infos {
+    display: flex;
+    align-items: center;
+    min-width: calc(70% - 10px);
+    height: 100%;
+    padding: 0 10px 0 0;
+}
+
+.stat-evs, .stat-ivs, .stat-tot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10%;
+    height: 100%;
+}
+
+.stat-evs form, .stat-ivs form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.stat-evs input[type="number"], .stat-ivs input[type="number"] {
+    width: 25px;
+    height: 100%;
+    border: none;
+    background-color: var(--grey);
+    border-radius: 5px;
+    text-align: center;
+    padding: 0 5px;
+}
+
+.stat-evs input[type="number"]::-webkit-inner-spin-button, .stat-ivs input[type="number"]::-webkit-inner-spin-button, .stat-evs input[type="number"]::-webkit-outer-spin-button, .stat-ivs input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.stat-name {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 85px;
+    height: 20px;
+}
+
+.stat-name.nature-increased {
+    color: var(--red);
+}
+
+.stat-name.nature-decreased {
+    color: var(--blue);
+}
+
+.stat-value {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 35px;
+    height: 20px;
+    font-family: var(--ff-base-bold), sans-serif;
+}
+
+.stat-progress {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 75%;
+    height: 5px;
+    background-color: var(--grey);
+    border-radius: 25px;
+}
+
+.stat-progress-value {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    height: 5px;
+    border-radius: 25px 0 0 25px;
+    transition: width 0.3s ease-in-out;
+}
+
+.remaining-evs {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    font-size: var(--fs-sm);
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // Interfaces
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
@@ -8,7 +8,6 @@ import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
 
 // Components
 import TeamDetails from './teamDetails';
-import FormTeam from './formTeam';
 import Teams from './teams';
 
 interface TeamListProps {
@@ -17,17 +16,32 @@ interface TeamListProps {
 }
 
 const TeamBuilderPage = ({ teams, avatars }: TeamListProps) => {
-	const [selectedTeam, setSelectedTeam] = useState<TeamEntity>(teams[0]);
+	const [selectedTeam, setSelectedTeam] = useState<TeamEntity>(null);
+	const [currentLength, setCurrentLength] = useState<number>(0);
+
+	useEffect(() => {
+		if (!teams) return;
+		setSelectedTeam(teams[0]);
+		setCurrentLength(teams.length);
+	}, []);
 
 	return (
 		<div className={'teambuilder-container'}>
 			<div className={'teambuilder-teams'}>
-				<FormTeam avatars={avatars} />
 				<Teams
+					avatars={avatars}
 					teams={teams}
 					setSelectedTeam={setSelectedTeam}
 					selectedTeam={selectedTeam}
+					setCurrentLength={setCurrentLength}
 				/>
+				<div className={'teams-number'}>
+					{currentLength === 15 ? (
+						<h3>Max teams reached</h3>
+					) : (
+						<h3>{currentLength}/15</h3>
+					)}
+				</div>
 			</div>
 
 			<div className={'teambuilder-team-details'}>
