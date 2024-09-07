@@ -38,7 +38,7 @@ const Battle = ({ battle }: BattleProps) => {
 
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
 
-	const recreatePokemonFromParsed = (parsedPokemon: any) => {
+	const recreatePokemonFromParsed = (parsedPokemon: Pokemon): Pokemon => {
 		const status = parsedPokemon.status
 			? new Status(
 					parsedPokemon.status.name,
@@ -231,6 +231,7 @@ const Battle = ({ battle }: BattleProps) => {
 				<BattleTeamCard
 					team={playerTeam}
 					activePokemon={activePlayerPokemon}
+					recreatePokemonFromParsed={recreatePokemonFromParsed}
 					setActivePokemon={setActivePlayerPokemon}
 					player={true}
 				/>
@@ -240,6 +241,7 @@ const Battle = ({ battle }: BattleProps) => {
 				<BattleTeamCard
 					team={opponentTeam}
 					activePokemon={activeOpponentPokemon}
+					recreatePokemonFromParsed={recreatePokemonFromParsed}
 					setActivePokemon={setActiveOpponentPokemon}
 					player={false}
 				/>

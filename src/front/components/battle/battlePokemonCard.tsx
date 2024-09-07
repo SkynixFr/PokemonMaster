@@ -40,17 +40,24 @@ const BattlePokemonCard = ({
 					</div>
 				</div>
 				<div className={'progress-bar-container'}>
-					<div className={'battle-pokemon-progress-bar'}>
+					<div
+						className={`battle-pokemon-progress-bar ${player ? 'player' : 'opponent'}`}
+					>
 						<div
 							className={'battle-pokemon-progress-bar-fill'}
 							style={{
-								width: `${activePokemon.stats[0].value}%`,
+								width: `${(activePokemon.stats[0].value / activePokemon.stats[0].total) * 100}%`,
 								backgroundColor:
-									activePokemon.stats[0].value * 100 > 75
+									activePokemon.stats[0].value >
+									Math.round(activePokemon.stats[0].total / 2)
 										? 'var(--grass)'
-										: activePokemon.stats[0].value * 100 > 50
+										: activePokemon.stats[0].value >
+											  Math.round(activePokemon.stats[0].total / 3)
 											? 'var(--electric)'
-											: activePokemon.stats[0].value * 100 > 25
+											: activePokemon.stats[0].value >
+												  Math.round(
+														activePokemon.stats[0].total / 4
+												  )
 												? 'var(--fire)'
 												: 'var(--fighting)'
 							}}

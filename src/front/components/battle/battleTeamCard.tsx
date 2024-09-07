@@ -10,6 +10,7 @@ interface TeamCardProps {
 	team: Team;
 	activePokemon: Pokemon;
 	setActivePokemon: (pokemon: Pokemon) => void;
+	recreatePokemonFromParsed: (pokemon: Pokemon) => Pokemon;
 	player?: boolean;
 }
 
@@ -17,8 +18,14 @@ const BattleTeamCard = ({
 	team,
 	activePokemon,
 	setActivePokemon,
+	recreatePokemonFromParsed,
 	player
 }: TeamCardProps) => {
+	const handleSwitchPokemon = (pokemon: Pokemon) => {
+		const newPokemon = recreatePokemonFromParsed(pokemon);
+		setActivePokemon(newPokemon);
+	};
+
 	return (
 		<div
 			className={`battle-team-container ${player ? 'player' : 'opponent'}`}
@@ -40,7 +47,7 @@ const BattleTeamCard = ({
 							className={`battle-team-pokemon ${
 								pokemon.name === activePokemon.name ? 'active' : ''
 							}`}
-							onClick={() => setActivePokemon(pokemon)}
+							onClick={() => handleSwitchPokemon(pokemon)}
 						>
 							<CustomImage
 								src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${pokemon.pokedexId}.gif`}
