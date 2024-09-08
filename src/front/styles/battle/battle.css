@@ -9,6 +9,7 @@
 	grid-template-rows: repeat(12, 1fr);
 	height: 100dvh;
 	position: relative;
+	overflow: hidden;
 }
 
 .battle-container.night .battle-turn {
