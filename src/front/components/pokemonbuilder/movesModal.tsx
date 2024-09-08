@@ -79,9 +79,6 @@ const MovesModal = ({
 			}
 			const newMoves = [...movesActive, move];
 			setMovesActive(newMoves);
-			if (newMoves.length === 4) {
-				setOpenMoveIndex(null);
-			}
 		}
 	};
 

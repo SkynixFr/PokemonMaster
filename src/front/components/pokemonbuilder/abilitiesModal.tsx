@@ -94,7 +94,6 @@ const AbilitiesModal = ({
 									}`}
 									onClick={() => {
 										setAbilityActive(ability);
-										setOpenAbilities(false);
 									}}
 								>
 									<div className={'ability-name'}>

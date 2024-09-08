@@ -135,7 +135,6 @@ const NaturesModal = ({
 									className={`natures-list-item ${natureActive ? (natureActive.name === nature.name ? 'active' : '') : ''}`}
 									onClick={() => {
 										setNatureActive(nature);
-										setOpenNature(false);
 									}}
 								>
 									<div className={'nature-name'}>
