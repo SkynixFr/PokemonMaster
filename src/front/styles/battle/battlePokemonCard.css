@@ -6,6 +6,7 @@
     height: 100%;
     width: 350px;
     position: relative;
+    gap: 5px;
 }
 
 .battle-pokemon-container.player {

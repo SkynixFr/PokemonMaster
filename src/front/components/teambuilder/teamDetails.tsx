@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMars, faVenus } from '@fortawesome/free-solid-svg-icons';
 import CustomImage from '../customImage';
 import { useRouter } from 'next/navigation';
-import { createBattle } from '../../utils/battle';
+import { createBattle } from '../../utils/battle/battle';
 interface TeamDetailsProps {
 	team: TeamEntity;
 }
@@ -16,7 +16,6 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 	const handleBattle = (team: TeamEntity) => {
 		const battle = createBattle(team);
 		localStorage.setItem('battle', JSON.stringify(battle));
-		console.log(battle);
 		router.push('/battle');
 	};
 

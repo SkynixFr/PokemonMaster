@@ -39,6 +39,26 @@
 	--steel: #b7b9d0;
 	--water: #6493eb;
 
+	/* type pokemon colors lighter */
+	--bug-light: rgba(167, 183, 35, 0.8);
+	--dark-light: rgba(117, 87, 76, 0.8);
+	--dragon-light: rgba(112, 55, 255, 0.8);
+	--electric-light: rgba(249, 207, 48, 0.8);
+	--fairy-light: rgba(230, 158, 172, 0.8);
+	--fighting-light: rgba(193, 34, 57, 0.8);
+	--fire-light: rgba(245, 125, 49, 0.8);
+	--flying-light: rgba(168, 145, 236, 0.8);
+	--ghost-light: rgba(112, 85, 155, 0.8);
+	--normal-light: rgba(170, 166, 127, 0.8);
+	--grass-light: rgba(116, 203, 72, 0.8);
+	--ground-light: rgba(222, 193, 107, 0.8);
+	--ice-light: rgba(154, 214, 223, 0.8);
+	--poison-light: rgba(164, 62, 158, 0.8);
+	--psychic-light: rgba(251, 85, 132, 0.8);
+	--rock-light: rgba(182, 158, 49, 0.8);
+	--steel-light: rgba(183, 185, 208, 0.8);
+	--water-light: rgba(100, 147, 235, 0.8);
+
 	/* font-family */
 	--ff-base: 'Spiegel Regular';
 	--ff-base-italic: 'Spiegel Regular Italic';

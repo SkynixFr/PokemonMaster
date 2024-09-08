@@ -1,9 +1,16 @@
 //Classes
 import Pokemon from '../../../back/classes/pokemon';
-import CustomImage from '../customImage';
+
+//Utils
 import { firstLetterMaj } from '../../utils/formatString';
+
+//Icons
 import { faMars, faVenus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+//Components
+import CustomImage from '../customImage';
+import BattleStatus from './battleStatus';
 
 //Interfaces
 interface BattlePokemonCardProps {
@@ -68,6 +75,7 @@ const BattlePokemonCard = ({
 					</span>
 				</div>
 			</div>
+			<BattleStatus activePokemon={activePokemon} />
 
 			<div className={'battle-pokemon-avatar'}>
 				<CustomImage

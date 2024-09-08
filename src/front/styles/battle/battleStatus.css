@@ -1,0 +1,65 @@
+.battle-status {
+    width: 300px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 25px;
+    font-size: var(--fs-sm);
+    font-family: var(--ff-base), sans-serif;
+    gap: 10px;
+}
+
+.battle-status-infos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+    height: 100%;
+    padding: 1px 5px;
+    border-radius: 5px;
+    gap: 5px;
+    animation: popIn .75s ease;
+}
+
+.battle-status-infos.par {
+    background-color: var(--electric-light);
+    color: var(--white);
+}
+
+.battle-status-infos.brn {
+    background-color: var(--fire-light);
+    color: var(--white);
+}
+
+.battle-status-infos.frz {
+    background-color: var(--ice-light);
+    color: var(--white);
+}
+
+.battle-status-infos.slp {
+    background-color: var(--psychic-light);
+    color: var(--white);
+}
+
+.battle-status-infos.psn {
+    background-color: var(--poison-light);
+    color: var(--white);
+}
+
+
+.battle-volatile-infos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+    height: 100%;
+    padding: 1px 5px;
+    border-radius: 5px;
+    gap: 5px;
+    animation: popIn .75s ease;
+}
+
+.battle-volatile-infos.cnf {
+    background-color: var(--ghost-light);
+    color: var(--white);
+}

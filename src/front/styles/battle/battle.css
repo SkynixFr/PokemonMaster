@@ -1,6 +1,7 @@
 @import url('battleTeamCard.css');
 @import url('battlePokemonCard.css');
 @import url('battleActions.css');
+@import url('battleStatus.css');
 
 .battle-container {
 	display: grid;

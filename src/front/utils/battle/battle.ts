@@ -1,16 +1,16 @@
-import { TeamEntity } from '../../interfaces/team/teamEntity';
-import Battle from '../../back/classes/battle';
-import Team from '../../back/classes/team';
-import Pokemon from '../../back/classes/pokemon';
-import TypeEffectiveness from '../../back/classes/typeEffectiveness';
-import Ability from '../../back/classes/ability';
-import Nature from '../../back/classes/nature';
-import Move from '../../back/classes/move';
-import Stat from '../../back/classes/stat';
-import { PokemonEntity } from '../../interfaces/pokemon/pokemonEntity';
-import { TypeEntity } from '../../interfaces/pokemon/type/typeEntity';
-import { MoveEntity } from '../../interfaces/pokemon/move/moveEntity';
-import { StatEntity } from '../../interfaces/pokemon/stat/statEntity';
+import { TeamEntity } from '../../../interfaces/team/teamEntity';
+import Battle from '../../../back/classes/battle';
+import Team from '../../../back/classes/team';
+import Pokemon from '../../../back/classes/pokemon';
+import TypeEffectiveness from '../../../back/classes/typeEffectiveness';
+import Ability from '../../../back/classes/ability';
+import Nature from '../../../back/classes/nature';
+import Move from '../../../back/classes/move';
+import Stat from '../../../back/classes/stat';
+import { PokemonEntity } from '../../../interfaces/pokemon/pokemonEntity';
+import { TypeEntity } from '../../../interfaces/pokemon/type/typeEntity';
+import { MoveEntity } from '../../../interfaces/pokemon/move/moveEntity';
+import { StatEntity } from '../../../interfaces/pokemon/stat/statEntity';
 
 export function battle(): TeamEntity {
 	return {

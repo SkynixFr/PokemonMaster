@@ -15,8 +15,6 @@ const BattleLoader = () => {
 	useEffect(() => {
 		const battle = JSON.parse(localStorage.getItem('battle'));
 		setBattle(battle);
-
-		console.log('battleLoader', battle);
 		setTimeout(() => {
 			setIsLoading(false);
 		}, 3000);
