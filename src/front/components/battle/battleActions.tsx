@@ -14,11 +14,11 @@ import Move from '../../../back/classes/move';
 // Interfaces
 interface BattleActionsProps {
 	playerPokemon: Pokemon;
-	handlePlayerMoveSelection: (move: Move) => void;
+	handleMoveSelection: (move: Move) => void;
 }
 const BattleActions = ({
 	playerPokemon,
-	handlePlayerMoveSelection
+	handleMoveSelection
 }: BattleActionsProps) => {
 	const router = useRouter();
 	const [openModalRunning, setOpenModalRunning] = useState<boolean>(false);
@@ -79,7 +79,7 @@ const BattleActions = ({
 									className={'pokemon-move-fullfilled'}
 									key={index}
 									onClick={() => {
-										handlePlayerMoveSelection(move);
+										handleMoveSelection(move);
 										setOpenPokemonMoves(false);
 									}}
 								>

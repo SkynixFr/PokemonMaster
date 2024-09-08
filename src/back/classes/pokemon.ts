@@ -133,7 +133,6 @@ class Pokemon {
 		const updatedHp = opponentHp.decrease(damage);
 		const hpIndex = target.stats.findIndex(stat => stat.name === 'hp');
 		target.stats[hpIndex] = updatedHp;
-		console.log(this.activeMove);
 		if (
 			this.activeMove.meta?.ailment === 'sleep' &&
 			!statusList.includes(target.status.name)

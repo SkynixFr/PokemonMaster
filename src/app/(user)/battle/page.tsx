@@ -40,6 +40,11 @@ const Battle = ({ battle }: BattleProps) => {
 	const [activeOpponentPokemon, setActiveOpponentPokemon] =
 		useState<Pokemon>(null);
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
+	const [opponentReady, setOpponentReady] = useState<boolean>(false);
+
+	const [currentView, setCurrentView] = useState<'player' | 'opponent'>(
+		'player'
+	);
 
 	const recreatePokemonFromParsed = (parsedPokemon: Pokemon): Pokemon => {
 		const status = parsedPokemon.status
@@ -93,21 +98,36 @@ const Battle = ({ battle }: BattleProps) => {
 		);
 	};
 
-	const handlePlayerMoveSelection = (move: Move) => {
+	const handleMoveSelection = (move: Move) => {
 		if (move.pp === 0) return;
-		let updatedPlayerPokemon = activePlayerPokemon.changeActiveMove(move);
-		setActivePlayerPokemon(updatedPlayerPokemon);
-		handlePlayerReady();
+
+		if (currentView === 'player') {
+			let updatedPlayerPokemon = activePlayerPokemon.changeActiveMove(move);
+			setActivePlayerPokemon(updatedPlayerPokemon);
+			setCurrentView('opponent');
+			handlePlayerReady();
+		} else {
+			let updatedOpponentPokemon =
+				activeOpponentPokemon.changeActiveMove(move);
+			setActiveOpponentPokemon(updatedOpponentPokemon);
+			handleOpponentReady();
+			setCurrentView('player');
+		}
 	};
 
 	const handlePlayerReady = () => {
 		setPlayerReady(true);
 	};
 
+	const handleOpponentReady = () => {
+		setOpponentReady(true);
+	};
+
 	const handlePlayerAttack = (
 		activePlayerPokemon: Pokemon,
 		activeOpponentPokemon: Pokemon
 	) => {
+		console.log('movePlayer', activePlayerPokemon.activeMove);
 		if (activePlayerPokemon.activeMove.target === 'user') {
 			const updatedPokemon = activePlayerPokemon.attack(activePlayerPokemon);
 			setActivePlayerPokemon(updatedPokemon);
@@ -116,6 +136,23 @@ const Battle = ({ battle }: BattleProps) => {
 				activeOpponentPokemon
 			);
 			setActiveOpponentPokemon(updatedPokemon);
+		}
+	};
+
+	const handleOpponentAttack = (
+		activePlayerPokemon: Pokemon,
+		activeOpponentPokemon: Pokemon
+	) => {
+		console.log('moveOpponent', activeOpponentPokemon.activeMove);
+		if (activeOpponentPokemon.activeMove.target === 'user') {
+			const updatedPokemon = activeOpponentPokemon.attack(
+				activeOpponentPokemon
+			);
+			setActiveOpponentPokemon(updatedPokemon);
+		} else {
+			const updatedPokemon =
+				activeOpponentPokemon.attack(activePlayerPokemon);
+			setActivePlayerPokemon(updatedPokemon);
 		}
 	};
 
@@ -128,17 +165,17 @@ const Battle = ({ battle }: BattleProps) => {
 
 		if (playerSpeed > opponentSpeed) {
 			handlePlayerAttack(activePlayerPokemon, opponentPlayerPokemon);
-			// handleOpponentAttack();
+			handleOpponentAttack(activePlayerPokemon, opponentPlayerPokemon);
 		} else if (playerSpeed < opponentSpeed) {
-			// handleOpponentAttack();
+			handleOpponentAttack(activePlayerPokemon, opponentPlayerPokemon);
 			handlePlayerAttack(activePlayerPokemon, opponentPlayerPokemon);
 		} else {
 			const random = Math.random();
 			if (random < 0.5) {
 				handlePlayerAttack(activePlayerPokemon, opponentPlayerPokemon);
-				// handleOpponentAttack();
+				handleOpponentAttack(activePlayerPokemon, opponentPlayerPokemon);
 			} else {
-				// handleOpponentAttack();
+				handleOpponentAttack(activePlayerPokemon, opponentPlayerPokemon);
 				handlePlayerAttack(activePlayerPokemon, opponentPlayerPokemon);
 			}
 		}
@@ -347,7 +384,7 @@ const Battle = ({ battle }: BattleProps) => {
 
 	// BATTLE
 	useEffect(() => {
-		if (!playerReady) return;
+		if (!playerReady || !opponentReady) return;
 		handleSleeping(activePlayerPokemon, activeOpponentPokemon);
 		handleConfusion(activePlayerPokemon, activeOpponentPokemon);
 		handleParalysis(activePlayerPokemon, activeOpponentPokemon);
@@ -356,7 +393,8 @@ const Battle = ({ battle }: BattleProps) => {
 		handlePoisoning(activePlayerPokemon, activeOpponentPokemon);
 		handleBurning(activePlayerPokemon, activeOpponentPokemon);
 		setPlayerReady(false);
-	}, [playerReady]);
+		setOpponentReady(false);
+	}, [playerReady, opponentReady]);
 
 	if (
 		!playerTeam ||
@@ -394,44 +432,89 @@ const Battle = ({ battle }: BattleProps) => {
 
 			<div className={'battle-global-infos'}></div>
 
-			<div className={'battle-team player'}>
-				<BattleTeamCard
-					team={playerTeam}
-					activePokemon={activePlayerPokemon}
-					recreatePokemonFromParsed={recreatePokemonFromParsed}
-					setActivePokemon={setActivePlayerPokemon}
-					player={true}
-				/>
-			</div>
+			{currentView === 'player' ? (
+				<>
+					<div className={'battle-team player'}>
+						<BattleTeamCard
+							team={playerTeam}
+							activePokemon={activePlayerPokemon}
+							recreatePokemonFromParsed={recreatePokemonFromParsed}
+							setActivePokemon={setActivePlayerPokemon}
+							player={true}
+						/>
+					</div>
 
-			<div className={'battle-team opponent'}>
-				<BattleTeamCard
-					team={opponentTeam}
-					activePokemon={activeOpponentPokemon}
-					recreatePokemonFromParsed={recreatePokemonFromParsed}
-					setActivePokemon={setActiveOpponentPokemon}
-					player={false}
-				/>
-			</div>
+					<div className={'battle-team opponent'}>
+						<BattleTeamCard
+							team={opponentTeam}
+							activePokemon={activeOpponentPokemon}
+							recreatePokemonFromParsed={recreatePokemonFromParsed}
+							setActivePokemon={setActiveOpponentPokemon}
+							player={false}
+						/>
+					</div>
 
-			<div className={'battle-pokemon player'}>
-				<BattlePokemonCard
-					activePokemon={activePlayerPokemon}
-					player={true}
-				/>
-			</div>
+					<div className={'battle-pokemon player'}>
+						<BattlePokemonCard
+							activePokemon={activePlayerPokemon}
+							player={true}
+						/>
+					</div>
 
-			<div className={'battle-pokemon opponent'}>
-				<BattlePokemonCard
-					activePokemon={activeOpponentPokemon}
-					player={false}
-				/>
-			</div>
+					<div className={'battle-pokemon opponent'}>
+						<BattlePokemonCard
+							activePokemon={activeOpponentPokemon}
+							player={false}
+						/>
+					</div>
 
-			<BattleActions
-				playerPokemon={activePlayerPokemon}
-				handlePlayerMoveSelection={handlePlayerMoveSelection}
-			/>
+					<BattleActions
+						playerPokemon={activePlayerPokemon}
+						handleMoveSelection={handleMoveSelection}
+					/>
+				</>
+			) : (
+				<>
+					<div className={'battle-team player'}>
+						<BattleTeamCard
+							team={opponentTeam}
+							activePokemon={activeOpponentPokemon}
+							recreatePokemonFromParsed={recreatePokemonFromParsed}
+							setActivePokemon={setActiveOpponentPokemon}
+							player={false}
+						/>
+					</div>
+
+					<div className={'battle-team opponent'}>
+						<BattleTeamCard
+							team={playerTeam}
+							activePokemon={activePlayerPokemon}
+							recreatePokemonFromParsed={recreatePokemonFromParsed}
+							setActivePokemon={setActivePlayerPokemon}
+							player={true}
+						/>
+					</div>
+
+					<div className={'battle-pokemon player'}>
+						<BattlePokemonCard
+							activePokemon={activeOpponentPokemon}
+							player={false}
+						/>
+					</div>
+
+					<div className={'battle-pokemon opponent'}>
+						<BattlePokemonCard
+							activePokemon={activePlayerPokemon}
+							player={true}
+						/>
+					</div>
+
+					<BattleActions
+						playerPokemon={activeOpponentPokemon}
+						handleMoveSelection={handleMoveSelection}
+					/>
+				</>
+			)}
 		</div>
 	);
 };
