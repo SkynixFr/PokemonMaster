@@ -6,14 +6,17 @@ import { Search, X } from 'lucide-react';
 
 // Utils
 import { firstLetterMaj } from '../../utils/formatString';
+import { attackTypeGradients } from '../../utils/type/attackTypeGradients';
 
 // Actions
 import { getMoves } from '../../actions/move.actions';
 
+// Components
+import CustomImage from '../customImage';
+
 // Interfaces
 import { MoveEntity } from '../../../interfaces/pokemon/move/moveEntity';
 import { PokemonTeamEntity } from '../../../interfaces/pokemon/pokemonTeamEntity';
-import CustomImage from '../customImage';
 interface MovesModalProps {
 	movesActive: MoveEntity[];
 	setMovesActive: (moves: MoveEntity[]) => void;
@@ -136,6 +139,31 @@ const MovesModal = ({
 						</button>
 					</form>
 				</div>
+
+				<div
+					className={`moves-selected ${movesActive.length > 0 ? 'displayed' : ''}`}
+				>
+					{movesActive.map((move: MoveEntity) => (
+						<div
+							key={move.name}
+							className={`moves-selected-move`}
+							onClick={() => {
+								handleMoves(move);
+							}}
+							style={{ background: attackTypeGradients[move.type] }}
+						>
+							<div className={'display-moves-selected-move-name'}>
+								{firstLetterMaj(move.name)}
+							</div>
+							{pokemon.types.map(type =>
+								type.name === move.type ? (
+									<span className={'badge-stab'}>Stab</span>
+								) : null
+							)}
+						</div>
+					))}
+				</div>
+
 				<div className="moves-modal-body">
 					<div className={'moves-table-title'}>
 						<div className={'moves-table-title-name'}>Name</div>
@@ -207,6 +235,11 @@ const MovesModal = ({
 									<div className={'move-description'}>
 										{move.description}
 									</div>
+									{pokemon.types.map(type =>
+										type.name === move.type ? (
+											<span className={'badge-stab item'}>Stab</span>
+										) : null
+									)}
 								</div>
 							))
 						) : (
