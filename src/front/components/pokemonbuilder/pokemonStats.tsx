@@ -36,7 +36,7 @@ const PokemonStats = ({
 	const [numberEvs, setNumberEvs] = useState<number>(510 - totalEvs);
 	const [prevEv, setPrevEv] = useState<number>(0);
 	const [prevIv, setPrevIv] = useState<number>(0);
-	const maxEvsPerStat = 252;
+	const maxEvsPerStat = 255;
 	const maxIvsPerStat = 31;
 
 	useEffect(() => {
@@ -77,7 +77,7 @@ const PokemonStats = ({
 	}, [natureActive]);
 
 	const computeStatWidth = (stat: StatEntity) => {
-		let modifiedStat;
+		let modifiedStat: number;
 		if (!isFromTeam) {
 			modifiedStat = computeBaseStats([stat], levelActive, natureActive)[0];
 		} else {
@@ -177,7 +177,8 @@ const PokemonStats = ({
 		if (e.currentTarget.value === '') {
 			e.currentTarget.value = prevEv.toString();
 		}
-		const ev = e.currentTarget.valueAsNumber;
+		let ev = e.currentTarget.valueAsNumber;
+		if (ev === 255) ev = 252;
 		const totalEvs = statsActive.reduce((acc, stat) => acc + stat.ev, 0);
 		const diffStatEv = ev - statsActive.find(s => s.name === stat.name)?.ev;
 		if (totalEvs + diffStatEv > 510) {
