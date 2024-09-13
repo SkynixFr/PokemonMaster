@@ -7640,7 +7640,7 @@ export function createBattle(playerTeam): Battle {
 			playerTeam.name,
 			playerTeam.avatar,
 			playerTeam.pokemons.map(
-				(pokemon: PokemonEntity) =>
+				(pokemon: PokemonEntity, index) =>
 					new Pokemon(
 						pokemon.pokedexId,
 						pokemon.name,
@@ -7709,7 +7709,8 @@ export function createBattle(playerTeam): Battle {
 							pokemon.moves[0].target
 						),
 						null,
-						null
+						null,
+						index
 					)
 			)
 		),
@@ -7718,7 +7719,7 @@ export function createBattle(playerTeam): Battle {
 			opponentTeam.name,
 			opponentTeam.avatar,
 			opponentTeam.pokemons.map(
-				(pokemon: PokemonEntity) =>
+				(pokemon: PokemonEntity, index) =>
 					new Pokemon(
 						pokemon.pokedexId,
 						pokemon.name,
@@ -7787,7 +7788,8 @@ export function createBattle(playerTeam): Battle {
 							pokemon.moves[0].target
 						),
 						null,
-						null
+						null,
+						index
 					)
 			)
 		),
@@ -7859,7 +7861,8 @@ export function createBattle(playerTeam): Battle {
 				playerTeam.pokemons[0].moves[0].target
 			),
 			null,
-			null
+			null,
+			0
 		),
 		new Pokemon(
 			opponentTeam.pokemons[0].pokedexId,
@@ -7929,7 +7932,8 @@ export function createBattle(playerTeam): Battle {
 				opponentTeam.pokemons[0].moves[0].target
 			),
 			null,
-			null
+			null,
+			0
 		),
 		1
 	);

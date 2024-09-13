@@ -21,6 +21,7 @@ class Pokemon {
 	readonly activeMove: Move;
 	readonly status: Status;
 	readonly volatileStatus: Status;
+	readonly index: number;
 
 	constructor(
 		pokedexId: number,
@@ -37,7 +38,8 @@ class Pokemon {
 		weight: number,
 		activeMove: Move,
 		status: Status,
-		volatileStatus: Status
+		volatileStatus: Status,
+		index
 	) {
 		this.pokedexId = pokedexId;
 		this.name = name;
@@ -56,6 +58,7 @@ class Pokemon {
 		this.volatileStatus = volatileStatus
 			? volatileStatus
 			: new Status('', '', 0, true);
+		this.index = index;
 	}
 
 	getStat(statName: string): Stat {
@@ -87,7 +90,8 @@ class Pokemon {
 			this.weight,
 			move,
 			this.status,
-			this.volatileStatus
+			this.volatileStatus,
+			this.index
 		);
 	}
 
@@ -107,7 +111,8 @@ class Pokemon {
 			this.weight,
 			this.activeMove,
 			this.status,
-			this.volatileStatus
+			this.volatileStatus,
+			this.index
 		);
 	}
 
@@ -202,7 +207,8 @@ class Pokemon {
 			target.weight,
 			target.activeMove,
 			target.status,
-			target.volatileStatus
+			target.volatileStatus,
+			target.index
 		);
 	}
 
@@ -222,7 +228,8 @@ class Pokemon {
 			this.weight,
 			this.activeMove,
 			updatedStatus,
-			this.volatileStatus
+			this.volatileStatus,
+			this.index
 		);
 	}
 
@@ -257,7 +264,8 @@ class Pokemon {
 			this.weight,
 			this.activeMove,
 			updatedStatus,
-			this.volatileStatus
+			this.volatileStatus,
+			this.index
 		);
 	}
 
@@ -277,7 +285,8 @@ class Pokemon {
 			this.weight,
 			this.activeMove,
 			this.status,
-			updatedVolatileStatus
+			updatedVolatileStatus,
+			this.index
 		);
 	}
 }
