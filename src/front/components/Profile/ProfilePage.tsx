@@ -2,17 +2,15 @@
 // React
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { PencilLine, SaveAll, Trash2 } from 'lucide-react';
+import { PencilLine, Trash2 } from 'lucide-react';
 import CustomImage from '../customImage';
+import FormEditAvatar from './formEditAvatar';
+import FormEditUsername from './formEditUsername'; // Import the new form
 // Model
 import { UserEntity } from '../../../interfaces/user/userEntity';
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
 import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
-import ProfileTeams from './ProfileTeams';
-import FormEditAvatar from './formEditAvatar';
-//
 
-// Actions
 interface UserListProps {
 	userDetails: UserEntity;
 	teams: TeamEntity[];
@@ -22,13 +20,19 @@ interface UserListProps {
 const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 	const [openForm, setOpenForm] = useState(false);
 	const [currentAvatar, setCurrentAvatar] = useState(userDetails.avatar);
+	const [username, setUsername] = useState(userDetails.username); // Track updated username
+
 	const handleAvatarUpdate = (newAvatar: AvatarEntity) => {
 		setCurrentAvatar(newAvatar);
-		// Optionally, you might want to update userDetails or other states if needed
 	};
+
+	const handleUsernameUpdate = (newUsername: string) => {
+		setUsername(newUsername); // Update username state
+		// Optionally call an API to save the username change
+	};
+
 	return (
 		<div>
-			{/* <h2>Profil</h2> */}
 			<div className="profil-infos">
 				<div className="user-infos-container">
 					<div className="user-infos">
@@ -44,11 +48,9 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 							<CustomImage
 								src={currentAvatar.sprite}
 								alt={currentAvatar.name}
-								width={150} /* Largeur de l'image */
-								height={
-									180
-								} /* Hauteur de l'image (doit être égale à la largeur pour conserver le ratio 1:1) */
-								className="profile-image" /* Appliquer la classe CSS pour le style */
+								width={150}
+								height={180}
+								className="profile-image"
 								sizes="(max-width: 600px) 150px, (max-width: 1200px) 150px, 150px"
 							/>
 						</div>
@@ -64,17 +66,16 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 						)}
 						<div className="user-details">
 							<div className="user-account">
-								<div className="user-username">
-									<h2>Username :</h2>
-									<h1>{userDetails.username}</h1>
-								</div>
-								<div className="user-username-edit">
-									<button type="submit" className="user-update">
-										<PencilLine />
-									</button>
-								</div>
+								<FormEditUsername
+									userDetails={userDetails}
+									initialUsername={username}
+									onUsernameUpdate={handleUsernameUpdate}
+								/>
 							</div>
 							<div className="user-email">
+								{
+									// TDOO: Add email editing form
+								}
 								<div className="user-email-label">
 									<h2>Email :</h2>
 									<h3>
@@ -99,9 +100,6 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 								<span>Supprimer</span>
 								<Trash2 />
 							</button>
-						</div>
-						<div className="user-team">
-							{/* TODO : <ProfileTeams teams={teams} avatars={avatars} /> */}
 						</div>
 					</div>
 				</div>

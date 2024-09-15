@@ -4,7 +4,6 @@ import { useState, useEffect, FormEventHandler } from 'react';
 import { toast } from 'sonner';
 // Components
 import Avatar from '../teambuilder/avatar';
-import CustomImage from '../customImage'; // This import is not used in the current component, consider removing if unnecessary
 // Interfaces
 import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
 import { UserEntity } from '../../../interfaces/user/userEntity';
