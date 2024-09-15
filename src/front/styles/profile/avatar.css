@@ -1,0 +1,26 @@
+.avatar-container {
+	width: calc(133px - 58px);
+	height: calc(130 - 30px);
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	background-color: var(--grey);
+	border-radius: 5px;
+	padding: 15px 29px;
+	cursor: pointer;
+}
+
+.avatar-container.selected {
+	background-color: var(--red);
+	transition: all 0.2s ease-in-out;
+}
+
+.avatar-container > .avatar-img {
+	position: relative;
+	width: 100px;
+	height: 100px;
+}
+
+.avatar-container > .avatar-img > img {
+	object-fit: contain;
+}

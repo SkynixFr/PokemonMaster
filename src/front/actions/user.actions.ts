@@ -1,6 +1,7 @@
 'use server';
 
 import { UserCreate } from '../../interfaces/user/userCreate';
+import { UserUpdate } from '../../interfaces/user/userUpdate';
 
 export const register = async (formData: FormData) => {
 	const userCreate: UserCreate = {
@@ -67,4 +68,22 @@ export const me = async (accessToken: string) => {
 		console.error('Error in me function:', error);
 		throw error;
 	}
+};
+
+export const updateUserAction = async (
+	userUpdate: UserUpdate,
+	accessToken: string
+) => {
+	const response = await fetch(
+		`http://localhost:8080/api/v1/user/${userUpdate.id}`,
+		{
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${accessToken}`
+			},
+			body: JSON.stringify(userUpdate)
+		}
+	);
+	return response.json();
 };
