@@ -107,7 +107,7 @@ const BattleActions = ({
 			{openModalRunning && (
 				<div className={'modal-running-container'}>
 					<div className={'modal-running-content'}>
-						<p>Are you sure you want to run?</p>
+						<h1>Are you sure you want to run?</h1>
 						<div className={'modal-running-btn-container'}>
 							<button
 								className={'btn-secondary'}

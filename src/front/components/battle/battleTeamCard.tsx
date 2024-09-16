@@ -1,17 +1,21 @@
+import React, { useEffect, useState } from 'react';
+
 // Classes
 import Pokemon from '../../../back/classes/pokemon';
 import Team from '../../../back/classes/team';
 
 // Components
 import CustomImage from '../customImage';
+import { firstLetterMaj } from '../../utils/formatString';
 
-//Interfaces
+// Interfaces
 interface TeamCardProps {
 	team: Team;
 	activePokemon: Pokemon;
 	setActivePokemon: (pokemon: Pokemon) => void;
 	recreatePokemonFromParsed: (pokemon: Pokemon) => Pokemon;
-	player?: boolean;
+	player: boolean;
+	currentView: string;
 }
 
 const BattleTeamCard = ({
@@ -19,12 +23,39 @@ const BattleTeamCard = ({
 	activePokemon,
 	setActivePokemon,
 	recreatePokemonFromParsed,
-	player
+	player,
+	currentView
 }: TeamCardProps) => {
+	const [isSwitching, setIsSwitching] = useState(false);
+	const [isSwitchingTo, setIsSwitchingTo] = useState<Pokemon | null>(null);
+
 	const handleSwitchPokemon = (pokemon: Pokemon) => {
+		if (pokemon.stats[0].value === 0) return;
 		const newPokemon = recreatePokemonFromParsed(pokemon);
 		setActivePokemon(newPokemon);
+		setIsSwitching(false);
+		setIsSwitchingTo(null);
 	};
+
+	const handleSwitching = (pokemon: Pokemon) => {
+		if (pokemon.stats[0].value === 0) return;
+		setIsSwitching(true);
+		setIsSwitchingTo(pokemon);
+	};
+
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				setIsSwitching(false);
+			}
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [setIsSwitching]);
 
 	return (
 		<div
@@ -46,8 +77,12 @@ const BattleTeamCard = ({
 							key={pokemon.name}
 							className={`battle-team-pokemon ${
 								pokemon.name === activePokemon.name ? 'active' : ''
-							}`}
-							onClick={() => handleSwitchPokemon(pokemon)}
+							} ${pokemon.stats[0].value === 0 ? 'ko' : ''}`}
+							onClick={() =>
+								((currentView === 'player' && player) ||
+									(currentView === 'opponent' && !player)) &&
+								handleSwitching(pokemon)
+							}
 						>
 							<CustomImage
 								src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${pokemon.pokedexId}.gif`}
@@ -60,6 +95,30 @@ const BattleTeamCard = ({
 					))}
 				</div>
 			</div>
+			{isSwitching && (
+				<div className={'modal-switching-container'}>
+					<div className={'modal-switching-content'}>
+						<h1>
+							Are you sure you want to switch to{' '}
+							{firstLetterMaj(isSwitchingTo.name)} ?
+						</h1>
+						<div className={'modal-switching-btn-container'}>
+							<button
+								className={'btn-secondary'}
+								onClick={() => handleSwitchPokemon(isSwitchingTo)}
+							>
+								Yes
+							</button>
+							<button
+								className={'btn-primary'}
+								onClick={() => setIsSwitching(false)}
+							>
+								No
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 };

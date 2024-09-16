@@ -85,8 +85,8 @@
 
 .modal-running-content {
     position: relative;
-    width: 300px;
-    height: 150px;
+    min-width: calc(550px - 50px);
+    min-height: calc(200px - 50px);
     background-color: var(--white);
     border-radius: 5px;
     display: flex;
@@ -94,18 +94,25 @@
     align-items: center;
     flex-flow: column wrap;
     animation: bounceIn .75s ease-in-out;
+    padding: 25px;
+    gap: 25px;
 }
 
 .modal-running-btn-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 25px;
 }
 
 .modal-running-btn-container button {
-    width: 75px;
-    height: 35px;
+    min-width: 75px;
+    min-height: 40px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.modal-running-btn-container button:hover {
+    transform:  scale(1.1);
+    transition: transform .5s ease;
 }
