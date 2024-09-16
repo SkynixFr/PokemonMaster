@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { PencilLine, Trash2 } from 'lucide-react';
 import CustomImage from '../customImage';
 import FormEditAvatar from './formEditAvatar';
-import FormEditUsername from './formEditUsername'; // Import the new form
+import FormEditUsername from './formEditUsername';
+import FormEditEmail from './formEditEmail';
 // Model
 import { UserEntity } from '../../../interfaces/user/userEntity';
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
@@ -20,17 +21,20 @@ interface UserListProps {
 const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 	const [openForm, setOpenForm] = useState(false);
 	const [currentAvatar, setCurrentAvatar] = useState(userDetails.avatar);
-	const [username, setUsername] = useState(userDetails.username); // Track updated username
+	const [username, setUsername] = useState(userDetails.username);
+	const [email, setEmail] = useState(userDetails.email);
 
 	const handleAvatarUpdate = (newAvatar: AvatarEntity) => {
 		setCurrentAvatar(newAvatar);
 	};
 
 	const handleUsernameUpdate = (newUsername: string) => {
-		setUsername(newUsername); // Update username state
-		// Optionally call an API to save the username change
+		setUsername(newUsername);
 	};
 
+	const handleEmailUpdate = (newEmail: string) => {
+		setEmail(newEmail);
+	};
 	return (
 		<div>
 			<div className="profil-infos">
@@ -72,28 +76,11 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 									onUsernameUpdate={handleUsernameUpdate}
 								/>
 							</div>
-							<div className="user-email">
-								{
-									// TDOO: Add email editing form
-								}
-								<div className="user-email-label">
-									<h2>Email :</h2>
-									<h3>
-										{`${userDetails.email
-											.split('@')[0]
-											.slice(0, 3)
-											.padEnd(
-												userDetails.email.split('@')[0].length,
-												'*'
-											)}@${userDetails.email.split('@')[1]}`}
-									</h3>
-								</div>
-								<div className="user-email-edit">
-									<button type="submit" className="user-update">
-										<PencilLine />
-									</button>
-								</div>
-							</div>
+							<FormEditEmail
+								userDetails={userDetails}
+								initialEmail={email}
+								onEmailUpdate={handleEmailUpdate}
+							/>
 						</div>
 						<div className="user-delete">
 							<button type="submit" className="user-delete">
