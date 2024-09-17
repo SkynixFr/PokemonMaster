@@ -9,4 +9,8 @@ export interface Notification {
 		sprite: string;
 	};
 	isKo?: boolean;
+	statusEffect?: {
+		type: string;
+		name: string;
+	};
 }

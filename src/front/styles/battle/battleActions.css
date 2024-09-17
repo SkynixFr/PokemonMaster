@@ -23,7 +23,12 @@
     color: var(--red);
     overflow: hidden;
     z-index: 1;
-    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.battle-actions .battle-actions-btn .btn-action.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .battle-actions .battle-actions-btn .btn-action img {

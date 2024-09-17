@@ -10,6 +10,7 @@ interface BattleToastProps {
 }
 
 const BattleToast = ({ currentNotification }: BattleToastProps) => {
+	console.log(currentNotification);
 	return (
 		<>
 			{currentNotification && (
@@ -28,22 +29,37 @@ const BattleToast = ({ currentNotification }: BattleToastProps) => {
 						<strong>
 							{firstLetterMaj(currentNotification.pokemonName)}
 						</strong>{' '}
-						{!currentNotification.isKo ? (
+						{currentNotification.isKo && (
 							<>
-								used{' '}
-								<span
+								{'is '}
+								<strong>KO</strong>
+							</>
+						)}
+						{currentNotification.move && (
+							<>
+								{'used '}
+								<div
 									className={`battle-toast__move ${currentNotification.move.type}`}
 								>
 									<strong>
+										{firstLetterMaj(currentNotification.move.name)}
+									</strong>{' '}
+									!
+								</div>
+							</>
+						)}
+						{currentNotification.statusEffect && (
+							<>
+								<div
+									className={`battle-toast__move ${currentNotification.statusEffect.type}`}
+								>
+									<strong>
 										{withoutSpaceAndSpecialChar(
-											currentNotification.move.name
+											currentNotification.statusEffect.name
 										)}
 									</strong>
-								</span>
-								!
+								</div>
 							</>
-						) : (
-							'is KO!'
 						)}
 					</div>
 				</div>

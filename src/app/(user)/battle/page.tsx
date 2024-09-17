@@ -56,19 +56,71 @@ const Battle = ({ battle }: BattleProps) => {
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const [currentNotification, setCurrentNotification] =
 		useState<Notification>(null);
+	const [isNotificationActive, setIsNotificationActive] =
+		useState<boolean>(false);
+	const [pokemonStatuses, setPokemonStatuses] = useState<string[]>([]);
 
 	const addNotification = (notification: Notification) => {
 		setNotifications(notifications => [...notifications, notification]);
 	};
 
+	const handleNotificationStatusEffect = (
+		status: string,
+		pokemonName: string,
+		userAvatar: { name: string; sprite: string }
+	) => {
+		const currentStatus = pokemonStatuses[pokemonName];
+
+		if (currentStatus === status || currentStatus) return;
+
+		addNotification({
+			pokemonName,
+			statusEffect: {
+				type:
+					status === 'PSN'
+						? 'poison'
+						: status === 'BRN'
+							? 'fire'
+							: status === 'SLP'
+								? 'normal'
+								: status === 'CNF'
+									? 'ghost'
+									: status === 'PAR'
+										? 'electric'
+										: status === 'FRZ'
+											? 'ice'
+											: '',
+				name:
+					status === 'PSN'
+						? 'is poisoned'
+						: status === 'SLP'
+							? 'fell asleep'
+							: status === 'CNF'
+								? 'is confused'
+								: status === 'PAR'
+									? 'is paralyzed'
+									: status === 'FRZ'
+										? 'is frozen'
+										: status === 'BRN'
+											? 'is burned'
+											: ''
+			},
+			userAvatar
+		});
+
+		setPokemonStatuses({ ...pokemonStatuses, [pokemonName]: status });
+	};
+
 	useEffect(() => {
 		if (!notifications.length || currentNotification) return;
 		const showNotification = () => {
+			setIsNotificationActive(true);
 			setCurrentNotification(notifications[0]);
 
 			setTimeout(() => {
 				setCurrentNotification(null);
 				setNotifications(notifications => notifications.slice(1));
+				setIsNotificationActive(false);
 			}, 2000);
 		};
 		showNotification();
@@ -173,6 +225,15 @@ const Battle = ({ battle }: BattleProps) => {
 			const updatedPokemon = activePlayerPokemon.attack(
 				activeOpponentPokemon
 			);
+
+			if (updatedPokemon.status.name !== '') {
+				handleNotificationStatusEffect(
+					updatedPokemon.status.name,
+					updatedPokemon.name,
+					opponentTeam.avatar
+				);
+			}
+
 			setActiveOpponentPokemon(updatedPokemon);
 			handleOpponentTeam(updatedPokemon);
 		}
@@ -229,6 +290,15 @@ const Battle = ({ battle }: BattleProps) => {
 		} else {
 			const updatedPokemon =
 				activeOpponentPokemon.attack(activePlayerPokemon);
+
+			if (updatedPokemon.status.name !== '') {
+				handleNotificationStatusEffect(
+					updatedPokemon.status.name,
+					updatedPokemon.name,
+					playerTeam.avatar
+				);
+			}
+
 			setActivePlayerPokemon(updatedPokemon);
 			handlePlayerTeam(updatedPokemon);
 		}
@@ -264,11 +334,33 @@ const Battle = ({ battle }: BattleProps) => {
 		if (activePlayerPokemon.status.name === 'PSN') {
 			const updatedPokemon = activePlayerPokemon.sufferFromStatus();
 			setActivePlayerPokemon(updatedPokemon);
+			addNotification({
+				pokemonName: activePlayerPokemon.name,
+				statusEffect: {
+					type: 'poison',
+					name: 'suffering from poison'
+				},
+				userAvatar: {
+					name: playerTeam.avatar.name,
+					sprite: playerTeam.avatar.sprite
+				}
+			});
 		}
 
 		if (activeOpponentPokemon.status.name === 'PSN') {
 			const updatedPokemon = activeOpponentPokemon.sufferFromStatus();
 			setActiveOpponentPokemon(updatedPokemon);
+			addNotification({
+				pokemonName: activeOpponentPokemon.name,
+				statusEffect: {
+					type: 'poison',
+					name: 'suffer from poison'
+				},
+				userAvatar: {
+					name: opponentTeam.avatar.name,
+					sprite: opponentTeam.avatar.sprite
+				}
+			});
 		}
 	};
 
@@ -282,9 +374,31 @@ const Battle = ({ battle }: BattleProps) => {
 			);
 			if (updatedStatus.counter === 0) {
 				updatedStatus = new Status('', '', 0, true);
+				addNotification({
+					pokemonName: activePlayerPokemon.name,
+					statusEffect: {
+						type: 'normal',
+						name: 'woke up'
+					},
+					userAvatar: {
+						name: playerTeam.avatar.name,
+						sprite: playerTeam.avatar.sprite
+					}
+				});
 			}
 			const updatedPokemon = activePlayerPokemon.changeStatus(updatedStatus);
 			setActivePlayerPokemon(updatedPokemon);
+			addNotification({
+				pokemonName: activePlayerPokemon.name,
+				statusEffect: {
+					type: 'normal',
+					name: 'sleeping'
+				},
+				userAvatar: {
+					name: playerTeam.avatar.name,
+					sprite: playerTeam.avatar.sprite
+				}
+			});
 		}
 
 		if (activeOpponentPokemon.status.name === 'SLP') {
@@ -293,10 +407,32 @@ const Battle = ({ battle }: BattleProps) => {
 			);
 			if (updatedStatus.counter === 0) {
 				updatedStatus = new Status('', '', 0, true);
+				addNotification({
+					pokemonName: activeOpponentPokemon.name,
+					statusEffect: {
+						type: 'normal',
+						name: 'woke up'
+					},
+					userAvatar: {
+						name: opponentTeam.avatar.name,
+						sprite: opponentTeam.avatar.sprite
+					}
+				});
 			}
 			const updatedPokemon =
 				activeOpponentPokemon.changeStatus(updatedStatus);
 			setActiveOpponentPokemon(updatedPokemon);
+			addNotification({
+				pokemonName: activeOpponentPokemon.name,
+				statusEffect: {
+					type: 'normal',
+					name: 'sleeping'
+				},
+				userAvatar: {
+					name: opponentTeam.avatar.name,
+					sprite: opponentTeam.avatar.sprite
+				}
+			});
 		}
 	};
 
@@ -404,6 +540,14 @@ const Battle = ({ battle }: BattleProps) => {
 
 	const handleOpponentKo = () => {
 		if (activeOpponentPokemon.getStat('hp').value === 0) {
+			addNotification({
+				pokemonName: activeOpponentPokemon.name,
+				userAvatar: {
+					name: opponentTeam.avatar.name,
+					sprite: opponentTeam.avatar.sprite
+				},
+				isKo: true
+			});
 			setCurrentView('opponent');
 			setActiveOpponentPokemonKo(true);
 		}
@@ -577,6 +721,7 @@ const Battle = ({ battle }: BattleProps) => {
 					<BattleActions
 						playerPokemon={activePlayerPokemon}
 						handleMoveSelection={handleMoveSelection}
+						disabled={isNotificationActive}
 					/>
 
 					{activePlayerPokemonKo ? (
@@ -634,6 +779,7 @@ const Battle = ({ battle }: BattleProps) => {
 					<BattleActions
 						playerPokemon={activeOpponentPokemon}
 						handleMoveSelection={handleMoveSelection}
+						disabled={isNotificationActive}
 					/>
 
 					{activeOpponentPokemonKo ? (

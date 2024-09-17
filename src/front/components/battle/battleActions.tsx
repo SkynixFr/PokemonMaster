@@ -15,10 +15,12 @@ import Move from '../../../back/classes/move';
 interface BattleActionsProps {
 	playerPokemon: Pokemon;
 	handleMoveSelection: (move: Move) => void;
+	disabled: boolean;
 }
 const BattleActions = ({
 	playerPokemon,
-	handleMoveSelection
+	handleMoveSelection,
+	disabled
 }: BattleActionsProps) => {
 	const router = useRouter();
 	const [openModalRunning, setOpenModalRunning] = useState<boolean>(false);
@@ -48,8 +50,9 @@ const BattleActions = ({
 		<div className={'battle-actions'}>
 			<div className={'battle-actions-btn fadeInToTop'}>
 				<button
-					className={'btn-action'}
+					className={`btn-action ${disabled ? 'disabled' : ''}`}
 					onClick={() => setOpenPokemonMoves(!openPokemonMoves)}
+					disabled={disabled}
 				>
 					Attack
 					<CustomImage
@@ -60,8 +63,9 @@ const BattleActions = ({
 					/>
 				</button>
 				<button
-					className={'btn-action'}
+					className={`btn-action ${disabled ? 'disabled' : ''}`}
 					onClick={() => setOpenModalRunning(!openModalRunning)}
+					disabled={disabled}
 				>
 					Run
 					<CustomImage
