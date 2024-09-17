@@ -4,9 +4,12 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { PencilLine, Trash2 } from 'lucide-react';
 import CustomImage from '../customImage';
+
+// Components
 import FormEditAvatar from './formEditAvatar';
 import FormEditUsername from './formEditUsername';
 import FormEditEmail from './formEditEmail';
+import FormEditPassword from './formEditPassword';
 // Model
 import { UserEntity } from '../../../interfaces/user/userEntity';
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
@@ -23,6 +26,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 	const [currentAvatar, setCurrentAvatar] = useState(userDetails.avatar);
 	const [username, setUsername] = useState(userDetails.username);
 	const [email, setEmail] = useState(userDetails.email);
+	const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
 	const handleAvatarUpdate = (newAvatar: AvatarEntity) => {
 		setCurrentAvatar(newAvatar);
@@ -81,6 +85,14 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 								initialEmail={email}
 								onEmailUpdate={handleEmailUpdate}
 							/>
+							{!isPasswordModalOpen && (
+								<div className="user-password">
+									<button onClick={() => setIsPasswordModalOpen(true)}>
+										<span>Update your password</span>
+										<PencilLine />
+									</button>
+								</div>
+							)}
 						</div>
 						<div className="user-delete">
 							<button type="submit" className="user-delete">
@@ -91,6 +103,15 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 					</div>
 				</div>
 			</div>
+
+			{isPasswordModalOpen && (
+				<div className="password-modal">
+					<FormEditPassword
+						userDetails={userDetails}
+						setOpenPasswordModal={setIsPasswordModalOpen}
+					/>
+				</div>
+			)}
 		</div>
 	);
 };
