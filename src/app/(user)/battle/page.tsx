@@ -71,7 +71,8 @@ const Battle = ({ battle }: BattleProps) => {
 	) => {
 		const currentStatus = pokemonStatuses[pokemonName];
 
-		if (currentStatus === status || currentStatus) return;
+		if (currentStatus === status || currentStatus || currentStatus === 'KO')
+			return;
 
 		addNotification({
 			pokemonName,
@@ -226,7 +227,10 @@ const Battle = ({ battle }: BattleProps) => {
 				activeOpponentPokemon
 			);
 
-			if (updatedPokemon.status.name !== '') {
+			if (
+				updatedPokemon.status.name !== '' &&
+				updatedPokemon.status.name != 'KO'
+			) {
 				handleNotificationStatusEffect(
 					updatedPokemon.status.name,
 					updatedPokemon.name,
@@ -291,7 +295,10 @@ const Battle = ({ battle }: BattleProps) => {
 			const updatedPokemon =
 				activeOpponentPokemon.attack(activePlayerPokemon);
 
-			if (updatedPokemon.status.name !== '') {
+			if (
+				updatedPokemon.status.name !== '' &&
+				updatedPokemon.status.name != 'KO'
+			) {
 				handleNotificationStatusEffect(
 					updatedPokemon.status.name,
 					updatedPokemon.name,
