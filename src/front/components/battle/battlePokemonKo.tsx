@@ -51,7 +51,7 @@ const BattlePokemonKo = ({
 							key={pokemon.name}
 							onClick={() => handleSwitchPokemon(pokemon)}
 							className={`pokemon-ko-modal-pokemon ${
-								pokemon.name === activePokemon.name ? 'ko' : ''
+								pokemon.stats[0].value === 0 ? 'ko' : ''
 							}
 							`}
 						>

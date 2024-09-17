@@ -134,3 +134,18 @@
     top: 325px;
     right: 35px;
 }
+
+
+@media screen and (max-width: 1920px) {
+    .pokemon-shadow.player{
+        transform: scaleX(-1) rotate(168.25deg);
+        top: 270px;
+        right: 100px;
+    }
+
+    .pokemon-shadow.opponent{
+        transform: scaleY(-1) rotate(15deg);
+        top: 255px;
+        right: 25px;
+    }
+}

@@ -116,3 +116,9 @@
     transform:  scale(1.1);
     transition: transform .5s ease;
 }
+
+@media screen and (max-width: 1920px) {
+    .pokemon-moves-modal-container{
+        left: 16.5%;
+    }
+}
