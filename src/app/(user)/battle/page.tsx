@@ -520,11 +520,33 @@ const Battle = ({ battle }: BattleProps) => {
 		if (activePlayerPokemon.status.name === 'BRN') {
 			const updatedPokemon = activePlayerPokemon.sufferFromStatus();
 			setActivePlayerPokemon(updatedPokemon);
+			addNotification({
+				pokemonName: activePlayerPokemon.name,
+				statusEffect: {
+					type: 'fire',
+					name: 'suffer from burn'
+				},
+				userAvatar: {
+					name: playerTeam.avatar.name,
+					sprite: playerTeam.avatar.sprite
+				}
+			});
 		}
 
 		if (activeOpponentPokemon.status.name === 'BRN') {
 			const updatedPokemon = activeOpponentPokemon.sufferFromStatus();
 			setActiveOpponentPokemon(updatedPokemon);
+			addNotification({
+				pokemonName: activeOpponentPokemon.name,
+				statusEffect: {
+					type: 'fire',
+					name: 'suffer from burn'
+				},
+				userAvatar: {
+					name: opponentTeam.avatar.name,
+					sprite: opponentTeam.avatar.sprite
+				}
+			});
 		}
 	};
 
