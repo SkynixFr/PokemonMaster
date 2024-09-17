@@ -61,7 +61,7 @@ const BattleTeamCard = ({
 		<div
 			className={`battle-team-container ${player ? 'player' : 'opponent'}`}
 		>
-			<div className={'battle-team-avatar'}>
+			<div className={`battle-team-avatar`}>
 				<CustomImage
 					src={team.avatar.sprite}
 					alt={`avatar-player-${team.avatar.name}`}

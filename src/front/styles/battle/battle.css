@@ -3,6 +3,7 @@
 @import url('battleActions.css');
 @import url('battleStatus.css');
 @import url('battlePokemonKo.css');
+@import url('battleToast.css');
 
 
 .battle-container {
@@ -150,16 +151,13 @@
 	position: relative;
 }
 
-
-/*!* Toast *!*/
-/*.battle-toast {*/
-/*	grid-column: 1 / 5;*/
-/*	grid-row: 3 / 5;*/
-/*	display: flex;*/
-/*	justify-content: center;*/
-/*	align-items: center;*/
-/*	background-color: #f1c40f;*/
-/*}*/
+.battle-toast {
+	grid-column: 1 / 5;
+	grid-row: 3 / 5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
 /*!* Timer *!*/
 /*.battle-timer {*/

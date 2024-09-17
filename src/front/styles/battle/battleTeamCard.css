@@ -25,6 +25,10 @@
     left: 63px;
 }
 
+.battle-team-avatar img {
+    object-fit: contain;
+}
+
 .battle-team-infos {
     display: flex;
     flex-direction: column;

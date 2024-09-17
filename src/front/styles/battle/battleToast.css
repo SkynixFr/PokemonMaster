@@ -1,0 +1,127 @@
+.battle-toast {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    max-width: calc(60% - 20px);
+    height: 75px;
+    margin-left: 25px;
+    border-radius:10px;
+    background-color: #fff;
+    animation: fadeInToRight 1s ease-in-out;
+    z-index: 999;
+}
+
+.battle-toast__avatar {
+    position: absolute;
+    top: -40px;
+    left: 20px;
+}
+
+.battle-toast__avatar img {
+    object-fit: contain;
+}
+
+
+.battle-toast__text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    padding-left: 80px;
+    font-size: var(--fs-xl);
+}
+
+.battle-toast__move {
+    background-color: #fff;
+}
+
+.battle-toast__move.grass {
+    color: var(--grass);
+}
+
+.battle-toast__move.poison {
+    color: var(--poison);
+}
+
+.battle-toast__move.fire {
+    color: var(--fire);
+}
+
+.battle-toast__move.flying {
+    color: var(--flying);
+}
+
+.battle-toast__move.water {
+    color: var(--water);
+}
+
+.battle-toast__move.bug {
+    color: var(--bug);
+}
+
+.battle-toast__move.normal {
+    color: var(--normal);
+}
+
+.battle-toast__move.electric {
+    color: var(--electric);
+}
+
+.battle-toast__move.ground {
+    color: var(--ground);
+}
+
+.battle-toast__move.fairy {
+    color: var(--fairy);
+}
+
+.battle-toast__move.fighting {
+    color: var(--fighting);
+}
+
+.battle-toast__move.psychic {
+    color: var(--psychic);
+}
+
+.battle-toast__move.rock {
+    color: var(--rock);
+}
+
+.battle-toast__move.steel {
+    color: var(--steel);
+}
+
+.battle-toast__move.ice {
+    color: var(--ice);
+}
+
+.battle-toast__move.dark {
+    color: var(--dark);
+}
+
+.battle-toast__move.dragon {
+    color: var(--dragon);
+}
+
+.battle-toast__move.ghost {
+    color: var(--ghost);
+}
+
+@media screen and (max-width: 1920px) {
+
+    .battle-toast {
+        height: 50px;
+    }
+
+    .battle-toast__avatar img {
+        width: 60px;
+        height: 100px;
+    }
+
+    .battle-toast__text {
+        font-size: var(--fs-md);
+    }
+}

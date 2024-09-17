@@ -7,6 +7,6 @@ export function firstLetterMaj(str: string): string {
 	return capitalizedWords.join(' ');
 }
 
-export function toLowerCaseWithoutSpaceAndSpecialChar(str: string): string {
-	return str.toLowerCase().replace(/[ .]/g, '');
+export function withoutSpaceAndSpecialChar(str: string): string {
+	return str.replace(/[ .,-]/g, ' ');
 }

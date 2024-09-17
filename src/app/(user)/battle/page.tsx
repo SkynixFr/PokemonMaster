@@ -7,6 +7,7 @@ import CustomImage from '../../../front/components/customImage';
 import BattleTeamCard from '../../../front/components/battle/battleTeamCard';
 import BattlePokemonCard from '../../../front/components/battle/battlePokemonCard';
 import BattlePokemonKo from '../../../front/components/battle/battlePokemonKo';
+import BattleToast from '../../../front/components/battle/battleToast';
 
 //Icons
 import { Moon, Sun } from 'lucide-react';
@@ -22,6 +23,7 @@ import Status from '../../../back/classes/status';
 interface BattleProps {
 	battle: BattleClass;
 }
+import { Notification } from '../../../interfaces/battle/notitication';
 
 // Utils
 import BattleActions from '../../../front/components/battle/battleActions';
@@ -46,11 +48,31 @@ const Battle = ({ battle }: BattleProps) => {
 	const [currentView, setCurrentView] = useState<'player' | 'opponent'>(
 		'player'
 	);
-
 	const [activePlayerPokemonKo, setActivePlayerPokemonKo] =
 		useState<boolean>(false);
 	const [activeOpponentPokemonKo, setActiveOpponentPokemonKo] =
 		useState<boolean>(false);
+
+	const [notifications, setNotifications] = useState<Notification[]>([]);
+	const [currentNotification, setCurrentNotification] =
+		useState<Notification>(null);
+
+	const addNotification = (notification: Notification) => {
+		setNotifications(notifications => [...notifications, notification]);
+	};
+
+	useEffect(() => {
+		if (!notifications.length || currentNotification) return;
+		const showNotification = () => {
+			setCurrentNotification(notifications[0]);
+
+			setTimeout(() => {
+				setCurrentNotification(null);
+				setNotifications(notifications => notifications.slice(1));
+			}, 2000);
+		};
+		showNotification();
+	}, [currentNotification, notifications]);
 
 	const recreatePokemonFromParsed = (parsedPokemon: Pokemon): Pokemon => {
 		const status = parsedPokemon.status
@@ -131,6 +153,18 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handlePlayerAttack = () => {
+		addNotification({
+			pokemonName: activePlayerPokemon.name,
+			move: {
+				name: activePlayerPokemon.activeMove.name,
+				type: activePlayerPokemon.activeMove.type
+			},
+			userAvatar: {
+				name: playerTeam.avatar.name,
+				sprite: playerTeam.avatar.sprite
+			}
+		});
+
 		if (activePlayerPokemon.activeMove.target === 'user') {
 			const updatedPokemon = activePlayerPokemon.attack(activePlayerPokemon);
 			setActivePlayerPokemon(updatedPokemon);
@@ -174,6 +208,18 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handleOpponentAttack = () => {
+		addNotification({
+			pokemonName: activeOpponentPokemon.name,
+			move: {
+				name: activeOpponentPokemon.activeMove.name,
+				type: activeOpponentPokemon.activeMove.type
+			},
+			userAvatar: {
+				name: opponentTeam.avatar.name,
+				sprite: opponentTeam.avatar.sprite
+			}
+		});
+
 		if (activeOpponentPokemon.activeMove.target === 'user') {
 			const updatedPokemon = activeOpponentPokemon.attack(
 				activeOpponentPokemon
@@ -342,6 +388,15 @@ const Battle = ({ battle }: BattleProps) => {
 	// KO
 	const handlePlayerKo = () => {
 		if (activePlayerPokemon.getStat('hp').value === 0) {
+			addNotification({
+				pokemonName: activePlayerPokemon.name,
+				userAvatar: {
+					name: playerTeam.avatar.name,
+					sprite: playerTeam.avatar.sprite
+				},
+				isKo: true
+			});
+
 			setCurrentView('player');
 			setActivePlayerPokemonKo(true);
 		}
@@ -478,6 +533,8 @@ const Battle = ({ battle }: BattleProps) => {
 			<div className={'battle-turn'}>Turn {activeTurn}</div>
 
 			<div className={'battle-global-infos'}></div>
+
+			<BattleToast currentNotification={currentNotification} />
 
 			{currentView === 'player' ? (
 				<>
