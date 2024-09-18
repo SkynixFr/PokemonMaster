@@ -96,7 +96,7 @@
     border-radius: 5px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     flex-flow: column wrap;
     animation: bounceIn .75s ease-in-out;
     padding: 25px;
@@ -107,7 +107,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 25px;
+    align-self: flex-end;
+    gap: 10px;
 }
 
 .modal-running-btn-container button {

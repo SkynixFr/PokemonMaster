@@ -6,6 +6,7 @@
 @import url('battleToast.css');
 @import url('battleLoader.css');
 @import url('battleEnd.css');
+@import url("battleSwitch.css");
 
 .battle-container {
 	display: grid;

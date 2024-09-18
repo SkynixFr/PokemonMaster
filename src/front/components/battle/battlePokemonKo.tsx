@@ -64,6 +64,10 @@ const BattlePokemonKo = ({
 					{firstLetterMaj(activePokemon.name)} is KO! Please select a new
 					Pokemon.
 				</h2>
+				<span>
+					Pick a Pokemon to switch to. A switch will be considered as a
+					turn.
+				</span>
 				<div className={'pokemon-ko-modal-pokemons'}>
 					{team.pokemons.map((pokemon: Pokemon) => (
 						<div

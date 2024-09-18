@@ -112,6 +112,9 @@ const BattleActions = ({
 				<div className={'modal-running-container'}>
 					<div className={'modal-running-content'}>
 						<h1>Are you sure you want to run?</h1>
+						<span>
+							You will lose the battle and your progress will be lost.
+						</span>
 						<div className={'modal-running-btn-container'}>
 							<button
 								className={'btn-secondary'}
