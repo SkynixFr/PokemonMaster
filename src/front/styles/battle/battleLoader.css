@@ -50,7 +50,7 @@
     width: 600px;
     display: flex;
     flex-flow: column;
-    margin: 0 100px;
+    margin: 0 300px;
 }
 
 .battle-loader__user__content.opponent {
@@ -169,3 +169,8 @@
 }
 
 
+@media screen and (max-width: 1920px) {
+    .battle-loader__user__content {
+        margin: 0 100px;
+    }
+}
