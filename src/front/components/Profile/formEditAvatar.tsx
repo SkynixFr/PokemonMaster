@@ -79,7 +79,7 @@ const FormEditAvatar = ({
 	};
 
 	return (
-		<div className="form-create-team">
+		<div className="form-edit-avatar">
 			<div className="bg-form"></div>
 			<button className="close-btn" onClick={() => setOpenForm(false)}>
 				<X width={30} height={30} />

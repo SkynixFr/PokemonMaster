@@ -87,3 +87,14 @@ export const updateUserAction = async (
 	);
 	return response.json();
 };
+
+export const deleteUserAction = async (userId: string, accessToken: string) => {
+	const response = await fetch(`http://localhost:8080/api/v1/user/${userId}`, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${accessToken}`
+		}
+	});
+	return response.json();
+};

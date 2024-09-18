@@ -10,6 +10,7 @@ import FormEditAvatar from './formEditAvatar';
 import FormEditUsername from './formEditUsername';
 import FormEditEmail from './formEditEmail';
 import FormEditPassword from './formEditPassword';
+import FormDeleteAccount from './formDeleteAccount';
 // Model
 import { UserEntity } from '../../../interfaces/user/userEntity';
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
@@ -27,6 +28,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 	const [username, setUsername] = useState(userDetails.username);
 	const [email, setEmail] = useState(userDetails.email);
 	const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
 	const handleAvatarUpdate = (newAvatar: AvatarEntity) => {
 		setCurrentAvatar(newAvatar);
@@ -95,7 +97,10 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 							)}
 						</div>
 						<div className="user-delete">
-							<button type="submit" className="user-delete">
+							<button
+								onClick={() => setIsDeleteModalOpen(true)}
+								className="user-delete"
+							>
 								<span>Supprimer</span>
 								<Trash2 />
 							</button>
@@ -109,6 +114,14 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 					<FormEditPassword
 						userDetails={userDetails}
 						setOpenPasswordModal={setIsPasswordModalOpen}
+					/>
+				</div>
+			)}
+			{isDeleteModalOpen && (
+				<div className="delete-modal">
+					<FormDeleteAccount
+						userDetails={userDetails}
+						setIsDeleteModalOpen={setIsDeleteModalOpen}
 					/>
 				</div>
 			)}
