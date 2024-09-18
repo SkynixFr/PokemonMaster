@@ -8,15 +8,15 @@
     height: 350px;
     border-radius: 10px;
     color: var(--black);
-    transition: all .3s ease-in-out;
+    opacity: 0;
 }
 
 .battle-team-container.player {
-    animation: fadeInToRight .75s ease-in-out;
+    animation: fadeInToRight 2s ease-in-out forwards;
 }
 
 .battle-team-container.opponent {
-    animation: fadeInToLeft .75s ease-in-out;
+    animation: fadeInToLeft 2s ease-in-out forwards;
 }
 
 .battle-team-avatar {

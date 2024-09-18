@@ -7,14 +7,17 @@
     width: 350px;
     position: relative;
     gap: 5px;
+    opacity: 0;
 }
 
 .battle-pokemon-container.player {
-    animation: fadeInToRight 1s ease-in-out;
+    animation: fadeInToRight 1s ease-in-out forwards;
+    animation-delay: .5s;
 }
 
 .battle-pokemon-container.opponent {
-    animation: fadeInToLeft 1s ease-in-out;
+    animation: fadeInToLeft 1s ease-in-out forwards;
+    animation-delay: .5s;
 }
 
 .battle-pokemon-infos {
@@ -29,8 +32,6 @@
     border-radius: 10px;
     padding: 10px 5px;
 }
-
-
 
 .battle-pokemon-infos .battle-pokemon-stat-top {
     display: flex;
@@ -104,6 +105,7 @@
     height:100%;
     border-radius: 25px;
     transition: width 0.5s ease-in-out;
+    transition-delay: 1s;
 }
 
 .progress-bar-container span {
