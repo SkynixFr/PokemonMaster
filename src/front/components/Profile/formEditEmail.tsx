@@ -15,7 +15,11 @@ import { UserEntity } from '../../../interfaces/user/userEntity';
 interface FormEditEmailProps {
 	userDetails: UserEntity;
 	initialEmail: string;
-	onEmailUpdate: (newEmail: string) => void; // Callback to handle the Email update
+	onEmailUpdate: (newEmail: string) => void;
+	setOpenForm: (
+		openForm: 'avatar' | 'username' | 'email' | 'password' | null
+	) => void;
+	openForm: 'avatar' | 'username' | 'email' | 'password' | null;
 }
 const userSchema = z.object({
 	email: z.string().email({ message: 'Invalid email address' })
@@ -30,7 +34,9 @@ function forEditEmail(email: string): string {
 const formEditEmail = ({
 	userDetails,
 	initialEmail,
-	onEmailUpdate
+	onEmailUpdate,
+	setOpenForm,
+	openForm
 }: FormEditEmailProps) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [newEmail, setNewEmail] = useState(initialEmail);
@@ -45,6 +51,7 @@ const formEditEmail = ({
 	// Handler to enable editing
 	const handleEdit = () => {
 		setIsEditing(true);
+		setOpenForm('email');
 	};
 	// Confirm the Email change
 	const handleConfirm = () => {
@@ -67,6 +74,7 @@ const formEditEmail = ({
 				success: () => {
 					onEmailUpdate(newEmail);
 					setIsEditing(false);
+					setOpenForm(null);
 					return 'Email updated';
 				},
 				error: error => {
@@ -93,6 +101,7 @@ const formEditEmail = ({
 		setNewEmail(initialEmail);
 		setErrors({ email: '' });
 		setIsEditing(false);
+		setOpenForm(null);
 	};
 
 	// Handle Enter key press to confirm changes
@@ -111,7 +120,7 @@ const formEditEmail = ({
 						type="text"
 						value={newEmail}
 						onChange={handleChange}
-						onKeyDown={handleKeyDown} // Handle Enter key press
+						onKeyDown={handleKeyDown}
 					/>
 					<button onClick={handleConfirm} className="btn-confirm-Email">
 						<Check />
@@ -124,7 +133,11 @@ const formEditEmail = ({
 				// Show Email and edit button when not editing
 				<div>
 					<h1>{forEditEmail(initialEmail)}</h1>
-					<button onClick={handleEdit} className="user-update">
+					<button
+						onClick={handleEdit}
+						className="user-update"
+						disabled={openForm !== null}
+					>
 						<PencilLine />
 					</button>
 				</div>

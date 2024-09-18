@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, FormEventHandler } from 'react';
 import { toast } from 'sonner';
-import { z } from 'zod';
+import { set, z } from 'zod';
 // Actions
 import { updateUserAction } from '../../actions/user.actions';
 // Interfaces
@@ -12,6 +12,10 @@ import { UserUpdate } from '../../../interfaces/user/userUpdate';
 interface FormEditPasswordProps {
 	userDetails: UserEntity;
 	setOpenPasswordModal: (isOpen: boolean) => void;
+	setOpenForm: (
+		openForm: 'avatar' | 'username' | 'email' | 'password' | null
+	) => void;
+	openForm: 'avatar' | 'username' | 'email' | 'password' | null;
 }
 
 const userSchema = z
@@ -37,9 +41,10 @@ const userSchema = z
 
 const FormEditPassword = ({
 	userDetails,
-	setOpenPasswordModal
+	setOpenPasswordModal,
+	openForm,
+	setOpenForm
 }: FormEditPasswordProps) => {
-	const [oldPassword, setOldPassword] = useState('');
 	const [newPassword, setNewPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [errors, setErrors] = useState<{
@@ -62,7 +67,6 @@ const FormEditPassword = ({
 			id: userDetails.id,
 			password: newPassword
 		};
-		console.log(userToUpdate);
 		try {
 			userSchema.parse({
 				newpassword: newPassword,
@@ -76,6 +80,7 @@ const FormEditPassword = ({
 				}
 			});
 			setOpenPasswordModal(false);
+			setOpenForm(null);
 		} catch (error) {
 			if (error instanceof z.ZodError) {
 				setErrors({
@@ -91,6 +96,13 @@ const FormEditPassword = ({
 	};
 	const handleChange = () => {
 		setErrors({ newpassword: '', confirmPassword: '' });
+	};
+	const handleCancel = () => {
+		setNewPassword('');
+		setConfirmPassword('');
+		setErrors({ newpassword: '', confirmPassword: '' });
+		setOpenPasswordModal(false);
+		setOpenForm(null);
 	};
 
 	return (
@@ -123,9 +135,7 @@ const FormEditPassword = ({
 					</div>
 					<div className="modal-actions">
 						<button onClick={handleSaveClick}>Save</button>
-						<button onClick={() => setOpenPasswordModal(false)}>
-							Cancel
-						</button>
+						<button onClick={() => handleCancel()}>Cancel</button>
 					</div>
 				</div>
 			</div>

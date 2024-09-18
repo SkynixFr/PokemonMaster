@@ -16,7 +16,9 @@ import { updateUserAction } from '../../actions/user.actions';
 interface FormAvatarProps {
 	userDetails: UserEntity;
 	avatars: AvatarEntity[];
-	setOpenForm: (openForm: boolean) => void;
+	setOpenForm: (
+		openForm: 'avatar' | 'username' | 'email' | 'password' | null
+	) => void;
 	onAvatarUpdate: (newAvatar: AvatarEntity) => void;
 }
 
@@ -39,7 +41,7 @@ const FormEditAvatar = ({
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') {
-				setOpenForm(false);
+				setOpenForm(null);
 			}
 		};
 
@@ -71,7 +73,7 @@ const FormEditAvatar = ({
 			onAvatarUpdate(avatarSelected);
 			toast.success(`${response.username} avatar updated successfully!`);
 			router.refresh(); // Refresh the router to update the UI
-			setOpenForm(false); // Close the form
+			setOpenForm(null); // Close the form
 		} catch (error: any) {
 			toast.error(error.message || 'An error occurred');
 			console.error('Error in FormEditAvatar:', error);
@@ -81,7 +83,7 @@ const FormEditAvatar = ({
 	return (
 		<div className="form-edit-avatar">
 			<div className="bg-form"></div>
-			<button className="close-btn" onClick={() => setOpenForm(false)}>
+			<button className="close-btn" onClick={() => setOpenForm(null)}>
 				<X width={30} height={30} />
 			</button>
 			<form className="create-team" onSubmit={handleSubmit}>

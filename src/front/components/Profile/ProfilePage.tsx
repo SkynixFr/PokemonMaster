@@ -15,6 +15,7 @@ import FormDeleteAccount from './formDeleteAccount';
 import { UserEntity } from '../../../interfaces/user/userEntity';
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
 import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
+import { set } from 'zod';
 
 interface UserListProps {
 	userDetails: UserEntity;
@@ -23,7 +24,9 @@ interface UserListProps {
 }
 
 const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
-	const [openForm, setOpenForm] = useState(false);
+	const [openForm, setOpenForm] = useState<
+		'avatar' | 'username' | 'email' | 'password' | null
+	>(null);
 	const [currentAvatar, setCurrentAvatar] = useState(userDetails.avatar);
 	const [username, setUsername] = useState(userDetails.username);
 	const [email, setEmail] = useState(userDetails.email);
@@ -41,6 +44,11 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 	const handleEmailUpdate = (newEmail: string) => {
 		setEmail(newEmail);
 	};
+	const OpenPasswordModal = () => {
+		setIsPasswordModalOpen(true);
+		setOpenForm('password');
+	};
+
 	return (
 		<div>
 			<div className="profil-infos">
@@ -49,7 +57,8 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 						<div className="btn-edit-avatar-container">
 							<button
 								className={'btn-edit-avatar'}
-								onClick={() => setOpenForm(!openForm)}
+								onClick={() => setOpenForm('avatar')}
+								disabled={openForm !== null}
 							>
 								<PencilLine />
 							</button>
@@ -64,7 +73,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 								sizes="(max-width: 600px) 150px, (max-width: 1200px) 150px, 150px"
 							/>
 						</div>
-						{openForm && (
+						{openForm == 'avatar' && (
 							<div className={'edit-avatar-avatar'}>
 								<FormEditAvatar
 									userDetails={userDetails}
@@ -80,16 +89,20 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 									userDetails={userDetails}
 									initialUsername={username}
 									onUsernameUpdate={handleUsernameUpdate}
+									setOpenForm={setOpenForm}
+									openForm={openForm}
 								/>
 							</div>
 							<FormEditEmail
 								userDetails={userDetails}
 								initialEmail={email}
 								onEmailUpdate={handleEmailUpdate}
+								setOpenForm={setOpenForm}
+								openForm={openForm}
 							/>
 							{!isPasswordModalOpen && (
 								<div className="user-password">
-									<button onClick={() => setIsPasswordModalOpen(true)}>
+									<button onClick={() => OpenPasswordModal()}>
 										<span>Update your password</span>
 										<PencilLine />
 									</button>
@@ -114,6 +127,8 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 					<FormEditPassword
 						userDetails={userDetails}
 						setOpenPasswordModal={setIsPasswordModalOpen}
+						setOpenForm={setOpenForm}
+						openForm={openForm}
 					/>
 				</div>
 			)}

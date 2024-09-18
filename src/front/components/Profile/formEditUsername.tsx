@@ -17,7 +17,11 @@ import { UserEntity } from '../../../interfaces/user/userEntity';
 interface FormEditUsernameProps {
 	userDetails: UserEntity;
 	initialUsername: string;
-	onUsernameUpdate: (newUsername: string) => void; // Callback to handle the username update
+	onUsernameUpdate: (newUsername: string) => void;
+	setOpenForm: (
+		openForm: 'avatar' | 'username' | 'email' | 'password' | null
+	) => void;
+	openForm: 'avatar' | 'username' | 'email' | 'password' | null;
 }
 
 const userSchema = z.object({
@@ -33,7 +37,9 @@ const userSchema = z.object({
 const FormEditUsername = ({
 	userDetails,
 	initialUsername,
-	onUsernameUpdate
+	onUsernameUpdate,
+	setOpenForm,
+	openForm
 }: FormEditUsernameProps) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [newUsername, setNewUsername] = useState(initialUsername);
@@ -49,26 +55,28 @@ const FormEditUsername = ({
 	// Handler to enable editing
 	const handleEdit = () => {
 		setIsEditing(true);
+		setOpenForm('username');
 	};
 
-	// // Handle Escape key press
-	// useEffect(() => {
-	// 	const handleKeyDown = (e: KeyboardEvent) => {
-	// 		if (e.key === 'Escape' && isEditing) {
-	// 			setIsEditing(false); // Close only if editing
-	// 		}
-	// 	};
+	// Handle Escape key press
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape' && isEditing) {
+				setIsEditing(false); // Close only if editing
+				setOpenForm(null);
+			}
+		};
 
-	// 	// Add event listener only when in edit mode
-	// 	if (isEditing) {
-	// 		document.addEventListener('keydown', handleKeyDown);
-	// 	}
+		// Add event listener only when in edit mode
+		if (isEditing) {
+			document.addEventListener('keydown', handleKeyDown);
+		}
 
-	// 	return () => {
-	// 		// Clean up the event listener when not editing
-	// 		document.removeEventListener('keydown', handleKeyDown);
-	// 	};
-	// }, [isEditing]);
+		return () => {
+			// Clean up the event listener when not editing
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [isEditing]);
 
 	// Confirm the username change
 	const handleConfirm = () => {
@@ -91,6 +99,7 @@ const FormEditUsername = ({
 				success: () => {
 					onUsernameUpdate(newUsername);
 					setIsEditing(false);
+					setOpenForm(null);
 					return 'Username updated';
 				},
 				error: error => {
@@ -119,6 +128,7 @@ const FormEditUsername = ({
 		setNewUsername(initialUsername);
 		setErrors({ username: '' });
 		setIsEditing(false);
+		setOpenForm(null);
 	};
 
 	// Handle Enter key press to confirm changes
@@ -154,7 +164,11 @@ const FormEditUsername = ({
 				// Show username and edit button when not editing
 				<div>
 					<h1>{initialUsername}</h1>
-					<button onClick={handleEdit} className="user-update">
+					<button
+						onClick={handleEdit}
+						className="user-update"
+						disabled={openForm !== null}
+					>
 						<PencilLine />
 					</button>
 				</div>
