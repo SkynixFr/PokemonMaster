@@ -4,7 +4,7 @@
 @import url('battleStatus.css');
 @import url('battlePokemonKo.css');
 @import url('battleToast.css');
-
+@import url('battleLoader.css');
 
 .battle-container {
 	display: grid;
@@ -24,7 +24,6 @@
 	top: 0;
 	left: 0;
 	z-index: -10;
-
 }
 
 .battle-background img {
