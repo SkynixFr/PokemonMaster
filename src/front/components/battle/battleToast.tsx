@@ -10,7 +10,6 @@ interface BattleToastProps {
 }
 
 const BattleToast = ({ currentNotification }: BattleToastProps) => {
-	console.log(currentNotification);
 	return (
 		<>
 			{currentNotification && (

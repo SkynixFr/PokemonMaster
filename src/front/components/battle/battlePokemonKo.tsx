@@ -7,6 +7,7 @@ import CustomImage from '../customImage';
 
 // Utils
 import { firstLetterMaj } from '../../utils/formatString';
+import { useEffect } from 'react';
 
 // Interfaces
 interface BattlePokemonKoProps {
@@ -37,6 +38,24 @@ const BattlePokemonKo = ({
 			setCurrentView('player');
 		}
 	};
+
+	useEffect(() => {
+		const counterPokemonsAlive = team.pokemons.filter(
+			pokemon => pokemon.stats[0].value > 0
+		).length;
+
+		if (counterPokemonsAlive === 1) {
+			const pokemonAlive = team.pokemons.find(
+				pokemon => pokemon.stats[0].value > 0
+			);
+
+			setActivePokemon(recreatePokemonFromParsed(pokemonAlive));
+			setActivePokemonKo(false);
+			if (!player) {
+				setCurrentView('player');
+			}
+		}
+	}, []);
 
 	return (
 		<div className={'pokemon-ko-modal'}>

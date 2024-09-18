@@ -31,6 +31,7 @@ import {
 	PARALYSIS_CHANCE,
 	THAW_CHANCE
 } from '../../../front/utils/battle/constants';
+import BattleEnd from '../../../front/components/battle/battleEnd';
 
 const Battle = ({ battle }: BattleProps) => {
 	const [isInitialized, setIsInitialized] = useState<boolean>(false);
@@ -63,6 +64,11 @@ const Battle = ({ battle }: BattleProps) => {
 	const addNotification = (notification: Notification) => {
 		setNotifications(notifications => [...notifications, notification]);
 	};
+	const [battleEnd, setBattleEnd] = useState<boolean>(false);
+	const [counterPlayerPokemonKo, setCounterPlayerPokemonKo] =
+		useState<number>(0);
+	const [counterOpponentPokemonKo, setCounterOpponentPokemonKo] =
+		useState<number>(0);
 
 	const handleNotificationStatusEffect = (
 		status: string,
@@ -562,6 +568,7 @@ const Battle = ({ battle }: BattleProps) => {
 				isKo: true
 			});
 
+			setCounterPlayerPokemonKo(counterPlayerPokemonKo + 1);
 			setCurrentView('player');
 			setActivePlayerPokemonKo(true);
 		}
@@ -577,8 +584,24 @@ const Battle = ({ battle }: BattleProps) => {
 				},
 				isKo: true
 			});
+
+			setCounterOpponentPokemonKo(counterOpponentPokemonKo + 1);
 			setCurrentView('opponent');
 			setActiveOpponentPokemonKo(true);
+		}
+	};
+
+	// END
+	const handleBattleEnd = () => {
+		const playerTeamKo = playerTeam.pokemons.every(
+			pokemon => pokemon.stats[0].value === 0
+		);
+		const opponentTeamKo = opponentTeam.pokemons.every(
+			pokemon => pokemon.stats[0].value === 0
+		);
+
+		if (playerTeamKo || opponentTeamKo) {
+			setBattleEnd(true);
 		}
 	};
 
@@ -614,6 +637,18 @@ const Battle = ({ battle }: BattleProps) => {
 			setActivePlayerPokemon(playerPokemon);
 			setActiveOpponentPokemon(opponentPokemon);
 			setActiveTurn(localStorageBattle.turn);
+
+			const playerPokemonKo = localStorageBattle.playerTeam.pokemons.every(
+				pokemon => pokemon.stats[0].value === 0
+			);
+			const opponentPokemonKo =
+				localStorageBattle.opponentTeam.pokemons.every(
+					pokemon => pokemon.stats[0].value === 0
+				);
+
+			if (playerPokemonKo || opponentPokemonKo) {
+				setBattleEnd(true);
+			}
 		} else if (battle) {
 			setPlayerTeam(battle.playerTeam);
 			setOpponentTeam(battle.opponentTeam);
@@ -669,6 +704,8 @@ const Battle = ({ battle }: BattleProps) => {
 		handleOpponentKo();
 		setPlayerReady(false);
 		setOpponentReady(false);
+		setActiveTurn(activeTurn + 1);
+		handleBattleEnd();
 	}, [playerReady, opponentReady]);
 
 	if (
@@ -678,6 +715,8 @@ const Battle = ({ battle }: BattleProps) => {
 		!activeOpponentPokemon
 	)
 		return null;
+
+	console.log('battleEnd', battleEnd);
 
 	return (
 		<div className={`battle-container ${activeTheme}`}>
@@ -689,6 +728,8 @@ const Battle = ({ battle }: BattleProps) => {
 					height={10000}
 				/>
 			</div>
+
+			{battleEnd && <BattleEnd playerTeam={playerTeam} />}
 
 			<div className={'battle-theme'}>
 				<button
@@ -753,7 +794,7 @@ const Battle = ({ battle }: BattleProps) => {
 						disabled={isNotificationActive}
 					/>
 
-					{activePlayerPokemonKo ? (
+					{activePlayerPokemonKo && !battleEnd && (
 						<BattlePokemonKo
 							activePokemon={activePlayerPokemon}
 							setActivePokemon={setActivePlayerPokemon}
@@ -763,8 +804,6 @@ const Battle = ({ battle }: BattleProps) => {
 							setCurrentView={setCurrentView}
 							player={true}
 						/>
-					) : (
-						''
 					)}
 				</>
 			) : (
@@ -811,7 +850,7 @@ const Battle = ({ battle }: BattleProps) => {
 						disabled={isNotificationActive}
 					/>
 
-					{activeOpponentPokemonKo ? (
+					{activeOpponentPokemonKo && !battleEnd && (
 						<BattlePokemonKo
 							activePokemon={activeOpponentPokemon}
 							setActivePokemon={setActiveOpponentPokemon}
@@ -821,8 +860,6 @@ const Battle = ({ battle }: BattleProps) => {
 							setCurrentView={setCurrentView}
 							player={false}
 						/>
-					) : (
-						''
 					)}
 				</>
 			)}

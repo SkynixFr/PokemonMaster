@@ -5,6 +5,7 @@
 @import url('battlePokemonKo.css');
 @import url('battleToast.css');
 @import url('battleLoader.css');
+@import url('battleEnd.css');
 
 .battle-container {
 	display: grid;
