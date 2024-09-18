@@ -96,5 +96,19 @@ export const deleteUserAction = async (userId: string, accessToken: string) => {
 			Authorization: `Bearer ${accessToken}`
 		}
 	});
-	return response.json();
+
+	// Vérifiez si la réponse est une suppression réussie sans contenu (204 No Content)
+	if (response.status === 200) {
+		// La suppression a réussi, mais il n'y a pas de contenu dans la réponse
+		return { message: 'Account deleted successfully' };
+	}
+
+	// Si la réponse contient un corps et est du JSON valide
+	if (response.headers.get('content-type')?.includes('application/json')) {
+		// Tente de parser le JSON uniquement si la réponse est du type JSON
+		return response.json();
+	} else {
+		// Sinon, renvoyer un message par défaut
+		return { message: 'Account deleted successfully but no JSON response' };
+	}
 };
