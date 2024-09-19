@@ -126,20 +126,22 @@
 
 .battle-loader__user__content .pokemons__container {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     align-items: center;
-    gap: 10px;
-    width: 100%;
+    gap:25px;
+    width: calc(100% - 50px);
     height: 150px;
     background:  rgba(62, 62, 62, 0.7);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border-radius: 8px;
+    padding: 0 25px;
 }
 
 .battle-loader__user__content.opponent .pokemons__container {
     align-self: normal;
+    justify-content: flex-end;
 }
 
 .pokemon__container {
