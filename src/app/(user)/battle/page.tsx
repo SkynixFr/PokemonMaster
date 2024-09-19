@@ -250,32 +250,32 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handlePlayerTeam = (updatedPokemon: Pokemon) => {
-		const updatedPlayerTeam = playerTeam.pokemons.map(pokemon =>
+		const updatedPokemons = playerTeam.pokemons.map(pokemon =>
 			pokemon.index === updatedPokemon.index ? updatedPokemon : pokemon
 		);
 
-		const playerTeamUpdated = new Team(
+		const updatedPlayerTeam = new Team(
 			playerTeam.id,
 			playerTeam.name,
 			playerTeam.avatar,
-			updatedPlayerTeam
+			updatedPokemons
 		);
 
 		setPlayerTeam(updatedPlayerTeam);
 	};
 	const handleOpponentTeam = (updatedPokemon: Pokemon) => {
-		const updatedOpponentTeam = opponentTeam.pokemons.map(pokemon =>
+		const updatedPokemons = opponentTeam.pokemons.map(pokemon =>
 			pokemon.index === updatedPokemon.index ? updatedPokemon : pokemon
 		);
 
-		const opponentTeamUpdated = new Team(
+		const updatedOpponentTeam = new Team(
 			opponentTeam.id,
 			opponentTeam.name,
 			opponentTeam.avatar,
-			updatedOpponentTeam
+			updatedPokemons
 		);
 
-		setOpponentTeam(opponentTeamUpdated);
+		setOpponentTeam(updatedOpponentTeam);
 	};
 
 	const handleOpponentAttack = () => {
@@ -366,7 +366,7 @@ const Battle = ({ battle }: BattleProps) => {
 				pokemonName: activeOpponentPokemon.name,
 				statusEffect: {
 					type: 'poison',
-					name: 'suffer from poison'
+					name: 'suffers from poison'
 				},
 				userAvatar: {
 					name: opponentTeam.avatar.name,
@@ -555,7 +555,6 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	};
 
-	// KO
 	const handlePlayerKo = () => {
 		if (activePlayerPokemon.getStat('hp').value === 0) {
 			addNotification({
@@ -590,7 +589,6 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	};
 
-	// END
 	const handleBattleEnd = () => {
 		const playerTeamKo = playerTeam.pokemons.every(
 			pokemon => pokemon.stats[0].value === 0
@@ -689,7 +687,6 @@ const Battle = ({ battle }: BattleProps) => {
 		activeTurn
 	]);
 
-	// BATTLE
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
 		handleSleeping(activePlayerPokemon, activeOpponentPokemon);

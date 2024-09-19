@@ -34,8 +34,26 @@ const BattleTeamCard = ({
 	const [isSwitchingTo, setIsSwitchingTo] = useState<Pokemon | null>(null);
 
 	const handleSwitchPokemon = (pokemon: Pokemon) => {
-		if (pokemon.stats[0].value === 0) return;
-		const newPokemon = recreatePokemonFromParsed(pokemon);
+		if (pokemon.status.name === 'KO') return;
+		let newPokemon = recreatePokemonFromParsed(pokemon);
+		newPokemon = new Pokemon(
+			newPokemon.pokedexId,
+			newPokemon.name,
+			newPokemon.types,
+			newPokemon.level,
+			newPokemon.ability,
+			newPokemon.nature,
+			newPokemon.gender,
+			newPokemon.isShiny,
+			newPokemon.moves,
+			newPokemon.item,
+			newPokemon.stats,
+			newPokemon.weight,
+			newPokemon.activeMove,
+			newPokemon.status.setAbleToMove(false),
+			newPokemon.volatileStatus,
+			newPokemon.index
+		);
 		setActivePokemon(newPokemon);
 		player ? handlePlayerReady() : handleOpponentReady();
 		setIsSwitching(false);
