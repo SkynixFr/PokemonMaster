@@ -1,0 +1,178 @@
+.battle-loader__container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    flex-flow: column;
+}
+
+.battle-loader__background {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -10;
+}
+
+.battle-loader__background .battle-loader__filter {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.battle-loader__content {
+    width: 100%;
+    height: 700px;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+}
+
+.battle__vs {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: popIn 1.5s ease-in-out;
+}
+
+.battle-loader__user__content {
+    position: relative;
+    width: 600px;
+    display: flex;
+    flex-flow: column;
+    margin: 0 300px;
+}
+
+.battle-loader__user__content.opponent {
+    align-self: flex-end;
+    align-items: flex-end;
+    justify-content: flex-end;
+    animation: fadeInToLeft 1.5s ease-in-out;
+}
+
+.battle-loader__user__content.player {
+    align-self: flex-start;
+    animation: fadeInToRight 1.5s ease-in-out;
+}
+
+.battle-loader__user__content .user__avatar {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transform: rotate(45deg);
+    top: -25px;
+    z-index: 1;
+}
+
+.battle-loader__user__content .user__avatar img {
+    position: absolute;
+    top: -10px;
+    left: 25px;
+    width: 100%;
+    height: auto;
+    transform: rotate(-45deg);
+}
+
+.battle-loader__user__content.opponent .user__avatar {
+    background-color: rgba(34, 85, 28, 1);
+    right: -50px;
+}
+
+.battle-loader__user__content.player .user__avatar {
+    background: rgba(193, 76, 28, 1);
+    left: -50px;
+}
+
+.battle-loader__user__content .user__name {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font: var(--fs-lg) var(--ff-base-bold), sans-serif;
+    letter-spacing: 1px;
+    color: #fff;
+    padding: 10px 20px;
+    width: calc(250px - 40px);
+}
+
+.battle-loader__user__content.opponent .user__name {
+    justify-content: flex-start;
+    border-radius:
+            12% 88% 88% 12% / 100% 0 0 100%;
+    background: linear-gradient(90deg, rgba(34, 85, 28, 1) 0%, rgba(34, 85, 28, 1) 40%, rgba(69, 128, 45, 1) 100%, rgba(69, 128, 45, 1) 100%);
+}
+
+.battle-loader__user__content.player .user__name {
+    border-radius:
+            88% 12% 12% 88% / 0 100% 100% 0;
+    background: linear-gradient(90deg, rgba(217, 120, 109, 1) 0%, rgba(217, 120, 109, 1) 0%, rgba(193, 76, 28, 1) 40%, rgba(193, 76, 28, 1) 100%);
+}
+
+
+.battle-loader__user__content .pokemons__container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap:25px;
+    width: calc(100% - 50px);
+    height: 150px;
+    background:  rgba(62, 62, 62, 0.7);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border-radius: 8px;
+    padding: 0 25px;
+}
+
+.battle-loader__user__content.opponent .pokemons__container {
+    align-self: normal;
+    justify-content: flex-end;
+}
+
+.pokemon__container {
+    opacity: 0;
+    animation-delay: .75s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+.pokemon__container img {
+    object-fit: contain;
+}
+
+
+.battle-loader__bottom {
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    width: 100%;
+    height: 50px;
+    color: var(--white);
+    gap: 10px;
+    animation: fadeInToTop 1.5s ease-in-out forwards;
+    animation-delay: .75s;
+}
+
+
+@media screen and (max-width: 1920px) {
+    .battle-loader__user__content {
+        margin: 0 100px;
+    }
+}

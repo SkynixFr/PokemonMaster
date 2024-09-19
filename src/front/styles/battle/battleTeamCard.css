@@ -1,5 +1,4 @@
 .battle-team-container {
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -8,21 +7,25 @@
     height: 350px;
     border-radius: 10px;
     color: var(--black);
-    transition: all .3s ease-in-out;
+    opacity: 0;
 }
 
 .battle-team-container.player {
-    animation: fadeInToRight .75s ease-in-out;
+    animation: fadeInToRight 1.5s ease-in-out forwards;
 }
 
 .battle-team-container.opponent {
-    animation: fadeInToLeft .75s ease-in-out;
+    animation: fadeInToLeft 1.5s ease-in-out forwards;
 }
 
 .battle-team-avatar {
     position: absolute;
     top: -100px;
     left: 63px;
+}
+
+.battle-team-avatar img {
+    object-fit: contain;
 }
 
 .battle-team-infos {
@@ -56,10 +59,14 @@
     transition: all .5s ease-in-out;
 }
 
+.battle-team-pokemons .battle-team-pokemon.ko {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .battle-team-pokemon img {
     object-fit: contain;
 }
-
 
 @media screen and (max-width: 1920px) {
     .battle-team-container {

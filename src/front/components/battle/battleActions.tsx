@@ -15,10 +15,12 @@ import Move from '../../../back/classes/move';
 interface BattleActionsProps {
 	playerPokemon: Pokemon;
 	handleMoveSelection: (move: Move) => void;
+	disabled: boolean;
 }
 const BattleActions = ({
 	playerPokemon,
-	handleMoveSelection
+	handleMoveSelection,
+	disabled
 }: BattleActionsProps) => {
 	const router = useRouter();
 	const [openModalRunning, setOpenModalRunning] = useState<boolean>(false);
@@ -48,8 +50,9 @@ const BattleActions = ({
 		<div className={'battle-actions'}>
 			<div className={'battle-actions-btn fadeInToTop'}>
 				<button
-					className={'btn-action'}
+					className={`btn-action ${disabled ? 'disabled' : ''}`}
 					onClick={() => setOpenPokemonMoves(!openPokemonMoves)}
+					disabled={disabled}
 				>
 					Attack
 					<CustomImage
@@ -60,8 +63,9 @@ const BattleActions = ({
 					/>
 				</button>
 				<button
-					className={'btn-action'}
+					className={`btn-action ${disabled ? 'disabled' : ''}`}
 					onClick={() => setOpenModalRunning(!openModalRunning)}
+					disabled={disabled}
 				>
 					Run
 					<CustomImage
@@ -107,7 +111,10 @@ const BattleActions = ({
 			{openModalRunning && (
 				<div className={'modal-running-container'}>
 					<div className={'modal-running-content'}>
-						<p>Are you sure you want to run?</p>
+						<h1>Are you sure you want to run?</h1>
+						<span>
+							You will lose the battle and your progress will be lost.
+						</span>
 						<div className={'modal-running-btn-container'}>
 							<button
 								className={'btn-secondary'}

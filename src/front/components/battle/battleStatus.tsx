@@ -9,7 +9,8 @@ interface BattleStatusProps {
 const BattleStatus = ({ activePokemon }: BattleStatusProps) => {
 	return (
 		<div className={`battle-status`}>
-			{activePokemon.status.name !== '' ? (
+			{activePokemon.status.name !== '' &&
+			activePokemon.status.name != 'KO' ? (
 				<div
 					className={`battle-status-infos ${activePokemon.status.name.toLowerCase()}`}
 				>
@@ -23,7 +24,9 @@ const BattleStatus = ({ activePokemon }: BattleStatusProps) => {
 										? 'fire'
 										: activePokemon.status.name === 'PSN'
 											? 'poison'
-											: 'ice'
+											: activePokemon.status.name === 'FRZ'
+												? 'ice'
+												: 'psychic'
 						}.png`}
 						alt={'Status icon'}
 						width={20}
@@ -39,7 +42,7 @@ const BattleStatus = ({ activePokemon }: BattleStatusProps) => {
 					className={`battle-volatile-infos ${activePokemon.volatileStatus.name.toLowerCase()}`}
 				>
 					<CustomImage
-						src={`/images/types/${activePokemon.volatileStatus.name === 'CNF' ? 'ghost' : ''}.png`}
+						src={`/images/types/${activePokemon.volatileStatus.name === 'CNF' ? 'psychic' : ''}.png`}
 						alt={'volatile status icon'}
 						width={20}
 						height={20}

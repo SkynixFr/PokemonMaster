@@ -2,6 +2,11 @@
 @import url('battlePokemonCard.css');
 @import url('battleActions.css');
 @import url('battleStatus.css');
+@import url('battlePokemonKo.css');
+@import url('battleToast.css');
+@import url('battleLoader.css');
+@import url('battleEnd.css');
+@import url("battleSwitch.css");
 
 .battle-container {
 	display: grid;
@@ -21,7 +26,6 @@
 	top: 0;
 	left: 0;
 	z-index: -10;
-
 }
 
 .battle-background img {
@@ -148,16 +152,13 @@
 	position: relative;
 }
 
-
-/*!* Toast *!*/
-/*.battle-toast {*/
-/*	grid-column: 1 / 5;*/
-/*	grid-row: 3 / 5;*/
-/*	display: flex;*/
-/*	justify-content: center;*/
-/*	align-items: center;*/
-/*	background-color: #f1c40f;*/
-/*}*/
+.battle-toast {
+	grid-column: 1 / 5;
+	grid-row: 3 / 5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
 /*!* Timer *!*/
 /*.battle-timer {*/
@@ -167,9 +168,6 @@
 /*	justify-content: center;*/
 /*	align-items: center;*/
 /*}*/
-
-
-
 
 @media screen and (max-width: 1920px) {
 	.battle-theme .theme-btn {

@@ -23,7 +23,12 @@
     color: var(--red);
     overflow: hidden;
     z-index: 1;
-    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.battle-actions .battle-actions-btn .btn-action.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .battle-actions .battle-actions-btn .btn-action img {
@@ -85,27 +90,41 @@
 
 .modal-running-content {
     position: relative;
-    width: 300px;
-    height: 150px;
+    min-width: calc(550px - 50px);
+    min-height: calc(200px - 50px);
     background-color: var(--white);
     border-radius: 5px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     flex-flow: column wrap;
     animation: bounceIn .75s ease-in-out;
+    padding: 25px;
+    gap: 25px;
 }
 
 .modal-running-btn-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    align-self: flex-end;
     gap: 10px;
 }
 
 .modal-running-btn-container button {
-    width: 75px;
-    height: 35px;
+    min-width: 75px;
+    min-height: 40px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.modal-running-btn-container button:hover {
+    transform:  scale(1.1);
+    transition: transform .5s ease;
+}
+
+@media screen and (max-width: 1920px) {
+    .pokemon-moves-modal-container{
+        left: 16.5%;
+    }
 }

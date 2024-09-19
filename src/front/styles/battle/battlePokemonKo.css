@@ -1,0 +1,67 @@
+.pokemon-ko-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+.pokemon-ko-modal-body {
+    position: relative;
+    width: calc(50% - 100px);
+    min-height: calc(25% - 50px);
+    max-height: calc(50% - 50px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 35px;
+    background-color: var(--white);
+    border-radius: 5px;
+    padding: 25px 50px;
+    z-index: 2;
+    animation: bounceIn .75s ease-in-out;
+}
+
+.pokemon-ko-modal-pokemons {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: row;
+}
+
+.pokemon-ko-modal-pokemon {
+    cursor: pointer;
+}
+
+.pokemon-ko-modal-pokemon:not(.ko):hover {
+    transform: scale(1.1);
+    transition: all .5s ease;
+}
+
+.pokemon-ko-modal-pokemon.ko {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@media screen and (max-width: 1920px) {
+
+    .pokemon-ko-modal-body {
+        width: calc(55% - 100px);
+        min-height: calc(30% - 50px);
+        max-height: calc(50% - 50px);
+    }
+
+    .pokemon-ko-modal-pokemon img {
+        width: 125px;
+        height: 125px;
+    }
+}

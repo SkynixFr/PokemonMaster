@@ -178,7 +178,6 @@ const PokemonStats = ({
 			e.currentTarget.value = prevEv.toString();
 		}
 		let ev = e.currentTarget.valueAsNumber;
-		if (ev === 255) ev = 252;
 		const totalEvs = statsActive.reduce((acc, stat) => acc + stat.ev, 0);
 		const diffStatEv = ev - statsActive.find(s => s.name === stat.name)?.ev;
 		if (totalEvs + diffStatEv > 510) {
