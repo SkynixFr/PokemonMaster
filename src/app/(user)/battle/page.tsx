@@ -105,27 +105,26 @@ const Battle = ({ battle }: BattleProps) => {
 		if (currentView === 'player') {
 			let updatedPlayerPokemon = activePlayerPokemon.changeActiveMove(move);
 			setActivePlayerPokemon(updatedPlayerPokemon);
-			setCurrentView('opponent');
 			handlePlayerReady();
 		} else {
 			let updatedOpponentPokemon =
 				activeOpponentPokemon.changeActiveMove(move);
 			setActiveOpponentPokemon(updatedOpponentPokemon);
 			handleOpponentReady();
-			setCurrentView('player');
 		}
 	};
 
 	const handlePlayerReady = () => {
 		setPlayerReady(true);
+		setCurrentView('opponent');
 	};
 
 	const handleOpponentReady = () => {
 		setOpponentReady(true);
+		setCurrentView('player');
 	};
 
 	const handlePlayerAttack = () => {
-		console.log('movePlayer', activePlayerPokemon.activeMove);
 		if (activePlayerPokemon.activeMove.target === 'user') {
 			const updatedPokemon = activePlayerPokemon.attack(activePlayerPokemon);
 			setActivePlayerPokemon(updatedPokemon);
@@ -141,31 +140,27 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handlePlayerTeam = (updatedPokemon: Pokemon) => {
-		const playerTeamPokemonsUpdated: Pokemon[] = playerTeam.pokemons.map(
+		const updatedPokemons: Pokemon[] = playerTeam.pokemons.map(
 			(pokemon, index) => {
 				pokemon[index] = updatedPokemon;
 				return pokemon;
 			}
 		);
 
-		console.log(playerTeamPokemonsUpdated);
-
-		const playerTeamUpdated = new Team(
+		const updatedPlayerTeam = new Team(
 			playerTeam.id,
 			playerTeam.name,
 			playerTeam.avatar,
-			playerTeamPokemonsUpdated
+			updatedPokemons
 		);
 
-		setPlayerTeam(playerTeamUpdated);
+		setPlayerTeam(updatedPlayerTeam);
 	};
 
 	const handleOpponentTeam = (updatedPokemon: Pokemon) => {
 		const updatedOpponentTeam = opponentTeam.pokemons.map(pokemon =>
 			pokemon.index === updatedPokemon.index ? updatedPokemon : pokemon
 		);
-
-		console.log(updatedOpponentTeam);
 
 		const opponentTeamUpdated = new Team(
 			opponentTeam.id,
@@ -176,8 +171,8 @@ const Battle = ({ battle }: BattleProps) => {
 
 		setOpponentTeam(opponentTeamUpdated);
 	};
+
 	const handleOpponentAttack = () => {
-		console.log('moveOpponent', activeOpponentPokemon.activeMove);
 		if (activeOpponentPokemon.activeMove.target === 'user') {
 			const updatedPokemon = activeOpponentPokemon.attack(
 				activeOpponentPokemon
@@ -212,7 +207,6 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	};
 
-	// STATUS
 	const handlePoisoning = (
 		activePlayerPokemon: Pokemon,
 		activeOpponentPokemon: Pokemon
@@ -425,7 +419,7 @@ const Battle = ({ battle }: BattleProps) => {
 		handleThawing(activePlayerPokemon, activeOpponentPokemon);
 		handlePoisoning(activePlayerPokemon, activeOpponentPokemon);
 		handleBurning(activePlayerPokemon, activeOpponentPokemon);
-		handleKo();
+		// handleKo();
 		setPlayerReady(false);
 		setOpponentReady(false);
 	}, [playerReady, opponentReady]);
@@ -474,6 +468,8 @@ const Battle = ({ battle }: BattleProps) => {
 							activePokemon={activePlayerPokemon}
 							recreatePokemonFromParsed={recreatePokemonFromParsed}
 							setActivePokemon={setActivePlayerPokemon}
+							handlePlayerReady={handlePlayerReady}
+							handleOpponentReady={handleOpponentReady}
 							player={true}
 						/>
 					</div>
@@ -484,6 +480,8 @@ const Battle = ({ battle }: BattleProps) => {
 							activePokemon={activeOpponentPokemon}
 							recreatePokemonFromParsed={recreatePokemonFromParsed}
 							setActivePokemon={setActiveOpponentPokemon}
+							handlePlayerReady={handlePlayerReady}
+							handleOpponentReady={handleOpponentReady}
 							player={false}
 						/>
 					</div>
@@ -515,6 +513,8 @@ const Battle = ({ battle }: BattleProps) => {
 							activePokemon={activeOpponentPokemon}
 							recreatePokemonFromParsed={recreatePokemonFromParsed}
 							setActivePokemon={setActiveOpponentPokemon}
+							handlePlayerReady={handlePlayerReady}
+							handleOpponentReady={handleOpponentReady}
 							player={false}
 						/>
 					</div>
@@ -525,6 +525,8 @@ const Battle = ({ battle }: BattleProps) => {
 							activePokemon={activePlayerPokemon}
 							recreatePokemonFromParsed={recreatePokemonFromParsed}
 							setActivePokemon={setActivePlayerPokemon}
+							handlePlayerReady={handlePlayerReady}
+							handleOpponentReady={handleOpponentReady}
 							player={true}
 						/>
 					</div>

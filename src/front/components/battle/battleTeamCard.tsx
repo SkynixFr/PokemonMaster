@@ -11,6 +11,8 @@ interface TeamCardProps {
 	activePokemon: Pokemon;
 	setActivePokemon: (pokemon: Pokemon) => void;
 	recreatePokemonFromParsed: (pokemon: Pokemon) => Pokemon;
+	handlePlayerReady: () => void;
+	handleOpponentReady: () => void;
 	player?: boolean;
 }
 
@@ -19,11 +21,14 @@ const BattleTeamCard = ({
 	activePokemon,
 	setActivePokemon,
 	recreatePokemonFromParsed,
+	handlePlayerReady,
+	handleOpponentReady,
 	player
 }: TeamCardProps) => {
 	const handleSwitchPokemon = (pokemon: Pokemon) => {
 		const newPokemon = recreatePokemonFromParsed(pokemon);
 		setActivePokemon(newPokemon);
+		player ? handlePlayerReady() : handleOpponentReady();
 	};
 
 	return (
