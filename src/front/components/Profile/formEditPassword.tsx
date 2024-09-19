@@ -13,9 +13,9 @@ interface FormEditPasswordProps {
 	userDetails: UserEntity;
 	setOpenPasswordModal: (isOpen: boolean) => void;
 	setOpenForm: (
-		openForm: 'avatar' | 'username' | 'email' | 'password' | null
+		openForm: 'avatar' | 'username' | 'email' | 'password' | 'delete' | null
 	) => void;
-	openForm: 'avatar' | 'username' | 'email' | 'password' | null;
+	openForm: 'avatar' | 'username' | 'email' | 'password' | 'delete' | null;
 }
 
 const userSchema = z

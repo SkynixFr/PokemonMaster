@@ -51,8 +51,6 @@ const Profile = () => {
 		<div>Loading...</div>
 	) : (
 		<div>
-			<Link href={'/'}>Go Back</Link>
-			<h1>Your Profile :</h1>
 			<ProfilePage userDetails={user} teams={teams} avatars={avatars} />
 		</div>
 	);

@@ -86,7 +86,7 @@ const FormEditAvatar = ({
 			<button className="close-btn" onClick={() => setOpenForm(null)}>
 				<X width={30} height={30} />
 			</button>
-			<form className="create-team" onSubmit={handleSubmit}>
+			<form className="edit-avatar" onSubmit={handleSubmit}>
 				{errors.name && <div className="error">{errors.name}</div>}
 				{avatars && avatars.length > 0 ? (
 					<div className="avatars-container">

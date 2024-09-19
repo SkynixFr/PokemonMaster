@@ -2,7 +2,7 @@
 // React
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { PencilLine, Trash2 } from 'lucide-react';
+import { MoveLeft, PencilLine, Trash2, X } from 'lucide-react';
 import CustomImage from '../customImage';
 
 // Components
@@ -16,6 +16,8 @@ import { UserEntity } from '../../../interfaces/user/userEntity';
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
 import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
 import { set } from 'zod';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface UserListProps {
 	userDetails: UserEntity;
@@ -24,15 +26,16 @@ interface UserListProps {
 }
 
 const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
+	const router = useRouter();
 	const [openForm, setOpenForm] = useState<
-		'avatar' | 'username' | 'email' | 'password' | null
+		'avatar' | 'username' | 'email' | 'password' | 'delete' | null
 	>(null);
 	const [currentAvatar, setCurrentAvatar] = useState(userDetails.avatar);
 	const [username, setUsername] = useState(userDetails.username);
 	const [email, setEmail] = useState(userDetails.email);
 	const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
+	const [openModal, setOpenModal] = useState(false);
 	const handleAvatarUpdate = (newAvatar: AvatarEntity) => {
 		setCurrentAvatar(newAvatar);
 	};
@@ -49,8 +52,50 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 		setOpenForm('password');
 	};
 
+	const OpenDeleteModal = () => {
+		setIsDeleteModalOpen(true);
+		setOpenForm('delete');
+	};
+
 	return (
-		<div>
+		<div className="profile-container">
+			{openModal && (
+				<div className={'profile-modal'}>
+					<div className={'profile-modal-content'}>
+						<h2>Any staged changes won't be save </h2>
+						<div className={'profile-modal-buttons'}>
+							<button
+								className={'profile-modal-button btn-primary'}
+								onClick={() => {
+									router.push('/');
+								}}
+							>
+								Yes
+							</button>
+							<button
+								className={'profile-modal-button'}
+								onClick={() => setOpenModal(false)}
+							>
+								No
+							</button>
+						</div>
+						<button
+							className={'close-btn'}
+							onClick={() => setOpenModal(false)}
+						>
+							<X width={30} height={30} />
+						</button>
+					</div>
+				</div>
+			)}
+			<div
+				className={'profile-goback'}
+				onClick={() => setOpenModal(!openModal)}
+			>
+				<MoveLeft />
+				Back
+			</div>
+			<h1>Your Profile :</h1>
 			<div className="profil-infos">
 				<div className="user-infos-container">
 					<div className="user-infos">
@@ -102,8 +147,12 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 							/>
 							{!isPasswordModalOpen && (
 								<div className="user-password">
-									<button onClick={() => OpenPasswordModal()}>
+									<button
+										onClick={() => OpenPasswordModal()}
+										disabled={openForm !== null}
+									>
 										<span>Update your password</span>
+
 										<PencilLine />
 									</button>
 								</div>
@@ -111,7 +160,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 						</div>
 						<div className="user-delete">
 							<button
-								onClick={() => setIsDeleteModalOpen(true)}
+								onClick={() => OpenDeleteModal()}
 								className="user-delete"
 							>
 								<span>Supprimer</span>
@@ -137,6 +186,8 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 					<FormDeleteAccount
 						userDetails={userDetails}
 						setIsDeleteModalOpen={setIsDeleteModalOpen}
+						setOpenForm={setOpenForm}
+						openForm={openForm}
 					/>
 				</div>
 			)}

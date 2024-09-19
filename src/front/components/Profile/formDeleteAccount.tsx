@@ -15,11 +15,17 @@ import { deleteUserAction } from '../../actions/user.actions';
 interface FormDeleteAccountProps {
 	userDetails: UserEntity;
 	setIsDeleteModalOpen: (isDeleteModalOpen: boolean) => void;
+	setOpenForm: (
+		openForm: 'avatar' | 'username' | 'email' | 'password' | 'delete' | null
+	) => void;
+	openForm: 'avatar' | 'username' | 'email' | 'password' | 'delete' | null;
 }
 
 const FormDeleteAccount = ({
 	userDetails,
-	setIsDeleteModalOpen
+	setIsDeleteModalOpen,
+	setOpenForm,
+	openForm
 }: FormDeleteAccountProps) => {
 	const accessToken =
 		typeof window !== 'undefined'
@@ -50,6 +56,10 @@ const FormDeleteAccount = ({
 			toast.error(error.message);
 		}
 	};
+	const handleCancel = () => {
+		setIsDeleteModalOpen(false);
+		setOpenForm(null);
+	};
 	return (
 		<div className="delete-account-modal">
 			<div className="delete-account-modal-content">
@@ -73,10 +83,7 @@ const FormDeleteAccount = ({
 				>
 					Delete Account
 				</button>
-				<button
-					className="btn-cancel"
-					onClick={() => setIsDeleteModalOpen(false)}
-				>
+				<button className="btn-cancel" onClick={() => handleCancel()}>
 					Cancel
 				</button>
 			</div>
