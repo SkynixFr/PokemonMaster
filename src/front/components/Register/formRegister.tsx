@@ -7,6 +7,9 @@ import { toast } from 'sonner';
 
 // Actions
 import { register } from '../../actions/user.actions';
+import { MoveLeft } from 'lucide-react';
+import Link from 'next/link';
+import CustomImage from '../customImage';
 const userSchema = z
 	.object({
 		username: z
@@ -105,34 +108,102 @@ const FormRegister = () => {
 		});
 	};
 	return (
-		<div>
-			<h2>Register</h2>
-			<form onSubmit={onsubmit} onChange={handleChange}>
-				<div>
-					<label htmlFor="username">Username</label>
-					<input type="text" name="username" id="username" />
-					{errors.username && <span>{errors.username}</span>}
+		<div className="form-container">
+			<div className="Go-Back-container">
+				<MoveLeft />
+				<Link href={'/'} className="back-link">
+					Go Back
+				</Link>
+			</div>
+			<div className={'form-background'}>
+				<CustomImage
+					src={`/images/backgrounds/pokemonMaster-bg-login.jpg`}
+					alt={'background sign up form'}
+					width={10000}
+					height={10000}
+				/>
+			</div>
+			<form
+				onSubmit={onsubmit}
+				onChange={handleChange}
+				className="form-wrapper"
+			>
+				<div className="form-logo">
+					<CustomImage
+						src={`/images/compressed/other/logo.png`}
+						alt={'pokemonMaster logo'}
+						width={150}
+						height={150}
+					/>
 				</div>
-				<div>
-					<label htmlFor="email">Email</label>
-					<input type="email" name="email" id="email" />
-					{errors.email && <span>{errors.email}</span>}
+				<h1 className="form-title">SIGN UP</h1>
+				<div className="input-group">
+					<label htmlFor="username" className="input-label">
+						Username
+					</label>
+					<input
+						type="text"
+						name="username"
+						id="username"
+						className="input-field"
+					/>
+					{errors.username && (
+						<span className="error-text">{errors.username}</span>
+					)}
 				</div>
-				<div>
-					<label htmlFor="password">Password</label>
-					<input type="password" name="password" id="password" />
-					{errors.password && <span>{errors.password}</span>}
+				<div className="input-group">
+					<label htmlFor="email" className="input-label">
+						Email
+					</label>
+					<input
+						type="email"
+						name="email"
+						id="email"
+						className="input-field"
+					/>
+					{errors.email && (
+						<span className="error-text">{errors.email}</span>
+					)}
 				</div>
-				<div>
-					<label htmlFor="confirmPassword">Confirm Password</label>
+				<div className="input-group">
+					<label htmlFor="password" className="input-label">
+						Password
+					</label>
+					<input
+						type="password"
+						name="password"
+						id="password"
+						className="input-field"
+					/>
+					{errors.password && (
+						<span className="error-text">{errors.password}</span>
+					)}
+				</div>
+				<div className="input-group">
+					<label htmlFor="confirmPassword" className="input-label">
+						Confirm Password
+					</label>
 					<input
 						type="password"
 						name="confirmPassword"
 						id="confirmPassword"
+						className="input-field"
 					/>
-					{errors.confirmPassword && <span>{errors.confirmPassword}</span>}
+					{errors.confirmPassword && (
+						<span className="error-text">{errors.confirmPassword}</span>
+					)}
 				</div>
-				<button type="submit">Register</button>
+				<div className="button-wrapper">
+					<button type="submit" className="register-button">
+						Register
+					</button>
+				</div>
+				<div className="form-footer">
+					<span>Already have an Account ? </span>
+					<Link href={'/login'} className="login-link">
+						Login here
+					</Link>
+				</div>
 			</form>
 		</div>
 	);
