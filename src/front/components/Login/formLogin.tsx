@@ -8,6 +8,7 @@ import Link from 'next/link';
 // Actions
 import { login } from '../../actions/user.actions';
 import CustomImage from '../customImage';
+import { MoveLeft } from 'lucide-react';
 
 const userSchema = z.object({
 	email: z.string().email({ message: 'Invalid email address' }),
@@ -83,9 +84,12 @@ const FormLogin = () => {
 
 	return (
 		<div className="form-container">
-			<Link href={'/'} className="back-link">
-				Go Back
-			</Link>
+			<div className="Go-Back-container">
+				<MoveLeft />
+				<Link href={'/'} className="back-link">
+					Go Back
+				</Link>
+			</div>
 
 			<div className={'form-background'}>
 				<CustomImage

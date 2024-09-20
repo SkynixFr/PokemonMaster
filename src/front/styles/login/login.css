@@ -97,8 +97,30 @@
 	background-color: #0056b3;
 }
 
-.back-link {
+.Go-Back-container {
+	display: flex;
+	align-items: center;
+	background-color: #ffffff;
+	padding: 10px 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 	position: absolute;
+	top: 20px;
+	left: 20px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+}
+
+.Go-Back-container:hover {
+	background-color: #f0f0f0;
+}
+.Go-Back-container svg {
+	margin-right: 10px;
+	width: 24px;
+	height: 24px;
+}
+
+.back-link {
 	top: 20px;
 	left: 20px;
 	color: black;
