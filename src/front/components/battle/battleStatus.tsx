@@ -1,18 +1,49 @@
+import { useEffect, useState } from 'react';
+
 // Classes
 import Pokemon from '../../../back/classes/pokemon';
 import CustomImage from '../customImage';
 
+// Interfaces
+import { Notification } from '../../../interfaces/battle/notitication';
+
 interface BattleStatusProps {
 	activePokemon: Pokemon;
+	currentNotification?: Notification;
+	isSwitching?: boolean;
 }
 
-const BattleStatus = ({ activePokemon }: BattleStatusProps) => {
+const BattleStatus = ({
+	activePokemon,
+	currentNotification,
+	isSwitching
+}: BattleStatusProps) => {
+	const [showStatus, setShowStatus] = useState(false);
+	const [showVolatileStatus, setShowVolatileStatus] = useState(false);
+
+	useEffect(() => {
+		if (currentNotification?.animationType === 'status') {
+			setTimeout(() => {
+				setShowStatus(true);
+				setShowVolatileStatus(true);
+			}, 2500);
+		}
+	}, [currentNotification]);
+
 	return (
 		<div className={`battle-status`}>
 			{activePokemon.status.name !== '' &&
-			activePokemon.status.name != 'KO' ? (
+			activePokemon.status.name !== 'KO' &&
+			showStatus ? (
 				<div
 					className={`battle-status-infos ${activePokemon.status.name.toLowerCase()}`}
+					style={{
+						animation: isSwitching
+							? 'none'
+							: currentNotification?.animationType === 'status'
+								? 'popIn 1s ease-in-out forwards'
+								: 'none'
+					}}
 				>
 					<CustomImage
 						src={`/images/types/${
@@ -37,9 +68,16 @@ const BattleStatus = ({ activePokemon }: BattleStatusProps) => {
 					</div>
 				</div>
 			) : null}
-			{activePokemon.volatileStatus.name !== '' ? (
+			{activePokemon.volatileStatus.name !== '' && showVolatileStatus ? (
 				<div
 					className={`battle-volatile-infos ${activePokemon.volatileStatus.name.toLowerCase()}`}
+					style={{
+						animation: isSwitching
+							? 'none'
+							: currentNotification?.animationType === 'status'
+								? 'popIn 1s ease-in-out forwards'
+								: 'none'
+					}}
 				>
 					<CustomImage
 						src={`/images/types/${activePokemon.volatileStatus.name === 'CNF' ? 'psychic' : ''}.png`}
