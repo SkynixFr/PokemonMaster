@@ -45,10 +45,15 @@ const BattlePokemonCard = ({
 		setProgressBarWidth((previousHp / activePokemon.stats[0].total) * 100);
 	}, [currentView]);
 
+	useEffect(() => {
+		setDisplayedHp(previousHp);
+		setProgressBarWidth((previousHp / activePokemon.stats[0].total) * 100);
+	}, [activePokemon]);
+
 	const animateHealthBar = () => {
 		if (activePokemon.stats[0].value != previousHp) {
 			const diff = previousHp - activePokemon.stats[0].value;
-			const step = diff / 20;
+			const step = diff / 12;
 
 			let currentHp: number = previousHp;
 
@@ -88,7 +93,7 @@ const BattlePokemonCard = ({
 	};
 
 	useEffect(() => {
-		animationPokemonInfos();
+		animationPokemonInfos().then();
 	}, [currentNotification, activePokemon, player]);
 
 	return (

@@ -16,6 +16,7 @@ interface TeamCardProps {
 	recreatePokemonFromParsed: (pokemon: Pokemon) => Pokemon;
 	player: boolean;
 	currentView: string;
+	setPreviousHp: (hp: number) => void;
 }
 
 const BattleTeamCard = ({
@@ -24,7 +25,8 @@ const BattleTeamCard = ({
 	setActivePokemon,
 	recreatePokemonFromParsed,
 	player,
-	currentView
+	currentView,
+	setPreviousHp
 }: TeamCardProps) => {
 	const [isSwitching, setIsSwitching] = useState(false);
 	const [isSwitchingTo, setIsSwitchingTo] = useState<Pokemon | null>(null);
@@ -33,6 +35,7 @@ const BattleTeamCard = ({
 		if (pokemon.stats[0].value === 0) return;
 		const newPokemon = recreatePokemonFromParsed(pokemon);
 		setActivePokemon(newPokemon);
+		setPreviousHp(newPokemon.stats[0].value);
 		setIsSwitching(false);
 		setIsSwitchingTo(null);
 	};

@@ -50,10 +50,6 @@ const Battle = ({ battle }: BattleProps) => {
 		'player'
 	);
 	const [isSwitching, setIsSwitching] = useState<boolean>(false);
-	const [activePlayerPokemonKo, setActivePlayerPokemonKo] =
-		useState<boolean>(false);
-	const [activeOpponentPokemonKo, setActiveOpponentPokemonKo] =
-		useState<boolean>(false);
 
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const [currentNotification, setCurrentNotification] =
@@ -612,8 +608,8 @@ const Battle = ({ battle }: BattleProps) => {
 			});
 
 			setCounterPlayerPokemonKo(counterPlayerPokemonKo + 1);
-			setCurrentView('player');
 			setActivePlayerPokemonKo(true);
+			setCurrentView('player');
 		}
 	};
 
@@ -630,8 +626,8 @@ const Battle = ({ battle }: BattleProps) => {
 			});
 
 			setCounterOpponentPokemonKo(counterOpponentPokemonKo + 1);
-			setCurrentView('opponent');
 			setActiveOpponentPokemonKo(true);
+			setCurrentView('opponent');
 		}
 	};
 
@@ -763,6 +759,7 @@ const Battle = ({ battle }: BattleProps) => {
 
 			handlePlayerKo();
 			handleOpponentKo();
+
 			setPlayerReady(false);
 			setOpponentReady(false);
 			setActiveTurn(activeTurn + 1);
@@ -824,6 +821,7 @@ const Battle = ({ battle }: BattleProps) => {
 							setActivePokemon={setActivePlayerPokemon}
 							player={true}
 							currentView={currentView}
+							setPreviousHp={setPreviousPlayerPokemonHp}
 						/>
 					</div>
 
@@ -835,6 +833,7 @@ const Battle = ({ battle }: BattleProps) => {
 							setActivePokemon={setActiveOpponentPokemon}
 							player={false}
 							currentView={currentView}
+							setPreviousHp={setPreviousOpponentPokemonHp}
 						/>
 					</div>
 
@@ -868,7 +867,7 @@ const Battle = ({ battle }: BattleProps) => {
 						disabled={isNotificationActive}
 					/>
 
-					{activePlayerPokemonKo && !battleEnd && (
+					{!battleEnd && (
 						<BattlePokemonKo
 							activePokemon={activePlayerPokemon}
 							setActivePokemon={setActivePlayerPokemon}
@@ -877,6 +876,8 @@ const Battle = ({ battle }: BattleProps) => {
 							recreatePokemonFromParsed={recreatePokemonFromParsed}
 							setCurrentView={setCurrentView}
 							player={true}
+							setPreviousHp={setPreviousPlayerPokemonHp}
+							currentNotification={currentNotification}
 						/>
 					)}
 				</>
@@ -890,6 +891,7 @@ const Battle = ({ battle }: BattleProps) => {
 							setActivePokemon={setActiveOpponentPokemon}
 							player={false}
 							currentView={currentView}
+							setPreviousHp={setPreviousOpponentPokemonHp}
 						/>
 					</div>
 
@@ -901,6 +903,7 @@ const Battle = ({ battle }: BattleProps) => {
 							setActivePokemon={setActivePlayerPokemon}
 							player={true}
 							currentView={currentView}
+							setPreviousHp={setPreviousPlayerPokemonHp}
 						/>
 					</div>
 
@@ -934,7 +937,7 @@ const Battle = ({ battle }: BattleProps) => {
 						disabled={isNotificationActive}
 					/>
 
-					{activeOpponentPokemonKo && !battleEnd && (
+					{!battleEnd && (
 						<BattlePokemonKo
 							activePokemon={activeOpponentPokemon}
 							setActivePokemon={setActiveOpponentPokemon}
@@ -943,6 +946,8 @@ const Battle = ({ battle }: BattleProps) => {
 							recreatePokemonFromParsed={recreatePokemonFromParsed}
 							setCurrentView={setCurrentView}
 							player={false}
+							setPreviousHp={setPreviousOpponentPokemonHp}
+							currentNotification={currentNotification}
 						/>
 					)}
 				</>
