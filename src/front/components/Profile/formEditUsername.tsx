@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { PencilLine, Check, X } from 'lucide-react';
+import { PencilLine, Check, X, SaveAll } from 'lucide-react';
 
 // Import needed libs
 import { toast } from 'sonner';
@@ -64,6 +64,7 @@ const FormEditUsername = ({
 			if (e.key === 'Escape' && isEditing) {
 				setIsEditing(false); // Close only if editing
 				setOpenForm(null);
+				handleCancel();
 			}
 		};
 
@@ -139,40 +140,48 @@ const FormEditUsername = ({
 	};
 
 	return (
-		<div className="form-edit-username">
-			<h2>Username :</h2>
-			{isEditing ? (
-				// Show input field when editing
-				<div>
-					{errors.username && (
-						<div className={'error'}>{errors.username}</div>
-					)}
-					<input
-						type="text"
-						value={newUsername}
-						onChange={handleChange}
-						onKeyDown={handleKeyDown} // Handle Enter key press
-					/>
-					<button onClick={handleConfirm} className="btn-confirm-username">
-						<Check />
-					</button>
-					<button onClick={handleCancel} className="btn-cancel-username">
-						<X />
-					</button>
-				</div>
-			) : (
-				// Show username and edit button when not editing
-				<div>
-					<h1>{initialUsername}</h1>
-					<button
-						onClick={handleEdit}
-						className="user-update"
-						disabled={openForm !== null}
-					>
-						<PencilLine />
-					</button>
-				</div>
-			)}
+		<div className="username-container">
+			<div className="form-edit-username">
+				<h2>Username : </h2>
+				{errors.username && (
+					<div className={'error'}>{errors.username}</div>
+				)}
+				{isEditing ? (
+					// Show input field when editing
+					<div className="username-show">
+						<div className="input-container">
+							<input
+								type="text"
+								value={newUsername}
+								onChange={handleChange}
+								onKeyDown={handleKeyDown}
+							/>
+						</div>
+						<div className="btn-confirm-username-container">
+							<button
+								onClick={handleConfirm}
+								className="btn-confirm-username"
+							>
+								<SaveAll width={20} height={20} />
+							</button>
+						</div>
+					</div>
+				) : (
+					// Show username and edit button when not editing
+					<div className="username-show">
+						<h1>{initialUsername}</h1>
+						<div className="btn-edit-username-container">
+							<button
+								onClick={handleEdit}
+								className="user-update"
+								disabled={openForm !== null}
+							>
+								<PencilLine />
+							</button>
+						</div>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };
