@@ -11,6 +11,7 @@ import FormEditUsername from './formEditUsername';
 import FormEditEmail from './formEditEmail';
 import FormEditPassword from './formEditPassword';
 import FormDeleteAccount from './formDeleteAccount';
+import GobackModal from './gobackModal';
 // Model
 import { UserEntity } from '../../../interfaces/user/userEntity';
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
@@ -59,75 +60,56 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 
 	return (
 		<div className="profile-container">
-			{openModal && (
-				<div className={'profile-modal'}>
-					<div className={'profile-modal-content'}>
-						<h2>Any staged changes won't be save </h2>
-						<div className={'profile-modal-buttons'}>
-							<button
-								className={'profile-modal-button btn-primary'}
-								onClick={() => {
-									router.push('/');
-								}}
-							>
-								Yes
-							</button>
-							<button
-								className={'profile-modal-button'}
-								onClick={() => setOpenModal(false)}
-							>
-								No
-							</button>
-						</div>
-						<button
-							className={'close-btn'}
-							onClick={() => setOpenModal(false)}
-						>
-							<X width={30} height={30} />
-						</button>
-					</div>
-				</div>
-			)}
+			{openModal && <GobackModal setOpenModal={setOpenModal} />}
 			<div
-				className={'profile-goback'}
+				className={'Go-Back-container'}
 				onClick={() => setOpenModal(!openModal)}
 			>
 				<MoveLeft />
-				Back
+				<div className="back-link">Go Back</div>
 			</div>
-			<h1>Your Profile :</h1>
+			<div className={'form-background'}>
+				<CustomImage
+					src={`/images/backgrounds/pokemonMaster-bg-login.jpg`}
+					alt={'background login'}
+					width={10000}
+					height={10000}
+				/>
+			</div>
+			<div className={'bg-form-profile'}>
+				<CustomImage
+					src="/images/other/bg-form-team.png"
+					alt="Background form team"
+					fill={true}
+					sizes="(max-width: 640px) 150px, 344px"
+				/>
+			</div>
 			<div className="profil-infos">
 				<div className="user-infos-container">
 					<div className="user-infos">
-						<div className="btn-edit-avatar-container">
-							<button
-								className={'btn-edit-avatar'}
-								onClick={() => setOpenForm('avatar')}
-								disabled={openForm !== null}
-							>
-								<PencilLine />
-							</button>
-						</div>
-						<div className="user-img">
-							<CustomImage
-								src={currentAvatar.sprite}
-								alt={currentAvatar.name}
-								width={150}
-								height={180}
-								className="profile-image"
-								sizes="(max-width: 600px) 150px, (max-width: 1200px) 150px, 150px"
-							/>
-						</div>
-						{openForm == 'avatar' && (
-							<div className={'edit-avatar-avatar'}>
-								<FormEditAvatar
-									userDetails={userDetails}
-									avatars={avatars}
-									setOpenForm={setOpenForm}
-									onAvatarUpdate={handleAvatarUpdate}
-								/>
+						<div className="user-avatar">
+							<div className="btn-edit-avatar-container">
+								<button
+									className={'btn-edit-avatar'}
+									onClick={() => setOpenForm('avatar')}
+									disabled={openForm !== null}
+								>
+									<PencilLine />
+								</button>
 							</div>
-						)}
+							<div className="user-img-container">
+								<div className="user-img">
+									<CustomImage
+										src={currentAvatar.sprite}
+										alt={currentAvatar.name}
+										width={150}
+										height={250}
+										className="profile-image"
+										sizes="(max-width: 600px) 150px, (max-width: 1200px) 150px, 150px"
+									/>
+								</div>
+							</div>
+						</div>
 						<div className="user-details">
 							<div className="user-account">
 								<FormEditUsername
@@ -170,7 +152,16 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 					</div>
 				</div>
 			</div>
-
+			{openForm == 'avatar' && (
+				<div className={'edit-avatar-avatar'}>
+					<FormEditAvatar
+						userDetails={userDetails}
+						avatars={avatars}
+						setOpenForm={setOpenForm}
+						onAvatarUpdate={handleAvatarUpdate}
+					/>
+				</div>
+			)}
 			{isPasswordModalOpen && (
 				<div className="password-modal">
 					<FormEditPassword
@@ -182,7 +173,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 				</div>
 			)}
 			{isDeleteModalOpen && (
-				<div className="delete-modal">
+				<div className="Go-Back-container">
 					<FormDeleteAccount
 						userDetails={userDetails}
 						setIsDeleteModalOpen={setIsDeleteModalOpen}

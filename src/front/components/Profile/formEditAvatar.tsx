@@ -81,39 +81,40 @@ const FormEditAvatar = ({
 	};
 
 	return (
-		<div className="form-edit-avatar">
-			<div className="bg-form"></div>
-			<button className="close-btn" onClick={() => setOpenForm(null)}>
-				<X width={30} height={30} />
-			</button>
-			<form className="edit-avatar" onSubmit={handleSubmit}>
-				{errors.name && <div className="error">{errors.name}</div>}
-				{avatars && avatars.length > 0 ? (
-					<div className="avatars-container">
-						<h3>Choose your avatar</h3>
-						<div className="avatars-list">
-							{avatars.map(avatar => (
-								<Avatar
-									avatar={avatar}
-									key={avatar.id}
-									avatarSelected={avatarSelected}
-									setAvatarSelected={setAvatarSelected}
-								/>
-							))}
+		<div className="create-team-modal">
+			<div className={'form-create-team'}>
+				<button className="close-btn" onClick={() => setOpenForm(null)}>
+					<X width={30} height={30} />
+				</button>
+				<form className="edit-avatar" onSubmit={handleSubmit}>
+					{errors.name && <div className="error">{errors.name}</div>}
+					{avatars && avatars.length > 0 ? (
+						<div className="avatars-container">
+							<h3>Choose your avatar</h3>
+							<div className="avatars-list">
+								{avatars.map(avatar => (
+									<Avatar
+										avatar={avatar}
+										key={avatar.id}
+										avatarSelected={avatarSelected}
+										setAvatarSelected={setAvatarSelected}
+									/>
+								))}
+							</div>
+							<div className="btn-create-team-container-modal">
+								<button
+									type="submit"
+									className="btn-create-team btn-primary"
+								>
+									Edit avatar
+								</button>
+							</div>
 						</div>
-						<div className="btn-create-team-container-modal">
-							<button
-								type="submit"
-								className="btn-create-team btn-primary"
-							>
-								Edit avatar
-							</button>
-						</div>
-					</div>
-				) : (
-					<div>No avatars found</div>
-				)}
-			</form>
+					) : (
+						<div>No avatars found</div>
+					)}
+				</form>
+			</div>
 		</div>
 	);
 };

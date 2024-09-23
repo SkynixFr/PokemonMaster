@@ -33,6 +33,7 @@ const FormDeleteAccount = ({
 			: null; // Ensuring it only runs on the client-side
 
 	const router = useRouter();
+
 	const deleteUser = async () => {
 		if (!accessToken) {
 			toast.error('No access token found');
@@ -60,31 +61,46 @@ const FormDeleteAccount = ({
 		setIsDeleteModalOpen(false);
 		setOpenForm(null);
 	};
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				handleCancel();
+			}
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [handleCancel]);
 	return (
-		<div className="delete-account-modal">
-			<div className="delete-account-modal-content">
-				<button
-					className="btn-close-modal"
-					onClick={() => setIsDeleteModalOpen(false)}
-				>
-					<X />
-				</button>
+		<div className="profile-modal">
+			<div className="profile-modal-content">
 				<h2>Delete Account</h2>
-				<p>
+				<span>
 					Are you sure you want to delete your account? This action is
 					irreversible.
-				</p>
-				<button
-					className="btn-delete-account"
-					onClick={() => {
-						setIsDeleteModalOpen(false);
-						deleteUser();
-					}}
-				>
-					Delete Account
-				</button>
-				<button className="btn-cancel" onClick={() => handleCancel()}>
-					Cancel
+				</span>
+				<div className="profile-modal-buttons">
+					<button
+						className="profile-modal-button btn-primary"
+						onClick={() => {
+							setIsDeleteModalOpen(false);
+							deleteUser();
+						}}
+					>
+						Delete Account
+					</button>
+					<button
+						className="profile-modal-button"
+						onClick={() => handleCancel()}
+					>
+						Cancel
+					</button>
+				</div>
+				<button className={'close-btn'} onClick={() => handleCancel()}>
+					<X width={30} height={30} />
 				</button>
 			</div>
 		</div>

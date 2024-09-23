@@ -33,6 +33,7 @@
 
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 	text-align: center;
+	animation: bounceIn 0.75s ease-in-out;
 }
 
 .form-title {
@@ -112,13 +113,19 @@
 	transition: background-color 0.3s;
 }
 
-.Go-Back-container:hover {
-	background-color: #f0f0f0;
+.Go-Back-container:hover .back-link {
+	color: var(--red);
 }
+
+.Go-Back-container:hover svg {
+	color: var(--red);
+}
+
 .Go-Back-container svg {
 	margin-right: 10px;
 	width: 24px;
 	height: 24px;
+	transition: color 0.3s;
 }
 
 .back-link {
@@ -128,13 +135,9 @@
 	text-decoration: none;
 	font-size: 1rem;
 	transition: color 0.3s;
+	font-weight: bold;
 }
-
-.back-link:hover {
-	color: #ddd;
-}
-
-.form-footer {
+form .form-footer {
 	margin-top: 20px;
 	font-size: 0.9rem;
 	color: #333;
