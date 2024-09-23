@@ -109,7 +109,7 @@ const Battle = ({ battle }: BattleProps) => {
 									: status === 'FRZ'
 										? 'is frozen'
 										: status === 'BRN'
-											? 'is burned'
+											? 'is burnt'
 											: ''
 			},
 			userAvatar
@@ -211,7 +211,10 @@ const Battle = ({ battle }: BattleProps) => {
 		setCurrentView('player');
 	};
 
-	const handlePlayerAttack = () => {
+	const handlePlayerAttack = (
+		activePlayerPokemon: Pokemon,
+		activeOpponentPokemon: Pokemon
+	) => {
 		addNotification({
 			pokemonName: activePlayerPokemon.name,
 			move: {
@@ -227,7 +230,7 @@ const Battle = ({ battle }: BattleProps) => {
 		if (activePlayerPokemon.activeMove.target === 'user') {
 			const updatedPokemon = activePlayerPokemon.attack(activePlayerPokemon);
 			setActivePlayerPokemon(updatedPokemon);
-			handlePlayerTeam(updatedPokemon);
+			updatePlayerTeam(updatedPokemon);
 		} else {
 			const updatedPokemon = activePlayerPokemon.attack(
 				activeOpponentPokemon
@@ -245,40 +248,14 @@ const Battle = ({ battle }: BattleProps) => {
 			}
 
 			setActiveOpponentPokemon(updatedPokemon);
-			handleOpponentTeam(updatedPokemon);
+			updateOpponentTeam(updatedPokemon);
 		}
 	};
 
-	const handlePlayerTeam = (updatedPokemon: Pokemon) => {
-		const updatedPokemons = playerTeam.pokemons.map(pokemon =>
-			pokemon.index === updatedPokemon.index ? updatedPokemon : pokemon
-		);
-
-		const updatedPlayerTeam = new Team(
-			playerTeam.id,
-			playerTeam.name,
-			playerTeam.avatar,
-			updatedPokemons
-		);
-
-		setPlayerTeam(updatedPlayerTeam);
-	};
-	const handleOpponentTeam = (updatedPokemon: Pokemon) => {
-		const updatedPokemons = opponentTeam.pokemons.map(pokemon =>
-			pokemon.index === updatedPokemon.index ? updatedPokemon : pokemon
-		);
-
-		const updatedOpponentTeam = new Team(
-			opponentTeam.id,
-			opponentTeam.name,
-			opponentTeam.avatar,
-			updatedPokemons
-		);
-
-		setOpponentTeam(updatedOpponentTeam);
-	};
-
-	const handleOpponentAttack = () => {
+	const handleOpponentAttack = (
+		activeOpponentPokemon: Pokemon,
+		activePlayerPokemon: Pokemon
+	) => {
 		addNotification({
 			pokemonName: activeOpponentPokemon.name,
 			move: {
@@ -296,7 +273,7 @@ const Battle = ({ battle }: BattleProps) => {
 				activeOpponentPokemon
 			);
 			setActiveOpponentPokemon(updatedPokemon);
-			handleOpponentTeam(updatedPokemon);
+			updateOpponentTeam(updatedPokemon);
 		} else {
 			const updatedPokemon =
 				activeOpponentPokemon.attack(activePlayerPokemon);
@@ -313,8 +290,37 @@ const Battle = ({ battle }: BattleProps) => {
 			}
 
 			setActivePlayerPokemon(updatedPokemon);
-			handlePlayerTeam(updatedPokemon);
+			updatePlayerTeam(updatedPokemon);
 		}
+	};
+
+	const updatePlayerTeam = (updatedPokemon: Pokemon) => {
+		const updatedPokemons = playerTeam.pokemons.map(pokemon =>
+			pokemon.index === updatedPokemon.index ? updatedPokemon : pokemon
+		);
+
+		const updatedPlayerTeam = new Team(
+			playerTeam.id,
+			playerTeam.name,
+			playerTeam.avatar,
+			updatedPokemons
+		);
+
+		setPlayerTeam(updatedPlayerTeam);
+	};
+	const updateOpponentTeam = (updatedPokemon: Pokemon) => {
+		const updatedPokemons = opponentTeam.pokemons.map(pokemon =>
+			pokemon.index === updatedPokemon.index ? updatedPokemon : pokemon
+		);
+
+		const updatedOpponentTeam = new Team(
+			opponentTeam.id,
+			opponentTeam.name,
+			opponentTeam.avatar,
+			updatedPokemons
+		);
+
+		setOpponentTeam(updatedOpponentTeam);
 	};
 
 	const handleAttacksByPriority = () => {
@@ -322,19 +328,20 @@ const Battle = ({ battle }: BattleProps) => {
 		const opponentSpeed = activeOpponentPokemon.getStat('speed').value;
 
 		if (playerSpeed > opponentSpeed) {
-			handlePlayerAttack();
-			handleOpponentAttack();
+			handlePlayerAttack(activePlayerPokemon, activeOpponentPokemon);
+			if (activeOpponentPokemon.getStat('hp').value > 0)
+				handleOpponentAttack(activeOpponentPokemon, activePlayerPokemon);
 		} else if (playerSpeed < opponentSpeed) {
-			handleOpponentAttack();
-			handlePlayerAttack();
+			handleOpponentAttack(activeOpponentPokemon, activePlayerPokemon);
+			handlePlayerAttack(activePlayerPokemon, activeOpponentPokemon);
 		} else {
 			const random = Math.random();
 			if (random < 0.5) {
-				handlePlayerAttack();
-				handleOpponentAttack();
+				handlePlayerAttack(activePlayerPokemon, activeOpponentPokemon);
+				handleOpponentAttack(activeOpponentPokemon, activePlayerPokemon);
 			} else {
-				handleOpponentAttack();
-				handlePlayerAttack();
+				handleOpponentAttack(activeOpponentPokemon, activePlayerPokemon);
+				handlePlayerAttack(activePlayerPokemon, activeOpponentPokemon);
 			}
 		}
 	};
@@ -555,7 +562,7 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	};
 
-	const handlePlayerKo = () => {
+	const handlePlayerKo = (activePlayerPokemon: Pokemon) => {
 		if (activePlayerPokemon.getStat('hp').value === 0) {
 			addNotification({
 				pokemonName: activePlayerPokemon.name,
@@ -572,7 +579,7 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	};
 
-	const handleOpponentKo = () => {
+	const handleOpponentKo = (activeOpponentPokemon: Pokemon) => {
 		if (activeOpponentPokemon.getStat('hp').value === 0) {
 			addNotification({
 				pokemonName: activeOpponentPokemon.name,
@@ -589,7 +596,7 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	};
 
-	const handleBattleEnd = () => {
+	const handleBattleEnd = (playerTeam: Team, opponentTeam: Team) => {
 		const playerTeamKo = playerTeam.pokemons.every(
 			pokemon => pokemon.stats[0].value === 0
 		);
@@ -626,13 +633,16 @@ const Battle = ({ battle }: BattleProps) => {
 
 		const parsedOpponentPokemon = localStorageBattle.activeOpponentPokemon;
 
-		const playerPokemon = recreatePokemonFromParsed(parsedPlayerPokemon);
-		const opponentPokemon = recreatePokemonFromParsed(parsedOpponentPokemon);
+		const activePlayerPokemon =
+			recreatePokemonFromParsed(parsedPlayerPokemon);
+		const activeOpponentPokemon = recreatePokemonFromParsed(
+			parsedOpponentPokemon
+		);
 		if (localStorageBattle) {
 			setPlayerTeam(localStorageBattle.playerTeam);
 			setOpponentTeam(localStorageBattle.opponentTeam);
-			setActivePlayerPokemon(playerPokemon);
-			setActiveOpponentPokemon(opponentPokemon);
+			setActivePlayerPokemon(activePlayerPokemon);
+			setActiveOpponentPokemon(activeOpponentPokemon);
 			setActiveTurn(localStorageBattle.turn);
 
 			const playerPokemonKo = localStorageBattle.playerTeam.pokemons.every(
@@ -696,12 +706,12 @@ const Battle = ({ battle }: BattleProps) => {
 		handleThawing(activePlayerPokemon, activeOpponentPokemon);
 		handlePoisoning(activePlayerPokemon, activeOpponentPokemon);
 		handleBurning(activePlayerPokemon, activeOpponentPokemon);
-		handlePlayerKo();
-		handleOpponentKo();
+		handlePlayerKo(activePlayerPokemon);
+		handleOpponentKo(activeOpponentPokemon);
 		setPlayerReady(false);
 		setOpponentReady(false);
 		setActiveTurn(activeTurn + 1);
-		handleBattleEnd();
+		handleBattleEnd(playerTeam, opponentTeam);
 	}, [playerReady, opponentReady]);
 
 	if (
