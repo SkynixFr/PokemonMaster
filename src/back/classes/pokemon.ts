@@ -125,10 +125,10 @@ class Pokemon {
 		const statusList = ['PSN', 'SLP', 'FRZ', 'KO', 'BRN', 'PAR'];
 		const missChance = Math.random();
 		let damage = this.activeMove.power;
-		if (missChance > this.activeMove.accuracy / 100) {
-			console.log('The attack missed!');
-			return target;
-		}
+		// if (missChance > 0) {
+		// 	console.log('The attack missed!');
+		// 	return target;
+		// }
 		const opponentHp = target.getStat('hp');
 		const updatedHp = opponentHp.decrease(damage);
 		const hpIndex = target.stats.findIndex(stat => stat.name === 'hp');
