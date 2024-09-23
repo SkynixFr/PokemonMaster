@@ -367,9 +367,10 @@ const Battle = ({ battle }: BattleProps) => {
 					? (nbNotificationsAttack +=
 							handleOpponentAttack().notificationOpponentAttack)
 					: null;
+			} else {
+				nbNotificationsAttack +=
+					handleOpponentAttack().notificationOpponentAttack;
 			}
-			nbNotificationsAttack +=
-				handleOpponentAttack().notificationOpponentAttack;
 		} else if (playerSpeed < opponentSpeed) {
 			if (!justSwitchedOpponent) {
 				const { notificationOpponentAttack, updatedPlayerPokemon } =
@@ -379,8 +380,10 @@ const Battle = ({ battle }: BattleProps) => {
 					? (nbNotificationsAttack +=
 							handlePlayerAttack().notificationPlayerAttack)
 					: null;
+			} else {
+				nbNotificationsAttack +=
+					handlePlayerAttack().notificationPlayerAttack;
 			}
-			nbNotificationsAttack += handlePlayerAttack().notificationPlayerAttack;
 		} else {
 			const random = Math.random();
 			if (random > 0.5) {
@@ -392,9 +395,10 @@ const Battle = ({ battle }: BattleProps) => {
 						? (nbNotificationsAttack +=
 								handleOpponentAttack().notificationOpponentAttack)
 						: null;
+				} else {
+					nbNotificationsAttack +=
+						handleOpponentAttack().notificationOpponentAttack;
 				}
-				nbNotificationsAttack +=
-					handleOpponentAttack().notificationOpponentAttack;
 			} else {
 				if (!justSwitchedOpponent) {
 					const { notificationOpponentAttack, updatedPlayerPokemon } =
@@ -404,9 +408,10 @@ const Battle = ({ battle }: BattleProps) => {
 						? (nbNotificationsAttack +=
 								handlePlayerAttack().notificationPlayerAttack)
 						: null;
+				} else {
+					nbNotificationsAttack +=
+						handlePlayerAttack().notificationPlayerAttack;
 				}
-				nbNotificationsAttack +=
-					handlePlayerAttack().notificationPlayerAttack;
 			}
 		}
 
@@ -796,16 +801,13 @@ const Battle = ({ battle }: BattleProps) => {
 			handleConfusion(activePlayerPokemon, activeOpponentPokemon);
 			handleParalysis(activePlayerPokemon, activeOpponentPokemon);
 			const nbNotificationAttacks = handleAttacksByPriority();
-
 			setBattleTurnEnd(true);
 			setIsSwitching(false);
-
 			setTimeout(() => {
 				handleThawing(activePlayerPokemon, activeOpponentPokemon);
 				handlePoisoning(activePlayerPokemon, activeOpponentPokemon);
 				handleBurning(activePlayerPokemon, activeOpponentPokemon);
 			}, nbNotificationAttacks * 2500);
-
 			handlePlayerKo();
 			handleOpponentKo();
 			setPlayerReady(false);

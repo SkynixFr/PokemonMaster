@@ -126,8 +126,8 @@ class Pokemon {
 		const missChance = Math.random();
 		let damage = this.activeMove.power;
 		if (missChance > this.activeMove.accuracy / 100) {
-			damage = 0;
 			console.log('The attack missed!');
+			return target;
 		}
 		const opponentHp = target.getStat('hp');
 		const updatedHp = opponentHp.decrease(damage);
