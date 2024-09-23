@@ -50,6 +50,9 @@ const Battle = ({ battle }: BattleProps) => {
 		'player'
 	);
 	const [isSwitching, setIsSwitching] = useState<boolean>(false);
+	const [justSwitchedPlayer, setJustSwitchedPlayer] = useState<boolean>(false);
+	const [justSwitchedOpponent, setJustSwitchedOpponent] =
+		useState<boolean>(false);
 	const [activePlayerPokemonKo, setActivePlayerPokemonKo] =
 		useState<boolean>(false);
 	const [activeOpponentPokemonKo, setActiveOpponentPokemonKo] =
@@ -255,32 +258,28 @@ const Battle = ({ battle }: BattleProps) => {
 			updatePlayerTeam(updatedPokemon);
 		} else {
 			setPreviousOpponentPokemonHp(activeOpponentPokemon.stats[0].value);
-			const updatedPokemon = activePlayerPokemon.attack(
+			const updatedOpponentPokemon = activePlayerPokemon.attack(
 				activeOpponentPokemon
 			);
 
 			if (
-				updatedPokemon.status.name !== '' &&
-				updatedPokemon.status.name != 'KO'
+				updatedOpponentPokemon.status.name !== '' &&
+				updatedOpponentPokemon.status.name != 'KO'
 			) {
 				handleNotificationStatusEffect(
-					updatedPokemon.status.name,
-					updatedPokemon.name,
+					updatedOpponentPokemon.status.name,
+					updatedOpponentPokemon.name,
 					opponentTeam.avatar
 				);
 				notificationPlayerAttack++;
 			}
-
-			setActiveOpponentPokemon(updatedPokemon);
-			updateOpponentTeam(updatedPokemon);
-			return notificationPlayerAttack;
+			setActiveOpponentPokemon(updatedOpponentPokemon);
+			updateOpponentTeam(updatedOpponentPokemon);
+			return { notificationPlayerAttack, updatedOpponentPokemon };
 		}
 	};
 
-	const handleOpponentAttack = (
-		activeOpponentPokemon: Pokemon,
-		activePlayerPokemon: Pokemon
-	) => {
+	const handleOpponentAttack = () => {
 		let notificationOpponentAttack = 0;
 		addNotification({
 			pokemonName: activeOpponentPokemon.name,
@@ -304,89 +303,115 @@ const Battle = ({ battle }: BattleProps) => {
 			updateOpponentTeam(updatedPokemon);
 		} else {
 			setPreviousPlayerPokemonHp(activePlayerPokemon.stats[0].value);
-			const updatedPokemon =
+			const updatedPlayerPokemon =
 				activeOpponentPokemon.attack(activePlayerPokemon);
 			if (
-				updatedPokemon.status.name !== '' &&
-				updatedPokemon.status.name != 'KO'
+				updatedPlayerPokemon.status.name !== '' &&
+				updatedPlayerPokemon.status.name != 'KO'
 			) {
 				handleNotificationStatusEffect(
-					updatedPokemon.status.name,
-					updatedPokemon.name,
+					updatedPlayerPokemon.status.name,
+					updatedPlayerPokemon.name,
 					playerTeam.avatar
 				);
 				notificationOpponentAttack++;
 			}
 
-			setActivePlayerPokemon(updatedPokemon);
-			handlePlayerTeam(updatedPokemon);
-			return notificationOpponentAttack;
+			setActivePlayerPokemon(updatedPlayerPokemon);
+			updatePlayerTeam(updatedPlayerPokemon);
+			return { notificationOpponentAttack, updatedPlayerPokemon };
 		}
-		updatePlayerTeam(updatedPokemon);
 	};
-};
 
-const updatePlayerTeam = (updatedPokemon: Pokemon) => {
-	const updatedPokemons = playerTeam.pokemons.map(pokemon =>
-		pokemon.index === updatedPokemon.index ? updatedPokemon : pokemon
-	);
+	const updatePlayerTeam = (updatedPokemon: Pokemon) => {
+		const updatedPokemons = playerTeam.pokemons.map(pokemon =>
+			pokemon.index === updatedPokemon.index ? updatedPokemon : pokemon
+		);
 
-	const updatedPlayerTeam = new Team(
-		playerTeam.id,
-		playerTeam.name,
-		playerTeam.avatar,
-		updatedPokemons
-	);
+		const updatedPlayerTeam = new Team(
+			playerTeam.id,
+			playerTeam.name,
+			playerTeam.avatar,
+			updatedPokemons
+		);
 
-	setPlayerTeam(updatedPlayerTeam);
-};
-const updateOpponentTeam = (updatedPokemon: Pokemon) => {
-	const updatedPokemons = opponentTeam.pokemons.map(pokemon =>
-		pokemon.index === updatedPokemon.index ? updatedPokemon : pokemon
-	);
+		setPlayerTeam(updatedPlayerTeam);
+	};
 
-	const updatedOpponentTeam = new Team(
-		opponentTeam.id,
-		opponentTeam.name,
-		opponentTeam.avatar,
-		updatedPokemons
-	);
+	const updateOpponentTeam = (updatedPokemon: Pokemon) => {
+		const updatedPokemons = opponentTeam.pokemons.map(pokemon =>
+			pokemon.index === updatedPokemon.index ? updatedPokemon : pokemon
+		);
 
-	setOpponentTeam(updatedOpponentTeam);
-};
+		const updatedOpponentTeam = new Team(
+			opponentTeam.id,
+			opponentTeam.name,
+			opponentTeam.avatar,
+			updatedPokemons
+		);
 
-const handleAttacksByPriority = () => {
-	const playerSpeed = activePlayerPokemon.getStat('speed').value;
-	const opponentSpeed = activeOpponentPokemon.getStat('speed').value;
-	let nbNotificationsAttack = 0;
+		setOpponentTeam(updatedOpponentTeam);
+	};
 
-	if (playerSpeed > opponentSpeed) {
-		nbNotificationsAttack += handlePlayerAttack();
-		nbNotificationsAttack += handleOpponentAttack();
-		handlePlayerAttack(activePlayerPokemon, activeOpponentPokemon);
-		if (activeOpponentPokemon.getStat('hp').value > 0)
-			handleOpponentAttack(activeOpponentPokemon, activePlayerPokemon);
-	} else if (playerSpeed < opponentSpeed) {
-		nbNotificationsAttack += handleOpponentAttack();
-		nbNotificationsAttack += handlePlayerAttack();
-		handleOpponentAttack(activeOpponentPokemon, activePlayerPokemon);
-		handlePlayerAttack(activePlayerPokemon, activeOpponentPokemon);
-	} else {
-		const random = Math.random();
-		if (random > 0.5) {
-			nbNotificationsAttack += handlePlayerAttack();
-			nbNotificationsAttack += handleOpponentAttack();
-			if (random < 0.5) {
-				handlePlayerAttack(activePlayerPokemon, activeOpponentPokemon);
-				handleOpponentAttack(activeOpponentPokemon, activePlayerPokemon);
+	const handleAttacksByPriority = () => {
+		const playerSpeed = activePlayerPokemon.getStat('speed').value;
+		const opponentSpeed = activeOpponentPokemon.getStat('speed').value;
+		let nbNotificationsAttack = 0;
+
+		if (playerSpeed > opponentSpeed) {
+			if (!justSwitchedPlayer) {
+				const { notificationPlayerAttack, updatedOpponentPokemon } =
+					handlePlayerAttack();
+				nbNotificationsAttack += notificationPlayerAttack;
+				updatedOpponentPokemon.status.ableToMove
+					? (nbNotificationsAttack +=
+							handleOpponentAttack().notificationOpponentAttack)
+					: null;
+			}
+			nbNotificationsAttack +=
+				handleOpponentAttack().notificationOpponentAttack;
+		} else if (playerSpeed < opponentSpeed) {
+			if (!justSwitchedOpponent) {
+				const { notificationOpponentAttack, updatedPlayerPokemon } =
+					handleOpponentAttack();
+				nbNotificationsAttack += notificationOpponentAttack;
+				updatedPlayerPokemon.status.ableToMove
+					? (nbNotificationsAttack +=
+							handlePlayerAttack().notificationPlayerAttack)
+					: null;
+			}
+			nbNotificationsAttack += handlePlayerAttack().notificationPlayerAttack;
+		} else {
+			const random = Math.random();
+			if (random > 0.5) {
+				if (!justSwitchedPlayer) {
+					const { notificationPlayerAttack, updatedOpponentPokemon } =
+						handlePlayerAttack();
+					nbNotificationsAttack += notificationPlayerAttack;
+					updatedOpponentPokemon.status.ableToMove
+						? (nbNotificationsAttack +=
+								handleOpponentAttack().notificationOpponentAttack)
+						: null;
+				}
+				nbNotificationsAttack +=
+					handleOpponentAttack().notificationOpponentAttack;
 			} else {
-				nbNotificationsAttack += handleOpponentAttack();
-				nbNotificationsAttack += handlePlayerAttack();
+				if (!justSwitchedOpponent) {
+					const { notificationOpponentAttack, updatedPlayerPokemon } =
+						handleOpponentAttack();
+					nbNotificationsAttack += notificationOpponentAttack;
+					updatedPlayerPokemon.status.ableToMove
+						? (nbNotificationsAttack +=
+								handlePlayerAttack().notificationPlayerAttack)
+						: null;
+				}
+				nbNotificationsAttack +=
+					handlePlayerAttack().notificationPlayerAttack;
 			}
 		}
 
 		return nbNotificationsAttack;
-	}
+	};
 
 	const handlePoisoning = (
 		activePlayerPokemon: Pokemon,
@@ -407,6 +432,9 @@ const handleAttacksByPriority = () => {
 				},
 				animationType: 'status-suffer'
 			});
+			if (updatedPokemon.stats[0].value === 0) {
+				handlePlayerKo();
+			}
 		}
 
 		if (activeOpponentPokemon.status.name === 'PSN') {
@@ -424,6 +452,9 @@ const handleAttacksByPriority = () => {
 				},
 				animationType: 'status-suffer'
 			});
+			if (updatedPokemon.stats[0].value === 0) {
+				handleOpponentKo();
+			}
 		}
 	};
 
@@ -612,8 +643,8 @@ const handleAttacksByPriority = () => {
 		}
 	};
 
-	const handlePlayerKo = (activePlayerPokemon: Pokemon) => {
-		if (activePlayerPokemon.getStat('hp').value === 0) {
+	const handlePlayerKo = () => {
+		if (activePlayerPokemon.stats[0].value === 0) {
 			addNotification({
 				pokemonName: activePlayerPokemon.name,
 				userAvatar: {
@@ -630,8 +661,8 @@ const handleAttacksByPriority = () => {
 		}
 	};
 
-	const handleOpponentKo = (activeOpponentPokemon: Pokemon) => {
-		if (activeOpponentPokemon.getStat('hp').value === 0) {
+	const handleOpponentKo = () => {
+		if (activeOpponentPokemon.stats[0].value === 0) {
 			addNotification({
 				pokemonName: activeOpponentPokemon.name,
 				userAvatar: {
@@ -648,7 +679,7 @@ const handleAttacksByPriority = () => {
 		}
 	};
 
-	const handleBattleEnd = (playerTeam: Team, opponentTeam: Team) => {
+	const handleBattleEnd = () => {
 		const playerTeamKo = playerTeam.pokemons.every(
 			pokemon => pokemon.stats[0].value === 0
 		);
@@ -696,8 +727,8 @@ const handleAttacksByPriority = () => {
 			setActivePlayerPokemon(activePlayerPokemon);
 			setActiveOpponentPokemon(activeOpponentPokemon);
 			setActiveTurn(localStorageBattle.turn);
-			setPreviousPlayerPokemonHp(playerPokemon.stats[0].value);
-			setPreviousOpponentPokemonHp(opponentPokemon.stats[0].value);
+			setPreviousPlayerPokemonHp(activePlayerPokemon.stats[0].value);
+			setPreviousOpponentPokemonHp(activeOpponentPokemon.stats[0].value);
 			const playerPokemonKo = localStorageBattle.playerTeam.pokemons.every(
 				(pokemon: Pokemon) => pokemon.stats[0].value === 0
 			);
@@ -779,6 +810,8 @@ const handleAttacksByPriority = () => {
 			handleOpponentKo();
 			setPlayerReady(false);
 			setOpponentReady(false);
+			setJustSwitchedPlayer(false);
+			setJustSwitchedOpponent(false);
 			setActiveTurn(activeTurn + 1);
 			handleBattleEnd();
 		};
@@ -840,6 +873,7 @@ const handleAttacksByPriority = () => {
 							handleOpponentReady={handleOpponentReady}
 							player={true}
 							currentView={currentView}
+							setJustSwitched={setJustSwitchedPlayer}
 						/>
 					</div>
 
@@ -853,6 +887,7 @@ const handleAttacksByPriority = () => {
 							handleOpponentReady={handleOpponentReady}
 							player={false}
 							currentView={currentView}
+							setJustSwitched={setJustSwitchedOpponent}
 						/>
 					</div>
 
@@ -910,6 +945,7 @@ const handleAttacksByPriority = () => {
 							handleOpponentReady={handleOpponentReady}
 							player={false}
 							currentView={currentView}
+							setJustSwitched={setJustSwitchedOpponent}
 						/>
 					</div>
 
@@ -923,6 +959,7 @@ const handleAttacksByPriority = () => {
 							handleOpponentReady={handleOpponentReady}
 							player={true}
 							currentView={currentView}
+							setJustSwitched={setJustSwitchedPlayer}
 						/>
 					</div>
 

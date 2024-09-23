@@ -39,7 +39,7 @@ class Pokemon {
 		activeMove: Move,
 		status: Status,
 		volatileStatus: Status,
-		index
+		index: number
 	) {
 		this.pokedexId = pokedexId;
 		this.name = name;
@@ -187,10 +187,11 @@ class Pokemon {
 				true
 			);
 		}
-		if (updatedHp.value <= 0) {
+		if (updatedHp.value === 0) {
 			updatedStatus = new Status('KO', `${this.name} has fainted`, 0, false);
 		}
 		target = target.changeStatus(updatedStatus);
+		console.log('updatedStatus' + JSON.stringify(target.status));
 		target = target.changeVolatileStatus(updatedVolatileStatus);
 		return new Pokemon(
 			target.pokedexId,

@@ -7,6 +7,7 @@ import Team from '../../../back/classes/team';
 // Components
 import CustomImage from '../customImage';
 import BattleSwitching from './battleSwitch';
+import { set } from 'zod';
 
 // Interfaces
 interface TeamCardProps {
@@ -18,6 +19,7 @@ interface TeamCardProps {
 	handleOpponentReady: () => void;
 	player: boolean;
 	currentView: string;
+	setJustSwitched: (justSwitched: boolean) => void;
 }
 
 const BattleTeamCard = ({
@@ -28,7 +30,8 @@ const BattleTeamCard = ({
 	handlePlayerReady,
 	handleOpponentReady,
 	player,
-	currentView
+	currentView,
+	setJustSwitched
 }: TeamCardProps) => {
 	const [isSwitching, setIsSwitching] = useState(false);
 	const [isSwitchingTo, setIsSwitchingTo] = useState<Pokemon | null>(null);
@@ -58,6 +61,7 @@ const BattleTeamCard = ({
 		player ? handlePlayerReady() : handleOpponentReady();
 		setIsSwitching(false);
 		setIsSwitchingTo(null);
+		setJustSwitched(true);
 	};
 
 	const handleSwitching = (pokemon: Pokemon) => {
