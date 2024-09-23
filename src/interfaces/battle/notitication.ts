@@ -13,4 +13,5 @@ export interface Notification {
 		type: string;
 		name: string;
 	};
+	animationType?: string;
 }

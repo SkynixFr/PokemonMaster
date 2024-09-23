@@ -9,8 +9,8 @@
     margin-left: 25px;
     border-radius:10px;
     background-color: #fff;
-    animation: fadeInToRight 1s ease-in-out;
     z-index: 999;
+    opacity: 0;
 }
 
 .battle-toast__avatar {

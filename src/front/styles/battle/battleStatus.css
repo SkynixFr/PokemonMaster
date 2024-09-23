@@ -18,7 +18,7 @@
     padding: 1px 5px;
     border-radius: 5px;
     gap: 5px;
-    animation: popIn .75s ease;
+    /*animation: popIn .75s ease;*/
 }
 
 .battle-status-infos.par {
@@ -48,6 +48,7 @@
 
 
 .battle-volatile-infos {
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,7 +57,7 @@
     padding: 1px 5px;
     border-radius: 5px;
     gap: 5px;
-    animation: popIn .75s ease;
+    /*animation: popIn .75s ease;*/
 }
 
 .battle-volatile-infos.cnf {

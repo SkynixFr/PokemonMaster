@@ -7,13 +7,24 @@ import {
 } from '../../utils/formatString';
 interface BattleToastProps {
 	currentNotification: Notification;
+	battleTurnEnd: boolean;
 }
 
-const BattleToast = ({ currentNotification }: BattleToastProps) => {
+const BattleToast = ({
+	currentNotification,
+	battleTurnEnd
+}: BattleToastProps) => {
 	return (
 		<>
 			{currentNotification && (
-				<div className={'battle-toast'}>
+				<div
+					className={`battle-toast`}
+					style={{
+						animation: battleTurnEnd
+							? 'fadeInToRight 2s ease-in-out forwards'
+							: 'none'
+					}}
+				>
 					<div
 						className={`battle-toast__avatar ${currentNotification.userAvatar.name}`}
 					>
