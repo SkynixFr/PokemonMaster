@@ -14,7 +14,7 @@
     border-radius: 40px;
     margin-top: 15px;
     gap: 25px;
-    border: 2px solid var(--white);
+    border: 1px solid var(--white);
     z-index: 10;
     left: 50%;
     transform: translateX(-50%);

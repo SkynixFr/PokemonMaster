@@ -20,6 +20,7 @@ interface TeamCardProps {
 	player: boolean;
 	currentView: string;
 	setJustSwitched: (justSwitched: boolean) => void;
+	setPreviousHp: (hp: number) => void;
 }
 
 const BattleTeamCard = ({
@@ -31,7 +32,8 @@ const BattleTeamCard = ({
 	handleOpponentReady,
 	player,
 	currentView,
-	setJustSwitched
+	setJustSwitched,
+	setPreviousHp
 }: TeamCardProps) => {
 	const [isSwitching, setIsSwitching] = useState(false);
 	const [isSwitchingTo, setIsSwitchingTo] = useState<Pokemon | null>(null);
@@ -59,6 +61,7 @@ const BattleTeamCard = ({
 		);
 		setActivePokemon(newPokemon);
 		player ? handlePlayerReady() : handleOpponentReady();
+		setPreviousHp(newPokemon.stats[0].value);
 		setIsSwitching(false);
 		setIsSwitchingTo(null);
 		setJustSwitched(true);
