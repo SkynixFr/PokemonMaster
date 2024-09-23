@@ -25,7 +25,6 @@ export const login = async (formData: FormData) => {
 		email: formData.get('email').toString(),
 		password: formData.get('password').toString()
 	};
-	console.log(userLogin);
 
 	const response = await fetch('http://localhost:8080/api/v1/user/login', {
 		method: 'POST',

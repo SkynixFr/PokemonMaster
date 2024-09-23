@@ -124,11 +124,6 @@ class Pokemon {
 		let updatedVolatileStatus: Status = target.volatileStatus;
 		const statusList = ['PSN', 'SLP', 'FRZ', 'KO', 'BRN', 'PAR'];
 		const missChance = Math.random();
-		// const effectiveness = TypeEffectiveness.calculateEffectiveness(
-		// 	this.activeMove.type,
-		// 	target.types
-		// );
-		// let damage = this.activeMove.power * effectiveness;
 		let damage = this.activeMove.power;
 		if (missChance > this.activeMove.accuracy / 100) {
 			damage = 0;
@@ -142,7 +137,6 @@ class Pokemon {
 			this.activeMove.meta?.ailment === 'sleep' &&
 			!statusList.includes(target.status.name)
 		) {
-			console.log('The target fell asleep');
 			updatedStatus = new Status(
 				'SLP',
 				`${this.name} is asleep`,
@@ -191,7 +185,6 @@ class Pokemon {
 			updatedStatus = new Status('KO', `${this.name} has fainted`, 0, false);
 		}
 		target = target.changeStatus(updatedStatus);
-		console.log('updatedStatus' + JSON.stringify(target.status));
 		target = target.changeVolatileStatus(updatedVolatileStatus);
 		return new Pokemon(
 			target.pokedexId,
