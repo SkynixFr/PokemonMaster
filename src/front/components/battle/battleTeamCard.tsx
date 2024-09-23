@@ -7,7 +7,6 @@ import Team from '../../../back/classes/team';
 // Components
 import CustomImage from '../customImage';
 import BattleSwitching from './battleSwitch';
-import { set } from 'zod';
 
 // Interfaces
 interface TeamCardProps {
@@ -21,6 +20,7 @@ interface TeamCardProps {
 	currentView: string;
 	setJustSwitched: (justSwitched: boolean) => void;
 	setPreviousHp: (hp: number) => void;
+	disabled: boolean;
 }
 
 const BattleTeamCard = ({
@@ -33,7 +33,8 @@ const BattleTeamCard = ({
 	player,
 	currentView,
 	setJustSwitched,
-	setPreviousHp
+	setPreviousHp,
+	disabled
 }: TeamCardProps) => {
 	const [isSwitching, setIsSwitching] = useState(false);
 	const [isSwitchingTo, setIsSwitchingTo] = useState<Pokemon | null>(null);
@@ -108,8 +109,9 @@ const BattleTeamCard = ({
 								key={pokemon.name}
 								className={`battle-team-pokemon ${
 									pokemon.name === activePokemon.name ? 'active' : ''
-								} ${pokemon.stats[0].value === 0 ? 'ko' : ''}`}
+								} ${pokemon.stats[0].value === 0 ? 'ko' : ''} ${player && disabled ? 'disabled' : ''} ${player && currentView === 'player' ? 'clikable' : ''} ${!player && currentView === 'opponent' ? 'clikable' : ''}`}
 								onClick={() =>
+									!disabled &&
 									((currentView === 'player' && player) ||
 										(currentView === 'opponent' && !player)) &&
 									handleSwitching(pokemon)

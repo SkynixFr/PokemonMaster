@@ -891,6 +891,7 @@ const Battle = ({ battle }: BattleProps) => {
 							currentView={currentView}
 							setJustSwitched={setJustSwitchedPlayer}
 							setPreviousHp={setPreviousPlayerPokemonHp}
+							disabled={isNotificationActive}
 						/>
 					</div>
 
@@ -906,6 +907,7 @@ const Battle = ({ battle }: BattleProps) => {
 							currentView={currentView}
 							setJustSwitched={setJustSwitchedOpponent}
 							setPreviousHp={setPreviousOpponentPokemonHp}
+							disabled={isNotificationActive}
 						/>
 					</div>
 
@@ -967,6 +969,7 @@ const Battle = ({ battle }: BattleProps) => {
 							currentView={currentView}
 							setJustSwitched={setJustSwitchedOpponent}
 							setPreviousHp={setPreviousOpponentPokemonHp}
+							disabled={isNotificationActive}
 						/>
 					</div>
 
@@ -982,6 +985,7 @@ const Battle = ({ battle }: BattleProps) => {
 							currentView={currentView}
 							setJustSwitched={setJustSwitchedPlayer}
 							setPreviousHp={setPreviousPlayerPokemonHp}
+							disabled={isNotificationActive}
 						/>
 					</div>
 
