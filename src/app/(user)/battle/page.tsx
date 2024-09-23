@@ -422,6 +422,7 @@ const Battle = ({ battle }: BattleProps) => {
 		activePlayerPokemon: Pokemon,
 		activeOpponentPokemon: Pokemon
 	) => {
+		let nbNotificationsPoison = 0;
 		if (activePlayerPokemon.status.name === 'PSN') {
 			const updatedPokemon = activePlayerPokemon.sufferFromStatus();
 			setActivePlayerPokemon(updatedPokemon);
@@ -440,6 +441,7 @@ const Battle = ({ battle }: BattleProps) => {
 			if (updatedPokemon.stats[0].value === 0) {
 				handlePlayerKo();
 			}
+			nbNotificationsPoison++;
 		}
 
 		if (activeOpponentPokemon.status.name === 'PSN') {
@@ -460,7 +462,9 @@ const Battle = ({ battle }: BattleProps) => {
 			if (updatedPokemon.stats[0].value === 0) {
 				handleOpponentKo();
 			}
+			nbNotificationsPoison++;
 		}
+		return nbNotificationsPoison;
 	};
 
 	const handleSleeping = (
@@ -805,11 +809,20 @@ const Battle = ({ battle }: BattleProps) => {
 			setIsSwitching(false);
 			setTimeout(() => {
 				handleThawing(activePlayerPokemon, activeOpponentPokemon);
-				handlePoisoning(activePlayerPokemon, activeOpponentPokemon);
+				const nbNotificationPoisons = handlePoisoning(
+					activePlayerPokemon,
+					activeOpponentPokemon
+				);
 				handleBurning(activePlayerPokemon, activeOpponentPokemon);
+
+				setTimeout(
+					() => {
+						handlePlayerKo();
+						handleOpponentKo();
+					},
+					nbNotificationAttacks * 2500 + nbNotificationPoisons * 2500
+				);
 			}, nbNotificationAttacks * 2500);
-			handlePlayerKo();
-			handleOpponentKo();
 
 			setPlayerReady(false);
 			setOpponentReady(false);
