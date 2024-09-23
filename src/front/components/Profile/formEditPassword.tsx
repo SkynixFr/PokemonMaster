@@ -8,6 +8,7 @@ import { updateUserAction } from '../../actions/user.actions';
 // Interfaces
 import { UserEntity } from '../../../interfaces/user/userEntity';
 import { UserUpdate } from '../../../interfaces/user/userUpdate';
+import { X } from 'lucide-react';
 
 interface FormEditPasswordProps {
 	userDetails: UserEntity;
@@ -104,43 +105,112 @@ const FormEditPassword = ({
 		setOpenPasswordModal(false);
 		setOpenForm(null);
 	};
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				handleCancel();
+			}
+		};
 
+		document.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [handleCancel]);
 	return (
-		<div className="modal">
-			<div className="modal-overlay">
-				<div className="modal-content">
-					<h2>Update your Password</h2>
+		<div className="profile-modal">
+			<div className="profile-modal-content">
+				<h1>Update your Password</h1>
 
-					<div className="form-group">
-						<label>New password</label>
-						<input
-							type="password"
-							value={newPassword}
-							onChange={e => setNewPassword(e.target.value)}
-							placeholder="New password"
-						/>
-						{errors.newpassword && <span>{errors.newpassword}</span>}
-					</div>
-					<div className="form-group">
-						<label>Confirm your new password</label>
-						<input
-							type="password"
-							value={confirmPassword}
-							onChange={e => setConfirmPassword(e.target.value)}
-							placeholder="Confirm your new password"
-						/>
-						{errors.confirmPassword && (
-							<span>{errors.confirmPassword}</span>
-						)}
-					</div>
-					<div className="modal-actions">
-						<button onClick={handleSaveClick}>Save</button>
-						<button onClick={() => handleCancel()}>Cancel</button>
-					</div>
+				<div className="input-group">
+					<label className="input-label">New password</label>
+					{errors.newpassword && <span>{errors.newpassword}</span>}
+					<input
+						type="password"
+						className="input-field"
+						value={newPassword}
+						onChange={e => setNewPassword(e.target.value)}
+					/>
 				</div>
+				<div className="input-group">
+					<label className="input-label">Confirm password</label>
+					{errors.confirmPassword && <span>{errors.confirmPassword}</span>}
+					<input
+						type="password"
+						className="input-field"
+						value={confirmPassword}
+						onChange={e => setConfirmPassword(e.target.value)}
+					/>
+				</div>
+				<div className="profile-modal-buttons">
+					<button
+						className="profile-modal-button btn-primary"
+						onClick={handleSaveClick}
+					>
+						Save
+					</button>
+					<button
+						className="profile-modal-button"
+						onClick={() => handleCancel()}
+					>
+						Cancel
+					</button>
+				</div>
+				<button className={'close-btn'} onClick={() => handleCancel()}>
+					<X width={30} height={30} />
+				</button>
 			</div>
 		</div>
 	);
 };
 
 export default FormEditPassword;
+
+{
+	/* <div className="profile-modal">
+	<div className="profile-modal-content">
+		<h1>Update your Password</h1>
+
+		<div className="input-group">
+			<label className="input-label">New password</label>
+			<input
+				type="password"
+				className="input-field"
+				value={newPassword}
+				onChange={e => setNewPassword(e.target.value)}
+				placeholder="New password"
+			/>
+			{errors.newpassword && <span>{errors.newpassword}</span>}
+		</div>
+		<div className="input-group">
+			<label className="input-label">Confirm your new password</label>
+			<input
+				type="password"
+				className="input-field"
+				value={confirmPassword}
+				onChange={e => setConfirmPassword(e.target.value)}
+				placeholder="Confirm your new password"
+			/>
+			{errors.confirmPassword && <span>{errors.confirmPassword}</span>}
+		</div>
+		<div className="profile-modal-buttons">
+			<button
+				className="profile-modal-button btn-primary"
+				onClick={handleSaveClick}
+			>
+				Save
+			</button>
+			<button
+				className="profile-modal-button"
+				onClick={() => handleCancel()}
+			>
+				Cancel
+			</button>
+		</div>
+		<button className={'close-btn'} onClick={() => handleCancel()}>
+			<X width={30} height={30} />
+		</button>
+	</div>
+</div>; */
+}

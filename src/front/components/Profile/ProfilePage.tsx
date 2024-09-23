@@ -86,6 +86,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 			</div>
 			<div className="profil-infos">
 				<div className="user-infos-container">
+					<h1>Your Profile : </h1>
 					<div className="user-infos">
 						<div className="user-avatar">
 							<div className="btn-edit-avatar-container">
@@ -127,27 +128,27 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 								setOpenForm={setOpenForm}
 								openForm={openForm}
 							/>
-							{!isPasswordModalOpen && (
-								<div className="user-password">
-									<button
-										onClick={() => OpenPasswordModal()}
-										disabled={openForm !== null}
-									>
-										<span>Update your password</span>
-
-										<PencilLine />
-									</button>
-								</div>
-							)}
 						</div>
-						<div className="user-delete">
-							<button
-								onClick={() => OpenDeleteModal()}
-								className="user-delete"
-							>
-								<span>Supprimer</span>
-								<Trash2 />
-							</button>
+						<div className="password-and-delete">
+							<div className="user-password btn-secondary">
+								<button
+									onClick={() => OpenPasswordModal()}
+									disabled={openForm !== null}
+								>
+									<span>Update your password</span>
+
+									<PencilLine />
+								</button>
+							</div>
+							<div className="user-delete">
+								<button
+									onClick={() => OpenDeleteModal()}
+									className="user-delete btn-primary"
+								>
+									<span>Delete Account</span>
+									<Trash2 />
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>

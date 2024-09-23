@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { PencilLine, Check, X, Mail } from 'lucide-react';
+import { PencilLine, Check, X, Mail, SaveAll } from 'lucide-react';
 
 // Import needed libs
 import { toast } from 'sonner';
@@ -104,6 +104,27 @@ const formEditEmail = ({
 		setOpenForm(null);
 	};
 
+	// Handle Escape key press
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape' && isEditing) {
+				setIsEditing(false); // Close only if editing
+				setOpenForm(null);
+				handleCancel();
+			}
+		};
+
+		// Add event listener only when in edit mode
+		if (isEditing) {
+			document.addEventListener('keydown', handleKeyDown);
+		}
+
+		return () => {
+			// Clean up the event listener when not editing
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [isEditing]);
+
 	// Handle Enter key press to confirm changes
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter') {
@@ -111,37 +132,48 @@ const formEditEmail = ({
 		}
 	};
 	return (
-		<div className="form-edit-email">
-			<Mail size={24} />
-			{isEditing ? (
-				<div>
-					{errors.email && <div className={'error'}>{errors.email}</div>}
-					<input
-						type="text"
-						value={newEmail}
-						onChange={handleChange}
-						onKeyDown={handleKeyDown}
-					/>
-					<button onClick={handleConfirm} className="btn-confirm-Email">
-						<Check />
-					</button>
-					<button onClick={handleCancel} className="btn-cancel-Email">
-						<X />
-					</button>
-				</div>
-			) : (
-				// Show Email and edit button when not editing
-				<div>
-					<h1>{forEditEmail(initialEmail)}</h1>
-					<button
-						onClick={handleEdit}
-						className="user-update"
-						disabled={openForm !== null}
-					>
-						<PencilLine />
-					</button>
-				</div>
-			)}
+		<div className="username-container">
+			<div className="form-edit-email">
+				<h2>Email : </h2>
+				{errors.email && <div className={'error'}>{errors.email}</div>}
+				{isEditing ? (
+					<div className="email-show">
+						<div className="email-image">
+							<Mail size={50} />
+						</div>
+						<div className="input-container">
+							<input
+								type="text"
+								value={newEmail}
+								onChange={handleChange}
+								onKeyDown={handleKeyDown}
+							/>
+						</div>
+						<div className="btn-confirm-container">
+							<button onClick={handleConfirm} className="btn-confirm">
+								<SaveAll width={20} height={20} />
+							</button>
+						</div>
+					</div>
+				) : (
+					// Show Email and edit button when not editing
+					<div className="email-show">
+						<div className="email-image">
+							<Mail size={50} />
+						</div>
+						<h1>{forEditEmail(initialEmail)}</h1>
+						<div className="btn-edit-container">
+							<button
+								onClick={handleEdit}
+								className="user-update"
+								disabled={openForm !== null}
+							>
+								<PencilLine />
+							</button>
+						</div>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 };

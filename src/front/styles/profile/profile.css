@@ -1,6 +1,8 @@
 @import url('profileModal.css');
 @import url('profileAvatar.css');
 @import url('profileUsername.css');
+@import url('profileEmail.css');
+@import url('profilePassword.css');
 .profile-container {
 	display: flex;
 	justify-content: center;
@@ -18,7 +20,7 @@
 	max-width: 1500px;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 	text-align: left;
-	/* animation: bounceIn 0.75s ease-in-out; */
+	animation: bounceIn 0.75s ease-in-out;
 }
 .bg-form-profile {
 	position: absolute;
@@ -27,7 +29,7 @@
 	width: 344px;
 	height: 250px;
 	z-index: 1;
-	/* animation: bounceIn 0.75s ease-in-out; */
+	animation: bounceIn 0.75s ease-in-out;
 }
 
 .user-infos {
@@ -42,4 +44,46 @@
 	flex: 1;
 	display: flex;
 	flex-direction: column;
+}
+
+.password-and-delete {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 20px;
+	margin-top: 20px;
+}
+
+.password-and-delete button {
+	width: 200px;
+	height: 40px;
+	cursor: pointer;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	transition: transform 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.password-and-delete button:hover {
+	transform: scale(1.1);
+}
+
+.user-password button {
+	width: 200px;
+	height: 40px;
+
+	font-weight: bold;
+	cursor: pointer;
+	background-color: var(--white);
+	color: var(--red);
+	border: 1px solid var(--red);
+}
+
+.user-delete span {
+	margin-right: 8px;
+}
+
+.user-password span {
+	margin-right: 8px;
 }

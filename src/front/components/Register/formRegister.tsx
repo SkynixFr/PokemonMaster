@@ -136,7 +136,7 @@ const FormRegister = () => {
 						height={150}
 					/>
 				</div>
-				<h1 className="form-title">SIGN UP</h1>
+				<h1 className="form-title">SIGN IN</h1>
 				<div className="input-group">
 					<label htmlFor="username" className="input-label">
 						Username

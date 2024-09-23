@@ -157,11 +157,8 @@ const FormEditUsername = ({
 								onKeyDown={handleKeyDown}
 							/>
 						</div>
-						<div className="btn-confirm-username-container">
-							<button
-								onClick={handleConfirm}
-								className="btn-confirm-username"
-							>
+						<div className="btn-confirm-container">
+							<button onClick={handleConfirm} className="btn-confirm">
 								<SaveAll width={20} height={20} />
 							</button>
 						</div>
@@ -170,7 +167,7 @@ const FormEditUsername = ({
 					// Show username and edit button when not editing
 					<div className="username-show">
 						<h1>{initialUsername}</h1>
-						<div className="btn-edit-username-container">
+						<div className="btn-edit-container">
 							<button
 								onClick={handleEdit}
 								className="user-update"

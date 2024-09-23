@@ -45,6 +45,7 @@
 
 .input-group {
 	margin-bottom: 20px;
+	margin-right: 20px;
 }
 
 .input-label {
@@ -83,7 +84,7 @@
 }
 
 .login-button {
-	width: 105%;
+	width: 100%;
 	padding: 15px;
 	background-color: #007bff;
 	color: white;
