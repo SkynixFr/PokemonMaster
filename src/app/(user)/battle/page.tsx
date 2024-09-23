@@ -50,6 +50,10 @@ const Battle = ({ battle }: BattleProps) => {
 		'player'
 	);
 	const [isSwitching, setIsSwitching] = useState<boolean>(false);
+	const [activePlayerPokemonKo, setActivePlayerPokemonKo] =
+		useState<boolean>(false);
+	const [activeOpponentPokemonKo, setActiveOpponentPokemonKo] =
+		useState<boolean>(false);
 
 	const [notifications, setNotifications] = useState<Notification[]>([]);
 	const [currentNotification, setCurrentNotification] =
