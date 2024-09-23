@@ -11,6 +11,7 @@
 @import url('battle/battle.css');
 @import url('teambuilder/teambuilder.css');
 @import url('pokemonbuilder/pokemonbuilder.css');
+@import url('home/home.css');
 
 /* Animations */
 @import url('animations.css');
