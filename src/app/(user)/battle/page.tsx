@@ -3,19 +3,19 @@
 import React, { useEffect, useState } from 'react';
 
 // Components
+import BattleToast from '../../../front/components/battle/battleToast';
 import CustomImage from '../../../front/components/customImage';
 import BattleTeamCard from '../../../front/components/battle/battleTeamCard';
 import BattlePokemonCard from '../../../front/components/battle/battlePokemonCard';
 import BattlePokemonKo from '../../../front/components/battle/battlePokemonKo';
-import BattleToast from '../../../front/components/battle/battleToast';
 
 //Icons
 import { Moon, Sun } from 'lucide-react';
 
 // Classes
+import BattleClass from '../../../back/classes/battle';
 import Team from '../../../back/classes/team';
 import Pokemon from '../../../back/classes/pokemon';
-import BattleClass from '../../../back/classes/battle';
 import Move from '../../../back/classes/move';
 import Status from '../../../back/classes/status';
 
@@ -45,7 +45,6 @@ const Battle = ({ battle }: BattleProps) => {
 		useState<Pokemon>(null);
 	const [playerReady, setPlayerReady] = useState<boolean>(false);
 	const [opponentReady, setOpponentReady] = useState<boolean>(false);
-
 	const [currentView, setCurrentView] = useState<'player' | 'opponent'>(
 		'player'
 	);
@@ -80,6 +79,8 @@ const Battle = ({ battle }: BattleProps) => {
 	const [previousOpponentPokemonHp, setPreviousOpponentPokemonHp] =
 		useState<number>(0);
 
+	// Notifications
+	//---------------------------------------------------------
 	const handleNotificationStatusEffect = (
 		status: string,
 		pokemonName: string,
@@ -128,7 +129,6 @@ const Battle = ({ battle }: BattleProps) => {
 
 		setPokemonStatuses({ ...pokemonStatuses, [pokemonName]: status });
 	};
-
 	useEffect(() => {
 		if (!notifications.length || currentNotification) return;
 
@@ -147,13 +147,13 @@ const Battle = ({ battle }: BattleProps) => {
 			showNotification().then();
 		}
 	}, [currentNotification, notifications, battleTurnEnd]);
-
 	useEffect(() => {
 		if (!notifications.length && !currentNotification) {
 			setIsNotificationActive(false);
 			handleBattleEnd();
 		}
 	}, [notifications, currentNotification]);
+	//---------------------------------------------------------
 
 	const recreatePokemonFromParsed = (parsedPokemon: Pokemon): Pokemon => {
 		const status = parsedPokemon.status
@@ -188,6 +188,9 @@ const Battle = ({ battle }: BattleProps) => {
 				parsedMove.effects
 			);
 		});
+		const activeMove = moves.find(
+			move => move.name === parsedPokemon.activeMove.name
+		);
 		return new Pokemon(
 			parsedPokemon.pokedexId,
 			parsedPokemon.name,
@@ -201,11 +204,25 @@ const Battle = ({ battle }: BattleProps) => {
 			parsedPokemon.item,
 			parsedPokemon.stats,
 			parsedPokemon.weight,
-			parsedPokemon.activeMove,
+			activeMove,
 			status,
 			volatileStatus,
 			parsedPokemon.index
 		);
+	};
+
+	const getActivePokemonsFromLocalStorage = () => {
+		const localStorageBattle = JSON.parse(localStorage.getItem('battle'));
+		const parsedPlayerPokemon = localStorageBattle.activePlayerPokemon;
+
+		const parsedOpponentPokemon = localStorageBattle.activeOpponentPokemon;
+
+		const activePlayerPokemon =
+			recreatePokemonFromParsed(parsedPlayerPokemon);
+		const activeOpponentPokemon = recreatePokemonFromParsed(
+			parsedOpponentPokemon
+		);
+		return { activePlayerPokemon, activeOpponentPokemon };
 	};
 
 	const handleMoveSelection = (move: Move) => {
@@ -238,6 +255,28 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handlePlayerAttack = () => {
+		const activePlayerPokemon =
+			getActivePokemonsFromLocalStorage().activePlayerPokemon;
+		const activeOpponentPokemon =
+			getActivePokemonsFromLocalStorage().activeOpponentPokemon;
+
+		console.log(activePlayerPokemon);
+
+		if (activePlayerPokemon.activeMove.pp === 0) return;
+		const updatedPlayerActiveMove =
+			activePlayerPokemon.activeMove.decreasePP();
+		console.log('decrease ' + JSON.stringify(updatedPlayerActiveMove.pp));
+		let updatedPlayerPokemon = activePlayerPokemon.changeActiveMove(
+			updatedPlayerActiveMove
+		);
+		console.log(
+			'change ' + JSON.stringify(updatedPlayerPokemon.activeMove.pp)
+		);
+		updatedPlayerPokemon = updatedPlayerPokemon.updateMoves();
+		console.log('update ' + JSON.stringify(updatedPlayerPokemon.moves));
+		setActivePlayerPokemon(updatedPlayerPokemon);
+		updatePlayerTeam(updatedPlayerPokemon);
+
 		let notificationPlayerAttack = 0;
 		addNotification({
 			pokemonName: activePlayerPokemon.name,
@@ -298,6 +337,11 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handleOpponentAttack = () => {
+		const activePlayerPokemon =
+			getActivePokemonsFromLocalStorage().activePlayerPokemon;
+		const activeOpponentPokemon =
+			getActivePokemonsFromLocalStorage().activeOpponentPokemon;
+
 		let notificationOpponentAttack = 0;
 		addNotification({
 			pokemonName: activeOpponentPokemon.name,
@@ -473,9 +517,6 @@ const Battle = ({ battle }: BattleProps) => {
 				},
 				animationType: 'status-suffer'
 			});
-			if (updatedPokemon.stats[0].value === 0) {
-				handlePlayerKo();
-			}
 			nbNotificationsPoison++;
 		}
 
@@ -494,9 +535,6 @@ const Battle = ({ battle }: BattleProps) => {
 				},
 				animationType: 'status-suffer'
 			});
-			if (updatedPokemon.stats[0].value === 0) {
-				handleOpponentKo();
-			}
 			nbNotificationsPoison++;
 		}
 		return nbNotificationsPoison;
@@ -819,7 +857,7 @@ const Battle = ({ battle }: BattleProps) => {
 
 	useEffect(() => {
 		if (!isInitialized) return;
-
+		console.log('sync');
 		syncBattleToLocalStorage(
 			playerTeam,
 			opponentTeam,

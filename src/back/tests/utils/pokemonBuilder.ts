@@ -8,19 +8,49 @@ import Stat from '../../classes/stat';
 import Move from '../../classes/move';
 
 class PokemonBuilder {
+	pokedexId: number = 6;
 	name: string = 'Charizard';
+	types: Type[] = [new TypeBuilder().default()];
+	level: number = 100;
+	ability: string = 'blaze';
+	nature: string;
+	gender: string;
+	isShiny: boolean = false;
+	moves: Move[] = [new MoveBuilder().default()];
+	item: string;
 	stats: Stat[] = [
 		new StatBuilder().default(),
 		new StatBuilder().withName('attack').withValue(25).build()
 	];
-	moves: Move[] = [new MoveBuilder().default()];
+	weight: number = 90.5;
+	activeMove: Move;
+	status: string;
+	volatileStatus: string;
+	index: number;
 
 	default(): Pokemon {
 		return new PokemonBuilder().build();
 	}
 
 	build(): Pokemon {
-		return new Pokemon(this.name, this.stats, this.moves);
+		return new Pokemon(
+			this.pokedexId,
+			this.name,
+			this.types,
+			this.level,
+			this.ability,
+			this.nature,
+			this.gender,
+			this.isShiny,
+			this.moves,
+			this.item,
+			this.stats,
+			this.weight,
+			this.activeMove,
+			this.status,
+			this.volatileStatus,
+			this.index
+		);
 	}
 
 	withName(name: string): PokemonBuilder {
