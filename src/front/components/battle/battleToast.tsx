@@ -47,7 +47,7 @@ const BattleToast = ({
 						)}
 						{currentNotification.move && (
 							<>
-								{'used '}
+								{'use'}
 								<div
 									className={`battle-toast__move ${currentNotification.move.type}`}
 								>
@@ -70,6 +70,9 @@ const BattleToast = ({
 									</strong>
 								</div>
 							</>
+						)}
+						{currentNotification.animationType === 'miss' && (
+							<>{'miss !'}</>
 						)}
 					</div>
 				</div>

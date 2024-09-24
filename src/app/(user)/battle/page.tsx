@@ -297,24 +297,41 @@ const Battle = ({ battle }: BattleProps) => {
 			updatePlayerTeam(updatedPokemon);
 		} else {
 			setPreviousOpponentPokemonHp(activeOpponentPokemon.stats[0].value);
-			const updatedOpponentPokemon = activePlayerPokemon.attack(
-				activeOpponentPokemon
-			);
-
-			if (
-				updatedOpponentPokemon.status.name !== '' &&
-				updatedOpponentPokemon.status.name != 'KO'
-			) {
-				handleNotificationStatusEffect(
-					updatedOpponentPokemon.status.name,
-					updatedOpponentPokemon.name,
-					opponentTeam.avatar
+			const missChance = Math.random();
+			if (missChance < activePlayerPokemon.activeMove.accuracy / 100) {
+				const updatedOpponentPokemon = activePlayerPokemon.attack(
+					activeOpponentPokemon
 				);
+				if (
+					updatedOpponentPokemon.status.name !== '' &&
+					updatedOpponentPokemon.status.name != 'KO'
+				) {
+					handleNotificationStatusEffect(
+						updatedOpponentPokemon.status.name,
+						updatedOpponentPokemon.name,
+						opponentTeam.avatar
+					);
+					notificationPlayerAttack++;
+				}
+
+				setActiveOpponentPokemon(updatedOpponentPokemon);
+				updateOpponentTeam(updatedOpponentPokemon);
+				return { notificationPlayerAttack, updatedOpponentPokemon };
+			} else {
+				addNotification({
+					pokemonName: activePlayerPokemon.name,
+					userAvatar: {
+						name: playerTeam.avatar.name,
+						sprite: playerTeam.avatar.sprite
+					},
+					animationType: 'miss'
+				});
 				notificationPlayerAttack++;
+				return {
+					notificationPlayerAttack,
+					updatedOpponentPokemon: activeOpponentPokemon
+				};
 			}
-			setActiveOpponentPokemon(updatedOpponentPokemon);
-			updateOpponentTeam(updatedOpponentPokemon);
-			return { notificationPlayerAttack, updatedOpponentPokemon };
 		}
 	};
 
@@ -347,23 +364,40 @@ const Battle = ({ battle }: BattleProps) => {
 			updateOpponentTeam(updatedPokemon);
 		} else {
 			setPreviousPlayerPokemonHp(activePlayerPokemon.stats[0].value);
-			const updatedPlayerPokemon =
-				activeOpponentPokemon.attack(activePlayerPokemon);
-			if (
-				updatedPlayerPokemon.status.name !== '' &&
-				updatedPlayerPokemon.status.name != 'KO'
-			) {
-				handleNotificationStatusEffect(
-					updatedPlayerPokemon.status.name,
-					updatedPlayerPokemon.name,
-					playerTeam.avatar
-				);
-				notificationOpponentAttack++;
-			}
+			const missChance = Math.random();
+			if (missChance < activeOpponentPokemon.activeMove.accuracy / 100) {
+				const updatedPlayerPokemon =
+					activeOpponentPokemon.attack(activePlayerPokemon);
+				if (
+					updatedPlayerPokemon.status.name !== '' &&
+					updatedPlayerPokemon.status.name != 'KO'
+				) {
+					handleNotificationStatusEffect(
+						updatedPlayerPokemon.status.name,
+						updatedPlayerPokemon.name,
+						playerTeam.avatar
+					);
+					notificationOpponentAttack++;
+				}
 
-			setActivePlayerPokemon(updatedPlayerPokemon);
-			updatePlayerTeam(updatedPlayerPokemon);
-			return { notificationOpponentAttack, updatedPlayerPokemon };
+				setActivePlayerPokemon(updatedPlayerPokemon);
+				updatePlayerTeam(updatedPlayerPokemon);
+				return { notificationOpponentAttack, updatedPlayerPokemon };
+			} else {
+				addNotification({
+					pokemonName: activeOpponentPokemon.name,
+					userAvatar: {
+						name: opponentTeam.avatar.name,
+						sprite: opponentTeam.avatar.sprite
+					},
+					animationType: 'miss'
+				});
+				notificationOpponentAttack++;
+				return {
+					notificationOpponentAttack,
+					updatedPlayerPokemon: activePlayerPokemon
+				};
+			}
 		}
 	};
 
@@ -929,6 +963,7 @@ const Battle = ({ battle }: BattleProps) => {
 							currentView={currentView}
 							setJustSwitched={setJustSwitchedPlayer}
 							setPreviousHp={setPreviousPlayerPokemonHp}
+							disabled={isNotificationActive}
 						/>
 					</div>
 
@@ -944,6 +979,7 @@ const Battle = ({ battle }: BattleProps) => {
 							currentView={currentView}
 							setJustSwitched={setJustSwitchedOpponent}
 							setPreviousHp={setPreviousOpponentPokemonHp}
+							disabled={isNotificationActive}
 						/>
 					</div>
 
@@ -1005,6 +1041,7 @@ const Battle = ({ battle }: BattleProps) => {
 							currentView={currentView}
 							setJustSwitched={setJustSwitchedOpponent}
 							setPreviousHp={setPreviousOpponentPokemonHp}
+							disabled={isNotificationActive}
 						/>
 					</div>
 
@@ -1020,6 +1057,7 @@ const Battle = ({ battle }: BattleProps) => {
 							currentView={currentView}
 							setJustSwitched={setJustSwitchedPlayer}
 							setPreviousHp={setPreviousPlayerPokemonHp}
+							disabled={isNotificationActive}
 						/>
 					</div>
 

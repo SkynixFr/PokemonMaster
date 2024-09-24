@@ -63,9 +63,8 @@ const BattleActions = ({
 					/>
 				</button>
 				<button
-					className={`btn-action ${disabled ? 'disabled' : ''}`}
+					className={`btn-action`}
 					onClick={() => setOpenModalRunning(!openModalRunning)}
-					disabled={disabled}
 				>
 					Run
 					<CustomImage
