@@ -83,13 +83,13 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 				<CustomImage
 					src="/images/other/bg-form-team.png"
 					alt="Background form team"
-					fill={true}
-					sizes="(max-width: 640px) 150px, 344px"
+					width={344}
+					height={250}
 				/>
 			</div>
 			<div className="profil-infos">
 				<div className="user-infos-container">
-					<h1>Your Profile : </h1>
+					<h1>Your Profile </h1>
 					<div className="user-infos">
 						<div className="user-avatar">
 							<div className="btn-edit-avatar-container">
@@ -115,15 +115,14 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 							</div>
 						</div>
 						<div className="user-details">
-							<div className="user-account">
-								<FormEditUsername
-									userDetails={userDetails}
-									initialUsername={username}
-									onUsernameUpdate={handleUsernameUpdate}
-									setOpenForm={setOpenForm}
-									openForm={openForm}
-								/>
-							</div>
+							<FormEditUsername
+								userDetails={userDetails}
+								initialUsername={username}
+								onUsernameUpdate={handleUsernameUpdate}
+								setOpenForm={setOpenForm}
+								openForm={openForm}
+							/>
+
 							<FormEditEmail
 								userDetails={userDetails}
 								initialEmail={email}
@@ -174,6 +173,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 					/>
 				</div>
 			)}
+
 			{isPasswordModalOpen && (
 				<div className="password-modal">
 					<FormEditPassword

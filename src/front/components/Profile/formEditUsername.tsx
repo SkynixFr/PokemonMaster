@@ -147,7 +147,7 @@ const FormEditUsername = ({
 	return (
 		<div className="username-container">
 			<div className="form-edit-username">
-				<h2>Username: </h2>
+				<h2>Username </h2>
 				{errors.username && (
 					<div className={'error'}>{errors.username}</div>
 				)}
@@ -178,14 +178,16 @@ const FormEditUsername = ({
 				) : (
 					// Show username and edit button when not editing
 					<div className="username-show">
-						<h1>{initialUsername}</h1>
-						<div className="btn-edit-container">
+						<span className={'username-show-text'}>
+							{initialUsername}
+						</span>
+						<div className="username-edit-container">
 							<button
 								onClick={handleEdit}
 								className="user-update"
 								disabled={openForm !== null}
 							>
-								<PencilLine />
+								<PencilLine width={20} height={20} />
 							</button>
 						</div>
 					</div>

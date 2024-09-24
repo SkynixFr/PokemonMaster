@@ -173,11 +173,11 @@ const FormEditEmail = ({
 					</div>
 				) : (
 					<div className="email-show">
-						<div className="email-image">
-							<Mail size={50} />
-						</div>
-						<h1>{forEditEmail(initialEmail)}</h1>
-						<div className="btn-edit-container">
+						<span className={'email-show-text'}>
+							<Mail width={25} height={25} />
+							{forEditEmail(initialEmail)}
+						</span>
+						<div className="email-edit-container">
 							<button
 								onClick={handleEdit}
 								className="user-update"

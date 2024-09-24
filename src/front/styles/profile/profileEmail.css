@@ -4,9 +4,17 @@
 	gap: 10px;
 }
 
+.form-edit-email {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
 .email-show {
 	display: flex;
 	align-items: center;
+	position: relative;
 }
 
 .email-show input {
@@ -26,6 +34,36 @@
 }
 
 .form-edit-email h2 {
-	margin-bottom: 20px;
 	text-decoration: underline;
+}
+
+.email-show-text {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: var(--fs-xl);
+}
+
+.email-edit-container {
+	position: absolute;
+	top: -20px;
+	right: -35px;
+}
+
+.email-edit-container button {
+	margin-left: 10px;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background-color: var(--red);
+	color: var(--white);
+	cursor: pointer;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	transition: transform 0.2s;
+	margin-top: -30px;
+	border: none;
+}
+
+.email-edit-container > button:hover {
+	transform: scale(1.1);
 }
