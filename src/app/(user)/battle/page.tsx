@@ -181,6 +181,7 @@ const Battle = ({ battle }: BattleProps) => {
 				parsedMove.power,
 				parsedMove.accuracy,
 				parsedMove.pp,
+				parsedMove.maxPp,
 				parsedMove.meta,
 				parsedMove.type,
 				parsedMove.category,

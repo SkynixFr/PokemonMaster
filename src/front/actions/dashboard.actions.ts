@@ -23,6 +23,7 @@ export const updatePokemons = async () => {
 
 export const updateMoves = async () => {
 	const moves = await getMoves();
+
 	const response = await fetch('http://localhost:8080/api/v1/moves', {
 		method: 'POST',
 		headers: {

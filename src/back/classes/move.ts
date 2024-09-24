@@ -7,6 +7,7 @@ class Move {
 	readonly power: number;
 	readonly accuracy: number;
 	readonly pp: number;
+	readonly maxPp: number;
 	readonly meta: Meta;
 	readonly type: string;
 	readonly category: string;
@@ -21,6 +22,7 @@ class Move {
 		power: number,
 		accuracy: number,
 		pp: number,
+		maxPp: number,
 		meta: Meta,
 		type: string,
 		category: string,
@@ -34,6 +36,7 @@ class Move {
 		this.power = power;
 		this.accuracy = accuracy;
 		this.pp = pp;
+		this.maxPp = maxPp;
 		this.meta = meta;
 		this.type = type;
 		this.category = category;
@@ -51,6 +54,7 @@ class Move {
 			this.power,
 			this.accuracy,
 			updatedPP,
+			this.maxPp,
 			this.meta,
 			this.type,
 			this.category,

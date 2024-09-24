@@ -191,6 +191,7 @@ const fetchMoves = async (offset: number, limit: number) => {
 				power: moveData.power,
 				accuracy: moveData.accuracy,
 				pp: moveData.pp,
+				maxPp: moveData.pp,
 				meta: meta,
 				type: moveData.type.name,
 				category: moveData.damage_class.name,

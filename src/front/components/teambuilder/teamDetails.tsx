@@ -128,7 +128,9 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 									<div className={'pokemon-moves-container'}>
 										{pokemon.moves.map((move, index) => (
 											<div
-												className={'pokemon-move-fullfilled'}
+												className={
+													'pokemon-move-fullfilled default'
+												}
 												key={index}
 											>
 												<CustomImage
