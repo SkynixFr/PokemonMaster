@@ -106,7 +106,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 									<CustomImage
 										src={currentAvatar.sprite}
 										alt={currentAvatar.name}
-										width={150}
+										width={250}
 										height={250}
 										className="profile-image"
 										sizes="(max-width: 600px) 150px, (max-width: 1200px) 150px, 150px"

@@ -57,8 +57,7 @@ const FormLogin = () => {
 					localStorage.setItem('refreshToken', response.refreshToken);
 					form.reset();
 					form.email.focus();
-					router.refresh();
-					router.push('/');
+					router.push('/profile');
 					return 'User logged in successfully!';
 				},
 				error: error => {
