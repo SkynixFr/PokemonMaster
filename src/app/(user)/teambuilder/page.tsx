@@ -40,7 +40,7 @@ const TeamBuilder = () => {
 		};
 
 		fetchData();
-	});
+	}, []);
 
 	return loading ? (
 		<div>Loading...</div>
