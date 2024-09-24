@@ -79,6 +79,9 @@ const Battle = ({ battle }: BattleProps) => {
 	const [previousOpponentPokemonHp, setPreviousOpponentPokemonHp] =
 		useState<number>(0);
 
+	const [playerRunning, setPlayerRunning] = useState<boolean>(false);
+	const [opponentRunning, setOpponentRunning] = useState<boolean>(false);
+
 	// Notifications
 	//---------------------------------------------------------
 	const handleNotificationStatusEffect = (
@@ -153,7 +156,6 @@ const Battle = ({ battle }: BattleProps) => {
 			handleBattleEnd();
 		}
 	}, [notifications, currentNotification]);
-	//---------------------------------------------------------
 
 	const recreatePokemonFromParsed = (parsedPokemon: Pokemon): Pokemon => {
 		const status = parsedPokemon.status
@@ -443,8 +445,6 @@ const Battle = ({ battle }: BattleProps) => {
 					updatedOpponentPokemon
 				} = handlePlayerAttack(activePlayerPokemon, activeOpponentPokemon);
 				nbNotificationsAttack += notificationPlayerAttack;
-
-				console.log(updatedOpponentPokemon.status.ableToMove);
 
 				if (updatedOpponentPokemon.status.ableToMove) {
 					const {
@@ -1044,7 +1044,12 @@ const Battle = ({ battle }: BattleProps) => {
 			</div>
 
 			{battleEnd && (
-				<BattleEnd playerTeam={playerTeam} opponentTeam={opponentTeam} />
+				<BattleEnd
+					playerTeam={playerTeam}
+					opponentTeam={opponentTeam}
+					playerRunning={playerRunning}
+					opponentRunning={opponentRunning}
+				/>
 			)}
 
 			<div className={'battle-theme'}>
@@ -1131,6 +1136,10 @@ const Battle = ({ battle }: BattleProps) => {
 						playerPokemon={activePlayerPokemon}
 						handleMoveSelection={handleMoveSelection}
 						disabled={isNotificationActive}
+						setBattleEnd={setBattleEnd}
+						currentView={currentView}
+						setPlayerRunning={setPlayerRunning}
+						setOpponentRunning={setOpponentRunning}
 					/>
 
 					{!battleEnd && (
@@ -1209,6 +1218,10 @@ const Battle = ({ battle }: BattleProps) => {
 						playerPokemon={activeOpponentPokemon}
 						handleMoveSelection={handleMoveSelection}
 						disabled={isNotificationActive}
+						setBattleEnd={setBattleEnd}
+						currentView={currentView}
+						setPlayerRunning={setPlayerRunning}
+						setOpponentRunning={setOpponentRunning}
 					/>
 
 					{!battleEnd && (
