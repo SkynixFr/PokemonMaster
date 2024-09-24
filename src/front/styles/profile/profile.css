@@ -1,0 +1,120 @@
+@import url('profileModal.css');
+@import url('profileAvatar.css');
+@import url('profileUsername.css');
+@import url('profileEmail.css');
+@import url('profilePassword.css');
+@import url('profileTeam.css');
+.profile-container {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	height: 100vh;
+	position: relative;
+}
+
+.form-background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: -1;
+}
+
+.profil-infos {
+	background-color: #ffffff;
+	border-radius: 8px;
+	padding: 50px;
+	width: 120%;
+	max-width: 1500px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	text-align: left;
+	animation: bounceIn 0.75s ease-in-out;
+	margin-top: 150px;
+}
+.bg-form-profile {
+	position: absolute;
+	top: 20px;
+	right: 50px;
+	width: 344px;
+	height: 250px;
+	z-index: 1;
+	animation: bounceIn 0.75s ease-in-out;
+}
+
+.user-infos {
+	display: flex;
+	align-items: center;
+	gap: 150px;
+	position: relative;
+	padding: 20px;
+}
+
+.user-details {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.password-and-delete {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 20px;
+	margin-top: 20px;
+}
+
+.password-and-delete button {
+	width: 200px;
+	height: 40px;
+	cursor: pointer;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	transition: transform 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.password-and-delete button:hover {
+	transform: scale(1.1);
+}
+
+.user-password button {
+	width: 200px;
+	height: 40px;
+
+	font-weight: bold;
+	cursor: pointer;
+	background-color: var(--white);
+	color: var(--red);
+	border: 1px solid var(--red);
+}
+
+.password-and-delete button:disabled,
+.user-password button:disabled,
+.btn-edit-avatar-container > button:disabled,
+.btn-edit-container > button:disabled {
+	background-color: #cccccc;
+	color: #666666;
+	cursor: not-allowed;
+	opacity: 0.6;
+	box-shadow: none;
+	transform: none;
+}
+
+.user-delete span {
+	margin-right: 8px;
+}
+
+.user-password span {
+	margin-right: 8px;
+}
+
+.separator-line {
+	width: 50%;
+	height: 2px;
+	background-color: var(--red);
+	margin: 20px auto;
+	margin-bottom: 5%;
+	margin-top: 5%;
+}

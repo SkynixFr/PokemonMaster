@@ -1,0 +1,25 @@
+.username-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 60px;
+}
+
+.username-show {
+	display: flex;
+	align-items: center;
+}
+
+.username-show input {
+	width: 100%;
+	height: 50px;
+	padding: 5px 12.5px;
+	border: 1px solid black;
+	border-radius: 5px;
+	font-family: sans-serif;
+	box-sizing: border-box;
+}
+.form-edit-username h2 {
+	margin-bottom: 20px;
+	text-decoration: underline;
+}
