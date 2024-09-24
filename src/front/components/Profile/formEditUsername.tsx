@@ -90,11 +90,14 @@ const FormEditUsername = ({
 			setIsSaving(true); // Start saving process
 			toast.promise(updateUserAction(userToUpdate, accessToken), {
 				loading: 'Updating username...',
-				success: () => {
+				success: response => {
+					if (response.status) {
+						throw new Error(response.message);
+					}
 					onUsernameUpdate(newUsername);
-					setIsSaving(false); // End saving process
-					setIsEditing(false); // Close the edit mode only after success
+					setIsEditing(false);
 					setOpenForm(null);
+					setIsSaving(false);
 					return 'Username updated successfully';
 				},
 				error: error => {
@@ -103,7 +106,6 @@ const FormEditUsername = ({
 				}
 			});
 		} catch (error) {
-			setIsSaving(false); // End saving process on validation error
 			if (error instanceof z.ZodError) {
 				setErrors({
 					username:
@@ -128,13 +130,10 @@ const FormEditUsername = ({
 		setOpenForm(null);
 	};
 
-	// Handle onBlur to confirm changes when the input loses focus
-	const handleBlur = () => {
-		if (!isSaving && newUsername !== initialUsername) {
-			handleConfirm();
-		} else if (!isSaving) {
-			setIsEditing(false);
-			setOpenForm(null);
+	// Handle onBlur mais ne pas annuler si le bouton Save est cliqué
+	const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+		if (!isSaving) {
+			handleCancel();
 		}
 	};
 
@@ -162,14 +161,14 @@ const FormEditUsername = ({
 								onChange={handleChange}
 								onBlur={handleBlur}
 								onKeyDown={handleKeyDown}
+								autoFocus
 							/>
 						</div>
 						<div className="btn-confirm-container">
 							<button
-								onClick={() => {
-									setIsSaving(true); // Set saving state when clicking Save
-									handleConfirm();
-								}}
+								onClick={handleConfirm}
+								onMouseDown={() => setIsSaving(true)} // Pour capturer le clic de sauvegarde
+								onMouseUp={() => setIsSaving(false)} // Réinitialiser après le clic
 								className="btn-confirm"
 							>
 								<SaveAll width={20} height={20} />
