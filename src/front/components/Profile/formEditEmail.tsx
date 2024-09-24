@@ -121,6 +121,25 @@ const FormEditEmail = ({
 		}
 	};
 
+	// Handle Escape key press to cancel
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape' && isEditing) {
+				setIsEditing(false);
+				setOpenForm(null);
+				handleCancel();
+			}
+		};
+
+		if (isEditing) {
+			document.addEventListener('keydown', handleKeyDown);
+		}
+
+		return () => {
+			document.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [isEditing]);
+
 	return (
 		<div className="email-container">
 			<div className="form-edit-email">
