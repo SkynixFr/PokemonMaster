@@ -254,25 +254,13 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handlePlayerAttack = () => {
-		const activePlayerPokemon =
-			getActivePokemonsFromLocalStorage().activePlayerPokemon;
-		const activeOpponentPokemon =
-			getActivePokemonsFromLocalStorage().activeOpponentPokemon;
-
-		console.log(activePlayerPokemon);
-
 		if (activePlayerPokemon.activeMove.pp === 0) return;
 		const updatedPlayerActiveMove =
 			activePlayerPokemon.activeMove.decreasePP();
-		console.log('decrease ' + JSON.stringify(updatedPlayerActiveMove.pp));
 		let updatedPlayerPokemon = activePlayerPokemon.changeActiveMove(
 			updatedPlayerActiveMove
 		);
-		console.log(
-			'change ' + JSON.stringify(updatedPlayerPokemon.activeMove.pp)
-		);
 		updatedPlayerPokemon = updatedPlayerPokemon.updateMoves();
-		console.log('update ' + JSON.stringify(updatedPlayerPokemon.moves));
 		setActivePlayerPokemon(updatedPlayerPokemon);
 		updatePlayerTeam(updatedPlayerPokemon);
 
@@ -336,11 +324,6 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handleOpponentAttack = () => {
-		const activePlayerPokemon =
-			getActivePokemonsFromLocalStorage().activePlayerPokemon;
-		const activeOpponentPokemon =
-			getActivePokemonsFromLocalStorage().activeOpponentPokemon;
-
 		let notificationOpponentAttack = 0;
 		addNotification({
 			pokemonName: activeOpponentPokemon.name,
@@ -790,6 +773,7 @@ const Battle = ({ battle }: BattleProps) => {
 		localStorage.setItem('battle', JSON.stringify(localStorageBattle));
 	};
 
+	//Battle initialization
 	useEffect(() => {
 		if (!battle) return;
 		const localStorageBattle = JSON.parse(localStorage.getItem('battle'));
@@ -850,6 +834,7 @@ const Battle = ({ battle }: BattleProps) => {
 		setIsInitialized(true);
 	}, [battle]);
 
+	//Sync battle to local storage
 	useEffect(() => {
 		if (!isInitialized) return;
 		console.log('sync');
@@ -869,6 +854,7 @@ const Battle = ({ battle }: BattleProps) => {
 		activeTurn
 	]);
 
+	//Turn sequence
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
 
