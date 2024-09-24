@@ -90,6 +90,18 @@
 	border: 1px solid var(--red);
 }
 
+.password-and-delete button:disabled,
+.user-password button:disabled,
+.btn-edit-avatar-container > button:disabled,
+.btn-edit-container > button:disabled {
+	background-color: #cccccc;
+	color: #666666;
+	cursor: not-allowed;
+	opacity: 0.6;
+	box-shadow: none;
+	transform: none;
+}
+
 .user-delete span {
 	margin-right: 8px;
 }

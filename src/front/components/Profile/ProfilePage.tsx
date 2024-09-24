@@ -147,6 +147,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 								<button
 									onClick={() => OpenDeleteModal()}
 									className="user-delete btn-primary"
+									disabled={openForm !== null}
 								>
 									<span>Delete Account</span>
 									<Trash2 />

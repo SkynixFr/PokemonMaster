@@ -1,19 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { PencilLine, Check, X, SaveAll } from 'lucide-react';
-
-// Import needed libs
+import { PencilLine, SaveAll } from 'lucide-react';
 import { toast } from 'sonner';
-import { set, z } from 'zod';
-
-// Actions
+import { z } from 'zod';
 import { updateUserAction } from '../../actions/user.actions';
-
-// Interfaces
 import { UserUpdate } from '../../../interfaces/user/userUpdate';
 import { UserEntity } from '../../../interfaces/user/userEntity';
 
-// Interface
 interface FormEditUsernameProps {
 	userDetails: UserEntity;
 	initialUsername: string;
@@ -43,43 +36,40 @@ const FormEditUsername = ({
 }: FormEditUsernameProps) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [newUsername, setNewUsername] = useState(initialUsername);
-	const [errors, setErrors] = useState<{ username: string }>({
-		username: ''
-	});
+	const [errors, setErrors] = useState<{ username: string }>({ username: '' });
+	const [isSaving, setIsSaving] = useState(false);
 
 	const accessToken =
 		typeof window !== 'undefined'
 			? localStorage.getItem('accessToken')
 			: null;
 
-	// Handler to enable editing
+	// Enable editing
 	const handleEdit = () => {
 		setIsEditing(true);
 		setOpenForm('username');
 	};
 
-	// Handle Escape key press
+	// Handle Escape key press to cancel
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === 'Escape' && isEditing) {
-				setIsEditing(false); // Close only if editing
+				setIsEditing(false);
 				setOpenForm(null);
 				handleCancel();
 			}
 		};
 
-		// Add event listener only when in edit mode
 		if (isEditing) {
 			document.addEventListener('keydown', handleKeyDown);
 		}
 
 		return () => {
-			// Clean up the event listener when not editing
 			document.removeEventListener('keydown', handleKeyDown);
 		};
 	}, [isEditing]);
 
-	// Confirm the username change
+	// Confirm username change
 	const handleConfirm = () => {
 		if (!accessToken) {
 			toast.error('No access token found');
@@ -89,42 +79,48 @@ const FormEditUsername = ({
 			toast.error('No changes made to the username');
 			return;
 		}
+
 		const userToUpdate: UserUpdate = {
 			id: userDetails.id,
 			username: newUsername
 		};
+
 		try {
 			userSchema.parse({ username: newUsername });
+			setIsSaving(true); // Start saving process
 			toast.promise(updateUserAction(userToUpdate, accessToken), {
 				loading: 'Updating username...',
 				success: () => {
 					onUsernameUpdate(newUsername);
-					setIsEditing(false);
+					setIsSaving(false); // End saving process
+					setIsEditing(false); // Close the edit mode only after success
 					setOpenForm(null);
-					return 'Username updated';
+					return 'Username updated successfully';
 				},
 				error: error => {
+					setIsSaving(false); // End saving process on error
 					return error.message;
 				}
 			});
 		} catch (error) {
+			setIsSaving(false); // End saving process on validation error
 			if (error instanceof z.ZodError) {
 				setErrors({
 					username:
-						error.errors.find(e => e.path[0] === 'username')?.message ??
+						error.errors.find(e => e.path[0] === 'username')?.message ||
 						''
 				});
 			}
 		}
 	};
 
-	// Handle change of username input
+	// Handle change of input and clear errors
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setNewUsername(e.target.value);
 		setErrors({ username: '' });
 	};
 
-	// Cancel and revert changes
+	// Cancel editing and revert changes
 	const handleCancel = () => {
 		setNewUsername(initialUsername);
 		setErrors({ username: '' });
@@ -132,7 +128,17 @@ const FormEditUsername = ({
 		setOpenForm(null);
 	};
 
-	// Handle Enter key press to confirm changes
+	// Handle onBlur to confirm changes when the input loses focus
+	const handleBlur = () => {
+		if (!isSaving && newUsername !== initialUsername) {
+			handleConfirm();
+		} else if (!isSaving) {
+			setIsEditing(false);
+			setOpenForm(null);
+		}
+	};
+
+	// Surveiller les touches Enter et Escape
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter') {
 			handleConfirm();
@@ -142,7 +148,7 @@ const FormEditUsername = ({
 	return (
 		<div className="username-container">
 			<div className="form-edit-username">
-				<h2>Username : </h2>
+				<h2>Username: </h2>
 				{errors.username && (
 					<div className={'error'}>{errors.username}</div>
 				)}
@@ -154,11 +160,18 @@ const FormEditUsername = ({
 								type="text"
 								value={newUsername}
 								onChange={handleChange}
+								onBlur={handleBlur}
 								onKeyDown={handleKeyDown}
 							/>
 						</div>
 						<div className="btn-confirm-container">
-							<button onClick={handleConfirm} className="btn-confirm">
+							<button
+								onClick={() => {
+									setIsSaving(true); // Set saving state when clicking Save
+									handleConfirm();
+								}}
+								className="btn-confirm"
+							>
 								<SaveAll width={20} height={20} />
 							</button>
 						</div>

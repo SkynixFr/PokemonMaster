@@ -1,17 +1,11 @@
-'use client';
 import React, { useEffect, useState } from 'react';
-import { PencilLine, Check, X, Mail, SaveAll } from 'lucide-react';
-
-// Import needed libs
+import { PencilLine, Mail, SaveAll } from 'lucide-react';
 import { toast } from 'sonner';
-import { set, z } from 'zod';
-
-// Actions
+import { z } from 'zod';
 import { updateUserAction } from '../../actions/user.actions';
-
-// Interfaces
 import { UserUpdate } from '../../../interfaces/user/userUpdate';
 import { UserEntity } from '../../../interfaces/user/userEntity';
+
 interface FormEditEmailProps {
 	userDetails: UserEntity;
 	initialEmail: string;
@@ -21,6 +15,7 @@ interface FormEditEmailProps {
 	) => void;
 	openForm: 'avatar' | 'username' | 'email' | 'password' | 'delete' | null;
 }
+
 const userSchema = z.object({
 	email: z.string().email({ message: 'Invalid email address' })
 });
@@ -31,7 +26,7 @@ function forEditEmail(email: string): string {
 	return `${maskedEmail}@${domain}`;
 }
 
-const formEditEmail = ({
+const FormEditEmail = ({
 	userDetails,
 	initialEmail,
 	onEmailUpdate,
@@ -40,20 +35,19 @@ const formEditEmail = ({
 }: FormEditEmailProps) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [newEmail, setNewEmail] = useState(initialEmail);
-	const [errors, setErrors] = useState<{ email: string }>({
-		email: ''
-	});
+	const [errors, setErrors] = useState<{ email: string }>({ email: '' });
+	const [isSaving, setIsSaving] = useState(false); // Variable pour détecter si on sauvegarde
+
 	const accessToken =
 		typeof window !== 'undefined'
 			? localStorage.getItem('accessToken')
 			: null;
 
-	// Handler to enable editing
 	const handleEdit = () => {
 		setIsEditing(true);
 		setOpenForm('email');
 	};
-	// Confirm the Email change
+
 	const handleConfirm = () => {
 		if (!accessToken) {
 			toast.error('No access token found');
@@ -69,15 +63,18 @@ const formEditEmail = ({
 		};
 		try {
 			userSchema.parse({ email: newEmail });
+			setIsSaving(true);
 			toast.promise(updateUserAction(userToUpdate, accessToken), {
 				loading: 'Updating Email...',
 				success: () => {
 					onEmailUpdate(newEmail);
 					setIsEditing(false);
 					setOpenForm(null);
+					setIsSaving(false);
 					return 'Email updated';
 				},
 				error: error => {
+					setIsSaving(false);
 					return error.message;
 				}
 			});
@@ -90,13 +87,13 @@ const formEditEmail = ({
 			}
 		}
 	};
-	// Handle change of Email input
+
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setNewEmail(e.target.value);
 		setErrors({ email: '' });
 	};
 
-	// Cancel and revert changes
+	// Annuler les modifications
 	const handleCancel = () => {
 		setNewEmail(initialEmail);
 		setErrors({ email: '' });
@@ -104,37 +101,24 @@ const formEditEmail = ({
 		setOpenForm(null);
 	};
 
-	// Handle Escape key press
-	useEffect(() => {
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === 'Escape' && isEditing) {
-				setIsEditing(false); // Close only if editing
-				setOpenForm(null);
-				handleCancel();
-			}
-		};
-
-		// Add event listener only when in edit mode
-		if (isEditing) {
-			document.addEventListener('keydown', handleKeyDown);
+	// Handle onBlur mais ne pas annuler si le bouton Save est cliqué
+	const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+		if (!isSaving) {
+			handleCancel();
 		}
+	};
 
-		return () => {
-			// Clean up the event listener when not editing
-			document.removeEventListener('keydown', handleKeyDown);
-		};
-	}, [isEditing]);
-
-	// Handle Enter key press to confirm changes
+	// Surveiller les touches Enter et Escape
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter') {
 			handleConfirm();
 		}
 	};
+
 	return (
-		<div className="username-container">
+		<div className="email-container">
 			<div className="form-edit-email">
-				<h2>Email : </h2>
+				<h2>Email :</h2>
 				{errors.email && <div className={'error'}>{errors.email}</div>}
 				{isEditing ? (
 					<div className="email-show">
@@ -147,16 +131,22 @@ const formEditEmail = ({
 								value={newEmail}
 								onChange={handleChange}
 								onKeyDown={handleKeyDown}
+								onBlur={handleBlur}
+								autoFocus
 							/>
 						</div>
 						<div className="btn-confirm-container">
-							<button onClick={handleConfirm} className="btn-confirm">
+							<button
+								onClick={handleConfirm}
+								onMouseDown={() => setIsSaving(true)} // Pour capturer le clic de sauvegarde
+								onMouseUp={() => setIsSaving(false)} // Réinitialiser après le clic
+								className="btn-confirm"
+							>
 								<SaveAll width={20} height={20} />
 							</button>
 						</div>
 					</div>
 				) : (
-					// Show Email and edit button when not editing
 					<div className="email-show">
 						<div className="email-image">
 							<Mail size={50} />
@@ -178,4 +168,4 @@ const formEditEmail = ({
 	);
 };
 
-export default formEditEmail;
+export default FormEditEmail;
