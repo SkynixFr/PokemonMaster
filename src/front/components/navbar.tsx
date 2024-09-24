@@ -42,14 +42,16 @@ const Navbar = () => {
 								Home
 							</Link>
 						</li>
-						<li>
-							<Link
-								href={'/teambuilder'}
-								className={`link ${pathname === '/teambuilder' ? 'active' : ''} `}
-							>
-								Team Builder
-							</Link>
-						</li>
+						{isConnected() && (
+							<li>
+								<Link
+									href={'/teambuilder'}
+									className={`link ${pathname === '/teambuilder' ? 'active' : ''} `}
+								>
+									Team Builder
+								</Link>
+							</li>
+						)}
 					</ul>
 					{isConnected() ? (
 						<div className={'navbar-profil'}>

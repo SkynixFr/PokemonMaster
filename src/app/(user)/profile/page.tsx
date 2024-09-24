@@ -27,7 +27,7 @@ const Profile = () => {
 			try {
 				const accessToken = localStorage.getItem('accessToken');
 				if (!accessToken) {
-					throw new Error('Access token not found');
+					throw new Error('User not connected');
 				}
 				const userData = await me(accessToken);
 				const teamsData = await getTeams();
@@ -38,7 +38,9 @@ const Profile = () => {
 
 				setError(null); // Clear any previous errors
 			} catch (error) {
-				toast.error('Failed to fetch user data');
+				if (error.message != 'User not connected') {
+					toast.error('Error fetching user data');
+				}
 				console.error('Error fetching user data:', error);
 				setError(error.message);
 			} finally {
