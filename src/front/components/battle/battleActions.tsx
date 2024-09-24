@@ -46,6 +46,8 @@ const BattleActions = ({
 		};
 	}, [setOpenModalRunning, setOpenPokemonMoves]);
 
+	useEffect(() => {}, []);
+
 	return (
 		<div className={'battle-actions'}>
 			<div className={'battle-actions-btn fadeInToTop'}>
