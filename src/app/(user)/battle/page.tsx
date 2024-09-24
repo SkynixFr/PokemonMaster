@@ -150,6 +150,7 @@ const Battle = ({ battle }: BattleProps) => {
 	useEffect(() => {
 		if (!notifications.length && !currentNotification) {
 			setIsNotificationActive(false);
+			handleBattleEnd();
 		}
 	}, [notifications, currentNotification]);
 	//---------------------------------------------------------
@@ -718,10 +719,11 @@ const Battle = ({ battle }: BattleProps) => {
 				isKo: true,
 				animationType: 'ko'
 			});
-
-			setCounterPlayerPokemonKo(counterPlayerPokemonKo + 1);
-			setActivePlayerPokemonKo(true);
-			setCurrentView('player');
+			if (playerTeam.pokemons.some(pokemon => pokemon.stats[0].value > 0)) {
+				setCounterPlayerPokemonKo(counterPlayerPokemonKo + 1);
+				setActivePlayerPokemonKo(true);
+				setCurrentView('player');
+			}
 		}
 	};
 
@@ -736,18 +738,21 @@ const Battle = ({ battle }: BattleProps) => {
 				isKo: true,
 				animationType: 'ko'
 			});
-
-			setCounterOpponentPokemonKo(counterOpponentPokemonKo + 1);
-			setActiveOpponentPokemonKo(true);
-			setCurrentView('opponent');
+			if (
+				opponentTeam.pokemons.some(pokemon => pokemon.stats[0].value > 0)
+			) {
+				setCounterOpponentPokemonKo(counterOpponentPokemonKo + 1);
+				setActiveOpponentPokemonKo(true);
+				setCurrentView('opponent');
+			}
 		}
 	};
 
 	const handleBattleEnd = () => {
-		const playerTeamKo = playerTeam.pokemons.every(
+		const playerTeamKo = playerTeam?.pokemons.every(
 			pokemon => pokemon.stats[0].value === 0
 		);
-		const opponentTeamKo = opponentTeam.pokemons.every(
+		const opponentTeamKo = opponentTeam?.pokemons.every(
 			pokemon => pokemon.stats[0].value === 0
 		);
 
@@ -886,8 +891,8 @@ const Battle = ({ battle }: BattleProps) => {
 			setOpponentReady(false);
 			setJustSwitchedPlayer(false);
 			setJustSwitchedOpponent(false);
+
 			setActiveTurn(activeTurn + 1);
-			handleBattleEnd();
 		};
 		handleTurnSequence().then();
 	}, [playerReady, opponentReady]);
@@ -911,7 +916,9 @@ const Battle = ({ battle }: BattleProps) => {
 				/>
 			</div>
 
-			{battleEnd && <BattleEnd playerTeam={playerTeam} />}
+			{battleEnd && (
+				<BattleEnd playerTeam={playerTeam} opponentTeam={opponentTeam} />
+			)}
 
 			<div className={'battle-theme'}>
 				<button

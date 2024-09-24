@@ -67,7 +67,10 @@ const BattlePokemonKo = ({
 	}, []);
 
 	useEffect(() => {
-		if (currentNotification?.animationType === 'ko') {
+		if (
+			currentNotification?.animationType === 'ko' &&
+			team.pokemons.some(pokemon => pokemon.stats[0].value > 0)
+		) {
 			setModalOpen(true);
 		}
 	}, [currentNotification]);
