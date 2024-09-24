@@ -17,7 +17,10 @@ interface FormEditEmailProps {
 }
 
 const userSchema = z.object({
-	email: z.string().email({ message: 'Invalid email address' })
+	email: z
+		.string()
+		.email({ message: 'Invalid email address' })
+		.max(30, { message: 'Email must be 30 characters or less' })
 });
 
 function forEditEmail(email: string): string {
@@ -66,7 +69,10 @@ const FormEditEmail = ({
 			setIsSaving(true);
 			toast.promise(updateUserAction(userToUpdate, accessToken), {
 				loading: 'Updating Email...',
-				success: () => {
+				success: response => {
+					if (response.status) {
+						throw new Error(response.message);
+					}
 					onEmailUpdate(newEmail);
 					setIsEditing(false);
 					setOpenForm(null);

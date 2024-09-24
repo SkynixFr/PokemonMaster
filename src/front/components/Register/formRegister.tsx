@@ -19,7 +19,10 @@ const userSchema = z
 				message:
 					'Username must be between 3 and 16 characters long and contain only letters, numbers, and underscores'
 			}),
-		email: z.string().email({ message: 'Invalid email address' }),
+		email: z
+			.string()
+			.email({ message: 'Invalid email address' })
+			.max(30, { message: 'Email must be 30 characters or less' }),
 		password: z.string().refine(
 			password => {
 				const isValid = password.match(

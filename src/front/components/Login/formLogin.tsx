@@ -11,7 +11,10 @@ import CustomImage from '../customImage';
 import { MoveLeft } from 'lucide-react';
 
 const userSchema = z.object({
-	email: z.string().email({ message: 'Invalid email address' }),
+	email: z
+		.string()
+		.email({ message: 'Invalid email address' })
+		.max(30, { message: 'Email must be 30 characters or less' }),
 	password: z.string().refine(
 		password => {
 			const isValid = password.match(
