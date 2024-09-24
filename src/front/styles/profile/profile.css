@@ -137,3 +137,15 @@
 	display: flex;
 	background-color: red;
 }
+
+.user-teams > .teams-container > .teams-list {
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.user-teams > .teams-container > .teams-list > .team-container {
+	max-width: 30%;
+}
