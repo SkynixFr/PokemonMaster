@@ -19,6 +19,9 @@ import { AvatarEntity } from '../../../interfaces/avatar/avatarEntity';
 import { set } from 'zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import TeamBuilderPage from '../teambuilder/teamBuilderPage';
+import Profile from '../../../app/(user)/profile/page';
+import ProfileUserTeam from './profileUserTeam';
 
 interface UserListProps {
 	userDetails: UserEntity;
@@ -149,6 +152,13 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 									<Trash2 />
 								</button>
 							</div>
+						</div>
+					</div>
+					<div className="separator-line" />
+					<div className="user-teams-container">
+						<h1>Your Teams :</h1>
+						<div className="user-teams-info">
+							<ProfileUserTeam teams={teams} avatars={avatars} />
 						</div>
 					</div>
 				</div>

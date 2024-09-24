@@ -3,13 +3,22 @@
 @import url('profileUsername.css');
 @import url('profileEmail.css');
 @import url('profilePassword.css');
+@import url('profileTeam.css');
 .profile-container {
 	display: flex;
 	justify-content: center;
-	align-items: center;
+	align-items: flex-start;
 	height: 100vh;
 	position: relative;
-	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.form-background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: -1;
 }
 
 .profil-infos {
@@ -21,6 +30,7 @@
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 	text-align: left;
 	animation: bounceIn 0.75s ease-in-out;
+	margin-top: 150px;
 }
 .bg-form-profile {
 	position: absolute;
@@ -86,4 +96,13 @@
 
 .user-password span {
 	margin-right: 8px;
+}
+
+.separator-line {
+	width: 50%;
+	height: 2px;
+	background-color: var(--red);
+	margin: 20px auto;
+	margin-bottom: 5%;
+	margin-top: 5%;
 }
