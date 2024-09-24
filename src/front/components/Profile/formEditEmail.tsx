@@ -144,12 +144,11 @@ const FormEditEmail = ({
 		<div className="email-container">
 			<div className="form-edit-email">
 				<h2>Email :</h2>
+
 				{errors.email && <div className={'error'}>{errors.email}</div>}
 				{isEditing ? (
 					<div className="email-show">
-						<div className="email-image">
-							<Mail size={50} />
-						</div>
+						<Mail width={25} height={25} />
 						<div className="input-container">
 							<input
 								type="text"

@@ -132,7 +132,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 							/>
 						</div>
 						<div className="password-and-delete">
-							<div className="user-password btn-secondary">
+							<div className="user-password ">
 								<button
 									onClick={() => OpenPasswordModal()}
 									disabled={openForm !== null}
@@ -145,7 +145,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 							<div className="user-delete">
 								<button
 									onClick={() => OpenDeleteModal()}
-									className="user-delete btn-primary"
+									className="user-delete "
 									disabled={openForm !== null}
 								>
 									<span>Delete Account</span>
