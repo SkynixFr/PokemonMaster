@@ -13,6 +13,7 @@ import TeamBuilderPage from '../../../front/components/teambuilder/teamBuilderPa
 import { me } from '../../../front/actions/user.actions';
 import { getTeams } from '../../../front/actions/team.actions';
 import { getAvatars } from '../../../front/actions/avatar.actions';
+import Unauthorized from '../unauthorized/page';
 const Profile = () => {
 	const [user, setUser] = useState<UserEntity>(null);
 	const [loading, setLoading] = useState<boolean>(true);
@@ -49,6 +50,8 @@ const Profile = () => {
 	}, [router]);
 	return loading ? (
 		<div>Loading...</div>
+	) : error ? (
+		<Unauthorized />
 	) : (
 		<div>
 			<ProfilePage userDetails={user} teams={teams} avatars={avatars} />
