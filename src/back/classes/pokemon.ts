@@ -95,7 +95,14 @@ class Pokemon {
 		);
 	}
 
-	updateMoves(updatedMoves: Move[]): Pokemon {
+	updateMoves(): Pokemon {
+		const updatedMove = this.activeMove;
+		const updatedMoves = this.moves.map(move => {
+			if (move.name === updatedMove.name) {
+				return updatedMove;
+			}
+			return move;
+		});
 		return new Pokemon(
 			this.pokedexId,
 			this.name,
@@ -120,6 +127,7 @@ class Pokemon {
 		if (!this.status.ableToMove) {
 			return target;
 		}
+		this.activeMove.decreasePP();
 		let updatedStatus: Status = target.status;
 		let updatedVolatileStatus: Status = target.volatileStatus;
 		const statusList = ['PSN', 'SLP', 'FRZ', 'KO', 'BRN', 'PAR'];
