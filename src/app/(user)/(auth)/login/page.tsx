@@ -6,8 +6,6 @@ import FormLogin from '../../../../front/components/Login/formLogin';
 const Login = () => {
 	return (
 		<div>
-			<Link href={'/'}>Go Back</Link>
-			<h1>Page de connexion</h1>
 			<FormLogin></FormLogin>
 		</div>
 	);
