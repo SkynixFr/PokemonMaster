@@ -41,10 +41,10 @@ const TeamsUser = ({
 
 	return (
 		<>
-			<div className={'teams-container'}>
+			<div className={'user-teams-content'}>
 				{currentTeams && currentTeams.length > 0 ? (
 					<>
-						<div className={'teams-list'}>
+						<div className={'user-teams-list'}>
 							{currentTeams.map(team => (
 								<TeamProfile
 									team={team}

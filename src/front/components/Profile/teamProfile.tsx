@@ -132,6 +132,9 @@ const TeamProfile = ({
 					<button onClick={() => handleDelete(team.id)}>
 						<Trash2 />
 					</button>
+					<button onClick={() => handleCopy(team)}>
+						<Copy />
+					</button>
 				</div>
 			) : null}
 		</div>

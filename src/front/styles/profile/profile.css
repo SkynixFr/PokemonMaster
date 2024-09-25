@@ -69,7 +69,7 @@
 	width: 200px;
 	height: 40px;
 	cursor: pointer;
-	background-color: none;
+	background-color: transparent;
 	transition: transform 0.2s;
 	display: flex;
 	align-items: center;
@@ -137,22 +137,34 @@
 	display: flex;
 	background-color: red;
 }
-.user-teams-container .teams-container {
+
+.user-teams-container {
 	display: flex;
-	align-items: center !important;
-	justify-content: center !important;
 	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	width: 100%;
+	gap: 25px;
 }
-.user-teams-container > .teams-container > .teams-list {
+
+.user-teams-list {
 	display: flex;
+	flex-flow: row wrap;
 	align-items: center;
+	justify-content: flex-start;
+	width: 100%;
+	column-gap: 75px;
+	row-gap: 25px;
+	padding: 10px 0;
 
-	flex-direction: row;
-	flex-wrap: wrap;
+
+}
+.user-teams-list  .team-container {
+	height: 100px;
+	width: 450px;
+	overflow: hidden;
 }
 
-.user-teams-container > .teams-container > .teams-list > .team-container {
-	max-width: 30%;
-	height: 150px;
-	margin-top: 50px;
+.user-teams-list .team-container .user-team-options button {
+	height: 50px;
 }
