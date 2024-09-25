@@ -1,11 +1,18 @@
 'use client';
 
-import React, { use } from 'react';
-import { Router, useRouter } from 'next/router';
+import React, { use, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { MoveLeft } from 'lucide-react';
 import Link from 'next/link';
 import CustomImage from '../../../front/components/customImage';
 const Unauthorized = () => {
+	const router = useRouter();
+	useEffect(() => {
+		localStorage.removeItem('accessToken');
+		localStorage.removeItem('refreshToken');
+		router.refresh();
+	}, []);
+
 	return (
 		<div className="form-container">
 			<div className="Go-Back-container">
