@@ -854,7 +854,9 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handlePlayerKo = () => {
-		const { activePlayerPokemonFromLS } = getActivePokemonsFromLocalStorage();
+		const { activePlayerPokemonFromLS, activeOpponentPokemonFromLS } =
+			getActivePokemonsFromLocalStorage();
+		setPreviousOpponentPokemonHp(activeOpponentPokemonFromLS.stats[0].value);
 		if (activePlayerPokemonFromLS.stats[0].value === 0) {
 			addNotification({
 				pokemonName: activePlayerPokemonFromLS.name,
@@ -874,8 +876,9 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handleOpponentKo = () => {
-		const { activeOpponentPokemonFromLS } =
+		const { activePlayerPokemonFromLS, activeOpponentPokemonFromLS } =
 			getActivePokemonsFromLocalStorage();
+		setPreviousPlayerPokemonHp(activePlayerPokemonFromLS.stats[0].value);
 		if (activeOpponentPokemonFromLS.stats[0].value === 0) {
 			addNotification({
 				pokemonName: activeOpponentPokemonFromLS.name,
