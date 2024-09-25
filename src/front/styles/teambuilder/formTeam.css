@@ -8,7 +8,7 @@
     padding: 25px
 }
 
-.search-team {
+.teams-searchbar {
     position: relative;
     width: 80%;
     height: 100%;
@@ -17,28 +17,49 @@
     justify-content: center;
 }
 
-.search-team > input[type="search"] {
-    width: 100%;
+.teams-searchbar form {
+    position: relative;
+    width: 475px;
     height: 50px;
-    background-color: var(--grey);
-    border: none;
-    border-radius: 5px;
-    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
 }
 
-.btn-search-team {
+
+.teams-searchbar form > input[type="text"] {
+    width: 100%;
+    height: 100%;
+    padding: 0 45px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background-color: var(--grey);
+}
+
+.teams-searchbar .search-icon {
     position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
+    left: 10px;
+    top: 0;
+    height: 100%;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    border: none;
+}
+
+.teams-searchbar .btn-search-team {
     width: 30px;
     height: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    z-index: 1;
+    border: none;
+    background: transparent;
+    cursor: default;
 }
 
 .btn-create-team-container {

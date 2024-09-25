@@ -9,7 +9,6 @@ import FormCreateTeam from './formCreateTeam';
 // Images
 import { Plus, Search } from 'lucide-react';
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
-import { toast } from 'sonner';
 
 interface FormTeamProps {
 	avatars: AvatarEntity[];
@@ -59,7 +58,7 @@ const FormTeam = ({
 		});
 
 		if (filteredTeams.length === 0) {
-			toast.error('No teams found, bad name');
+			setCurrentTeams([]);
 			return;
 		}
 
@@ -69,17 +68,22 @@ const FormTeam = ({
 
 	return (
 		<div className={'form-team-container'}>
-			<form className={'search-team'} onSubmit={handleSubmit}>
-				<input
-					type="search"
-					name="search"
-					placeholder="Search a team"
-					onChange={handleTeamsSearch}
-				/>
-				<button className={'btn-search-team btn-primary'}>
-					<Search width={20} height={20} />
-				</button>
-			</form>
+			<div className={'teams-searchbar'}>
+				<div className={'search-icon'}>
+					<button className={'btn-search-team'}>
+						<Search width={20} height={20} />
+					</button>
+				</div>
+				<form onSubmit={handleSubmit}>
+					<input
+						type="text"
+						name="text"
+						placeholder="Search a team"
+						onChange={handleTeamsSearch}
+					/>
+				</form>
+			</div>
+
 			<div className={'btn-create-team-container'}>
 				<button
 					onClick={() => setOpenForm(!openForm)}

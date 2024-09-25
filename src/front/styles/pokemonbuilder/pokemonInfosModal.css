@@ -54,7 +54,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-
 }
 
 .natures-searchbar form > input[type="text"], .moves-searchbar form > input[type="text"] {
@@ -65,7 +64,6 @@
     border-radius: 5px;
     outline: none;
     background-color: var(--grey);
-
 }
 
 .btn-search-natures, .btn-search-moves{
