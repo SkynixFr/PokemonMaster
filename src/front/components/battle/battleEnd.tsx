@@ -28,8 +28,11 @@ const BattleEnd = ({
 	};
 
 	useEffect(() => {
+		console.log(playerTeam);
+		console.log(opponentTeam);
 		if (playerTeam.pokemons.every(pokemon => pokemon.stats[0].value === 0)) {
 			setOpponentWin(true);
+			console.log('opponent win');
 		}
 		if (
 			opponentTeam.pokemons.every(pokemon => pokemon.stats[0].value === 0)
@@ -43,19 +46,30 @@ const BattleEnd = ({
 			<div className={'battle-end-modal-body'}>
 				<div className={'battle-end-modal-content'}>
 					<div className={'battle-end-modal-title'}>
-						{playerWin ||
-							(opponentRunning && (
-								<>
-									<h1>{playerTeam.name} won the battle !</h1>
-								</>
-							))}
+						{playerWin && (
+							<>
+								<h1>{playerTeam.name} won the battle !</h1>
+							</>
+						)}
 
-						{opponentWin ||
-							(playerRunning && (
-								<>
-									<h1>{opponentTeam.name} won the battle !</h1>
-								</>
-							))}
+						{opponentWin && (
+							<>
+								<h1>{opponentTeam.name} won the battle !</h1>
+							</>
+						)}
+
+						{playerRunning && (
+							<>
+								<h1>{playerTeam.name} ran away !</h1>
+							</>
+						)}
+
+						{opponentRunning && (
+							<>
+								<h1>{opponentTeam.name} ran away !</h1>
+							</>
+						)}
+
 						<span>Congratulations ! You're a Pokemon Master !</span>
 					</div>
 					<button

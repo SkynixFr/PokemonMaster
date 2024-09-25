@@ -881,9 +881,6 @@ const Battle = ({ battle }: BattleProps) => {
 				animationType: 'ko'
 			});
 			if (playerTeam.pokemons.some(pokemon => pokemon.stats[0].value > 0)) {
-				// setCounterPlayerPokemonKo(counterPlayerPokemonKo + 1);
-				// setActivePlayerPokemonKo(true);
-				// setCurrentView('player');
 				setPreviousPlayerPokemonHp(
 					activePlayerPokemonFromLS.stats[0].value
 				);
@@ -914,9 +911,6 @@ const Battle = ({ battle }: BattleProps) => {
 			if (
 				opponentTeam.pokemons.some(pokemon => pokemon.stats[0].value > 0)
 			) {
-				// setCounterOpponentPokemonKo(counterOpponentPokemonKo + 1);
-				// setActiveOpponentPokemonKo(true);
-
 				setPreviousPlayerPokemonHp(
 					activePlayerPokemonFromLS.stats[0].value
 				);
