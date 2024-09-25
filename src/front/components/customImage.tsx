@@ -8,6 +8,7 @@ interface CustomImageProps {
 	fill?: boolean;
 	sizes?: string;
 	className?: string;
+	unoptimized?: boolean;
 }
 
 const CustomImage = ({
@@ -17,7 +18,8 @@ const CustomImage = ({
 	height,
 	fill,
 	sizes,
-	className
+	className,
+	unoptimized
 }: CustomImageProps) => {
 	return (
 		<Image
@@ -30,6 +32,7 @@ const CustomImage = ({
 			quality={100}
 			priority={true}
 			className={className}
+			unoptimized={unoptimized}
 		/>
 	);
 };

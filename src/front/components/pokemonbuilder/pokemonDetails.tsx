@@ -42,7 +42,7 @@ const PokemonDetails = ({
 }: PokemonDetailsProps) => {
 	const [genderActive, setGenderActive] = useState<
 		'neutral' | 'male' | 'female'
-	>(pokemon.gender);
+	>(pokemon?.gender);
 	const [levelActive, setLevelActive] = useState<number>(100);
 	const [itemActive, setItemActive] = useState<ItemEntity>(pokemon?.item);
 	const [natureActive, setNatureActive] = useState<NatureEntity>(
@@ -228,7 +228,7 @@ const PokemonDetails = ({
 					<div className={'pokemon-img'}>
 						<CustomImage
 							src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon?.pokedexId}.png`}
-							alt={pokemon.name}
+							alt={pokemon?.name}
 							fill={true}
 							sizes="(max-width: 768px) 150px, 300px"
 						/>

@@ -12,13 +12,15 @@ interface TeamsProps {
 	setSelectedTeam: (team: TeamEntity) => void;
 	selectedTeam: TeamEntity;
 	avatars: AvatarEntity[];
+	setCurrentLength: (length: number) => void;
 }
 
 const Teams = ({
 	teams,
 	selectedTeam,
 	setSelectedTeam,
-	avatars
+	avatars,
+	setCurrentLength
 }: TeamsProps) => {
 	const [currentTeams, setCurrentTeams] = useState<TeamEntity[]>([]);
 
@@ -44,6 +46,7 @@ const Teams = ({
 				setSelectedTeam={setSelectedTeam}
 				setCurrentTeams={setCurrentTeams}
 				currentTeams={teams}
+				setCurrentLength={setCurrentLength}
 			/>
 
 			<div className={'teams-container'}>
@@ -60,6 +63,7 @@ const Teams = ({
 									resetSelectedTeam={resetSelectedTeam}
 									setCurrentTeams={setCurrentTeams}
 									currentTeams={currentTeams}
+									setCurrentLength={setCurrentLength}
 									option={true}
 								/>
 							))}

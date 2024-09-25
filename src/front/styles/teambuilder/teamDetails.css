@@ -9,6 +9,7 @@
     padding: 25px;
     gap: 25px;
     overflow: hidden;
+
 }
 
 .team-details-avatar {
@@ -17,8 +18,14 @@
     left: 50%;
     transform: translate(-50%, -50%);
     opacity: 0.5;
-
 }
+
+.team-details-avatar img {
+
+    object-fit: contain;
+}
+
+
 
 .team-details-pokemons {
     display: flex;
@@ -39,9 +46,11 @@
     background-color: var(--white);
     border-radius: 20px;
     width: 100px;
-    height: 550px;
+    height: calc(550px - 25px);
+    padding-bottom: 25px;
     overflow: hidden;
     transition: all 0.75s ease-in-out;
+    gap: 10px;
 }
 
 .team-details-pokemon:nth-child(odd) {
@@ -68,7 +77,6 @@
 .team-details-pokemon:hover .team-details-pokemon-bg {
     top: -50px;
     left: -50px;
-
 }
 
 .team-details-pokemon:hover .team-details-pokemon-bg img {
@@ -95,7 +103,7 @@
 .team-details-pokemon-info .top-details {
     display: flex;
     flex-direction: row;
-    height: 225px;
+    height: 200px;
 }
 
 .top-details .bg-pokemon-details {
@@ -247,6 +255,7 @@
     background-color: var(--grey);
     border-radius: 5px;
     min-width: max-content;
+    font-size: var(--fs-sm);
 }
 
 .team-details-pokemon-info .pokemon-item {
@@ -272,9 +281,9 @@
 .team-details-pokemon-info .pokemon-moves {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    flex-grow: 1;
+    height: max-content;
 }
 
 .team-details-pokemon-info .pokemon-moves h3 {
@@ -287,6 +296,7 @@
     justify-content: space-around;
     align-items: center;
     gap: 10px;
+    min-width: 100%;
 }
 
 .pokemon-moves-container .pokemon-move-fullfilled {
@@ -296,10 +306,10 @@
 .team-details-pokemon-info .pokemon-stats {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
-    gap: 10px;
     width: 100%;
+    gap: 20px;
 }
 
 .team-details-pokemon-info .pokemon-stats-container {
@@ -389,10 +399,40 @@
     background-color: #7037FF;
 }
 
+.team-details-container .battle-btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.battle-btn-container .battle-btn {
+    width: 150px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--fs-xl);
+    font-family: var(--ff-base-bold), sans-serif;
+    padding: 5px;
+    border-radius: 5px;
+    gap: 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+
 @media screen and (min-width: 1920px) {
     .team-details-pokemon {
         height: 600px;
+        font-size: var(--fs-md);
     }
+
+    .team-details-pokemon:hover .team-details-pokemon-bg img {
+        width: 375px;
+        height: 375px;
+    }
+
+
     .team-details-pokemon .team-details-pokemon-bg img {
         height: 600px;
     }
@@ -401,4 +441,48 @@
         height: 1000px;
     }
 
+    .top-details {
+        justify-content: flex-start !important;
+        height: 250px !important;
+        z-index: 1;
+    }
+
+    .team-details-pokemon-info .pokemon-moves{
+        justify-content: center;
+        flex-grow: 1;
+    }
+
+    .team-details-pokemon-info .pokemon-stats {
+        justify-content: flex-end;
+        height: 50px;
+    }
+
+    .pokemon-ability-nature div h3 div {
+        font-size: var(--fs-sm);
+    }
+
+}
+
+@media screen and (max-width: 1920px) {
+    .team-details-pokemon {
+        height: 500px;
+        font-size: var(--fs-md);
+    }
+
+    .top-details {
+        justify-content: flex-start !important;
+        height: 225px !important;
+        z-index: 1;
+    }
+
+    .battle-btn-container .battle-btn {
+        width: 125px;
+        height: 45px;
+        font-size: var(--fs-md);
+    }
+
+    .battle-btn img {
+        width: 30px;
+        height: 30px;
+    }
 }

@@ -1,50 +1,50 @@
 .team-infos {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
 }
 
 .team-infos > div {
-    display: flex;
-    align-items: center;
-    width: 100px;
-    gap: 10px;
-    font-family: var(--ff-base-bold), sans-serif;
+	display: flex;
+	align-items: center;
+	width: 100px;
+	gap: 10px;
+	font-family: var(--ff-base-bold), sans-serif;
 }
 
 .team-infos .team-name-edit {
-    width: 80%;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: var(--ff-base-bold), sans-serif;
-    gap: 25px;
+	width: 80%;
+	height: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-family: var(--ff-base-bold), sans-serif;
+	gap: 25px;
 }
 
 .team-infos .team-name-edit input {
-    width: calc(15% - 25px);
-    height: 30px;
-    padding: 5px 12.5px;
-    border: none;
-    border-radius: 5px;
-    font-family: var(--ff-base-bold), sans-serif;
+	width: calc(15% - 25px);
+	height: 30px;
+	padding: 5px 12.5px;
+	border: none;
+	border-radius: 5px;
+	font-family: var(--ff-base-bold), sans-serif;
 }
 
 .team-infos .team-name-edit button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 35px;
-    height: 35px;
-    background-color: var(--red);
-    color: white;
-    border: none;
-    border-radius: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 35px;
+	height: 35px;
+	background-color: var(--red);
+	color: white;
+	border: none;
+	border-radius: 5px;
 }
 
 .team-goback {
-    cursor: pointer;
+	cursor: pointer;
 }

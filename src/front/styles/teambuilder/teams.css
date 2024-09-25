@@ -8,7 +8,6 @@
     gap: 10px;
     padding: 25px 25px 0 25px;
     flex-grow: 1;
-    overflow-y: auto;
 }
 
 .teams-container > h3 {

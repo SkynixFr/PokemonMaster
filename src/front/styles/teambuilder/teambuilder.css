@@ -14,7 +14,6 @@
     height: calc(100dvh - 75px);
     margin: 75px 0 0 0;
     gap: 50px;
-
 }
 
 .teambuilder-teams {
@@ -23,11 +22,13 @@
     align-items: flex-end;
     justify-content: flex-start;
     width: 25%;
-    height: 90%;
+    max-height: 90%;
+    height: max-content;
+    min-height: 90%;
     background-color: var(--white);
     border-radius: 10px;
     gap: 10px;
-    position: relative;
+    overflow-y: auto;
 }
 
 .teambuilder-team-details {
@@ -43,7 +44,7 @@
 }
 
 .teams-number {
-    position: absolute;
+    position: sticky;
     bottom: 0;
     z-index: 2;
     display: flex;

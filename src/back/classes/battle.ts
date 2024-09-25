@@ -1,12 +1,25 @@
+import Team from './team';
 import Pokemon from './pokemon';
 
 class Battle {
-	readonly playerPokemon: Pokemon;
-	readonly opponentPokemon: Pokemon;
+	readonly playerTeam: Team;
+	readonly opponentTeam: Team;
+	readonly activePlayerPokemon: Pokemon;
+	readonly activeOpponentPokemon: Pokemon;
+	readonly turn: number;
 
-	constructor(playerPokemon: Pokemon, opponentPokemon: Pokemon) {
-		this.playerPokemon = playerPokemon;
-		this.opponentPokemon = opponentPokemon;
+	constructor(
+		playerTeam: Team,
+		opponentTeam: Team,
+		activePlayerPokemon: Pokemon,
+		activeOpponentPokemon: Pokemon,
+		turn: number
+	) {
+		this.playerTeam = playerTeam;
+		this.opponentTeam = opponentTeam;
+		this.activePlayerPokemon = activePlayerPokemon;
+		this.activeOpponentPokemon = activeOpponentPokemon;
+		this.turn = turn;
 	}
 }
 

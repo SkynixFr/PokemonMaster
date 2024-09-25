@@ -16,13 +16,15 @@ interface FormTeamProps {
 	setSelectedTeam: (team: TeamEntity) => void;
 	setCurrentTeams: (teams: TeamEntity[]) => void;
 	currentTeams: TeamEntity[];
+	setCurrentLength: (length: number) => void;
 }
 
 const FormTeam = ({
 	avatars,
 	setSelectedTeam,
 	currentTeams,
-	setCurrentTeams
+	setCurrentTeams,
+	setCurrentLength
 }: FormTeamProps) => {
 	const [openForm, setOpenForm] = useState(false);
 	const [defaultTeams, setDefaultTeams] = useState<TeamEntity[]>([]);
@@ -48,6 +50,7 @@ const FormTeam = ({
 	const filterTeams = () => {
 		if (searchTerm === '') {
 			setCurrentTeams(defaultTeams);
+			setCurrentLength(defaultTeams.length);
 			return;
 		}
 
@@ -61,6 +64,7 @@ const FormTeam = ({
 		}
 
 		setCurrentTeams(filteredTeams);
+		setCurrentLength(filteredTeams.length);
 	};
 
 	return (
@@ -77,9 +81,6 @@ const FormTeam = ({
 				</button>
 			</form>
 			<div className={'btn-create-team-container'}>
-				<div className={'hover-info'}>
-					<span>Create a team</span>
-				</div>
 				<button
 					onClick={() => setOpenForm(!openForm)}
 					className={'btn-create-team btn-primary '}
@@ -95,6 +96,7 @@ const FormTeam = ({
 						setSelectedTeam={setSelectedTeam}
 						setCurrentTeams={setCurrentTeams}
 						currentTeams={currentTeams}
+						setCurrentLength={setCurrentLength}
 					/>
 				</div>
 			)}
