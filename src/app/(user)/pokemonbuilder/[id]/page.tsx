@@ -3,7 +3,6 @@ import { getTeam } from '../../../../front/actions/team.actions';
 import { getPokemons } from '../../../../front/actions/pokemon.actions';
 
 // Components
-import Team from '../../../../front/components/pokemonbuilder/team';
 import Pokemons from '../../../../front/components/pokemonbuilder/pokemons';
 
 const PokemonBuilder = async ({ params }: { params: { id: string } }) => {

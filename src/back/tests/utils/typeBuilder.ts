@@ -1,15 +1,16 @@
 import Type from '../../classes/typeEffectiveness';
+import DamageRelation from '../../classes/damageRelation';
 
 class TypeBuilder {
-	name: string = 'normal';
-	damageRelation: DamageRelation = new DamageRelation();
+	name: string;
+	damageRelations: DamageRelation;
 
 	default(): Type {
 		return new TypeBuilder().build();
 	}
 
 	build(): Type {
-		return new Type(this.name, this.damageRelation);
+		return new Type(this.name, this.damageRelations);
 	}
 
 	withName(name: string): TypeBuilder {
@@ -17,18 +18,10 @@ class TypeBuilder {
 		return this;
 	}
 
-	withWeaknesses(weaknesses: Type[]): TypeBuilder {
-		this.weaknesses = weaknesses;
-		return this;
-	}
-
-	withResistances(resistances: Type[]): TypeBuilder {
-		this.resistances = resistances;
-		return this;
-	}
-
-	withImmunities(immunities: Type[]): TypeBuilder {
-		this.immunities = immunities;
+	withDamageRelations(damageRelations: DamageRelation): TypeBuilder {
+		this.damageRelations = damageRelations;
 		return this;
 	}
 }
+
+export default TypeBuilder;
