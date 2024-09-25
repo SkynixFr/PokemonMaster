@@ -37,7 +37,7 @@
 .bg-form-profile {
 	position: absolute;
 	top: 50px;
-	right: 350px;
+	right: 150px;
 	z-index: 1;
 	animation: bounceIn 0.75s ease-in-out;
 }
@@ -148,4 +148,6 @@
 
 .user-teams > .teams-container > .teams-list > .team-container {
 	max-width: 30%;
+	height: 150px;
+	margin-top: 50px;
 }

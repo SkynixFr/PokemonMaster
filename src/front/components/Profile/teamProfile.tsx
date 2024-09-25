@@ -113,8 +113,8 @@ const TeamProfile = ({
 							<CustomImage
 								src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
 								alt={pokemon.name}
-								width={40}
-								height={40}
+								width={50}
+								height={50}
 								key={index}
 							/>
 						))}
@@ -126,8 +126,11 @@ const TeamProfile = ({
 
 			{option && team.id === selectedTeam?.id ? (
 				<div className={'user-team-options'}>
-					<button onClick={() => router.push('teambuilder')}>
+					<button onClick={() => router.push(`pokemonbuilder/${team.id}`)}>
 						<PencilLine />
+					</button>
+					<button onClick={() => handleDelete(team.id)}>
+						<Trash2 />
 					</button>
 				</div>
 			) : null}
