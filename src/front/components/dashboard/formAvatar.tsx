@@ -24,6 +24,9 @@ const avatarSchema = z.object({
 				'Alola',
 				'Galar',
 				'Hisui',
+				'Unys',
+				'Arceus',
+				'Unite',
 				'Other'
 			].includes(region)
 		),
@@ -114,6 +117,9 @@ const FormAvatar = () => {
 					<option value="Alola">Alola</option>
 					<option value="Galar">Galar</option>
 					<option value="Hisui">Hisui</option>
+					<option value="Unys">Unys</option>
+					<option value="Arceus">Arceus</option>*
+					<option value="Unite">Unite</option>
 					<option value="Other">Other</option>
 				</select>
 				{errors.region && <span>{errors.region}</span>}

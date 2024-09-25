@@ -1,45 +1,64 @@
-.navbar {
-    position: absolute;
+.navbar-container {
+    position: fixed;
     top: 0;
-    left: 0;
-    width: calc(100% - 56px);
-    height: 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--white);
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    padding: 12px 28px;
+    width: calc(650px - 56px);
+    height: 85px;
+    background: var(--white-light);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    padding: 0 8px 0 32px;
+    border-radius: 40px;
+    margin-top: 15px;
+    gap: 25px;
+    border: 2px solid var(--white);
+    z-index: 10;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-.navbar-links {
-    flex-grow: 1;
+.navbar-container .navbar-logo {
+    height: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
-.navbar-links > li {
-    width: 160px;
-    text-align: center;
-    font-family: var(--ff-base-bold), sans-serif;
-    font-size: var(--fs-md);
+.navbar-container .navbar-logo img {
+    object-fit: contain;
 }
 
-.navbar-links .link.active {
-    transition: .2s ease-in-out;
-    color: var(--red);
+.navbar-links-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-grow: 1;
+    background-color: #fff;
+    border-radius: 32px;
+    height: calc(100% - 32px);
+    padding: 8px 8px 8px 32px;
 }
 
-.navbar-logo, .navbar-profil{
-    width: 235px;
+.navbar-links-container .navbar-links {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-grow: 1;
+    gap: 32px;
 }
 
 .navbar-profil {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 10px;
+    background-color: #F5F5FC;
+    height: calc(100% - 24px);
+    padding: 12px 12px 12px 24px;
+    border-radius: 24px;
+    gap: 12px;
 }
 
 .navbar-profil > button {
@@ -48,5 +67,52 @@
     border-radius: 5px;
     font-family: var(--ff-base-bold), sans-serif;
 }
+
+.navbar-links .link {
+    font-family: var(--ff-base-bold), sans-serif;
+    font-size: var(--fs-md);
+    text-decoration: none;
+}
+
+.navbar-links .link.active {
+    transition: .2s ease-in-out;
+    color: var(--red);
+}
+
+/*.navbar-links {*/
+/*    flex-grow: 1;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*}*/
+
+/*.navbar-links > li {*/
+/*    width: 160px;*/
+/*    text-align: center;*/
+/*    font-family: var(--ff-base-bold), sans-serif;*/
+/*    font-size: var(--fs-md);*/
+/*}*/
+
+/*.navbar-links .link.active {*/
+/*    transition: .2s ease-in-out;*/
+/*    color: var(--red);*/
+/*}*/
+
+/*.navbar-logo, .navbar-profil{*/
+/*    width: 235px;*/
+/*}*/
+
+/*.navbar-profil {*/
+/*    display: flex;*/
+/*    justify-content: flex-end;*/
+/*    align-items: center;*/
+/*    gap: 10px;*/
+/*}*/
+
+/*.navbar-profil > button {*/
+/*    width: 75px;*/
+/*    height: 30px;*/
+/*    border-radius: 5px;*/
+/*    font-family: var(--ff-base-bold), sans-serif;*/
+/*}*/
 
 

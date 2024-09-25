@@ -4,17 +4,23 @@ import { FormEventHandler, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { toast } from 'sonner';
-
+import Link from 'next/link';
 // Actions
 import { login } from '../../actions/user.actions';
+import CustomImage from '../customImage';
+import { MoveLeft } from 'lucide-react';
+
 const userSchema = z.object({
-	email: z.string().email({ message: 'Invalid email address' }),
+	email: z
+		.string()
+		.email({ message: 'Invalid email address' })
+		.max(30, { message: 'Email must be 30 characters or less' }),
 	password: z.string().refine(
 		password => {
-			const hasNumber = /\d/.test(password);
-			const hasUpperCase = /[A-Z]/.test(password);
-			const hasLowerCase = /[a-z]/.test(password);
-			return hasNumber && hasUpperCase && hasLowerCase;
+			const isValid = password.match(
+				'^(?=.*[A-Z])(?=.*\\d)(?=.*\\W)[A-Za-z\\d\\W]{8,}$'
+			);
+			return isValid;
 		},
 		{
 			message:
@@ -25,10 +31,7 @@ const userSchema = z.object({
 
 const FormLogin = () => {
 	const router = useRouter();
-	const [errors, setErrors] = useState<{
-		email: string;
-		password: string;
-	}>({
+	const [errors, setErrors] = useState<{ email: string; password: string }>({
 		email: '',
 		password: ''
 	});
@@ -44,7 +47,7 @@ const FormLogin = () => {
 			const formData = new FormData(form);
 
 			toast.promise(login(formData), {
-				loading: 'login in...',
+				loading: 'Logging in...',
 				success: response => {
 					if (response.status) {
 						throw new Error(response.message);
@@ -54,9 +57,8 @@ const FormLogin = () => {
 					localStorage.setItem('refreshToken', response.refreshToken);
 					form.reset();
 					form.email.focus();
-					router.refresh();
-					router.push('/');
-					return 'User log in successfully!';
+					router.push('/profile');
+					return 'User logged in successfully!';
 				},
 				error: error => {
 					return error.message;
@@ -74,27 +76,84 @@ const FormLogin = () => {
 			}
 		}
 	};
+
 	const handleChange = () => {
 		setErrors({
 			email: '',
 			password: ''
 		});
 	};
+
 	return (
-		<div>
-			<h1>Login</h1>
-			<form onSubmit={onsubmit} onChange={handleChange}>
-				<div>
-					<label htmlFor="email">Email</label>
-					<input type="email" name="email" id="email" />
-					{errors.email && <span>{errors.email}</span>}
+		<div className="form-container">
+			<div className="Go-Back-container">
+				<MoveLeft />
+				<Link href={'/'} className="back-link">
+					Go Back
+				</Link>
+			</div>
+
+			<div className={'form-background'}>
+				<CustomImage
+					src={`/images/backgrounds/pokemonMaster-bg-login.jpg`}
+					alt={'background login'}
+					width={10000}
+					height={10000}
+				/>
+			</div>
+			<form
+				onSubmit={onsubmit}
+				onChange={handleChange}
+				className="form-wrapper"
+			>
+				<div className="form-logo">
+					<CustomImage
+						src={`/images/compressed/other/logo.png`}
+						alt={'pokemonMaster logo'}
+						width={150}
+						height={150}
+					/>
 				</div>
-				<div>
-					<label htmlFor="password">Password</label>
-					<input type="password" name="password" id="password" />
-					{errors.password && <span>{errors.password}</span>}
+				<h1 className="form-title">SIGN IN</h1>
+				<div className="input-group">
+					<label htmlFor="email" className="input-label">
+						Email
+					</label>
+					{errors.email && (
+						<span className="error-text">{errors.email}</span>
+					)}
+					<input
+						type="email"
+						name="email"
+						id="email"
+						className="input-field"
+					/>
 				</div>
-				<button type="submit">Login</button>
+				<div className="input-group">
+					<label htmlFor="password" className="input-label">
+						Password
+					</label>
+					{errors.password && (
+						<span className="error-text">{errors.password}</span>
+					)}
+					<input
+						type="password"
+						name="password"
+						id="password"
+						className="input-field"
+					/>
+				</div>
+				<div className="button-wrapper">
+					<button type="submit" className="login-button">
+						Login
+					</button>
+				</div>
+				<div className="form-footer">
+					<span>Don't have an account ? </span>
+					<Link href={'/signin'} className="register-link">
+						Register here
+					</Link>
+				</div>
 			</form>
 		</div>
 	);

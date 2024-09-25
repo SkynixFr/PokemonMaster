@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 // Interfaces
 import { TeamEntity } from '../../../interfaces/team/teamEntity';
 import { firstLetterMaj } from '../../utils/formatString';
@@ -7,25 +5,32 @@ import { Stars } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMars, faVenus } from '@fortawesome/free-solid-svg-icons';
 import CustomImage from '../customImage';
+import { useRouter } from 'next/navigation';
+import { createBattle } from '../../utils/battle';
 interface TeamDetailsProps {
 	team: TeamEntity;
 }
 
 const TeamDetails = ({ team }: TeamDetailsProps) => {
+	const router = useRouter();
+	const handleBattle = (team: TeamEntity) => {
+		const battle = createBattle(team);
+		localStorage.setItem('battle', JSON.stringify(battle));
+		console.log(battle);
+		router.push('/battle');
+	};
+
 	return (
 		team && (
 			<div className={'team-details-container'}>
 				<h1>{team.name}</h1>
-				<div className={'team-details-avatar'}>
-					<Image
+				<div className={`team-details-avatar ${team.avatar.name}`}>
+					<CustomImage
 						src={team.avatar.sprite}
 						alt={team.avatar.name}
 						width={1000}
-						height={700}
-						priority={true}
-						quality={100}
+						height={800}
 						sizes={'100vw'}
-						style={{ objectFit: 'contain' }}
 					/>
 				</div>
 				<div className={'team-details-pokemons'}>
@@ -33,15 +38,12 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 						<div key={index} className={`team-details-pokemon ${index}`}>
 							<div></div>
 							<div className={'team-details-pokemon-bg'}>
-								<Image
+								<CustomImage
 									src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
 									alt={pokemon.name}
 									width={500}
 									height={500}
-									priority={true}
-									quality={100}
 									sizes={'100vw'}
-									style={{ objectFit: 'contain' }}
 								/>
 							</div>
 							<div className={'team-details-pokemon-info'}>
@@ -96,6 +98,13 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 												) : (
 													''
 												)}
+												{pokemon.item != null ? (
+													<div className={'pokemon-item'}>
+														<div>{pokemon.item.name}</div>
+													</div>
+												) : (
+													''
+												)}
 											</div>
 										</div>
 										<div className={'pokemon-ability-nature'}>
@@ -115,18 +124,14 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 									</div>
 								</div>
 
-								<div className={'pokemon-item'}>
-									<div>
-										{pokemon.item != null
-											? pokemon.item.name
-											: 'No item'}
-									</div>
-								</div>
 								<div className={'pokemon-moves'}>
 									<h3>Moves</h3>
 									<div className={'pokemon-moves-container'}>
-										{pokemon.moves.map(move => (
-											<div className={'pokemon-move-fullfilled'}>
+										{pokemon.moves.map((move, index) => (
+											<div
+												className={'pokemon-move-fullfilled'}
+												key={index}
+											>
 												<CustomImage
 													src={`/images/types/${move.type}.png`}
 													alt={move.type}
@@ -180,6 +185,20 @@ const TeamDetails = ({ team }: TeamDetailsProps) => {
 							</div>
 						</div>
 					))}
+				</div>
+				<div className={'battle-btn-container'}>
+					<button
+						className={'battle-btn btn-primary'}
+						onClick={() => handleBattle(team)}
+					>
+						Battle
+						<CustomImage
+							src={'/images/other/pikachu-battle.png'}
+							alt={'pikachu battle'}
+							width={40}
+							height={40}
+						/>
+					</button>
 				</div>
 			</div>
 		)

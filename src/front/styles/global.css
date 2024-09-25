@@ -8,9 +8,15 @@
 @import url('pagination.css');
 
 /* Page styles */
-@import url('battle.css');
+@import url('battle/battle.css');
 @import url('teambuilder/teambuilder.css');
 @import url('pokemonbuilder/pokemonbuilder.css');
+@import url('login/login.css');
+@import url('signin/signin.css');
+@import url('profile/profile.css');
+@import url('unauthorized/unauthorized.css');
+/* Animations */
+@import url('animations.css');
 
 /* Global styles */
 body {
@@ -31,7 +37,7 @@ h6 {
 	margin: 0;
 }
 
-button	{
+button {
 	cursor: pointer;
 }
 
@@ -72,11 +78,27 @@ a {
 	background-color: transparent;
 	color: var(--red);
 	width: max-content;
-	height:30px;
+	height: 30px;
 	padding: 0;
 }
 
 .error {
 	color: var(--red);
 	font-size: var(--fs-sm);
+}
+
+.fadeInToBottom {
+	animation: fadeInToBottom 1s ease-in-out;
+}
+
+.fadeInToTop {
+	animation: fadeInToTop 1s ease-in-out;
+}
+
+.fadeInToLeft {
+	animation: fadeInToLeft 1s ease-in-out;
+}
+
+.fadeInToRight {
+	animation: fadeInToRight 1s ease-in-out;
 }
