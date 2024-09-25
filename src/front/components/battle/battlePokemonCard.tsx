@@ -94,10 +94,6 @@ const BattlePokemonCard = ({
 		setProgressBarWidth((previousHp / activePokemon.stats[0].total) * 100);
 	}, [currentView]);
 
-	useEffect(() => {
-		console.log('displayedHp', player + ' ' + displayedHp);
-	}, [displayedHp]);
-
 	return (
 		<div
 			className={`battle-pokemon-container ${player ? 'player' : 'opponent'}`}

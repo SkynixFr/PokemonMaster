@@ -97,12 +97,12 @@ class Pokemon {
 
 	updateMoves(): Pokemon {
 		const updatedMove = this.activeMove;
-		const updatedMoves = this.moves.map(move => {
-			if (move.name === updatedMove.name) {
-				return updatedMove;
-			}
-			return move;
-		});
+		// const updatedMoves = this.moves.map(move => {
+		// 	if (move.name === updatedMove.name) {
+		// 		return updatedMove;
+		// 	}
+		// 	return move;
+		// });
 		return new Pokemon(
 			this.pokedexId,
 			this.name,
@@ -112,7 +112,9 @@ class Pokemon {
 			this.nature,
 			this.gender,
 			this.isShiny,
-			updatedMoves,
+			this.moves.map(move =>
+				move.name === updatedMove.name ? updatedMove : move
+			),
 			this.item,
 			this.stats,
 			this.weight,
