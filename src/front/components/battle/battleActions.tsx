@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 // Components
 import CustomImage from '../customImage';
@@ -16,19 +15,33 @@ interface BattleActionsProps {
 	playerPokemon: Pokemon;
 	handleMoveSelection: (move: Move) => void;
 	disabled: boolean;
+	setBattleEnd: (value: boolean) => void;
+	currentView: string;
+	setPlayerRunning: (value: boolean) => void;
+	setOpponentRunning: (value: boolean) => void;
 }
 const BattleActions = ({
 	playerPokemon,
 	handleMoveSelection,
-	disabled
+	disabled,
+	setBattleEnd,
+	currentView,
+	setPlayerRunning,
+	setOpponentRunning
 }: BattleActionsProps) => {
-	const router = useRouter();
 	const [openModalRunning, setOpenModalRunning] = useState<boolean>(false);
 	const [openPokemonMoves, setOpenPokemonMoves] = useState<boolean>(false);
 
 	const handlePlayerRunning = () => {
-		localStorage.removeItem('battle');
-		router.push('/teambuilder');
+		if (currentView === 'player') {
+			setPlayerRunning(true);
+			setBattleEnd(true);
+			setOpenModalRunning(false);
+		} else {
+			setOpponentRunning(true);
+			setBattleEnd(true);
+			setOpenModalRunning(false);
+		}
 	};
 
 	useEffect(() => {
@@ -45,8 +58,6 @@ const BattleActions = ({
 			document.removeEventListener('keydown', handleKeyDown);
 		};
 	}, [setOpenModalRunning, setOpenPokemonMoves]);
-
-	useEffect(() => {}, []);
 
 	return (
 		<div className={'battle-actions'}>
@@ -81,12 +92,13 @@ const BattleActions = ({
 						<div className={`pokemon-moves-modal-content fadeInToTop`}>
 							{playerPokemon.moves.map((move, index) => (
 								<button
-									className={'pokemon-move-fullfilled'}
+									className={`pokemon-move-fullfilled ${move.pp === 0 ? 'disabled' : ''}`}
 									key={index}
 									onClick={() => {
 										handleMoveSelection(move);
 										setOpenPokemonMoves(false);
 									}}
+									disabled={move.pp === 0}
 								>
 									<CustomImage
 										src={`/images/types/${move.type}.png`}
@@ -99,7 +111,7 @@ const BattleActions = ({
 											{firstLetterMaj(move.name)}
 										</div>
 										<div>
-											{move.pp}/{move.pp}
+											{move.pp}/{move.maxPp}
 										</div>
 									</div>
 								</button>

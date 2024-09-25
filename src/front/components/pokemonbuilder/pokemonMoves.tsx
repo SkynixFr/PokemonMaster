@@ -34,7 +34,7 @@ const PokemonMoves = ({
 				{Array.from({ length: 4 }).map((_, index) =>
 					movesActive[index] ? (
 						<div
-							className={'pokemon-move-fullfilled'}
+							className={'pokemon-move-fullfilled default'}
 							onClick={() => handleMoveClick(index)}
 						>
 							<CustomImage
@@ -47,7 +47,7 @@ const PokemonMoves = ({
 							<div className={'pokemon-move-fullfilled infos'}>
 								<div>{firstLetterMaj(movesActive[index].name)}</div>
 								<div>
-									{movesActive[index].pp}/{movesActive[index].pp}
+									{movesActive[index].pp}/{movesActive[index].maxPp}
 								</div>
 							</div>
 						</div>

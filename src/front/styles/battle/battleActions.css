@@ -68,6 +68,9 @@
     font-size: var(--fs-md);
 }
 
+
+
+
 .pokemon-move-fullfilled-name {
     display: flex;
     justify-content: flex-start;

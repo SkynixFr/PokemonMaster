@@ -15,12 +15,14 @@ const BattleLoader = () => {
 
 	useEffect(() => {
 		const battle = JSON.parse(localStorage.getItem('battle'));
+
 		setBattle(battle);
 		setTimeout(() => {
 			setIsLoading(false);
 		}, 5000);
 	}, []);
 
+	if (!battle) return null;
 	return (
 		<div>
 			{isLoading ? (
@@ -118,6 +120,7 @@ const BattleLoader = () => {
 							alt={'pokeball loader'}
 							width={40}
 							height={40}
+							unoptimized={true}
 						/>
 					</div>
 				</div>

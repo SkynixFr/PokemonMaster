@@ -98,6 +98,7 @@ export function battle(): TeamEntity {
 						power: 80,
 						accuracy: 100,
 						pp: 15,
+						maxPp: 15,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -367,6 +368,7 @@ export function battle(): TeamEntity {
 						power: 60,
 						accuracy: 100,
 						pp: 15,
+						maxPp: 15,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -1340,6 +1342,7 @@ export function battle(): TeamEntity {
 						power: 0,
 						accuracy: 100,
 						pp: 15,
+						maxPp: 15,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -1487,6 +1490,7 @@ export function battle(): TeamEntity {
 						power: 60,
 						accuracy: 100,
 						pp: 5,
+						maxPp: 5,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -1756,6 +1760,7 @@ export function battle(): TeamEntity {
 						power: 75,
 						accuracy: 100,
 						pp: 15,
+						maxPp: 15,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -2226,6 +2231,7 @@ export function battle(): TeamEntity {
 						power: 90,
 						accuracy: 90,
 						pp: 10,
+						maxPp: 10,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -2417,6 +2423,7 @@ export function battle(): TeamEntity {
 						power: 130,
 						accuracy: 90,
 						pp: 5,
+						maxPp: 5,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -2554,6 +2561,7 @@ export function battle(): TeamEntity {
 						power: 150,
 						accuracy: 90,
 						pp: 5,
+						maxPp: 5,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -3469,6 +3477,7 @@ export function battle(): TeamEntity {
 						power: 100,
 						accuracy: 100,
 						pp: 10,
+						maxPp: 10,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -3881,6 +3890,7 @@ export function battle(): TeamEntity {
 						power: 80,
 						accuracy: 100,
 						pp: 5,
+						maxPp: 5,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -3931,6 +3941,7 @@ export function battle(): TeamEntity {
 						power: 75,
 						accuracy: 100,
 						pp: 15,
+						maxPp: 15,
 						meta: {
 							ailment: 'freeze',
 							drain: 0,
@@ -4186,6 +4197,7 @@ export function battle(): TeamEntity {
 						power: 120,
 						accuracy: 75,
 						pp: 5,
+						maxPp: 5,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -4560,6 +4572,7 @@ export function battle(): TeamEntity {
 						power: 80,
 						accuracy: 100,
 						pp: 10,
+						maxPp: 10,
 						meta: {
 							ailment: null,
 							drain: 0,
@@ -4655,6 +4668,7 @@ export function battle(): TeamEntity {
 						power: 50,
 						accuracy: 100,
 						pp: 20,
+						maxPp: 20,
 						meta: {
 							ailment: null,
 							drain: 0,
@@ -4906,6 +4920,7 @@ export function battle(): TeamEntity {
 						power: 85,
 						accuracy: 100,
 						pp: 10,
+						maxPp: 10,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -5107,6 +5122,7 @@ export function battle(): TeamEntity {
 						power: 110,
 						accuracy: 80,
 						pp: 5,
+						maxPp: 5,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -5481,6 +5497,7 @@ export function battle(): TeamEntity {
 						power: 60,
 						accuracy: 0,
 						pp: 20,
+						maxPp: 20,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -5922,6 +5939,7 @@ export function battle(): TeamEntity {
 						power: 60,
 						accuracy: 100,
 						pp: 25,
+						maxPp: 25,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -6199,6 +6217,7 @@ export function battle(): TeamEntity {
 						power: 40,
 						accuracy: 90,
 						pp: 10,
+						maxPp: 10,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -6361,6 +6380,7 @@ export function battle(): TeamEntity {
 						power: 70,
 						accuracy: 100,
 						pp: 15,
+						maxPp: 15,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -7063,6 +7083,7 @@ export function battle(): TeamEntity {
 						power: 120,
 						accuracy: 85,
 						pp: 10,
+						maxPp: 10,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -7141,6 +7162,7 @@ export function battle(): TeamEntity {
 						power: 0,
 						accuracy: 0,
 						pp: 5,
+						maxPp: 5,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -7291,6 +7313,7 @@ export function battle(): TeamEntity {
 						power: 0,
 						accuracy: 0,
 						pp: 20,
+						maxPp: 20,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -7411,6 +7434,7 @@ export function battle(): TeamEntity {
 						power: 65,
 						accuracy: 100,
 						pp: 10,
+						maxPp: 10,
 						meta: {
 							ailment: 'none',
 							drain: 0,
@@ -7671,6 +7695,7 @@ export function createBattle(playerTeam): Battle {
 									move.power,
 									move.accuracy,
 									move.pp,
+									move.maxPp,
 									move.meta,
 									move.type,
 									move.category,
@@ -7700,6 +7725,7 @@ export function createBattle(playerTeam): Battle {
 							pokemon.moves[0].power,
 							pokemon.moves[0].accuracy,
 							pokemon.moves[0].pp,
+							pokemon.moves[0].maxPp,
 							pokemon.moves[0].meta,
 							pokemon.moves[0].type,
 							pokemon.moves[0].category,
@@ -7750,6 +7776,7 @@ export function createBattle(playerTeam): Battle {
 									move.power,
 									move.accuracy,
 									move.pp,
+									move.maxPp,
 									move.meta,
 									move.type,
 									move.category,
@@ -7779,6 +7806,7 @@ export function createBattle(playerTeam): Battle {
 							pokemon.moves[0].power,
 							pokemon.moves[0].accuracy,
 							pokemon.moves[0].pp,
+							pokemon.moves[0].maxPp,
 							pokemon.moves[0].meta,
 							pokemon.moves[0].type,
 							pokemon.moves[0].category,
@@ -7823,6 +7851,7 @@ export function createBattle(playerTeam): Battle {
 						move.power,
 						move.accuracy,
 						move.pp,
+						move.maxPp,
 						move.meta,
 						move.type,
 						move.category,
@@ -7852,6 +7881,7 @@ export function createBattle(playerTeam): Battle {
 				playerTeam.pokemons[0].moves[0].power,
 				playerTeam.pokemons[0].moves[0].accuracy,
 				playerTeam.pokemons[0].moves[0].pp,
+				playerTeam.pokemons[0].moves[0].maxPp,
 				playerTeam.pokemons[0].moves[0].meta,
 				playerTeam.pokemons[0].moves[0].type,
 				playerTeam.pokemons[0].moves[0].category,
@@ -7894,6 +7924,7 @@ export function createBattle(playerTeam): Battle {
 						move.power,
 						move.accuracy,
 						move.pp,
+						move.maxPp,
 						move.meta,
 						move.type,
 						move.category,
@@ -7923,6 +7954,7 @@ export function createBattle(playerTeam): Battle {
 				opponentTeam.pokemons[0].moves[0].power,
 				opponentTeam.pokemons[0].moves[0].accuracy,
 				opponentTeam.pokemons[0].moves[0].pp,
+				opponentTeam.pokemons[0].moves[0].maxPp,
 				opponentTeam.pokemons[0].moves[0].meta,
 				opponentTeam.pokemons[0].moves[0].type,
 				opponentTeam.pokemons[0].moves[0].category,

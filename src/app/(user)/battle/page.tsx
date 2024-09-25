@@ -79,6 +79,9 @@ const Battle = ({ battle }: BattleProps) => {
 	const [previousOpponentPokemonHp, setPreviousOpponentPokemonHp] =
 		useState<number>(0);
 
+	const [playerRunning, setPlayerRunning] = useState<boolean>(false);
+	const [opponentRunning, setOpponentRunning] = useState<boolean>(false);
+
 	// Notifications
 	//---------------------------------------------------------
 	const handleNotificationStatusEffect = (
@@ -153,7 +156,6 @@ const Battle = ({ battle }: BattleProps) => {
 			handleBattleEnd();
 		}
 	}, [notifications, currentNotification]);
-	//---------------------------------------------------------
 
 	const recreatePokemonFromParsed = (parsedPokemon: Pokemon): Pokemon => {
 		const status = parsedPokemon.status
@@ -179,6 +181,7 @@ const Battle = ({ battle }: BattleProps) => {
 				parsedMove.power,
 				parsedMove.accuracy,
 				parsedMove.pp,
+				parsedMove.maxPp,
 				parsedMove.meta,
 				parsedMove.type,
 				parsedMove.category,
@@ -217,12 +220,12 @@ const Battle = ({ battle }: BattleProps) => {
 
 		const parsedOpponentPokemon = localStorageBattle.activeOpponentPokemon;
 
-		const activePlayerPokemon =
+		const activePlayerPokemonFromLS =
 			recreatePokemonFromParsed(parsedPlayerPokemon);
-		const activeOpponentPokemon = recreatePokemonFromParsed(
+		const activeOpponentPokemonFromLS = recreatePokemonFromParsed(
 			parsedOpponentPokemon
 		);
-		return { activePlayerPokemon, activeOpponentPokemon };
+		return { activePlayerPokemonFromLS, activeOpponentPokemonFromLS };
 	};
 
 	const handleMoveSelection = (move: Move) => {
@@ -254,23 +257,27 @@ const Battle = ({ battle }: BattleProps) => {
 		setCurrentView('player');
 	};
 
-	const handlePlayerAttack = () => {
-		if (activePlayerPokemon.activeMove.pp === 0) return;
-		const updatedPlayerActiveMove =
-			activePlayerPokemon.activeMove.decreasePP();
-		let updatedPlayerPokemon = activePlayerPokemon.changeActiveMove(
-			updatedPlayerActiveMove
-		);
-		updatedPlayerPokemon = updatedPlayerPokemon.updateMoves();
-		setActivePlayerPokemon(updatedPlayerPokemon);
-		updatePlayerTeam(updatedPlayerPokemon);
+	const handleMoveReduction = (pokemon: Pokemon) => {
+		if (pokemon.activeMove.pp === 0) {
+			return;
+		}
+		const updatedPokemonActiveMove = pokemon.activeMove.decreasePP();
+		const updatedPokemon = pokemon.changeActiveMove(updatedPokemonActiveMove);
+		return updatedPokemon.updateMoves();
+	};
+
+	const handlePlayerAttack = (
+		activePlayerPokemon: Pokemon,
+		activeOpponentPokemon: Pokemon
+	) => {
+		const updatedPlayerPokemon = handleMoveReduction(activePlayerPokemon);
 
 		let notificationPlayerAttack = 0;
 		addNotification({
-			pokemonName: activePlayerPokemon.name,
+			pokemonName: updatedPlayerPokemon.name,
 			move: {
-				name: activePlayerPokemon.activeMove.name,
-				type: activePlayerPokemon.activeMove.type
+				name: updatedPlayerPokemon.activeMove.name,
+				type: updatedPlayerPokemon.activeMove.type
 			},
 			userAvatar: {
 				name: playerTeam.avatar.name,
@@ -280,20 +287,21 @@ const Battle = ({ battle }: BattleProps) => {
 		});
 		notificationPlayerAttack++;
 
-		if (activePlayerPokemon.activeMove.target === 'user') {
-			const updatedPokemon = activePlayerPokemon.attack(activePlayerPokemon);
+		if (updatedPlayerPokemon.activeMove.target === 'user') {
+			const updatedPokemon =
+				updatedPlayerPokemon.attack(updatedPlayerPokemon);
 			setActivePlayerPokemon(updatedPokemon);
 			updatePlayerTeam(updatedPokemon);
 		} else {
 			setPreviousOpponentPokemonHp(activeOpponentPokemon.stats[0].value);
 			const missChance = Math.random();
-			if (missChance < activePlayerPokemon.activeMove.accuracy / 100) {
-				const updatedOpponentPokemon = activePlayerPokemon.attack(
+			if (missChance < updatedPlayerPokemon.activeMove.accuracy / 100) {
+				const updatedOpponentPokemon = updatedPlayerPokemon.attack(
 					activeOpponentPokemon
 				);
 				if (
 					updatedOpponentPokemon.status.name !== '' &&
-					updatedOpponentPokemon.status.name != 'KO'
+					updatedOpponentPokemon.status.name !== 'KO'
 				) {
 					handleNotificationStatusEffect(
 						updatedOpponentPokemon.status.name,
@@ -302,13 +310,14 @@ const Battle = ({ battle }: BattleProps) => {
 					);
 					notificationPlayerAttack++;
 				}
-
-				setActiveOpponentPokemon(updatedOpponentPokemon);
-				updateOpponentTeam(updatedOpponentPokemon);
-				return { notificationPlayerAttack, updatedOpponentPokemon };
+				return {
+					notificationPlayerAttack,
+					updatedPlayerPokemon,
+					updatedOpponentPokemon
+				};
 			} else {
 				addNotification({
-					pokemonName: activePlayerPokemon.name,
+					pokemonName: updatedPlayerPokemon.name,
 					userAvatar: {
 						name: playerTeam.avatar.name,
 						sprite: playerTeam.avatar.sprite
@@ -318,19 +327,25 @@ const Battle = ({ battle }: BattleProps) => {
 				notificationPlayerAttack++;
 				return {
 					notificationPlayerAttack,
-					activeOpponentPokemon
+					updatedPlayerPokemon,
+					updatedOpponentPokemon: activeOpponentPokemon
 				};
 			}
 		}
 	};
 
-	const handleOpponentAttack = () => {
+	const handleOpponentAttack = (
+		activePlayerPokemon: Pokemon,
+		activeOpponentPokemon: Pokemon
+	) => {
+		const updatedOpponentPokemon = handleMoveReduction(activeOpponentPokemon);
+
 		let notificationOpponentAttack = 0;
 		addNotification({
-			pokemonName: activeOpponentPokemon.name,
+			pokemonName: updatedOpponentPokemon.name,
 			move: {
-				name: activeOpponentPokemon.activeMove.name,
-				type: activeOpponentPokemon.activeMove.type
+				name: updatedOpponentPokemon.activeMove.name,
+				type: updatedOpponentPokemon.activeMove.type
 			},
 			userAvatar: {
 				name: opponentTeam.avatar.name,
@@ -340,18 +355,18 @@ const Battle = ({ battle }: BattleProps) => {
 		});
 		notificationOpponentAttack++;
 
-		if (activeOpponentPokemon.activeMove.target === 'user') {
-			const updatedPokemon = activeOpponentPokemon.attack(
-				activeOpponentPokemon
+		if (updatedOpponentPokemon.activeMove.target === 'user') {
+			const updatedPokemon = updatedOpponentPokemon.attack(
+				updatedOpponentPokemon
 			);
 			setActiveOpponentPokemon(updatedPokemon);
 			updateOpponentTeam(updatedPokemon);
 		} else {
 			setPreviousPlayerPokemonHp(activePlayerPokemon.stats[0].value);
 			const missChance = Math.random();
-			if (missChance < activeOpponentPokemon.activeMove.accuracy / 100) {
+			if (missChance < updatedOpponentPokemon.activeMove.accuracy / 100) {
 				const updatedPlayerPokemon =
-					activeOpponentPokemon.attack(activePlayerPokemon);
+					updatedOpponentPokemon.attack(activePlayerPokemon);
 				if (
 					updatedPlayerPokemon.status.name !== '' &&
 					updatedPlayerPokemon.status.name != 'KO'
@@ -364,12 +379,14 @@ const Battle = ({ battle }: BattleProps) => {
 					notificationOpponentAttack++;
 				}
 
-				setActivePlayerPokemon(updatedPlayerPokemon);
-				updatePlayerTeam(updatedPlayerPokemon);
-				return { notificationOpponentAttack, updatedPlayerPokemon };
+				return {
+					notificationOpponentAttack,
+					updatedOpponentPokemonFromOA: updatedOpponentPokemon,
+					updatedPlayerPokemonFromOA: updatedPlayerPokemon
+				};
 			} else {
 				addNotification({
-					pokemonName: activeOpponentPokemon.name,
+					pokemonName: updatedOpponentPokemon.name,
 					userAvatar: {
 						name: opponentTeam.avatar.name,
 						sprite: opponentTeam.avatar.sprite
@@ -379,7 +396,8 @@ const Battle = ({ battle }: BattleProps) => {
 				notificationOpponentAttack++;
 				return {
 					notificationOpponentAttack,
-					activePlayerPokemon
+					updatedOpponentPokemonFromOA: updatedOpponentPokemon,
+					updatedPlayerPokemonFromOA: activePlayerPokemon
 				};
 			}
 		}
@@ -422,57 +440,171 @@ const Battle = ({ battle }: BattleProps) => {
 
 		if (playerSpeed > opponentSpeed) {
 			if (!justSwitchedPlayer) {
-				const { notificationPlayerAttack, updatedOpponentPokemon } =
-					handlePlayerAttack();
+				const {
+					notificationPlayerAttack,
+					updatedPlayerPokemon,
+					updatedOpponentPokemon
+				} = handlePlayerAttack(activePlayerPokemon, activeOpponentPokemon);
 				nbNotificationsAttack += notificationPlayerAttack;
-				updatedOpponentPokemon.status.ableToMove
-					? (nbNotificationsAttack +=
-							handleOpponentAttack().notificationOpponentAttack)
-					: null;
+
+				if (updatedOpponentPokemon.status.ableToMove) {
+					const {
+						notificationOpponentAttack,
+						updatedOpponentPokemonFromOA,
+						updatedPlayerPokemonFromOA
+					} = handleOpponentAttack(
+						updatedPlayerPokemon,
+						updatedOpponentPokemon
+					);
+					nbNotificationsAttack += notificationOpponentAttack;
+
+					setActiveOpponentPokemon(updatedOpponentPokemonFromOA);
+					updateOpponentTeam(updatedOpponentPokemonFromOA);
+					setActivePlayerPokemon(updatedPlayerPokemonFromOA);
+					updatePlayerTeam(updatedPlayerPokemonFromOA);
+				}
 			} else {
-				nbNotificationsAttack +=
-					handleOpponentAttack().notificationOpponentAttack;
+				const {
+					notificationOpponentAttack,
+					updatedOpponentPokemonFromOA,
+					updatedPlayerPokemonFromOA
+				} = handleOpponentAttack(
+					activePlayerPokemon,
+					activeOpponentPokemon
+				);
+				nbNotificationsAttack += notificationOpponentAttack;
+				setActiveOpponentPokemon(updatedOpponentPokemonFromOA);
+				updateOpponentTeam(updatedOpponentPokemonFromOA);
+				setActivePlayerPokemon(updatedPlayerPokemonFromOA);
+				updatePlayerTeam(updatedPlayerPokemonFromOA);
 			}
 		} else if (playerSpeed < opponentSpeed) {
 			if (!justSwitchedOpponent) {
-				const { notificationOpponentAttack, updatedPlayerPokemon } =
-					handleOpponentAttack();
+				const {
+					notificationOpponentAttack,
+					updatedOpponentPokemonFromOA,
+					updatedPlayerPokemonFromOA
+				} = handleOpponentAttack(
+					activePlayerPokemon,
+					activeOpponentPokemon
+				);
 				nbNotificationsAttack += notificationOpponentAttack;
-				updatedPlayerPokemon.status.ableToMove
-					? (nbNotificationsAttack +=
-							handlePlayerAttack().notificationPlayerAttack)
-					: null;
+
+				if (updatedPlayerPokemonFromOA.status.ableToMove) {
+					const {
+						notificationPlayerAttack,
+						updatedOpponentPokemon,
+						updatedPlayerPokemon
+					} = handlePlayerAttack(
+						updatedPlayerPokemonFromOA,
+						updatedOpponentPokemonFromOA
+					);
+					nbNotificationsAttack += notificationPlayerAttack;
+
+					setActiveOpponentPokemon(updatedOpponentPokemon);
+					updateOpponentTeam(updatedOpponentPokemon);
+					setActivePlayerPokemon(updatedPlayerPokemon);
+					updatePlayerTeam(updatedPlayerPokemon);
+				}
 			} else {
-				nbNotificationsAttack +=
-					handlePlayerAttack().notificationPlayerAttack;
+				const {
+					notificationPlayerAttack,
+					updatedOpponentPokemon,
+					updatedPlayerPokemon
+				} = handlePlayerAttack(activePlayerPokemon, activeOpponentPokemon);
+				nbNotificationsAttack += notificationPlayerAttack;
+				setActiveOpponentPokemon(updatedOpponentPokemon);
+				updateOpponentTeam(updatedOpponentPokemon);
+				setActivePlayerPokemon(updatedPlayerPokemon);
+				updatePlayerTeam(updatedPlayerPokemon);
 			}
 		} else {
 			const random = Math.random();
 			if (random > 0.5) {
 				if (!justSwitchedPlayer) {
-					const { notificationPlayerAttack, updatedOpponentPokemon } =
-						handlePlayerAttack();
+					const {
+						notificationPlayerAttack,
+						updatedPlayerPokemon,
+						updatedOpponentPokemon
+					} = handlePlayerAttack(
+						activePlayerPokemon,
+						activeOpponentPokemon
+					);
 					nbNotificationsAttack += notificationPlayerAttack;
-					updatedOpponentPokemon.status.ableToMove
-						? (nbNotificationsAttack +=
-								handleOpponentAttack().notificationOpponentAttack)
-						: null;
+
+					if (updatedOpponentPokemon.status.ableToMove) {
+						const {
+							notificationOpponentAttack,
+							updatedOpponentPokemonFromOA,
+							updatedPlayerPokemonFromOA
+						} = handleOpponentAttack(
+							updatedPlayerPokemon,
+							updatedOpponentPokemon
+						);
+						nbNotificationsAttack += notificationOpponentAttack;
+
+						setActiveOpponentPokemon(updatedOpponentPokemonFromOA);
+						updateOpponentTeam(updatedOpponentPokemonFromOA);
+						setActivePlayerPokemon(updatedPlayerPokemonFromOA);
+						updatePlayerTeam(updatedPlayerPokemonFromOA);
+					}
 				} else {
-					nbNotificationsAttack +=
-						handleOpponentAttack().notificationOpponentAttack;
+					const {
+						notificationOpponentAttack,
+						updatedOpponentPokemonFromOA,
+						updatedPlayerPokemonFromOA
+					} = handleOpponentAttack(
+						activePlayerPokemon,
+						activeOpponentPokemon
+					);
+					nbNotificationsAttack += notificationOpponentAttack;
+					setActiveOpponentPokemon(updatedOpponentPokemonFromOA);
+					updateOpponentTeam(updatedOpponentPokemonFromOA);
+					setActivePlayerPokemon(updatedPlayerPokemonFromOA);
+					updatePlayerTeam(updatedPlayerPokemonFromOA);
 				}
 			} else {
 				if (!justSwitchedOpponent) {
-					const { notificationOpponentAttack, updatedPlayerPokemon } =
-						handleOpponentAttack();
+					const {
+						notificationOpponentAttack,
+						updatedOpponentPokemonFromOA,
+						updatedPlayerPokemonFromOA
+					} = handleOpponentAttack(
+						activePlayerPokemon,
+						activeOpponentPokemon
+					);
 					nbNotificationsAttack += notificationOpponentAttack;
-					updatedPlayerPokemon.status.ableToMove
-						? (nbNotificationsAttack +=
-								handlePlayerAttack().notificationPlayerAttack)
-						: null;
+
+					if (updatedPlayerPokemonFromOA.status.ableToMove) {
+						const {
+							notificationPlayerAttack,
+							updatedOpponentPokemon,
+							updatedPlayerPokemon
+						} = handlePlayerAttack(
+							updatedPlayerPokemonFromOA,
+							updatedOpponentPokemonFromOA
+						);
+						nbNotificationsAttack += notificationPlayerAttack;
+
+						setActiveOpponentPokemon(updatedOpponentPokemon);
+						updateOpponentTeam(updatedOpponentPokemon);
+						setActivePlayerPokemon(updatedPlayerPokemon);
+						updatePlayerTeam(updatedPlayerPokemon);
+					}
 				} else {
-					nbNotificationsAttack +=
-						handlePlayerAttack().notificationPlayerAttack;
+					const {
+						notificationPlayerAttack,
+						updatedOpponentPokemon,
+						updatedPlayerPokemon
+					} = handlePlayerAttack(
+						activePlayerPokemon,
+						activeOpponentPokemon
+					);
+					nbNotificationsAttack += notificationPlayerAttack;
+					setActiveOpponentPokemon(updatedOpponentPokemon);
+					updateOpponentTeam(updatedOpponentPokemon);
+					setActivePlayerPokemon(updatedPlayerPokemon);
+					updatePlayerTeam(updatedPlayerPokemon);
 				}
 			}
 		}
@@ -480,16 +612,16 @@ const Battle = ({ battle }: BattleProps) => {
 		return nbNotificationsAttack;
 	};
 
-	const handlePoisoning = (
-		activePlayerPokemon: Pokemon,
-		activeOpponentPokemon: Pokemon
-	) => {
+	const handlePoisoning = () => {
+		const { activePlayerPokemonFromLS, activeOpponentPokemonFromLS } =
+			getActivePokemonsFromLocalStorage();
+
 		let nbNotificationsPoison = 0;
-		if (activePlayerPokemon.status.name === 'PSN') {
-			const updatedPokemon = activePlayerPokemon.sufferFromStatus();
+		if (activePlayerPokemonFromLS.status.name === 'PSN') {
+			const updatedPokemon = activePlayerPokemonFromLS.sufferFromStatus();
 			setActivePlayerPokemon(updatedPokemon);
 			addNotification({
-				pokemonName: activePlayerPokemon.name,
+				pokemonName: activePlayerPokemonFromLS.name,
 				statusEffect: {
 					type: 'poison',
 					name: 'suffering from poison'
@@ -503,11 +635,11 @@ const Battle = ({ battle }: BattleProps) => {
 			nbNotificationsPoison++;
 		}
 
-		if (activeOpponentPokemon.status.name === 'PSN') {
-			const updatedPokemon = activeOpponentPokemon.sufferFromStatus();
+		if (activeOpponentPokemonFromLS.status.name === 'PSN') {
+			const updatedPokemon = activeOpponentPokemonFromLS.sufferFromStatus();
 			setActiveOpponentPokemon(updatedPokemon);
 			addNotification({
-				pokemonName: activeOpponentPokemon.name,
+				pokemonName: activeOpponentPokemonFromLS.name,
 				statusEffect: {
 					type: 'poison',
 					name: 'suffers from poison'
@@ -709,9 +841,10 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handlePlayerKo = () => {
-		if (activePlayerPokemon.stats[0].value === 0) {
+		const { activePlayerPokemonFromLS } = getActivePokemonsFromLocalStorage();
+		if (activePlayerPokemonFromLS.stats[0].value === 0) {
 			addNotification({
-				pokemonName: activePlayerPokemon.name,
+				pokemonName: activePlayerPokemonFromLS.name,
 				userAvatar: {
 					name: playerTeam.avatar.name,
 					sprite: playerTeam.avatar.sprite
@@ -728,9 +861,11 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handleOpponentKo = () => {
-		if (activeOpponentPokemon.stats[0].value === 0) {
+		const { activeOpponentPokemonFromLS } =
+			getActivePokemonsFromLocalStorage();
+		if (activeOpponentPokemonFromLS.stats[0].value === 0) {
 			addNotification({
-				pokemonName: activeOpponentPokemon.name,
+				pokemonName: activeOpponentPokemonFromLS.name,
 				userAvatar: {
 					name: opponentTeam.avatar.name,
 					sprite: opponentTeam.avatar.sprite
@@ -778,7 +913,6 @@ const Battle = ({ battle }: BattleProps) => {
 		localStorage.setItem('battle', JSON.stringify(localStorageBattle));
 	};
 
-	//Battle initialization
 	useEffect(() => {
 		if (!battle) return;
 		const localStorageBattle = JSON.parse(localStorage.getItem('battle'));
@@ -839,7 +973,6 @@ const Battle = ({ battle }: BattleProps) => {
 		setIsInitialized(true);
 	}, [battle]);
 
-	//Sync battle to local storage
 	useEffect(() => {
 		if (!isInitialized) return;
 		syncBattleToLocalStorage(
@@ -858,7 +991,6 @@ const Battle = ({ battle }: BattleProps) => {
 		activeTurn
 	]);
 
-	//Turn sequence
 	useEffect(() => {
 		if (!playerReady || !opponentReady) return;
 
@@ -871,10 +1003,7 @@ const Battle = ({ battle }: BattleProps) => {
 			setIsSwitching(false);
 			setTimeout(() => {
 				handleThawing(activePlayerPokemon, activeOpponentPokemon);
-				const nbNotificationPoisons = handlePoisoning(
-					activePlayerPokemon,
-					activeOpponentPokemon
-				);
+				const nbNotificationPoisons = handlePoisoning();
 				handleBurning(activePlayerPokemon, activeOpponentPokemon);
 
 				setTimeout(
@@ -916,7 +1045,12 @@ const Battle = ({ battle }: BattleProps) => {
 			</div>
 
 			{battleEnd && (
-				<BattleEnd playerTeam={playerTeam} opponentTeam={opponentTeam} />
+				<BattleEnd
+					playerTeam={playerTeam}
+					opponentTeam={opponentTeam}
+					playerRunning={playerRunning}
+					opponentRunning={opponentRunning}
+				/>
 			)}
 
 			<div className={'battle-theme'}>
@@ -1003,6 +1137,10 @@ const Battle = ({ battle }: BattleProps) => {
 						playerPokemon={activePlayerPokemon}
 						handleMoveSelection={handleMoveSelection}
 						disabled={isNotificationActive}
+						setBattleEnd={setBattleEnd}
+						currentView={currentView}
+						setPlayerRunning={setPlayerRunning}
+						setOpponentRunning={setOpponentRunning}
 					/>
 
 					{!battleEnd && (
@@ -1081,6 +1219,10 @@ const Battle = ({ battle }: BattleProps) => {
 						playerPokemon={activeOpponentPokemon}
 						handleMoveSelection={handleMoveSelection}
 						disabled={isNotificationActive}
+						setBattleEnd={setBattleEnd}
+						currentView={currentView}
+						setPlayerRunning={setPlayerRunning}
+						setOpponentRunning={setOpponentRunning}
 					/>
 
 					{!battleEnd && (

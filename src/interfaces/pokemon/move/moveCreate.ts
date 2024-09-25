@@ -6,6 +6,7 @@ export interface MoveCreate {
 	power: number;
 	accuracy: number;
 	pp: number;
+	maxPp: number;
 	meta: MetaEntity;
 	type: string;
 	category: string;
