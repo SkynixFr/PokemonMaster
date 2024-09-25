@@ -61,7 +61,7 @@ class Pokemon {
 		this.index = index;
 	}
 
-	getStat(statName: string): Stat {
+	getStatByName(statName: string): Stat {
 		const searchedStat = this.stats.find(stat => stat.name === statName);
 		return new Stat(
 			searchedStat.name,
@@ -130,65 +130,56 @@ class Pokemon {
 		this.activeMove.decreasePP();
 		let updatedStatus: Status = target.status;
 		let updatedVolatileStatus: Status = target.volatileStatus;
-		const statusList = ['PSN', 'SLP', 'FRZ', 'KO', 'BRN', 'PAR'];
-		const missChance = Math.random();
 		let damage = this.activeMove.power;
-		// if (missChance > 0) {
-		// 	console.log('The attack missed!');
-		// 	return target;
-		// }
-		const opponentHp = target.getStat('hp');
+		const opponentHp = target.getStatByName('hp');
 		const updatedHp = opponentHp.decrease(damage);
 		const hpIndex = target.stats.findIndex(stat => stat.name === 'hp');
 		target.stats[hpIndex] = updatedHp;
-		if (
-			this.activeMove.meta?.ailment === 'sleep' &&
-			!statusList.includes(target.status.name)
-		) {
-			updatedStatus = new Status(
-				'SLP',
-				`${this.name} is asleep`,
-				Math.ceil(Math.random() * 3),
-				false
-			);
-		}
-		if (
-			this.activeMove.meta?.ailment === 'poison' &&
-			!statusList.includes(target.status.name)
-		) {
+		// if (
+		// 	this.activeMove.meta?.ailment === 'sleep' &&
+		// 	!statusList.includes(target.status.name)
+		// ) {
+		// 	updatedStatus = new Status(
+		// 		'SLP',
+		// 		`${this.name} is asleep`,
+		// 		Math.ceil(Math.random() * 3),
+		// 		false
+		// 	);
+		// }
+		if (this.activeMove.meta?.ailment === 'poison') {
 			updatedStatus = new Status('PSN', `${this.name} is poisoned`, 0, true);
 		}
-		if (
-			this.activeMove.meta?.ailment === 'freeze' &&
-			!statusList.includes(target.status.name)
-		) {
-			updatedStatus = new Status('FRZ', `${this.name} is frozen`, 0, false);
-		}
-		if (
-			this.activeMove.meta?.ailment === 'burn' &&
-			!statusList.includes(target.status.name)
-		) {
-			updatedStatus = new Status('BRN', `${this.name} is burned`, 0, true);
-		}
-		if (
-			this.activeMove.meta?.ailment === 'paralysis' &&
-			!statusList.includes(target.status.name)
-		) {
-			updatedStatus = new Status(
-				'PAR',
-				`${this.name} is paralyzed`,
-				0,
-				false
-			);
-		}
-		if (this.activeMove.meta?.ailment === 'confusion') {
-			updatedVolatileStatus = new Status(
-				'CNF',
-				`${this.name} is confused`,
-				Math.ceil(Math.random() * 4),
-				true
-			);
-		}
+		// if (
+		// 	this.activeMove.meta?.ailment === 'freeze' &&
+		// 	!statusList.includes(target.status.name)
+		// ) {
+		// 	updatedStatus = new Status('FRZ', `${this.name} is frozen`, 0, false);
+		// }
+		// if (
+		// 	this.activeMove.meta?.ailment === 'burn' &&
+		// 	!statusList.includes(target.status.name)
+		// ) {
+		// 	updatedStatus = new Status('BRN', `${this.name} is burned`, 0, true);
+		// }
+		// if (
+		// 	this.activeMove.meta?.ailment === 'paralysis' &&
+		// 	!statusList.includes(target.status.name)
+		// ) {
+		// 	updatedStatus = new Status(
+		// 		'PAR',
+		// 		`${this.name} is paralyzed`,
+		// 		0,
+		// 		false
+		// 	);
+		// }
+		// if (this.activeMove.meta?.ailment === 'confusion') {
+		// 	updatedVolatileStatus = new Status(
+		// 		'CNF',
+		// 		`${this.name} is confused`,
+		// 		Math.ceil(Math.random() * 4),
+		// 		true
+		// 	);
+		// }
 		if (updatedHp.value === 0) {
 			updatedStatus = new Status('KO', `${this.name} has fainted`, 0, false);
 		}
@@ -215,36 +206,41 @@ class Pokemon {
 	}
 
 	changeStatus(updatedStatus: Status): Pokemon {
-		return new Pokemon(
-			this.pokedexId,
-			this.name,
-			this.types,
-			this.level,
-			this.ability,
-			this.nature,
-			this.gender,
-			this.isShiny,
-			this.moves,
-			this.item,
-			this.stats,
-			this.weight,
-			this.activeMove,
-			updatedStatus,
-			this.volatileStatus,
-			this.index
-		);
+		const statusList = ['PSN', 'SLP', 'FRZ', 'KO', 'BRN', 'PAR'];
+		if (!statusList.includes(this.status.name)) {
+			return new Pokemon(
+				this.pokedexId,
+				this.name,
+				this.types,
+				this.level,
+				this.ability,
+				this.nature,
+				this.gender,
+				this.isShiny,
+				this.moves,
+				this.item,
+				this.stats,
+				this.weight,
+				this.activeMove,
+				updatedStatus,
+				this.volatileStatus,
+				this.index
+			);
+		} else {
+			return this;
+		}
 	}
 
 	sufferFromStatus(): Pokemon {
 		let updatedStatus = this.status;
 		let damage = 0;
 		if (this.status.name === 'PSN') {
-			damage = Math.ceil(this.getStat('hp').max / 8);
+			damage = Math.ceil(this.getStatByName('hp').max / 8);
 		}
 		if (this.status.name === 'BRN') {
-			damage = Math.ceil(this.getStat('hp').max / 16);
+			damage = Math.ceil(this.getStatByName('hp').max / 16);
 		}
-		const updatedHp = this.getStat('hp').decrease(damage);
+		const updatedHp = this.getStatByName('hp').decrease(damage);
 		const index = this.stats.findIndex(stat => stat.name === 'hp');
 		this.stats[index] = updatedHp;
 		if (updatedHp.value <= 0) {

@@ -438,8 +438,8 @@ const Battle = ({ battle }: BattleProps) => {
 			return;
 		}
 
-		const playerSpeed = activePlayerPokemon.getStat('speed').value;
-		const opponentSpeed = activeOpponentPokemon.getStat('speed').value;
+		const playerSpeed = activePlayerPokemon.getStatByName('speed').value;
+		const opponentSpeed = activeOpponentPokemon.getStatByName('speed').value;
 		let nbNotificationsAttack = 0;
 
 		if (playerSpeed > opponentSpeed) {
