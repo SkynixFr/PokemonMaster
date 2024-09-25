@@ -16,7 +16,6 @@ import { ChevronsDown, ChevronsUp, Search, X } from 'lucide-react';
 
 // Utils
 import { firstLetterMaj } from '../../utils/formatString';
-import { toast } from 'sonner';
 
 const NaturesModal = ({
 	setOpenNature,
@@ -85,7 +84,7 @@ const NaturesModal = ({
 		);
 
 		if (filteredNatures.length === 0) {
-			toast.error('No natures found, bad name');
+			setNatures([]);
 			return;
 		}
 
@@ -109,15 +108,18 @@ const NaturesModal = ({
 					<X width={30} height={30} />
 				</button>
 				<div className={'natures-searchbar'}>
+					<div className={'search-icon'}>
+						<button className={'btn-search-natures'}>
+							<Search width={20} height={20} />
+						</button>
+					</div>
+
 					<form onSubmit={handleSubmit}>
 						<input
 							type="text"
 							placeholder="Search for a nature..."
 							onChange={handleNaturesSearch}
 						/>
-						<button className={'btn-search-natures btn-primary'}>
-							<Search width={20} height={20} />
-						</button>
 					</form>
 				</div>
 				<div className="natures-modal-body">
@@ -128,7 +130,7 @@ const NaturesModal = ({
 						</div>
 					</div>
 					<div className={'natures-list'}>
-						{natures ? (
+						{natures.length > 0 ? (
 							natures.map(nature => (
 								<div
 									key={nature.id}
@@ -195,7 +197,7 @@ const NaturesModal = ({
 								</div>
 							))
 						) : (
-							<div className={'natures-list-item'}>Loading...</div>
+							<h3>No natures found</h3>
 						)}
 					</div>
 				</div>

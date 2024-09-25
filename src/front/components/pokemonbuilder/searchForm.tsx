@@ -93,6 +93,12 @@ const SearchForm = ({
 	return (
 		<div className={'search-pokemons'}>
 			<div className={'search-pokemons-bar'}>
+				<div className={'search-icon'}>
+					<button type="button" className={'btn-search-pokemons'}>
+						<Search width={20} height={20} />
+					</button>
+				</div>
+
 				<form onSubmit={handleSubmit}>
 					<input
 						type="text"
@@ -101,9 +107,6 @@ const SearchForm = ({
 						placeholder="Search pokemons"
 						onChange={handleSearchPokemon}
 					/>
-					<button type="button" className={'btn-search-moves btn-primary'}>
-						<Search width={20} height={20} />
-					</button>
 				</form>
 			</div>
 			<div className={'filter-pokemons'}>

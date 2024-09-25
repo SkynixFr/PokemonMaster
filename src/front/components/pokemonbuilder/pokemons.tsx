@@ -66,6 +66,19 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 			return toast.error('You must have at least one pokemon in your team');
 		}
 
+		// if (
+		// 	team.pokemons.some(
+		// 		(pokemon, index, self) =>
+		// 			self.findIndex(
+		// 				p => p.name === pokemon.name && pokemon.name !== ''
+		// 			) !== index
+		// 	)
+		// ) {
+		// 	return toast.error(
+		// 		'You cannot have the same pokemon twice in your team'
+		// 	);
+		// }
+
 		const teamNameRegex: RegExp = /^[a-zA-Z0-9._\-\s]*$/;
 
 		if (!teamNameRegex.test(team.name)) {

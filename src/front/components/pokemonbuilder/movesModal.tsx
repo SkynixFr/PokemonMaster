@@ -101,7 +101,7 @@ const MovesModal = ({
 		);
 
 		if (filteredMoves.length === 0) {
-			toast.error('No moves found, bad name');
+			setMoves([]);
 			return;
 		}
 
@@ -125,18 +125,18 @@ const MovesModal = ({
 					<X width={30} height={30} />
 				</button>
 				<div className={'moves-searchbar'}>
+					<div className={'search-icon'}>
+						<button className={'btn-search-natures'}>
+							<Search width={20} height={20} />
+						</button>
+					</div>
+
 					<form onSubmit={handleSubmit}>
 						<input
 							type="text"
 							placeholder="Search for a move..."
 							onChange={handleMovesSearch}
 						/>
-						<button
-							className={'btn-search-moves btn-primary'}
-							type="button"
-						>
-							<Search width={20} height={20} />
-						</button>
 					</form>
 				</div>
 
@@ -243,7 +243,7 @@ const MovesModal = ({
 								</div>
 							))
 						) : (
-							<div className={'moves-list-item'}>Loading...</div>
+							<h3>No moves found</h3>
 						)}
 					</div>
 				</div>

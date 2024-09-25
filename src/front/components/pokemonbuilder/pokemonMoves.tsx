@@ -54,7 +54,7 @@ const PokemonMoves = ({
 					) : (
 						<button
 							key={index}
-							className={`pokemon-move`}
+							className={`pokemon-move ${index > 0 && (!movesActive || !movesActive[index - 1] ? 'disabled' : '')}`}
 							onClick={() => handleMoveClick(index)}
 							disabled={
 								index > 0 && (!movesActive || !movesActive[index - 1])

@@ -32,6 +32,11 @@
     font-size: var(--fs-sm);
 }
 
+.pokemon-move.disabled {
+    cursor: default;
+    background-color: var(--grey);
+}
+
 .pokemon-move-fullfilled {
     min-width: calc(160px - 10px);
     height: 30px;
@@ -42,11 +47,13 @@
     font-size: var(--fs-sm);
     padding: 0 5px;
     gap: 10px;
+
 }
 
 .pokemon-move-fullfilled.default {
     background-color: var(--grey);
     color: var(--black);
+    cursor: pointer;
 }
 
 
