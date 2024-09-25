@@ -434,6 +434,10 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handleAttacksByPriority = () => {
+		if (justSwitchedPlayer && justSwitchedOpponent) {
+			return;
+		}
+
 		const playerSpeed = activePlayerPokemon.getStat('speed').value;
 		const opponentSpeed = activeOpponentPokemon.getStat('speed').value;
 		let nbNotificationsAttack = 0;
