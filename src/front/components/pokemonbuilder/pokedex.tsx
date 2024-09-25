@@ -43,6 +43,8 @@ const Pokedex = ({
 				savedPokemons={pokemons}
 				currentPokemons={currentPokemons}
 				setCurrentPokemons={setCurrentPokemons}
+				setCurrentPage={setCurrentPage}
+				totalPages={totalPages}
 			/>
 			<div className={'pokedex-pokemons'}>
 				{currentPokemons.map(pokemon => (

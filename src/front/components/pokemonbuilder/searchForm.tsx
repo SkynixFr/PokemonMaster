@@ -11,9 +11,16 @@ interface SearchFormProps {
 	currentPokemons: PokemonEntity[];
 	setCurrentPokemons: (pokemons: PokemonEntity[]) => void;
 	savedPokemons: PokemonEntity[];
+	setCurrentPage: (currentPage: number) => void;
+	totalPages: number;
 }
 
-const SearchForm = ({ setCurrentPokemons, savedPokemons }: SearchFormProps) => {
+const SearchForm = ({
+	setCurrentPokemons,
+	savedPokemons,
+	setCurrentPage,
+	totalPages
+}: SearchFormProps) => {
 	const [searchTerm, setSearchTerm] = useState<string>('');
 	const [pokemonType, setPokemonType] = useState<string>('type');
 	const [pokemonGeneration, setPokemonGeneration] =
@@ -38,43 +45,39 @@ const SearchForm = ({ setCurrentPokemons, savedPokemons }: SearchFormProps) => {
 	const filterPokemons = () => {
 		let filteredPokemons = savedPokemons;
 
-		if (searchTerm) {
-			filteredPokemons = filteredPokemons.filter(pokemon =>
-				pokemon.name.toLowerCase().includes(searchTerm)
-			);
-
-			if (filteredPokemons.length === 0) {
-				toast.error('No pokemons found, bad name');
-				return;
-			}
-		}
-
+		// Filtrage par type
 		if (pokemonType !== 'type') {
 			filteredPokemons = filteredPokemons.filter(pokemon =>
 				pokemon.types.some(type => type.name === pokemonType)
 			);
-
-			if (filteredPokemons.length === 0) {
-				toast.error('No pokemons found, bad type');
-				setPokemonType('type');
-				return;
-			}
 		}
 
+		// Filtrage par génération
 		if (pokemonGeneration !== 'generation') {
 			const { start, end } = generationIds[pokemonGeneration];
 			filteredPokemons = filteredPokemons.filter(
 				pokemon => pokemon.pokedexId >= start && pokemon.pokedexId <= end
 			);
+		}
 
-			if (filteredPokemons.length === 0) {
-				toast.error('No pokemons found, bad generation');
-				setPokemonGeneration('generation');
+		// Recherche par nom uniquement parmi les pokemons déjà filtrés
+		if (searchTerm) {
+			const searchedPokemons = filteredPokemons.filter(pokemon =>
+				pokemon.name.toLowerCase().includes(searchTerm)
+			);
+
+			if (searchedPokemons.length === 0) {
+				toast.error(
+					'No Pokémon found with that name in the filtered results'
+				);
 				return;
 			}
+			filteredPokemons = searchedPokemons;
 		}
 
 		setCurrentPokemons(filteredPokemons);
+		setCurrentPage(1);
+		totalPages = Math.ceil(filteredPokemons.length / 12);
 	};
 
 	const handleSearchPokemon = (event: ChangeEvent<HTMLInputElement>) => {
