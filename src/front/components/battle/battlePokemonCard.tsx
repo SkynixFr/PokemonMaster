@@ -35,15 +35,8 @@ const BattlePokemonCard = ({
 	currentView,
 	setPreviousHp
 }: BattlePokemonCardProps) => {
-	const [progressBarWidth, setProgressBarWidth] = useState(
-		(previousHp / activePokemon.stats[0].total) * 100
-	);
-	const [displayedHp, setDisplayedHp] = useState(previousHp);
-
-	useEffect(() => {
-		setDisplayedHp(previousHp);
-		setProgressBarWidth((previousHp / activePokemon.stats[0].total) * 100);
-	}, [currentView]);
+	const [progressBarWidth, setProgressBarWidth] = useState(0);
+	const [displayedHp, setDisplayedHp] = useState(0);
 
 	useEffect(() => {
 		setDisplayedHp(previousHp);
@@ -94,7 +87,16 @@ const BattlePokemonCard = ({
 
 	useEffect(() => {
 		animationPokemonInfos().then();
-	}, [currentNotification, activePokemon, player]);
+	}, [currentNotification]);
+
+	useEffect(() => {
+		setDisplayedHp(previousHp);
+		setProgressBarWidth((previousHp / activePokemon.stats[0].total) * 100);
+	}, [currentView]);
+
+	useEffect(() => {
+		console.log('displayedHp', player + ' ' + displayedHp);
+	}, [displayedHp]);
 
 	return (
 		<div

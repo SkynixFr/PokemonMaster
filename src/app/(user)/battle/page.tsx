@@ -856,7 +856,7 @@ const Battle = ({ battle }: BattleProps) => {
 	const handlePlayerKo = () => {
 		const { activePlayerPokemonFromLS, activeOpponentPokemonFromLS } =
 			getActivePokemonsFromLocalStorage();
-		setPreviousOpponentPokemonHp(activeOpponentPokemonFromLS.stats[0].value);
+		// setPreviousOpponentPokemonHp(activeOpponentPokemonFromLS.stats[0].value);
 		if (activePlayerPokemonFromLS.stats[0].value === 0) {
 			addNotification({
 				pokemonName: activePlayerPokemonFromLS.name,
@@ -868,9 +868,18 @@ const Battle = ({ battle }: BattleProps) => {
 				animationType: 'ko'
 			});
 			if (playerTeam.pokemons.some(pokemon => pokemon.stats[0].value > 0)) {
-				setCounterPlayerPokemonKo(counterPlayerPokemonKo + 1);
-				setActivePlayerPokemonKo(true);
-				setCurrentView('player');
+				// setCounterPlayerPokemonKo(counterPlayerPokemonKo + 1);
+				// setActivePlayerPokemonKo(true);
+				// setCurrentView('player');
+				setPreviousPlayerPokemonHp(
+					activePlayerPokemonFromLS.stats[0].value
+				);
+				setPreviousOpponentPokemonHp(
+					activeOpponentPokemonFromLS.stats[0].value
+				);
+				setTimeout(() => {
+					setCurrentView('player');
+				}, 1000);
 			}
 		}
 	};
@@ -878,7 +887,7 @@ const Battle = ({ battle }: BattleProps) => {
 	const handleOpponentKo = () => {
 		const { activePlayerPokemonFromLS, activeOpponentPokemonFromLS } =
 			getActivePokemonsFromLocalStorage();
-		setPreviousPlayerPokemonHp(activePlayerPokemonFromLS.stats[0].value);
+		// setPreviousPlayerPokemonHp(activePlayerPokemonFromLS.stats[0].value);
 		if (activeOpponentPokemonFromLS.stats[0].value === 0) {
 			addNotification({
 				pokemonName: activeOpponentPokemonFromLS.name,
@@ -892,9 +901,18 @@ const Battle = ({ battle }: BattleProps) => {
 			if (
 				opponentTeam.pokemons.some(pokemon => pokemon.stats[0].value > 0)
 			) {
-				setCounterOpponentPokemonKo(counterOpponentPokemonKo + 1);
-				setActiveOpponentPokemonKo(true);
-				setCurrentView('opponent');
+				// setCounterOpponentPokemonKo(counterOpponentPokemonKo + 1);
+				// setActiveOpponentPokemonKo(true);
+
+				setPreviousPlayerPokemonHp(
+					activePlayerPokemonFromLS.stats[0].value
+				);
+				setPreviousOpponentPokemonHp(
+					activeOpponentPokemonFromLS.stats[0].value
+				);
+				setTimeout(() => {
+					setCurrentView('opponent');
+				}, 1000);
 			}
 		}
 	};
