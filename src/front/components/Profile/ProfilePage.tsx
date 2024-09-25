@@ -157,9 +157,8 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 					<div className="separator-line" />
 					<div className="user-teams-container">
 						<h1>Your Teams :</h1>
-						<div className="user-teams-info">
-							<ProfileUserTeam teams={teams} avatars={avatars} />
-						</div>
+
+						<ProfileUserTeam teams={teams} avatars={avatars} />
 					</div>
 				</div>
 			</div>

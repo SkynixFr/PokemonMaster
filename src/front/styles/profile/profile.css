@@ -137,16 +137,21 @@
 	display: flex;
 	background-color: red;
 }
-
-.user-teams > .teams-container > .teams-list {
+.user-teams-container .teams-container {
+	display: flex;
+	align-items: center !important;
+	justify-content: center !important;
+	flex-direction: column;
+}
+.user-teams-container > .teams-container > .teams-list {
 	display: flex;
 	align-items: center;
-	justify-content: space-evenly;
+
 	flex-direction: row;
 	flex-wrap: wrap;
 }
 
-.user-teams > .teams-container > .teams-list > .team-container {
+.user-teams-container > .teams-container > .teams-list > .team-container {
 	max-width: 30%;
 	height: 150px;
 	margin-top: 50px;

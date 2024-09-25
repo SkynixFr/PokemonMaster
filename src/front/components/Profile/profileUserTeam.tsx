@@ -26,17 +26,13 @@ const profileUserTeam = ({ teams, avatars }: profileUserTeamProps) => {
 	}, []);
 
 	return (
-		<div className={'user-container'}>
-			<div className={'user-teams'}>
-				<TeamsUser
-					avatars={avatars}
-					teams={teams}
-					setSelectedTeam={setSelectedTeam}
-					selectedTeam={selectedTeam}
-					setCurrentLength={setCurrentLength}
-				/>
-			</div>
-		</div>
+		<TeamsUser
+			avatars={avatars}
+			teams={teams}
+			setSelectedTeam={setSelectedTeam}
+			selectedTeam={selectedTeam}
+			setCurrentLength={setCurrentLength}
+		/>
 	);
 };
 
