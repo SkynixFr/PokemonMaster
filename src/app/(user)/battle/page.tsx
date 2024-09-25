@@ -937,6 +937,16 @@ const Battle = ({ battle }: BattleProps) => {
 		}
 	};
 
+	const handleBattleTheme = () => {
+		if (activeTheme === 'day') {
+			setActiveTheme('night');
+			localStorage.setItem('theme-battle', 'night');
+		} else {
+			setActiveTheme('day');
+			localStorage.setItem('theme-battle', 'day');
+		}
+	};
+
 	const syncBattleToLocalStorage = (
 		playerTeam: Team,
 		opponentTeam: Team,
@@ -985,6 +995,7 @@ const Battle = ({ battle }: BattleProps) => {
 			if (playerPokemonKo || opponentPokemonKo) {
 				setBattleEnd(true);
 			}
+			setActiveTheme(localStorage.getItem('theme-battle'));
 		} else if (battle) {
 			setPlayerTeam(battle.playerTeam);
 			setOpponentTeam(battle.opponentTeam);
@@ -1097,11 +1108,7 @@ const Battle = ({ battle }: BattleProps) => {
 			<div className={'battle-theme'}>
 				<button
 					className={`theme-btn btn-primary ${activeTheme} fadeInToBottom`}
-					onClick={() =>
-						activeTheme === 'day'
-							? setActiveTheme('night')
-							: setActiveTheme('day')
-					}
+					onClick={() => handleBattleTheme()}
 				>
 					{activeTheme === 'day' ? <Moon /> : <Sun />}
 				</button>
