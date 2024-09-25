@@ -127,13 +127,13 @@ class Pokemon {
 		if (!this.status.ableToMove) {
 			return target;
 		}
-		this.activeMove.decreasePP();
 		let updatedStatus: Status = target.status;
 		let updatedVolatileStatus: Status = target.volatileStatus;
 		let damage = this.activeMove.power;
 		const opponentHp = target.getStatByName('hp');
 		const updatedHp = opponentHp.decrease(damage);
 		const hpIndex = target.stats.findIndex(stat => stat.name === 'hp');
+
 		target.stats[hpIndex] = updatedHp;
 		// if (
 		// 	this.activeMove.meta?.ailment === 'sleep' &&
@@ -232,16 +232,16 @@ class Pokemon {
 	}
 
 	sufferFromStatus(): Pokemon {
+		const index = this.stats.findIndex(stat => stat.name === 'hp');
 		let updatedStatus = this.status;
 		let damage = 0;
 		if (this.status.name === 'PSN') {
 			damage = Math.ceil(this.getStatByName('hp').max / 8);
 		}
-		if (this.status.name === 'BRN') {
-			damage = Math.ceil(this.getStatByName('hp').max / 16);
-		}
+		// if (this.status.name === 'BRN') {
+		// 	damage = Math.ceil(this.getStatByName('hp').max / 16);
+		// }
 		const updatedHp = this.getStatByName('hp').decrease(damage);
-		const index = this.stats.findIndex(stat => stat.name === 'hp');
 		this.stats[index] = updatedHp;
 		if (updatedHp.value <= 0) {
 			updatedStatus = new Status('KO', `${this.name} has fainted`, 0, false);
