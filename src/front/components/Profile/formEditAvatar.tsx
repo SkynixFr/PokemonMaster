@@ -81,7 +81,7 @@ const FormEditAvatar = ({
 	};
 
 	return (
-		<div className="create-team-modal">
+		<div className="profile-modal">
 			<div className={'form-create-team'}>
 				<button className="close-btn" onClick={() => setOpenForm(null)}>
 					<X width={30} height={30} />
