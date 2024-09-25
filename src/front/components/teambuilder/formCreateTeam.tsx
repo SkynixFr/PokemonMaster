@@ -29,10 +29,11 @@ const teamSchema = z.object({
 	name: z
 		.string()
 		.min(1, { message: 'Name is required' })
+		.min(3, { message: 'Name is too short' })
 		.max(20, { message: 'Name is too long' })
-		.regex(new RegExp('^[\\w -]+$'), {
+		.regex(/^[a-zA-Z0-9._\-\s]*$/, {
 			message:
-				'Name is invalid. Only letters, numbers, spaces and hyphens are allowed.'
+				'Name must contain only letters, numbers, spaces, dots, underscores, and dashes'
 		})
 });
 
