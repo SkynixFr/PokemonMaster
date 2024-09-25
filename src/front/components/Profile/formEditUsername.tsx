@@ -22,8 +22,7 @@ const userSchema = z.object({
 		.string()
 		.min(1, { message: 'Name is required' })
 		.refine(username => /^[a-zA-Z0-9_]{3,16}$/.test(username), {
-			message:
-				'Username must be between 3 and 16 characters long and contain only letters, numbers, and underscores'
+			message: 'Invalid Username'
 		})
 });
 
@@ -147,14 +146,15 @@ const FormEditUsername = ({
 	return (
 		<div className="username-container">
 			<div className="form-edit-username">
-				<h2>Username </h2>
-				{errors.username && (
-					<div className={'error'}>{errors.username}</div>
-				)}
+				<h2>Username :</h2>
+
 				{isEditing ? (
 					// Show input field when editing
 					<div className="username-show">
 						<div className="input-container">
+							{errors.username && (
+								<div className={'error'}>{errors.username}</div>
+							)}
 							<input
 								type="text"
 								value={newUsername}
