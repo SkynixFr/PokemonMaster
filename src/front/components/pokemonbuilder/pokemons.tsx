@@ -183,13 +183,15 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 						setCurrentPage={setCurrentPage}
 					/>
 				</div>
-				<PokemonDetails
-					pokemon={pokemonActive}
-					team={team}
-					teamActive={teamActive}
-					setTeamActive={setTeamActive}
-					isFromTeam={isFromTeam}
-				/>
+				{currentPokemons.length > 0 && pokemonActive && (
+					<PokemonDetails
+						pokemon={pokemonActive}
+						team={team}
+						teamActive={teamActive}
+						setTeamActive={setTeamActive}
+						isFromTeam={isFromTeam}
+					/>
+				)}
 			</div>
 		</>
 	);

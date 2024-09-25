@@ -5,7 +5,6 @@ import { Search } from 'lucide-react';
 
 // Interfaces
 import { PokemonEntity } from '../../../interfaces/pokemon/pokemonEntity';
-import { toast } from 'sonner';
 
 interface SearchFormProps {
 	currentPokemons: PokemonEntity[];
@@ -43,16 +42,14 @@ const SearchForm = ({
 	}, [pokemonType, searchTerm, pokemonGeneration]);
 
 	const filterPokemons = () => {
-		let filteredPokemons = savedPokemons;
+		let filteredPokemons = [...savedPokemons];
 
-		// Filtrage par type
 		if (pokemonType !== 'type') {
 			filteredPokemons = filteredPokemons.filter(pokemon =>
 				pokemon.types.some(type => type.name === pokemonType)
 			);
 		}
 
-		// Filtrage par génération
 		if (pokemonGeneration !== 'generation') {
 			const { start, end } = generationIds[pokemonGeneration];
 			filteredPokemons = filteredPokemons.filter(
@@ -60,26 +57,20 @@ const SearchForm = ({
 			);
 		}
 
-		// Recherche par nom uniquement parmi les pokemons déjà filtrés
 		if (searchTerm) {
-			const searchedPokemons = filteredPokemons.filter(pokemon =>
-				pokemon.name.toLowerCase().includes(searchTerm)
+			filteredPokemons = filteredPokemons.filter(pokemon =>
+				pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())
 			);
-
-			if (searchedPokemons.length === 0) {
-				toast.error(
-					'No Pokémon found with that name in the filtered results'
-				);
-				return;
-			}
-			filteredPokemons = searchedPokemons;
 		}
 
+		console.log(filteredPokemons);
+
 		setCurrentPokemons(filteredPokemons);
+
 		setCurrentPage(1);
+
 		totalPages = Math.ceil(filteredPokemons.length / 12);
 	};
-
 	const handleSearchPokemon = (event: ChangeEvent<HTMLInputElement>) => {
 		const search = event.target.value.toLowerCase();
 		setSearchTerm(search);

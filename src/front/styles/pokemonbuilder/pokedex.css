@@ -11,12 +11,12 @@
     flex-flow: row wrap;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    flex-grow: 1;
     gap: 20px;
     padding: 50px 125px;
 }
 
-.pokedex-pokemon {
+.pokedex-pokemon, .empty-slot {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -27,6 +27,10 @@
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
+}
+
+.empty-slot {
+    background-color: transparent;
 }
 
 .pokedex-pokemon:hover {
