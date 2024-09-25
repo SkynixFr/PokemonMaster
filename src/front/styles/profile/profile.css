@@ -137,34 +137,3 @@
 	display: flex;
 	background-color: red;
 }
-
-.user-teams-container {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	justify-content: center;
-	width: 100%;
-	gap: 25px;
-}
-
-.user-teams-list {
-	display: flex;
-	flex-flow: row wrap;
-	align-items: center;
-	justify-content: flex-start;
-	width: 100%;
-	column-gap: 75px;
-	row-gap: 25px;
-	padding: 10px 0;
-
-
-}
-.user-teams-list  .team-container {
-	height: 100px;
-	width: 450px;
-	overflow: hidden;
-}
-
-.user-teams-list .team-container .user-team-options button {
-	height: 50px;
-}
