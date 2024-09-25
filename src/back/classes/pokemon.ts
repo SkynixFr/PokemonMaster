@@ -15,7 +15,7 @@ class Pokemon {
 	readonly gender: string = 'neutral' || 'female' || 'male';
 	readonly isShiny: boolean = false;
 	readonly moves: Move[];
-	readonly item = '';
+	readonly item: string;
 	readonly stats: Stat[];
 	readonly weight: number;
 	readonly activeMove: Move;
@@ -33,7 +33,7 @@ class Pokemon {
 		gender: string,
 		isShiny: boolean,
 		moves: Move[],
-		item: '',
+		item: string,
 		stats: Stat[],
 		weight: number,
 		activeMove: Move,

@@ -451,7 +451,10 @@ const Battle = ({ battle }: BattleProps) => {
 				} = handlePlayerAttack(activePlayerPokemon, activeOpponentPokemon);
 				nbNotificationsAttack += notificationPlayerAttack;
 
-				if (updatedOpponentPokemon.status.ableToMove) {
+				if (
+					updatedOpponentPokemon.status.ableToMove &&
+					!justSwitchedOpponent
+				) {
 					const {
 						notificationOpponentAttack,
 						updatedOpponentPokemonFromOA,
@@ -494,7 +497,10 @@ const Battle = ({ battle }: BattleProps) => {
 				);
 				nbNotificationsAttack += notificationOpponentAttack;
 
-				if (updatedPlayerPokemonFromOA.status.ableToMove) {
+				if (
+					updatedPlayerPokemonFromOA.status.ableToMove &&
+					!justSwitchedPlayer
+				) {
 					const {
 						notificationPlayerAttack,
 						updatedOpponentPokemon,
@@ -525,7 +531,7 @@ const Battle = ({ battle }: BattleProps) => {
 		} else {
 			const random = Math.random();
 			if (random > 0.5) {
-				if (!justSwitchedPlayer) {
+				if (!justSwitchedPlayer && !justSwitchedOpponent) {
 					const {
 						notificationPlayerAttack,
 						updatedPlayerPokemon,
@@ -579,7 +585,10 @@ const Battle = ({ battle }: BattleProps) => {
 					);
 					nbNotificationsAttack += notificationOpponentAttack;
 
-					if (updatedPlayerPokemonFromOA.status.ableToMove) {
+					if (
+						updatedPlayerPokemonFromOA.status.ableToMove &&
+						!justSwitchedPlayer
+					) {
 						const {
 							notificationPlayerAttack,
 							updatedOpponentPokemon,
