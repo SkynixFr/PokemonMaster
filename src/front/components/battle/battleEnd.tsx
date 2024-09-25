@@ -76,7 +76,7 @@ const BattleEnd = ({
 						className={'battle-end-modal-button btn-primary'}
 						onClick={() => handleBattleEnd()}
 					>
-						Go back
+						Return to Team Builder
 					</button>
 				</div>
 			</div>

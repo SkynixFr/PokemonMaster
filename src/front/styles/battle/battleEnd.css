@@ -43,7 +43,7 @@
 }
 
 .battle-end-modal-button {
-    width: 100px;
+    width: max-content;
     height: 35px;
     display: flex;
     align-items: center;
@@ -54,4 +54,5 @@
     font-size: var(--fs-md);
     border-radius: 5px;
     transition: all 0.3s ease-in-out;
+    padding: 2px 15px;
 }
