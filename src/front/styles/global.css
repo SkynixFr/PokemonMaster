@@ -11,8 +11,13 @@
 @import url('battle/battle.css');
 @import url('teambuilder/teambuilder.css');
 @import url('pokemonbuilder/pokemonbuilder.css');
+
 @import url('home/home.css');
 
+@import url('login/login.css');
+@import url('signin/signin.css');
+@import url('profile/profile.css');
+@import url('unauthorized/unauthorized.css');
 /* Animations */
 @import url('animations.css');
 
@@ -35,7 +40,7 @@ h6 {
 	margin: 0;
 }
 
-button	{
+button {
 	cursor: pointer;
 }
 
@@ -76,7 +81,7 @@ a {
 	background-color: transparent;
 	color: var(--red);
 	width: max-content;
-	height:30px;
+	height: 30px;
 	padding: 0;
 }
 
