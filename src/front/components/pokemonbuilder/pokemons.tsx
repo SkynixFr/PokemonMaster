@@ -58,6 +58,22 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 	};
 
 	const handleSaveTeam = (team: TeamEntity) => {
+		if (team.name.length < 3 || team.name.length > 20) {
+			return toast.error('Team name must be between 3 and 20 characters');
+		}
+
+		if (team.pokemons.length < 1) {
+			return toast.error('You must have at least one pokemon in your team');
+		}
+
+		const teamNameRegex: RegExp = /^[a-zA-Z0-9._\-\s]*$/;
+
+		if (!teamNameRegex.test(team.name)) {
+			return toast.error(
+				'Team name must contain only letters, numbers, spaces, dots and dashes'
+			);
+		}
+
 		const newTeam: TeamUpdate = {
 			name: team.name,
 			avatarId: team.avatar.id,
