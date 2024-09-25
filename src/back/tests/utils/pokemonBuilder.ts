@@ -1,7 +1,6 @@
 // Builder
 import StatBuilder from './statBuilder';
 import MoveBuilder from './moveBuilder';
-import TypeBuilder from './typeBuilder';
 
 // Classes
 import Pokemon from '../../classes/pokemon';
@@ -11,24 +10,27 @@ import Type from '../../classes/typeEffectiveness';
 import Ability from '../../classes/ability';
 import Nature from '../../classes/nature';
 import Status from '../../classes/status';
+import DamageRelationBuilder from './damageRelationBuilder';
+import AbilityBuilder from './abilityBuilder';
+import NatureBuilder from './natureBuilder';
 
 class PokemonBuilder {
-	pokedexId: number;
-	name: string;
-	types: Type[];
-	level: number;
-	ability: Ability;
-	nature: Nature;
-	gender: string;
-	isShiny: boolean;
-	moves: Move[];
-	item: string;
-	stats: Stat[];
-	weight: number;
-	activeMove: Move;
-	status: Status;
-	volatileStatus: Status;
-	index: number;
+	pokedexId: number = 6;
+	name: string = 'Charizard';
+	types: Type[] = [new Type('fire', new DamageRelationBuilder().default())];
+	level: number = 100;
+	ability: Ability = new AbilityBuilder().default();
+	nature: Nature = new NatureBuilder().default();
+	gender: string = 'male';
+	isShiny: boolean = false;
+	moves: Move[] = [new MoveBuilder().default()];
+	item: string = 'Charcoal';
+	stats: Stat[] = [new StatBuilder().default()];
+	weight: number = 905;
+	activeMove: Move = new MoveBuilder().default();
+	status: Status = new Status('', '', 0, true);
+	volatileStatus: Status = new Status('', '', 0, true);
+	index: number = 0;
 
 	default(): Pokemon {
 		return new PokemonBuilder().build();

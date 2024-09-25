@@ -11,11 +11,23 @@ describe('Battle', () => {
 		battle = new BattleBuilder().default();
 	});
 
-	test('should have an opponent pokemon', () => {
-		expect(battle.opponentPokemon).toBeDefined();
+	test('should have a player team', () => {
+		expect(battle.playerTeam).toBeDefined();
 	});
 
-	test('should have a player pokemon', () => {
-		expect(battle.playerPokemon).toBeDefined();
+	test('should have an opponent team', () => {
+		expect(battle.opponentTeam).toBeDefined();
+	});
+
+	test('should have an active player pokemon', () => {
+		expect(battle.activePlayerPokemon).toBeDefined();
+	});
+
+	test('should have an active opponent pokemon', () => {
+		expect(battle.activeOpponentPokemon).toBeDefined();
+	});
+
+	test('should have a turn', () => {
+		expect(battle.turn).toBeDefined();
 	});
 });

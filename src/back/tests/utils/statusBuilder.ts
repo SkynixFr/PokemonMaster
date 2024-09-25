@@ -1,10 +1,10 @@
 import Status from '../../classes/status';
 
 class StatusBuilder {
-	name: string;
-	description: string;
-	counter: number;
-	ableToMove: boolean;
+	name: string = '';
+	description: string = '';
+	counter: number = 0;
+	ableToMove: boolean = true;
 
 	default(): Status {
 		return new StatusBuilder().build();
@@ -39,3 +39,5 @@ class StatusBuilder {
 		return this;
 	}
 }
+
+export default StatusBuilder;

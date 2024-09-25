@@ -1,28 +1,26 @@
-// Builder
 import PokemonBuilder from './pokemonBuilder';
-import StatBuilder from './statBuilder';
-import MoveBuilder from './moveBuilder';
-
-// Classes
+import TeamBuilder from './teamBuilder';
 import Battle from '../../classes/battle';
 
 class BattleBuilder {
-	playerPokemon = new PokemonBuilder().default();
-	opponentPokemon = new PokemonBuilder()
-		.withName('Bulbasaur')
-		.withStats([
-			new StatBuilder().default(),
-			new StatBuilder().withName('attack').withValue(10).build()
-		])
-		.withMoves([new MoveBuilder().withName('Tackle').withPower(10).build()])
-		.build();
+	playerTeam = new TeamBuilder().default();
+	opponentTeam = new TeamBuilder().default();
+	activePlayerPokemon = new PokemonBuilder().default();
+	activeOpponentPokemon = new PokemonBuilder().default();
+	turn = 1;
 
 	default(): Battle {
 		return new BattleBuilder().build();
 	}
 
 	build(): Battle {
-		return new Battle(this.playerPokemon, this.opponentPokemon);
+		return new Battle(
+			this.playerTeam,
+			this.opponentTeam,
+			this.activePlayerPokemon,
+			this.activeOpponentPokemon,
+			this.turn
+		);
 	}
 }
 

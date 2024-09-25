@@ -1,8 +1,10 @@
+import Stat from './stat';
+
 class StatChange {
-	readonly stat: string;
+	readonly stat: Stat;
 	readonly change: number;
 
-	constructor(stat: string, change: number) {
+	constructor(stat: Stat, change: number) {
 		this.stat = stat;
 		this.change = change;
 	}

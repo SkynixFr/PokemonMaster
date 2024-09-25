@@ -19,9 +19,24 @@ describe('Stat', () => {
 		expect(stat.value).toBeDefined();
 	});
 
-	test('should not decrease the value below 0', () => {
-		const decreasedStat = stat.decrease(stat.max + 1);
-		expect(decreasedStat.value).toBe(0);
+	test('should have a max', () => {
+		expect(stat.max).toBeDefined();
+	});
+
+	test('should have ev', () => {
+		expect(stat.ev).toBeDefined();
+	});
+
+	test('should have iv', () => {
+		expect(stat.iv).toBeDefined();
+	});
+
+	test('should have total', () => {
+		expect(stat.total).toBeDefined();
+	});
+
+	test('should have base', () => {
+		expect(stat.base).toBeDefined();
 	});
 
 	test('should decrease the value', () => {
@@ -29,14 +44,24 @@ describe('Stat', () => {
 		expect(decreasedStat.value).toBe(stat.value - 5);
 	});
 
+	test('should not decrease the value below 0', () => {
+		const decreasedStat = stat.decrease(stat.max + 1);
+		expect(decreasedStat.value).toBe(0);
+	});
+
+	test('should increase the value', () => {
+		const increasedStat = stat.decrease(10).increase(5);
+		expect(increasedStat.value).toBe(stat.value - 5);
+	});
+
 	test('should not increase the value above the max', () => {
 		const increasedStat = stat.increase(stat.value + 1);
 		expect(increasedStat.value).toBe(stat.max);
 	});
 
-	test('should increase the value', () => {
-		const newStat = stat.decrease(10);
-		const increasedStat = newStat.increase(5);
-		expect(increasedStat.value).toBe(newStat.value + 5);
+	test('should get the stat', () => {
+		const statName = 'hp';
+		const statGot = stat.getStat(statName);
+		expect(statGot.name).toBe(statName);
 	});
 });
