@@ -318,7 +318,7 @@ const Battle = ({ battle }: BattleProps) => {
 				notificationPlayerAttack++;
 				return {
 					notificationPlayerAttack,
-					updatedOpponentPokemon: activeOpponentPokemon
+					activeOpponentPokemon
 				};
 			}
 		}
@@ -379,7 +379,7 @@ const Battle = ({ battle }: BattleProps) => {
 				notificationOpponentAttack++;
 				return {
 					notificationOpponentAttack,
-					updatedPlayerPokemon: activePlayerPokemon
+					activePlayerPokemon
 				};
 			}
 		}
@@ -842,7 +842,6 @@ const Battle = ({ battle }: BattleProps) => {
 	//Sync battle to local storage
 	useEffect(() => {
 		if (!isInitialized) return;
-		console.log('sync');
 		syncBattleToLocalStorage(
 			playerTeam,
 			opponentTeam,
