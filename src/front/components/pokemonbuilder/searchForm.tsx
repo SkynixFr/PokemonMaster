@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
 
 // Icons
-import { Search } from 'lucide-react';
+import { RotateCcw, Search } from 'lucide-react';
 
 // Interfaces
 import { PokemonEntity } from '../../../interfaces/pokemon/pokemonEntity';
@@ -88,6 +88,12 @@ const SearchForm = ({
 		e.preventDefault();
 	};
 
+	const handleReset = () => {
+		setPokemonType('type');
+		setPokemonGeneration('generation');
+		setSearchTerm('');
+	};
+
 	return (
 		<div className={'search-pokemons'}>
 			<div className={'search-pokemons-bar'}>
@@ -155,6 +161,10 @@ const SearchForm = ({
 						<option value="galar">Galar</option>
 						<option value="paldea">Paldea</option>
 					</select>
+
+					<button className={'reset-button'} onClick={() => handleReset()}>
+						<RotateCcw width={20} height={20} />
+					</button>
 				</form>
 			</div>
 		</div>
