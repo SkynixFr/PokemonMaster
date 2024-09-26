@@ -48,8 +48,7 @@
     width: max-content;
     height: 100px;
     z-index: 100;
-    transform: translate(-20%, 0);
-
+    transform: translate(-19.5%, 0);
 }
 
 
@@ -64,7 +63,7 @@
 
 .pokemon-moves-modal-content .pokemon-move-fullfilled {
     font-size: var(--fs-md);
-    width: 250px;
+    width: 300px;
 }
 
 .modal-running-container{
