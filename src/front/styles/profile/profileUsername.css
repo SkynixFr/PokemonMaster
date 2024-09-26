@@ -1,0 +1,64 @@
+.username-container {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	margin-bottom: 60px;
+
+	width: 100%;
+}
+
+.form-edit-username {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.username-show {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	position: relative;
+}
+
+.username-show .username-show-text {
+	font-size: var(--fs-xl);
+}
+
+.username-show input {
+	width: 100%;
+	height: 50px;
+	padding: 5px 12.5px;
+	border: 1px solid black;
+	border-radius: 5px;
+	font-family: sans-serif;
+	box-sizing: border-box;
+}
+.form-edit-username h2 {
+	text-decoration: underline;
+}
+
+
+.username-edit-container {
+	position: absolute;
+	top: -20px;
+	right: -35px;
+}
+
+.username-edit-container button {
+	margin-left: 10px;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background-color: var(--red);
+	color: var(--white);
+	cursor: pointer;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	transition: transform 0.2s;
+	margin-top: -30px;
+	border: none;
+}
+
+.username-edit-container > button:hover {
+	transform: scale(1.1);
+}
