@@ -15,6 +15,7 @@
 @import url('signin/signin.css');
 @import url('profile/profile.css');
 @import url('unauthorized/unauthorized.css');
+@import url('home/home.css');
 /* Animations */
 @import url('animations.css');
 
