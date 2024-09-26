@@ -23,3 +23,7 @@
     gap: 10px;
     padding-bottom: 10px;
 }
+
+.teams-list .teams-list-draggable {
+    width: 100%;
+}

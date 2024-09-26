@@ -12,6 +12,10 @@
 
 }
 
+.team-details-container h1 {
+    font-size: 3rem;
+}
+
 .team-details-avatar {
     position: absolute;
     top: 50%;
