@@ -1,12 +1,14 @@
 'use client';
 
-import React, { use, useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { MoveLeft } from 'lucide-react';
 import Link from 'next/link';
 import CustomImage from '../../../front/components/customImage';
+
 const Unauthorized = () => {
 	const router = useRouter();
+
 	useEffect(() => {
 		localStorage.removeItem('accessToken');
 		localStorage.removeItem('refreshToken');
