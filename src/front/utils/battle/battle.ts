@@ -180,7 +180,7 @@ export function battle(): TeamEntity {
 				stats: [
 					{
 						name: 'hp',
-						value: 10.0,
+						value: 230.0,
 						max: 230,
 						ev: 0,
 						iv: 0,
@@ -235,220 +235,426 @@ export function battle(): TeamEntity {
 				],
 				weight: 650,
 				item: null
+			},
+			{
+				pokedexId: 110,
+				item: null,
+				name: 'weezing',
+				types: [
+					{
+						name: 'poison',
+						damageRelation: {
+							doubleDamageFrom: ['ground', 'psychic'],
+							doubleDamageTo: ['grass', 'fairy'],
+							halfDamageFrom: [
+								'fighting',
+								'poison',
+								'bug',
+								'grass',
+								'fairy'
+							],
+							halfDamageTo: ['poison', 'ground', 'rock', 'ghost'],
+							noDamageFrom: [],
+							noDamageTo: ['steel']
+						}
+					}
+				],
+				level: 100,
+				ability: {
+					id: '66f129e273d6f80915e88f76',
+					name: 'levitate',
+					description: 'Evades ground moves.',
+					learnedBy: []
+				},
+				nature: {
+					id: '66f40d0bb976b901b11767ee',
+					name: 'adamant',
+					increasedStat: 'attack',
+					decreasedStat: 'special-attack'
+				},
+				gender: 'neutral',
+				isShiny: false,
+				moves: [
+					{
+						id: '66f32ceb2072986d98236a7b',
+						name: 'assurance',
+						power: 60,
+						accuracy: 100,
+						pp: 10,
+						maxPp: 10,
+						meta: {
+							ailment: 'none',
+							drain: 0,
+							healing: 0,
+							critRate: 0,
+							priority: 0,
+							effectChance: 0,
+							flinchChance: 0,
+							statChance: 0,
+							minHits: 0,
+							maxHits: 0,
+							minTurns: 0,
+							maxTurns: 0
+						},
+						type: 'dark',
+						category: 'physical',
+						description:
+							'Power is doubled if the target has already received damage this turn.',
+						learnedBy: [],
+						target: 'selected-pokemon',
+						statsChange: null
+					},
+					{
+						id: '66f32ceb2072986d98236a96',
+						name: 'dark-pulse',
+						power: 80,
+						accuracy: 100,
+						pp: 15,
+						maxPp: 15,
+						meta: {
+							ailment: 'flinch',
+							drain: 0,
+							healing: 0,
+							critRate: 0,
+							priority: 0,
+							effectChance: 20,
+							flinchChance: 0,
+							statChance: 0,
+							minHits: 0,
+							maxHits: 0,
+							minTurns: 0,
+							maxTurns: 0
+						},
+						type: 'dark',
+						category: 'special',
+						description: 'Has a 20% chance to make the target flinch.',
+						learnedBy: [],
+						target: 'selected-pokemon',
+						statsChange: null
+					},
+					{
+						id: '66f32ce82072986d982369f4',
+						name: 'hidden-power',
+						power: 60,
+						accuracy: 100,
+						pp: 15,
+						maxPp: 15,
+						meta: {
+							ailment: 'none',
+							drain: 0,
+							healing: 0,
+							critRate: 0,
+							priority: 0,
+							effectChance: 0,
+							flinchChance: 0,
+							statChance: 0,
+							minHits: 0,
+							maxHits: 0,
+							minTurns: 0,
+							maxTurns: 0
+						},
+						type: 'normal',
+						category: 'special',
+						description:
+							"Power and type depend upon user's IVs.  Power can range from 30 to 70.",
+						learnedBy: [],
+						target: 'selected-pokemon',
+						statsChange: null
+					},
+					{
+						id: '66f32ce92072986d98236a29',
+						name: 'secret-power',
+						power: 70,
+						accuracy: 100,
+						pp: 20,
+						maxPp: 20,
+						meta: {
+							ailment: 'none',
+							drain: 0,
+							healing: 0,
+							critRate: 0,
+							priority: 0,
+							effectChance: 30,
+							flinchChance: 0,
+							statChance: 0,
+							minHits: 0,
+							maxHits: 0,
+							minTurns: 0,
+							maxTurns: 0
+						},
+						statsChange: null,
+						type: 'normal',
+						category: 'physical',
+						description:
+							'Has a 30% chance to inflict a status effect which depends upon the terrain.',
+						learnedBy: [],
+						target: 'selected-pokemon'
+					}
+				],
+				stats: [
+					{
+						name: 'hp',
+						value: 240.0,
+						max: 240,
+						ev: 0,
+						iv: 0,
+						total: 240,
+						base: 65
+					},
+					{
+						name: 'attack',
+						value: 203.0,
+						max: 203,
+						ev: 0,
+						iv: 0,
+						total: 203,
+						base: 90
+					},
+					{
+						name: 'defense',
+						value: 245.0,
+						max: 245,
+						ev: 0,
+						iv: 0,
+						total: 245,
+						base: 120
+					},
+					{
+						name: 'special-attack',
+						value: 158.0,
+						max: 158,
+						ev: 0,
+						iv: 0,
+						total: 158,
+						base: 85
+					},
+					{
+						name: 'special-defense',
+						value: 145.0,
+						max: 145,
+						ev: 0,
+						iv: 0,
+						total: 145,
+						base: 70
+					},
+					{
+						name: 'speed',
+						value: 125.0,
+						max: 125,
+						ev: 0,
+						iv: 0,
+						total: 125,
+						base: 60
+					}
+				],
+				weight: 95
+			},
+			{
+				pokedexId: 52,
+				name: 'meowth',
+				types: [
+					{
+						name: 'normal',
+						damageRelation: {
+							doubleDamageFrom: ['fighting'],
+							doubleDamageTo: [],
+							halfDamageFrom: [],
+							halfDamageTo: ['rock', 'steel'],
+							noDamageFrom: ['ghost'],
+							noDamageTo: ['ghost']
+						}
+					}
+				],
+				level: 100,
+				ability: {
+					id: '66f129e273d6f80915e88f91',
+					name: 'pickup',
+					description:
+						"Picks up other Pokémon's used and Flung held items.  May also pick up an item after battle.",
+					learnedBy: []
+				},
+				nature: {
+					id: '66f40d0bb976b901b11767ee',
+					name: 'adamant',
+					increasedStat: 'attack',
+					decreasedStat: 'special-attack'
+				},
+				gender: 'neutral',
+				isShiny: false,
+				moves: [
+					{
+						id: '66f32ceb2072986d98236a7b',
+						name: 'assurance',
+						power: 60,
+						accuracy: 100,
+						pp: 10,
+						maxPp: 10,
+						meta: {
+							ailment: 'none',
+							drain: 0,
+							healing: 0,
+							critRate: 0,
+							priority: 0,
+							effectChance: 0,
+							flinchChance: 0,
+							statChance: 0,
+							minHits: 0,
+							maxHits: 0,
+							minTurns: 0,
+							maxTurns: 0
+						},
+						type: 'dark',
+						category: 'physical',
+						description:
+							'Power is doubled if the target has already received damage this turn.',
+						learnedBy: [],
+						target: 'selected-pokemon',
+						statsChange: null
+					},
+					{
+						id: '66f32ce32072986d98236933',
+						name: 'bite',
+						power: 60,
+						accuracy: 100,
+						pp: 25,
+						maxPp: 25,
+						meta: {
+							ailment: 'none',
+							drain: 0,
+							healing: 0,
+							critRate: 0,
+							priority: 0,
+							effectChance: 0,
+							flinchChance: 30,
+							statChance: 0,
+							minHits: 0,
+							maxHits: 0,
+							minTurns: 0,
+							maxTurns: 0
+						},
+						type: 'dark',
+						category: 'physical',
+						description: 'Has a 30% chance to make the target flinch.',
+						learnedBy: [],
+						target: 'selected-pokemon',
+						statsChange: null
+					},
+					{
+						id: '66f32cf52072986d98236c7d',
+						name: 'chilling-water',
+						power: 50,
+						accuracy: 100,
+						pp: 20,
+						maxPp: 20,
+						meta: {
+							ailment: 'none',
+							drain: 0,
+							healing: 0,
+							critRate: 0,
+							priority: 0,
+							effectChance: 0,
+							flinchChance: 0,
+							statChance: 0,
+							minHits: 0,
+							maxHits: 0,
+							minTurns: 0,
+							maxTurns: 0
+						},
+						type: 'water',
+						category: 'special',
+						description: 'No description available',
+						learnedBy: [],
+						target: 'selected-pokemon',
+						statsChange: null
+					},
+					{
+						id: '66f32ceb2072986d98236a96',
+						name: 'dark-pulse',
+						power: 80,
+						accuracy: 100,
+						pp: 15,
+						maxPp: 15,
+						meta: {
+							ailment: 'none',
+							drain: 0,
+							healing: 0,
+							critRate: 0,
+							priority: 0,
+							effectChance: 0,
+							flinchChance: 20,
+							statChance: 0,
+							minHits: 0,
+							maxHits: 0,
+							minTurns: 0,
+							maxTurns: 0
+						},
+						type: 'dark',
+						category: 'special',
+						description: 'Has a 20% chance to make the target flinch.',
+						learnedBy: [],
+						target: 'selected-pokemon',
+						statsChange: null
+					}
+				],
+				stats: [
+					{
+						name: 'hp',
+						value: 190.0,
+						max: 190,
+						ev: 0,
+						iv: 0,
+						total: 190,
+						base: 40
+					},
+					{
+						name: 'attack',
+						value: 104.0,
+						max: 104,
+						ev: 0,
+						iv: 0,
+						total: 104,
+						base: 45
+					},
+					{
+						name: 'defense',
+						value: 75.0,
+						max: 75,
+						ev: 0,
+						iv: 0,
+						total: 75,
+						base: 35
+					},
+					{
+						name: 'special-attack',
+						value: 77.0,
+						max: 77,
+						ev: 0,
+						iv: 0,
+						total: 77,
+						base: 40
+					},
+					{
+						name: 'special-defense',
+						value: 85.0,
+						max: 85,
+						ev: 0,
+						iv: 0,
+						total: 85,
+						base: 40
+					},
+					{
+						name: 'speed',
+						value: 185.0,
+						max: 185,
+						ev: 0,
+						iv: 0,
+						total: 185,
+						base: 90
+					}
+				],
+				weight: 42,
+				item: null
 			}
-			// {
-			// 	pokedexId: 110,
-			// 	item: null,
-			// 	name: 'weezing',
-			// 	types: [
-			// 		{
-			// 			name: 'poison',
-			// 			damageRelation: {
-			// 				doubleDamageFrom: ['ground', 'psychic'],
-			// 				doubleDamageTo: ['grass', 'fairy'],
-			// 				halfDamageFrom: [
-			// 					'fighting',
-			// 					'poison',
-			// 					'bug',
-			// 					'grass',
-			// 					'fairy'
-			// 				],
-			// 				halfDamageTo: ['poison', 'ground', 'rock', 'ghost'],
-			// 				noDamageFrom: [],
-			// 				noDamageTo: ['steel']
-			// 			}
-			// 		}
-			// 	],
-			// 	level: 100,
-			// 	ability: {
-			// 		id: '66f129e273d6f80915e88f76',
-			// 		name: 'levitate',
-			// 		description: 'Evades ground moves.',
-			// 		learnedBy: []
-			// 	},
-			// 	nature: {
-			// 		id: '66f40d0bb976b901b11767ee',
-			// 		name: 'adamant',
-			// 		increasedStat: 'attack',
-			// 		decreasedStat: 'special-attack'
-			// 	},
-			// 	gender: 'neutral',
-			// 	isShiny: false,
-			// 	moves: [
-			// 		{
-			// 			id: '66f32ceb2072986d98236a7b',
-			// 			name: 'assurance',
-			// 			power: 60,
-			// 			accuracy: 100,
-			// 			pp: 10,
-			// 			maxPp: 10,
-			// 			meta: {
-			// 				ailment: 'none',
-			// 				drain: 0,
-			// 				healing: 0,
-			// 				critRate: 0,
-			// 				priority: 0,
-			// 				effectChance: 0,
-			// 				flinchChance: 0,
-			// 				statChance: 0,
-			// 				minHits: 0,
-			// 				maxHits: 0,
-			// 				minTurns: 0,
-			// 				maxTurns: 0
-			// 			},
-			// 			type: 'dark',
-			// 			category: 'physical',
-			// 			description:
-			// 				'Power is doubled if the target has already received damage this turn.',
-			// 			learnedBy: [],
-			// 			target: 'selected-pokemon',
-			// 			statsChange: null
-			// 		},
-			// 		{
-			// 			id: '66f32ceb2072986d98236a96',
-			// 			name: 'dark-pulse',
-			// 			power: 80,
-			// 			accuracy: 100,
-			// 			pp: 15,
-			// 			maxPp: 15,
-			// 			meta: {
-			// 				ailment: 'flinch',
-			// 				drain: 0,
-			// 				healing: 0,
-			// 				critRate: 0,
-			// 				priority: 0,
-			// 				effectChance: 20,
-			// 				flinchChance: 0,
-			// 				statChance: 0,
-			// 				minHits: 0,
-			// 				maxHits: 0,
-			// 				minTurns: 0,
-			// 				maxTurns: 0
-			// 			},
-			// 			type: 'dark',
-			// 			category: 'special',
-			// 			description: 'Has a 20% chance to make the target flinch.',
-			// 			learnedBy: [],
-			// 			target: 'selected-pokemon',
-			// 			statsChange: null
-			// 		},
-			// 		{
-			// 			id: '66f32ce82072986d982369f4',
-			// 			name: 'hidden-power',
-			// 			power: 60,
-			// 			accuracy: 100,
-			// 			pp: 15,
-			// 			maxPp: 15,
-			// 			meta: {
-			// 				ailment: 'none',
-			// 				drain: 0,
-			// 				healing: 0,
-			// 				critRate: 0,
-			// 				priority: 0,
-			// 				effectChance: 0,
-			// 				flinchChance: 0,
-			// 				statChance: 0,
-			// 				minHits: 0,
-			// 				maxHits: 0,
-			// 				minTurns: 0,
-			// 				maxTurns: 0
-			// 			},
-			// 			type: 'normal',
-			// 			category: 'special',
-			// 			description:
-			// 				"Power and type depend upon user's IVs.  Power can range from 30 to 70.",
-			// 			learnedBy: [],
-			// 			target: 'selected-pokemon',
-			// 			statsChange: null
-			// 		},
-			// 		{
-			// 			id: '66f32ce92072986d98236a29',
-			// 			name: 'secret-power',
-			// 			power: 70,
-			// 			accuracy: 100,
-			// 			pp: 20,
-			// 			maxPp: 20,
-			// 			meta: {
-			// 				ailment: 'none',
-			// 				drain: 0,
-			// 				healing: 0,
-			// 				critRate: 0,
-			// 				priority: 0,
-			// 				effectChance: 30,
-			// 				flinchChance: 0,
-			// 				statChance: 0,
-			// 				minHits: 0,
-			// 				maxHits: 0,
-			// 				minTurns: 0,
-			// 				maxTurns: 0
-			// 			},
-			// 			statsChange: null,
-			// 			type: 'normal',
-			// 			category: 'physical',
-			// 			description:
-			// 				'Has a 30% chance to inflict a status effect which depends upon the terrain.',
-			// 			learnedBy: [],
-			// 			target: 'selected-pokemon'
-			// 		}
-			// 	],
-			// 	stats: [
-			// 		{
-			// 			name: 'hp',
-			// 			value: 240.0,
-			// 			max: 240,
-			// 			ev: 0,
-			// 			iv: 0,
-			// 			total: 240,
-			// 			base: 65
-			// 		},
-			// 		{
-			// 			name: 'attack',
-			// 			value: 203.0,
-			// 			max: 203,
-			// 			ev: 0,
-			// 			iv: 0,
-			// 			total: 203,
-			// 			base: 90
-			// 		},
-			// 		{
-			// 			name: 'defense',
-			// 			value: 245.0,
-			// 			max: 245,
-			// 			ev: 0,
-			// 			iv: 0,
-			// 			total: 245,
-			// 			base: 120
-			// 		},
-			// 		{
-			// 			name: 'special-attack',
-			// 			value: 158.0,
-			// 			max: 158,
-			// 			ev: 0,
-			// 			iv: 0,
-			// 			total: 158,
-			// 			base: 85
-			// 		},
-			// 		{
-			// 			name: 'special-defense',
-			// 			value: 145.0,
-			// 			max: 145,
-			// 			ev: 0,
-			// 			iv: 0,
-			// 			total: 145,
-			// 			base: 70
-			// 		},
-			// 		{
-			// 			name: 'speed',
-			// 			value: 125.0,
-			// 			max: 125,
-			// 			ev: 0,
-			// 			iv: 0,
-			// 			total: 125,
-			// 			base: 60
-			// 		}
-			// 	],
-			// 	weight: 95
-			// }
 		]
 	};
 }
