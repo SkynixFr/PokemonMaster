@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 // Utils
 import { firstLetterMaj } from '../../utils/formatString';
@@ -11,7 +10,6 @@ import CustomImage from '../customImage';
 // Interfaces
 import { MoveEntity } from '../../../interfaces/pokemon/move/moveEntity';
 import { PokemonTeamEntity } from '../../../interfaces/pokemon/pokemonTeamEntity';
-import { PokemonEntity } from '../../../interfaces/pokemon/pokemonEntity';
 interface PokemonMovesProps {
 	movesActive: MoveEntity[];
 	setMovesActive: (moves: MoveEntity[]) => void;
@@ -39,6 +37,7 @@ const PokemonMoves = ({
 						<div
 							className={'pokemon-move-fullfilled default'}
 							onClick={() => handleMoveClick(index)}
+							key={index}
 						>
 							<CustomImage
 								src={`/images/types/${movesActive[index].type}.png`}

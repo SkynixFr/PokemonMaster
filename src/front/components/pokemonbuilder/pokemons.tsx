@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { addPokemonToTeam } from '../../actions/team.actions';
 import Team from './team';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { firstLetterMaj } from '../../utils/formatString';
 
 interface PokemonsProps {
 	team: TeamEntity;
@@ -43,6 +44,8 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 	const [activePokemonIndex, setActivePokemonIndex] = useState<number | null>(
 		null
 	);
+	const [openModal, setOpenModal] = useState(false);
+	const [index, setIndex] = useState<number>(0);
 
 	useEffect(() => {
 		const currentIndex = (currentPage - 1) * NUMBER_OF_POKEMONS;
@@ -52,10 +55,15 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 	}, [currentPage, currentPokemons]);
 
 	const handleDeletePokemon = (index: number) => {
+		console.log('index', index);
+		if (teamActive.pokemons.length === 1) {
+			return toast.error('You must have at least one pokemon in your team');
+		}
 		const newTeam = { ...teamActive };
 		newTeam.pokemons.splice(index, 1);
 		setTeamActive(newTeam);
-		setPokemonActive(displayPokemons[0]);
+		setPokemonActive(teamActive.pokemons[0]);
+		setOpenModal(false);
 	};
 
 	const handleSaveTeam = (team: TeamEntity) => {
@@ -206,9 +214,10 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 																</div>
 																<button
 																	className={'remove-pokemon'}
-																	onClick={() =>
-																		handleDeletePokemon(index)
-																	}
+																	onClick={() => {
+																		setOpenModal(true);
+																		setIndex(index);
+																	}}
 																>
 																	<X width={30} height={30} />
 																</button>
@@ -263,6 +272,40 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 					/>
 				)}
 			</div>
+			{openModal && (
+				<div className={'modal-delete-pokemon-container'}>
+					<div className={'modal-delete-pokemon-content'}>
+						<h1>
+							Are you sure you want to delete{' '}
+							<span>
+								{firstLetterMaj(teamActive.pokemons[index].name)}
+							</span>{' '}
+							?
+						</h1>
+						<span>A delete is irreversible.</span>
+						<div className={'modal-delete-pokemon-btn-container'}>
+							<button
+								className={'btn-secondary'}
+								onClick={() => handleDeletePokemon(index)}
+							>
+								Yes
+							</button>
+							<button
+								className={'btn-primary'}
+								onClick={() => setOpenModal(false)}
+							>
+								No
+							</button>
+						</div>
+						<button
+							className={'close-btn'}
+							onClick={() => setOpenModal(false)}
+						>
+							<X width={30} height={30} />
+						</button>
+					</div>
+				</div>
+			)}
 		</>
 	);
 };

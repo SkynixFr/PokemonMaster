@@ -48,3 +48,57 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+.modal-save-team-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+
+}
+
+.modal-save-team-content {
+    min-width: calc(600px - 100px);
+    min-height: calc(200px - 100px);
+    background-color: var(--white);
+    border-radius: 5px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-flow: column wrap;
+    animation: bounceIn .75s ease-in-out;
+    padding: 50px;
+    gap: 25px;
+    position: relative;
+}
+
+.modal-save-team-content h1 span {
+    color: var(--red);
+}
+
+.modal-save-team-btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-end;
+    gap: 10px;
+}
+
+.modal-save-team-btn-container button {
+    min-width: 75px;
+    min-height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-save-team-btn-container button:hover {
+    transform:  scale(1.1);
+    transition: all .5s ease;
+}
