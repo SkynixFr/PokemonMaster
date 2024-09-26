@@ -87,7 +87,7 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 			);
 		}
 
-		const teamNameRegex: RegExp = /^[a-zA-Z0-9._\-\s]*$/;
+		const teamNameRegex: RegExp = /^[a-zA-Z0-9._\-\s()]*$/;
 
 		if (!teamNameRegex.test(team.name)) {
 			return toast.error(
