@@ -93,7 +93,7 @@
 	background-color: var(--white);
 	color: var(--red);
 	border: 1px solid var(--red);
-	border-radius: 10px;
+	border-radius: 5px;
 }
 
 .user-delete button {
