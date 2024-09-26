@@ -89,7 +89,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 			</div>
 			<div className="profil-infos">
 				<div className="user-infos-container">
-					<h1>Your Profile </h1>
+					<h1>Your Profile :</h1>
 					<div className="user-infos">
 						<div className="user-avatar">
 							<div className="btn-edit-avatar-container">
@@ -157,7 +157,6 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 					<div className="separator-line" />
 					<div className="user-teams-container">
 						<h1>Your Teams :</h1>
-
 						<ProfileUserTeam teams={teams} avatars={avatars} />
 					</div>
 				</div>

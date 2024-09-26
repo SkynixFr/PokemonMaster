@@ -160,13 +160,13 @@ const FormEditPassword = ({
 				</div>
 				<div className="profile-modal-buttons">
 					<button
-						className="profile-modal-button btn-primary"
+						className="profile-modal-button btn-secondary"
 						onClick={handleSaveClick}
 					>
 						Save
 					</button>
 					<button
-						className="profile-modal-button btn-secondary"
+						className="profile-modal-button btn-primary"
 						onClick={() => handleCancel()}
 					>
 						Cancel

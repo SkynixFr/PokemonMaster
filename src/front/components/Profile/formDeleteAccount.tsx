@@ -79,13 +79,10 @@ const FormDeleteAccount = ({
 		<div className="profile-modal">
 			<div className="profile-modal-content">
 				<h1>
-					Delete Account{' '}
-					<span>{firstLetterMaj(userDetails.username)}</span>
+					Are you sure you want to delete account{' '}
+					<span>{firstLetterMaj(userDetails.username)}</span> ?
 				</h1>
-				<span>
-					Are you sure you want to delete your account? This action is
-					irreversible.
-				</span>
+				<span>This action is irreversible.</span>
 				<div className="profile-modal-buttons">
 					<button
 						className="profile-modal-button btn-secondary"

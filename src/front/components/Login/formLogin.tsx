@@ -119,29 +119,31 @@ const FormLogin = () => {
 					<label htmlFor="email" className="input-label">
 						Email
 					</label>
-					{errors.email && (
-						<span className="error-text">{errors.email}</span>
-					)}
+
 					<input
 						type="email"
 						name="email"
 						id="email"
 						className="input-field"
 					/>
+					{errors.email && (
+						<span className="error-text">{errors.email}</span>
+					)}
 				</div>
 				<div className="input-group">
 					<label htmlFor="password" className="input-label">
 						Password
 					</label>
-					{errors.password && (
-						<span className="error-text">{errors.password}</span>
-					)}
+
 					<input
 						type="password"
 						name="password"
 						id="password"
 						className="input-field"
 					/>
+					{errors.password && (
+						<span className="error-text">{errors.password}</span>
+					)}
 				</div>
 				<div className="button-wrapper">
 					<button type="submit" className="login-button">
