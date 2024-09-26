@@ -198,7 +198,6 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 																ref={provided.innerRef}
 																{...provided.draggableProps}
 																{...provided.dragHandleProps}
-																key={pokemon.name}
 															>
 																<div
 																	className={

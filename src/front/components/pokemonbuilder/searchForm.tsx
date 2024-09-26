@@ -92,6 +92,8 @@ const SearchForm = ({
 		setPokemonType('type');
 		setPokemonGeneration('generation');
 		setSearchTerm('');
+		setCurrentPokemons(savedPokemons);
+		setCurrentPage(1);
 	};
 
 	return (
@@ -118,7 +120,6 @@ const SearchForm = ({
 					<select
 						name="type"
 						id="type"
-						defaultValue="type"
 						onChange={handleFilterType}
 						value={pokemonType}
 					>
@@ -146,7 +147,6 @@ const SearchForm = ({
 					<select
 						name="generation"
 						id="generation"
-						defaultValue="generation"
 						onChange={handleFilterGeneration}
 						value={pokemonGeneration}
 					>
