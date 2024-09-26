@@ -19,6 +19,12 @@ const Team = ({ teamActive, saveTeam, setTeamActive }: TeamProps) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const router = useRouter();
 
+	const handleBack = () => {
+		localStorage.setItem('teamActive', teamActive.id);
+		router.push('/teambuilder');
+		setOpenModal(false);
+	};
+
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') {
@@ -63,13 +69,16 @@ const Team = ({ teamActive, saveTeam, setTeamActive }: TeamProps) => {
 						<div className={'modal-save-team-btn-container'}>
 							<button
 								className={'btn-secondary'}
-								onClick={() => saveTeam(teamActive)}
+								onClick={() => {
+									localStorage.setItem('teamActive', teamActive.id);
+									saveTeam(teamActive);
+								}}
 							>
 								Yes
 							</button>
 							<button
 								className={'btn-primary'}
-								onClick={() => router.push('/teambuilder')}
+								onClick={() => handleBack()}
 							>
 								No
 							</button>

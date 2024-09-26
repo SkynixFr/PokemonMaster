@@ -21,7 +21,16 @@ const TeamBuilderPage = ({ teams, avatars }: TeamListProps) => {
 
 	useEffect(() => {
 		if (!teams) return;
-		setSelectedTeam(teams[0]);
+		if (localStorage.getItem('teamActive')) {
+			teams.map(team => {
+				if (team.id === localStorage.getItem('teamActive')) {
+					setSelectedTeam(team);
+				}
+			});
+		} else {
+			setSelectedTeam(teams[0]);
+		}
+
 		setCurrentLength(teams.length);
 	}, []);
 

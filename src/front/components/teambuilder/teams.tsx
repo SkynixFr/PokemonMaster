@@ -37,7 +37,15 @@ const Teams = ({
 
 	useEffect(() => {
 		if (teams && teams.length > 0) {
-			setSelectedTeam(teams[0]);
+			if (localStorage.getItem('teamActive')) {
+				teams.map(team => {
+					if (team.id === localStorage.getItem('teamActive')) {
+						setSelectedTeam(team);
+					}
+				});
+			} else {
+				setSelectedTeam(teams[0]);
+			}
 			setCurrentTeams(teams);
 		}
 	}, [teams]);
