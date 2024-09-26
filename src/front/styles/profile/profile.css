@@ -8,8 +8,9 @@
 	display: flex;
 	justify-content: center;
 	align-items: flex-start;
-	height: 100vh;
+	height: 100%;
 	position: relative;
+	background-color: rgba(0, 0, 0, 0.75);
 }
 
 .user-infos-container > h1 {
@@ -92,7 +93,7 @@
 	background-color: var(--white);
 	color: var(--red);
 	border: 1px solid var(--red);
-	border-radius: 10px;
+	border-radius: 5px;
 }
 
 .user-delete button {
@@ -104,7 +105,7 @@
 	background-color: var(--red);
 	color: var(--white);
 	border: 1px solid var(--red);
-	border-radius: 10px;
+	border-radius: 5px;
 }
 
 .password-and-delete button:disabled,
@@ -139,4 +140,10 @@
 .edit-account {
 	display: flex;
 	background-color: red;
+}
+
+@media screen and (max-width: 1920px) {
+	.bg-form-profile {
+		right: 25px;
+	}
 }

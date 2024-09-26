@@ -16,7 +16,15 @@
 	margin-bottom: 20px;
 }
 
-.unauthorized-page p {
+.unauthorized-page span {
 	font-size: 1.5rem;
 	margin-bottom: 40px;
+}
+
+.home-link {
+	color: #007bff;
+	text-decoration: none;
+	font-weight: bold;
+	text-decoration: underline;
+	font-size: 1.2rem;
 }

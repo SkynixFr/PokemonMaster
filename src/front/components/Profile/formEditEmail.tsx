@@ -147,7 +147,6 @@ const FormEditEmail = ({
 
 				{isEditing ? (
 					<div className="email-show">
-						<Mail width={25} height={25} />
 						<div className="input-container">
 							{errors.email && (
 								<div className={'error'}>{errors.email}</div>
@@ -184,7 +183,7 @@ const FormEditEmail = ({
 								className="user-update"
 								disabled={openForm !== null}
 							>
-								<PencilLine />
+								<PencilLine width={20} height={20} />
 							</button>
 						</div>
 					</div>

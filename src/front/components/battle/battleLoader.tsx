@@ -8,10 +8,27 @@ import Battle from '../../../app/(user)/battle/page';
 //Classes
 import BattleClass from '../../../back/classes/battle';
 import CustomImage from '../customImage';
-
+import { useRouter } from 'next/navigation';
 const BattleLoader = () => {
 	const [battle, setBattle] = useState<BattleClass>();
 	const [isLoading, setIsLoading] = useState(true);
+	const router = useRouter();
+
+	useEffect(() => {
+		const fetchData = () => {
+			try {
+				const accessToken = localStorage.getItem('accessToken');
+				if (!accessToken) {
+					throw new Error('User not connected');
+				}
+			} catch (error) {
+				console.error('Error fetching user data:', error);
+				router.push('/unauthorized');
+			}
+		};
+
+		fetchData();
+	}, [router]);
 
 	useEffect(() => {
 		const battle = JSON.parse(localStorage.getItem('battle'));

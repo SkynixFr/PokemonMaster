@@ -29,9 +29,6 @@ const TeamBuilder = () => {
 				setAvatars(avatarsData);
 				setError(null);
 			} catch (error) {
-				if (error.message != 'User not Connected') {
-					toast.error('Error fetching user data');
-				}
 				console.error('Error fetching user data:', error);
 				setError(error.message);
 			} finally {

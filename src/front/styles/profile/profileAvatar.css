@@ -1,7 +1,7 @@
 .user-img {
 	width: 150px;
-	height: auto;
-	border-radius: 50%;
+
+	position: absolute;
 	flex-shrink: 0;
 	display: flex;
 	align-items: center;
@@ -19,7 +19,7 @@
 	margin-left: 130px;
 }
 
-.btn-edit-avatar-container > button {
+.btn-edit-avatar-container button {
 	margin-left: 10px;
 	width: 40px;
 	height: 40px;

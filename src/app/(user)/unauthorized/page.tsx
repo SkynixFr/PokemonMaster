@@ -1,12 +1,14 @@
 'use client';
 
-import React, { use, useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { MoveLeft } from 'lucide-react';
 import Link from 'next/link';
 import CustomImage from '../../../front/components/customImage';
+
 const Unauthorized = () => {
 	const router = useRouter();
+
 	useEffect(() => {
 		localStorage.removeItem('accessToken');
 		localStorage.removeItem('refreshToken');
@@ -40,7 +42,12 @@ const Unauthorized = () => {
 				</div>
 
 				<h1>Error 401 - Unauthorized</h1>
-				<p>Sorry, you do not have permission to access this page.</p>
+				<span>Sorry, you do not have permission to access this page.</span>
+				<div className="form-footer">
+					<Link href={'/'} className="home-link">
+						Click here to go back to the home page
+					</Link>
+				</div>
 			</div>
 		</div>
 	);
