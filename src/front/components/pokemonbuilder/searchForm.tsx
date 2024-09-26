@@ -63,8 +63,6 @@ const SearchForm = ({
 			);
 		}
 
-		console.log(filteredPokemons);
-
 		setCurrentPokemons(filteredPokemons);
 
 		setCurrentPage(1);

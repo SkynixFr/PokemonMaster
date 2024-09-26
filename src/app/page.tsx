@@ -1,7 +1,19 @@
+'use client';
 import CustomImage from '../front/components/customImage';
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import { isConnected } from '../front/components/authProvider/authProvider';
 
 const Home = () => {
+	const router = useRouter();
+	const handleTryBattle = () => {
+		if (isConnected()) {
+			router.push('/teambuilder');
+		} else {
+			router.push('/signin');
+		}
+	};
+
 	return (
 		<div className={'hero-container'}>
 			<div className={'hero-container__background'}>
@@ -22,7 +34,7 @@ const Home = () => {
 						become the ultimate champion? Join us now and embark on your
 						journey to glory!
 					</p>
-					<button>Try a battle</button>
+					<button onClick={() => handleTryBattle()}>Try a battle</button>
 				</div>
 			</div>
 			<div>

@@ -2,7 +2,6 @@
 @import url('profileAvatar.css');
 @import url('profileUsername.css');
 @import url('profileEmail.css');
-@import url('profilePassword.css');
 @import url('profileTeam.css');
 
 .profile-container {
@@ -37,7 +36,7 @@
 .bg-form-profile {
 	position: absolute;
 	top: 50px;
-	right: 150px;
+	right: 250px;
 	z-index: 1;
 	animation: bounceIn 0.75s ease-in-out;
 }

@@ -47,4 +47,9 @@
 
 .team-goback {
 	cursor: pointer;
+	transition: all 0.3s ease-in-out;
+}
+
+.team-goback:hover {
+	color: var(--red);
 }

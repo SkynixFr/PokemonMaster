@@ -12,7 +12,6 @@ const Navbar = () => {
 	const logout: MouseEventHandler<HTMLButtonElement> = async event => {
 		localStorage.removeItem('accessToken');
 		localStorage.removeItem('refreshToken');
-		toast('Logging out...');
 		toast.success('User log out successfully!');
 		router.push('/');
 		router.refresh();

@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Interfaces
 interface TeamProps {
@@ -12,6 +12,7 @@ import { TeamEntity } from '../../../interfaces/team/teamEntity';
 
 // Icons
 import { Edit3, MoveLeft, SaveAll, X } from 'lucide-react';
+import { firstLetterMaj } from '../../utils/formatString';
 
 const Team = ({ teamActive, saveTeam, setTeamActive }: TeamProps) => {
 	const [openModal, setOpenModal] = useState(false);
@@ -49,20 +50,25 @@ const Team = ({ teamActive, saveTeam, setTeamActive }: TeamProps) => {
 	return (
 		<>
 			{openModal && (
-				<div className={'team-modal'}>
-					<div className={'team-modal-content'}>
-						<h2>Do you want to save the team?</h2>
-						<div className={'team-modal-buttons'}>
+				<div className={'modal-save-team-container'}>
+					<div className={'modal-save-team-content'}>
+						<h1>
+							Do you want to save your team{' '}
+							<span>{firstLetterMaj(teamActive.name)}</span> ?
+						</h1>
+						<span>
+							Any unsaved changes will be lost if you don't save your
+							team.
+						</span>
+						<div className={'modal-save-team-btn-container'}>
 							<button
-								className={'team-modal-button btn-primary'}
-								onClick={() => {
-									saveTeam(teamActive);
-								}}
+								className={'btn-secondary'}
+								onClick={() => saveTeam(teamActive)}
 							>
 								Yes
 							</button>
 							<button
-								className={'team-modal-button'}
+								className={'btn-primary'}
 								onClick={() => router.push('/teambuilder')}
 							>
 								No
@@ -83,7 +89,7 @@ const Team = ({ teamActive, saveTeam, setTeamActive }: TeamProps) => {
 					onClick={() => setOpenModal(!openModal)}
 				>
 					<MoveLeft />
-					Back
+					Go Back
 				</div>
 				<div className={'team-name-edit'}>
 					{isEditing ? (
