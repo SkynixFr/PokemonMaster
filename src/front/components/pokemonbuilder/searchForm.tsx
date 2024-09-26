@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState, useEffect } from 'react';
 
 // Icons
-import { Search } from 'lucide-react';
+import { RotateCcw, Search } from 'lucide-react';
 
 // Interfaces
 import { PokemonEntity } from '../../../interfaces/pokemon/pokemonEntity';
@@ -88,6 +88,14 @@ const SearchForm = ({
 		e.preventDefault();
 	};
 
+	const handleReset = () => {
+		setPokemonType('type');
+		setPokemonGeneration('generation');
+		setSearchTerm('');
+		setCurrentPokemons(savedPokemons);
+		setCurrentPage(1);
+	};
+
 	return (
 		<div className={'search-pokemons'}>
 			<div className={'search-pokemons-bar'}>
@@ -112,35 +120,33 @@ const SearchForm = ({
 					<select
 						name="type"
 						id="type"
-						defaultValue="type"
 						onChange={handleFilterType}
 						value={pokemonType}
 					>
 						<option value="type">Type</option>
-						<option value="fire">Fire</option>
-						<option value="water">Water</option>
-						<option value="grass">Grass</option>
-						<option value="electric">Electric</option>
-						<option value="rock">Rock</option>
-						<option value="ground">Ground</option>
-						<option value="flying">Flying</option>
-						<option value="psychic">Psychic</option>
-						<option value="ghost">Ghost</option>
+						<option value="bug">Bug</option>
 						<option value="dark">Dark</option>
-						<option value="steel">Steel</option>
-						<option value="ice">Ice</option>
 						<option value="dragon">Dragon</option>
+						<option value="electric">Electric</option>
 						<option value="fairy">Fairy</option>
 						<option value="fighting">Fighting</option>
+						<option value="fire">Fire</option>
+						<option value="flying">Flying</option>
+						<option value="ghost">Ghost</option>
+						<option value="grass">Grass</option>
+						<option value="ground">Ground</option>
+						<option value="ice">Ice</option>
 						<option value="normal">Normal</option>
-						<option value="bug">Bug</option>
 						<option value="poison">Poison</option>
+						<option value="psychic">Psychic</option>
+						<option value="rock">Rock</option>
+						<option value="steel">Steel</option>
+						<option value="water">Water</option>
 					</select>
 
 					<select
 						name="generation"
 						id="generation"
-						defaultValue="generation"
 						onChange={handleFilterGeneration}
 						value={pokemonGeneration}
 					>
@@ -155,6 +161,10 @@ const SearchForm = ({
 						<option value="galar">Galar</option>
 						<option value="paldea">Paldea</option>
 					</select>
+
+					<button className={'reset-button'} onClick={() => handleReset()}>
+						<RotateCcw width={20} height={20} />
+					</button>
 				</form>
 			</div>
 		</div>

@@ -82,8 +82,17 @@
 
 .battle-loader__user__content .user__avatar img {
     position: absolute;
-    top: -10px;
+    top: -15px;
     left: 25px;
+    width: 100%;
+    height: auto;
+    transform: rotate(-45deg);
+}
+
+.battle-loader__user__content.opponent .user__avatar img {
+    position: absolute;
+    top: 0px;
+    left: 15px;
     width: 100%;
     height: auto;
     transform: rotate(-45deg);

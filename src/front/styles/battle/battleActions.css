@@ -48,7 +48,8 @@
     width: max-content;
     height: 100px;
     z-index: 100;
-    transform: translate(-25%, 0);
+    transform: translate(-20%, 0);
+
 }
 
 
@@ -58,24 +59,12 @@
     align-items: center;
     flex-flow: row wrap;
     gap: 10px;
-    transition: all 5s ease-in-out;
+    width: 700px;
 }
 
-
-.pokemon-moves-modal-content .pokemon-move-fullfilled{
-    height: 40px;
-    width: 40%;
+.pokemon-moves-modal-content .pokemon-move-fullfilled {
     font-size: var(--fs-md);
-}
-
-
-
-
-.pokemon-move-fullfilled-name {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-
+    width: 250px;
 }
 
 .modal-running-container{

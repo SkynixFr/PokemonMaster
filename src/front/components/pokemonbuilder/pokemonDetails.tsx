@@ -119,6 +119,11 @@ const PokemonDetails = ({
 	};
 
 	const handleAddPokemon = (team: TeamEntity, pokemon: PokemonTeamEntity) => {
+		if (team.pokemons.some(p => p.pokedexId === pokemon.pokedexId)) {
+			toast.warning('This Pokémon is already in your team');
+			return;
+		}
+
 		const baseStats = computeBaseStats(
 			statsActive,
 			levelActive,

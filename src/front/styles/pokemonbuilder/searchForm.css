@@ -83,3 +83,16 @@
     background: transparent;
     cursor: default;
 }
+
+.reset-button {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    border: none;
+    border-radius: 5px;
+    background: var(--white);
+    cursor: pointer;
+}

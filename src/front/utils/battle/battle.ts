@@ -15,12 +15,12 @@ import { StatEntity } from '../../../interfaces/pokemon/stat/statEntity';
 export function battle(): TeamEntity {
 	return {
 		id: 'opponent-team',
-		name: 'Cynthia',
+		name: 'Team Rocket',
 		avatar: {
-			id: '6633b6f4a968092521e52047',
-			name: 'Cynthia',
-			region: 'Sinnoh',
-			sprite: '/images/avatars/Sinnoh/cynthia.png'
+			id: '66f5356c1946060bb2a4271b',
+			name: 'Team Rocket',
+			region: 'Other',
+			sprite: '/images/avatars/other/teamRocket.png'
 		},
 		pokemons: [
 			{
