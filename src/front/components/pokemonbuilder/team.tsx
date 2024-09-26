@@ -57,7 +57,8 @@ const Team = ({ teamActive, saveTeam, setTeamActive }: TeamProps) => {
 							<span>{firstLetterMaj(teamActive.name)}</span> ?
 						</h1>
 						<span>
-							You will be able to find it in the teambuilder page
+							Any unsaved changes will be lost if you don't save your
+							team.
 						</span>
 						<div className={'modal-save-team-btn-container'}>
 							<button
@@ -88,7 +89,7 @@ const Team = ({ teamActive, saveTeam, setTeamActive }: TeamProps) => {
 					onClick={() => setOpenModal(!openModal)}
 				>
 					<MoveLeft />
-					Back
+					Go Back
 				</div>
 				<div className={'team-name-edit'}>
 					{isEditing ? (

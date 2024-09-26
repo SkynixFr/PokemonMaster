@@ -18,10 +18,12 @@ interface TeamListItemProps {
 import CustomImage from '../customImage';
 
 // Icons
-import { Copy, PencilLine, Trash2 } from 'lucide-react';
+import { Copy, PencilLine, Trash2, X } from 'lucide-react';
 
 // Actions
 import { copyTeam, deleteTeam } from '../../actions/team.actions';
+import { firstLetterMaj } from '../../utils/formatString';
+import React, { useState } from 'react';
 
 const TeamProfile = ({
 	team,
@@ -34,6 +36,7 @@ const TeamProfile = ({
 	setCurrentLength
 }: TeamListItemProps) => {
 	const router = useRouter();
+	const [openModal, setOpenModal] = useState(false);
 
 	const handleDelete = async (teamId: string) => {
 		toast.promise(deleteTeam(teamId), {
@@ -92,52 +95,87 @@ const TeamProfile = ({
 	};
 
 	return (
-		<div className={'team-container'}>
-			<div
-				className={`team-infos ${selectedTeam?.id === team.id ? 'selected' : ''}`}
-				onClick={() => setSelectedTeam(team)}
-			>
-				<div className={'bg-team'}>
-					<CustomImage
-						src={team.avatar.sprite}
-						alt={team.avatar.name}
-						width={500}
-						height={500}
-						sizes={'100vw'}
-					/>
-				</div>
-				<span>{team.name}</span>
-				{team.pokemons && team.pokemons.length > 0 ? (
-					<div className={'user-team-pokemon'}>
-						{team.pokemons.map((pokemon, index) => (
-							<CustomImage
-								src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
-								alt={pokemon.name}
-								width={50}
-								height={50}
-								key={index}
-							/>
-						))}
+		<>
+			<div className={'team-container'}>
+				<div
+					className={`team-infos ${selectedTeam?.id === team.id ? 'selected' : ''}`}
+					onClick={() => setSelectedTeam(team)}
+				>
+					<div className={'bg-team'}>
+						<CustomImage
+							src={team.avatar.sprite}
+							alt={team.avatar.name}
+							width={500}
+							height={500}
+							sizes={'100vw'}
+						/>
 					</div>
-				) : (
-					<div>No pokemons</div>
-				)}
-			</div>
-
-			{option && team.id === selectedTeam?.id ? (
-				<div className={'user-team-options'}>
-					<button onClick={() => router.push(`pokemonbuilder/${team.id}`)}>
-						<PencilLine />
-					</button>
-					<button onClick={() => handleDelete(team.id)}>
-						<Trash2 />
-					</button>
-					<button onClick={() => handleCopy(team)}>
-						<Copy />
-					</button>
+					<span>{team.name}</span>
+					{team.pokemons && team.pokemons.length > 0 ? (
+						<div className={'user-team-pokemon'}>
+							{team.pokemons.map((pokemon, index) => (
+								<CustomImage
+									src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
+									alt={pokemon.name}
+									width={50}
+									height={50}
+									key={index}
+								/>
+							))}
+						</div>
+					) : (
+						<div>No pokemons</div>
+					)}
 				</div>
-			) : null}
-		</div>
+
+				{option && team.id === selectedTeam?.id ? (
+					<div className={'user-team-options'}>
+						<button
+							onClick={() => router.push(`pokemonbuilder/${team.id}`)}
+						>
+							<PencilLine />
+						</button>
+						<button onClick={() => setOpenModal(true)}>
+							<Trash2 />
+						</button>
+						<button onClick={() => handleCopy(team)}>
+							<Copy />
+						</button>
+					</div>
+				) : null}
+			</div>
+			{openModal && (
+				<div className={'modal-delete-team-container'}>
+					<div className={'modal-delete-team-content'}>
+						<h1>
+							Are you sure you want to delete team{' '}
+							<span>{firstLetterMaj(team.name)}</span> ?
+						</h1>
+						<span>A delete is irreversible.</span>
+						<div className={'modal-delete-team-btn-container'}>
+							<button
+								className={'btn-secondary'}
+								onClick={() => handleDelete(team.id)}
+							>
+								Yes
+							</button>
+							<button
+								className={'btn-primary'}
+								onClick={() => setOpenModal(false)}
+							>
+								No
+							</button>
+						</div>
+						<button
+							className={'close-btn'}
+							onClick={() => setOpenModal(false)}
+						>
+							<X width={30} height={30} />
+						</button>
+					</div>
+				</div>
+			)}
+		</>
 	);
 };
 
