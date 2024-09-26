@@ -95,7 +95,14 @@ const FormEditPassword = ({
 			}
 		}
 	};
-	const handleChange = () => {
+	const handleChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setNewPassword(e.target.value);
+		setErrors({ newpassword: '', confirmPassword: '' });
+	};
+	const handleChangeConfirmPassword = (
+		e: React.ChangeEvent<HTMLInputElement>
+	) => {
+		setConfirmPassword(e.target.value);
 		setErrors({ newpassword: '', confirmPassword: '' });
 	};
 	const handleCancel = () => {
@@ -118,6 +125,12 @@ const FormEditPassword = ({
 			document.removeEventListener('keydown', handleKeyDown);
 		};
 	}, [handleCancel]);
+	// Surveiller les touches Enter et Escape
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key === 'Enter') {
+			handleSaveClick();
+		}
+	};
 	return (
 		<div className="profile-modal">
 			<div className="profile-modal-content">
@@ -130,7 +143,8 @@ const FormEditPassword = ({
 						type="password"
 						className="input-field"
 						value={newPassword}
-						onChange={e => setNewPassword(e.target.value)}
+						onChange={handleChangePassword}
+						onKeyDown={handleKeyDown}
 					/>
 				</div>
 				<div className="input-group">
@@ -140,18 +154,19 @@ const FormEditPassword = ({
 						type="password"
 						className="input-field"
 						value={confirmPassword}
-						onChange={e => setConfirmPassword(e.target.value)}
+						onChange={handleChangeConfirmPassword}
+						onKeyDown={handleKeyDown}
 					/>
 				</div>
 				<div className="profile-modal-buttons">
 					<button
-						className="profile-modal-button btn-primary"
+						className="profile-modal-button btn-secondary"
 						onClick={handleSaveClick}
 					>
 						Save
 					</button>
 					<button
-						className="profile-modal-button"
+						className="profile-modal-button btn-primary"
 						onClick={() => handleCancel()}
 					>
 						Cancel
