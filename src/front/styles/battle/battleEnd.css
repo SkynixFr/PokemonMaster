@@ -14,7 +14,7 @@
 
 .battle-end-modal-body {
     position: relative;
-    width: 700px;
+    width: 550px;
     height: max-content;
     display: flex;
     flex-direction: column;
