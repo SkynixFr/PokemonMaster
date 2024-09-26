@@ -17,6 +17,7 @@ import { TeamUpdate } from '../../../interfaces/team/teamUpdate';
 import { toast } from 'sonner';
 import { addPokemonToTeam } from '../../actions/team.actions';
 import Team from './team';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 interface PokemonsProps {
 	team: TeamEntity;
@@ -66,18 +67,18 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 			return toast.error('You must have at least one pokemon in your team');
 		}
 
-		// if (
-		// 	team.pokemons.some(
-		// 		(pokemon, index, self) =>
-		// 			self.findIndex(
-		// 				p => p.name === pokemon.name && pokemon.name !== ''
-		// 			) !== index
-		// 	)
-		// ) {
-		// 	return toast.error(
-		// 		'You cannot have the same pokemon twice in your team'
-		// 	);
-		// }
+		if (
+			team.pokemons.some(
+				(pokemon, index, self) =>
+					self.findIndex(
+						p => p.name === pokemon.name && pokemon.name !== ''
+					) !== index
+			)
+		) {
+			return toast.error(
+				'You cannot have the same pokemon twice in your team'
+			);
+		}
 
 		const teamNameRegex: RegExp = /^[a-zA-Z0-9._\-\s]*$/;
 
@@ -124,6 +125,27 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 		}
 	};
 
+	const reorder = (list: PokemonEntity[], startIndex, endIndex) => {
+		const result = Array.from(list);
+		const [removed] = result.splice(startIndex, 1);
+		result.splice(endIndex, 0, removed);
+		return result;
+	};
+
+	const onDragEnd = (result: any) => {
+		if (!result.destination) return;
+
+		const sourceIndex = result.source.index;
+		const destinationIndex = result.destination.index;
+		const items: PokemonEntity[] = reorder(
+			teamActive.pokemons,
+			sourceIndex,
+			destinationIndex
+		);
+
+		setTeamActive({ ...teamActive, pokemons: items });
+	};
+
 	return (
 		<>
 			<Team
@@ -134,48 +156,83 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 			<div className={'pokemons-infos'}>
 				<div className={'pokemons'}>
 					<div className={'team-pokemons'}>
-						<div className={'list-team-pokemons'}>
-							{teamActive.pokemons && teamActive.pokemons.length > 0 ? (
-								Array.from({ length: 6 }).map((_, index) => {
-									const pokemon = teamActive.pokemons[index];
-									return pokemon ? (
-										<div
-											className={`team-pokemon ${isFromTeam && activePokemonIndex === index ? 'active' : ''}`}
-											onClick={() =>
-												handlePokemonActive(pokemon, true, index)
-											}
-											key={pokemon.name}
-										>
-											<div className={'team-pokemon-img'}>
-												<CustomImage
-													src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
-													alt={pokemon?.name}
-													width={80}
-													height={80}
-												/>
-											</div>
-											<button
-												className={'remove-pokemon'}
-												onClick={() => handleDeletePokemon(index)}
-											>
-												<X width={30} height={30} />
-											</button>
-										</div>
-									) : (
-										<div key={index}>
-											<CustomImage
-												src={'/images/other/pokeball.png'}
-												alt={'pokeball close'}
-												width={60}
-												height={60}
-											/>
-										</div>
-									);
-								})
-							) : (
-								<h3>No pokemons in your team</h3>
-							)}
-						</div>
+						<DragDropContext onDragEnd={onDragEnd}>
+							<Droppable
+								droppableId={'horizontal-list-pokemon'}
+								direction={'horizontal'}
+							>
+								{provided => (
+									<div
+										className={'list-team-pokemons'}
+										{...provided.droppableProps}
+										ref={provided.innerRef}
+									>
+										{teamActive.pokemons &&
+										teamActive.pokemons.length > 0 ? (
+											Array.from({ length: 6 }).map((_, index) => {
+												const pokemon = teamActive.pokemons[index];
+												return pokemon ? (
+													<Draggable
+														key={pokemon.name}
+														draggableId={pokemon.name}
+														index={index}
+													>
+														{(provided, snapshot) => (
+															<div
+																className={`team-pokemon ${isFromTeam && activePokemonIndex === index ? 'active' : ''} ${snapshot.isDragging ? 'dragging' : ''}`}
+																onClick={() =>
+																	handlePokemonActive(
+																		pokemon,
+																		true,
+																		index
+																	)
+																}
+																ref={provided.innerRef}
+																{...provided.draggableProps}
+																{...provided.dragHandleProps}
+																key={pokemon.name}
+															>
+																<div
+																	className={
+																		'team-pokemon-img'
+																	}
+																>
+																	<CustomImage
+																		src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.pokedexId}.png`}
+																		alt={pokemon?.name}
+																		width={80}
+																		height={80}
+																	/>
+																</div>
+																<button
+																	className={'remove-pokemon'}
+																	onClick={() =>
+																		handleDeletePokemon(index)
+																	}
+																>
+																	<X width={30} height={30} />
+																</button>
+															</div>
+														)}
+													</Draggable>
+												) : (
+													<div key={index}>
+														<CustomImage
+															src={'/images/other/pokeball.png'}
+															alt={'pokeball close'}
+															width={60}
+															height={60}
+														/>
+													</div>
+												);
+											})
+										) : (
+											<h3>No pokemons in your team</h3>
+										)}
+									</div>
+								)}
+							</Droppable>
+						</DragDropContext>
 						<button
 							className={'team-pokemons-save'}
 							onClick={() => handleSaveTeam(teamActive)}

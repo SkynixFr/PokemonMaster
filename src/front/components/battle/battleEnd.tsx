@@ -60,13 +60,17 @@ const BattleEnd = ({
 
 						{playerRunning && (
 							<>
-								<h1>{playerTeam.name} ran away !</h1>
+								<h1>
+									{playerTeam.name} ran away, {opponentTeam.name} won !
+								</h1>
 							</>
 						)}
 
 						{opponentRunning && (
 							<>
-								<h1>{opponentTeam.name} ran away !</h1>
+								<h1>
+									{opponentTeam.name} ran away, {playerTeam.name} won !
+								</h1>
 							</>
 						)}
 

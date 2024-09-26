@@ -8,6 +8,9 @@ import '../front/styles/global.css';
 // Components
 import Navbar from '../front/components/navbar';
 
+// DND
+import { DragDropContext } from '@hello-pangea/dnd';
+
 export const metadata: Metadata = {
 	title: 'Pokemon Master',
 	description: 'A new Pokemon battle game!',

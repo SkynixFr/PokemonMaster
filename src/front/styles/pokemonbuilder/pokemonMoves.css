@@ -1,4 +1,4 @@
-@import url("movesModal.css");
+@import "movesModal.css";
 
 .pokemon-moves {
     width: 100%;
@@ -12,15 +12,15 @@
 .list-moves {
     width: calc(100% - 30px);
     display: flex;
-    flex-flow: row wrap;
-    justify-content: space-around;
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    gap: 10px;
-    padding: 0 15px;
+    gap: 15px;
+    margin: 0 auto;
 }
 
 .pokemon-move {
-    min-width: 160px;
+    width: 200px;
     height: 30px;
     display: flex;
     justify-content: center;
@@ -38,17 +38,18 @@
 }
 
 .pokemon-move-fullfilled {
-    min-width: calc(160px - 10px);
-    height: 30px;
     display: flex;
     align-items: center;
+    justify-content: center;
     border: none;
     border-radius: 15px;
     font-size: var(--fs-sm);
-    padding: 0 5px;
+    padding: 4px 5px;
     gap: 10px;
-
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    width: 200px;
 }
+
 
 .pokemon-move-fullfilled.default {
     background-color: var(--grey);
@@ -56,20 +57,16 @@
     cursor: pointer;
 }
 
-
 .pokemon-move-fullfilled.disabled {
     cursor: not-allowed;
     color: var(--white);
     opacity: 0.5;
 }
 
+
 .pokemon-move-fullfilled.infos {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-grow: 1;
-}
-
-.pokemon-move-fullfilled.infos > div:nth-child(1) {
     flex-grow: 1;
 }

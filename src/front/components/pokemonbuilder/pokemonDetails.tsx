@@ -282,9 +282,9 @@ const PokemonDetails = ({
 			{teamActive.pokemons.some(p => p.pokedexId === pokemon.pokedexId) &&
 			isFromTeam ? (
 				<div className={'add-pokemon'}>
-					<button onClick={() => handleCopyPokemon(team, pokemon)}>
-						Copy <Copy />
-					</button>
+					{/*<button onClick={() => handleCopyPokemon(team, pokemon)}>*/}
+					{/*	Copy <Copy />*/}
+					{/*</button>*/}
 					<button
 						onClick={() =>
 							handleUpdatePokemon(
