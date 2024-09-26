@@ -1,9 +1,8 @@
 import StatChange from '../../classes/statChange';
 import StatBuilder from './statBuilder';
-import Stat from '../../classes/stat';
 
 class StatChangeBuilder {
-	stat: Stat = new StatBuilder().default();
+	stat: string = '';
 	change: number = 0;
 
 	default(): StatChange {
@@ -14,7 +13,7 @@ class StatChangeBuilder {
 		return new StatChange(this.stat, this.change);
 	}
 
-	withStat(stat: Stat): StatChangeBuilder {
+	withStat(stat: string): StatChangeBuilder {
 		this.stat = stat;
 		return this;
 	}

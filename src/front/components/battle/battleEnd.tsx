@@ -28,11 +28,8 @@ const BattleEnd = ({
 	};
 
 	useEffect(() => {
-		console.log(playerTeam);
-		console.log(opponentTeam);
 		if (playerTeam.pokemons.every(pokemon => pokemon.stats[0].value === 0)) {
 			setOpponentWin(true);
-			console.log('opponent win');
 		}
 		if (
 			opponentTeam.pokemons.every(pokemon => pokemon.stats[0].value === 0)

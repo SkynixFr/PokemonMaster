@@ -55,7 +55,6 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 	}, [currentPage, currentPokemons]);
 
 	const handleDeletePokemon = (index: number) => {
-		console.log('index', index);
 		if (teamActive.pokemons.length === 1) {
 			return toast.error('You must have at least one pokemon in your team');
 		}

@@ -5,7 +5,7 @@ describe('StatChange', () => {
 	let statChange: StatChange;
 
 	beforeEach(() => {
-		statChange = new StatChange(new StatBuilder().default(), 1);
+		statChange = new StatChange('', 1);
 	});
 
 	test('should have a stat', () => {

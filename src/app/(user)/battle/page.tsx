@@ -214,6 +214,18 @@ const Battle = ({ battle }: BattleProps) => {
 		);
 	};
 
+	const recreateTeamFromParsed = (parsedTeam: Team): Team => {
+		const pokemons = parsedTeam.pokemons.map((parsedPokemon: any) => {
+			return recreatePokemonFromParsed(parsedPokemon);
+		});
+		return new Team(
+			parsedTeam.id,
+			parsedTeam.name,
+			parsedTeam.avatar,
+			pokemons
+		);
+	};
+
 	const getActivePokemonsFromLocalStorage = () => {
 		const localStorageBattle = JSON.parse(localStorage.getItem('battle'));
 		const parsedPlayerPokemon = localStorageBattle.activePlayerPokemon;
@@ -226,6 +238,17 @@ const Battle = ({ battle }: BattleProps) => {
 			parsedOpponentPokemon
 		);
 		return { activePlayerPokemonFromLS, activeOpponentPokemonFromLS };
+	};
+
+	const getTeamsFromLocalStorage = () => {
+		const localStorageBattle = JSON.parse(localStorage.getItem('battle'));
+		const parsedPlayerTeam = localStorageBattle.playerTeam;
+		const parsedOpponentTeam = localStorageBattle.opponentTeam;
+
+		const playerTeamFromLS = recreateTeamFromParsed(parsedPlayerTeam);
+		const opponentTeamFromLS = recreateTeamFromParsed(parsedOpponentTeam);
+
+		return { playerTeamFromLS, opponentTeamFromLS };
 	};
 
 	const handleMoveSelection = (move: Move) => {
@@ -479,6 +502,7 @@ const Battle = ({ battle }: BattleProps) => {
 				} else {
 					setActivePlayerPokemon(updatedPlayerPokemon);
 					updatePlayerTeam(updatedPlayerPokemon);
+					updateOpponentTeam(updatedOpponentPokemon);
 				}
 			} else {
 				const {
@@ -528,6 +552,7 @@ const Battle = ({ battle }: BattleProps) => {
 				} else {
 					setActiveOpponentPokemon(updatedOpponentPokemonFromOA);
 					updateOpponentTeam(updatedOpponentPokemonFromOA);
+					updatePlayerTeam(updatedPlayerPokemonFromOA);
 				}
 			} else {
 				const {
@@ -573,6 +598,7 @@ const Battle = ({ battle }: BattleProps) => {
 					} else {
 						setActivePlayerPokemon(updatedPlayerPokemon);
 						updatePlayerTeam(updatedPlayerPokemon);
+						updateOpponentTeam(updatedOpponentPokemon);
 					}
 				} else {
 					const {
@@ -622,6 +648,7 @@ const Battle = ({ battle }: BattleProps) => {
 					} else {
 						setActiveOpponentPokemon(updatedOpponentPokemonFromOA);
 						updateOpponentTeam(updatedOpponentPokemonFromOA);
+						updatePlayerTeam(updatedPlayerPokemonFromOA);
 					}
 				} else {
 					const {
@@ -873,20 +900,25 @@ const Battle = ({ battle }: BattleProps) => {
 	};
 
 	const handlePlayerKo = () => {
+		const { playerTeamFromLS } = getTeamsFromLocalStorage();
 		const { activePlayerPokemonFromLS, activeOpponentPokemonFromLS } =
 			getActivePokemonsFromLocalStorage();
 
-		if (activePlayerPokemonFromLS.stats[0].value === 0) {
+		if (activePlayerPokemonFromLS.stats[0].value === 0 && !battleEnd) {
 			addNotification({
 				pokemonName: activePlayerPokemonFromLS.name,
 				userAvatar: {
-					name: playerTeam.avatar.name,
-					sprite: playerTeam.avatar.sprite
+					name: playerTeamFromLS.avatar.name,
+					sprite: playerTeamFromLS.avatar.sprite
 				},
 				isKo: true,
 				animationType: 'ko'
 			});
-			if (playerTeam.pokemons.some(pokemon => pokemon.stats[0].value > 0)) {
+			if (
+				playerTeamFromLS.pokemons.some(
+					pokemon => pokemon.stats[0].value > 0
+				)
+			) {
 				setPreviousPlayerPokemonHp(
 					activePlayerPokemonFromLS.stats[0].value
 				);
@@ -896,11 +928,14 @@ const Battle = ({ battle }: BattleProps) => {
 				setTimeout(() => {
 					setCurrentView('player');
 				}, 1000);
+			} else {
+				setBattleEnd(true);
 			}
 		}
 	};
 
 	const handleOpponentKo = () => {
+		const { opponentTeamFromLS } = getTeamsFromLocalStorage();
 		const { activePlayerPokemonFromLS, activeOpponentPokemonFromLS } =
 			getActivePokemonsFromLocalStorage();
 
@@ -908,14 +943,16 @@ const Battle = ({ battle }: BattleProps) => {
 			addNotification({
 				pokemonName: activeOpponentPokemonFromLS.name,
 				userAvatar: {
-					name: opponentTeam.avatar.name,
-					sprite: opponentTeam.avatar.sprite
+					name: opponentTeamFromLS.avatar.name,
+					sprite: opponentTeamFromLS.avatar.sprite
 				},
 				isKo: true,
 				animationType: 'ko'
 			});
 			if (
-				opponentTeam.pokemons.some(pokemon => pokemon.stats[0].value > 0)
+				opponentTeamFromLS.pokemons.some(
+					pokemon => pokemon.stats[0].value > 0
+				)
 			) {
 				setPreviousPlayerPokemonHp(
 					activePlayerPokemonFromLS.stats[0].value
@@ -926,6 +963,8 @@ const Battle = ({ battle }: BattleProps) => {
 				setTimeout(() => {
 					setCurrentView('opponent');
 				}, 1000);
+			} else {
+				setBattleEnd(true);
 			}
 		}
 	};
