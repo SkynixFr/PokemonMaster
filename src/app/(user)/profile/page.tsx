@@ -38,9 +38,6 @@ const Profile = () => {
 
 				setError(null); // Clear any previous errors
 			} catch (error) {
-				if (error.message != 'User not connected') {
-					toast.error('Error fetching user data');
-				}
 				console.error('Error fetching user data:', error);
 				setError(error.message);
 			} finally {

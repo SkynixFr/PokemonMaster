@@ -98,7 +98,7 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 									onClick={() => setOpenForm('avatar')}
 									disabled={openForm !== null}
 								>
-									<PencilLine />
+									<PencilLine width={20} height={20} />
 								</button>
 							</div>
 							<div className="user-img-container">
