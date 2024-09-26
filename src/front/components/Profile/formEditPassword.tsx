@@ -30,7 +30,7 @@ const userSchema = z
 			},
 			{
 				message:
-					'Password must contain at least one uppercase letter, one lowercase letter, and one number'
+					'Password must contain at least one uppercase letter, one lowercase letter, and one number and one special character'
 			}
 		),
 		confirmPassword: z.string()

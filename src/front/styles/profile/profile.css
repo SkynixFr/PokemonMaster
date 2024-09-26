@@ -37,7 +37,7 @@
 .bg-form-profile {
 	position: absolute;
 	top: 50px;
-	right: 150px;
+	right: 250px;
 	z-index: 1;
 	animation: bounceIn 0.75s ease-in-out;
 }
