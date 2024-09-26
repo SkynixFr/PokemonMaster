@@ -24,8 +24,8 @@ export function battle(): TeamEntity {
 		},
 		pokemons: [
 			{
-				pokedexId: 442,
-				name: 'spiritomb',
+				pokedexId: 24,
+				name: 'arbok',
 				types: [
 					{
 						name: 'ghost',

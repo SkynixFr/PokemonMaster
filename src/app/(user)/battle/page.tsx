@@ -297,7 +297,10 @@ const Battle = ({ battle }: BattleProps) => {
 		} else {
 			setPreviousOpponentPokemonHp(activeOpponentPokemon.stats[0].value);
 			const missChance = Math.random();
-			if (missChance < updatedPlayerPokemon.activeMove.accuracy / 100) {
+			if (
+				missChance < updatedPlayerPokemon.activeMove.accuracy / 100 ||
+				updatedPlayerPokemon.activeMove.accuracy === 0
+			) {
 				const updatedOpponentPokemon = updatedPlayerPokemon.attack(
 					activeOpponentPokemon
 				);
@@ -366,7 +369,10 @@ const Battle = ({ battle }: BattleProps) => {
 		} else {
 			setPreviousPlayerPokemonHp(activePlayerPokemon.stats[0].value);
 			const missChance = Math.random();
-			if (missChance < updatedOpponentPokemon.activeMove.accuracy / 100) {
+			if (
+				missChance < updatedOpponentPokemon.activeMove.accuracy / 100 ||
+				updatedOpponentPokemon.activeMove.accuracy === 0
+			) {
 				const updatedPlayerPokemon =
 					updatedOpponentPokemon.attack(activePlayerPokemon);
 				if (
