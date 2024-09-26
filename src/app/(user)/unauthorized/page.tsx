@@ -42,7 +42,7 @@ const Unauthorized = () => {
 				<h1>Error 401 - Unauthorized</h1>
 				<span>Sorry, you do not have permission to access this page.</span>
 				<div className="form-footer">
-					<Link href={'/home'} className="home-link">
+					<Link href={'/'} className="home-link">
 						Click here to go back to the home page
 					</Link>
 				</div>
