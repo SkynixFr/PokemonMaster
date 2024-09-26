@@ -95,6 +95,8 @@ const Pokemons = ({ team, pokemons }: PokemonsProps) => {
 			);
 		}
 
+		localStorage.setItem('teamActive', team.id);
+
 		const newTeam: TeamUpdate = {
 			name: team.name,
 			avatarId: team.avatar.id,
