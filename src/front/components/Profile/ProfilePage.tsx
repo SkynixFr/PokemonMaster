@@ -184,14 +184,12 @@ const ProfilePage = ({ userDetails, teams, avatars }: UserListProps) => {
 				</div>
 			)}
 			{isDeleteModalOpen && (
-				<div className="Go-Back-container">
-					<FormDeleteAccount
-						userDetails={userDetails}
-						setIsDeleteModalOpen={setIsDeleteModalOpen}
-						setOpenForm={setOpenForm}
-						openForm={openForm}
-					/>
-				</div>
+				<FormDeleteAccount
+					userDetails={userDetails}
+					setIsDeleteModalOpen={setIsDeleteModalOpen}
+					setOpenForm={setOpenForm}
+					openForm={openForm}
+				/>
 			)}
 		</div>
 	);

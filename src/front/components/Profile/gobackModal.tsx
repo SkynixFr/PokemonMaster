@@ -25,11 +25,11 @@ const gobackModal = ({ setOpenModal }: GobackModalProps) => {
 	return (
 		<div className={'profile-modal'}>
 			<div className={'profile-modal-content'}>
-				<h2>Are you sure you want to leave ? </h2>
+				<h1>Are you sure you want to leave ? </h1>
 				<span>Any staged changes won't be save</span>
 				<div className={'profile-modal-buttons'}>
 					<button
-						className={'profile-modal-button btn-primary'}
+						className={'profile-modal-button btn-secondary '}
 						onClick={() => {
 							router.push('/');
 						}}
@@ -37,7 +37,7 @@ const gobackModal = ({ setOpenModal }: GobackModalProps) => {
 						Yes
 					</button>
 					<button
-						className={'profile-modal-button'}
+						className={'profile-modal-button btn-primary'}
 						onClick={() => setOpenModal(false)}
 					>
 						No
