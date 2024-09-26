@@ -11,6 +11,7 @@ import { UserUpdate } from '../../../interfaces/user/userUpdate';
 import { X } from 'lucide-react';
 // Actions
 import { deleteUserAction } from '../../actions/user.actions';
+import { firstLetterMaj } from '../../utils/formatString';
 
 interface FormDeleteAccountProps {
 	userDetails: UserEntity;
@@ -77,14 +78,14 @@ const FormDeleteAccount = ({
 	return (
 		<div className="profile-modal">
 			<div className="profile-modal-content">
-				<h2>Delete Account</h2>
-				<span>
-					Are you sure you want to delete your account? This action is
-					irreversible.
-				</span>
+				<h1>
+					Are you sure you want to delete account{' '}
+					<span>{firstLetterMaj(userDetails.username)}</span> ?
+				</h1>
+				<span>This action is irreversible.</span>
 				<div className="profile-modal-buttons">
 					<button
-						className="profile-modal-button btn-primary"
+						className="profile-modal-button btn-secondary"
 						onClick={() => {
 							setIsDeleteModalOpen(false);
 							deleteUser();
@@ -93,7 +94,7 @@ const FormDeleteAccount = ({
 						Delete Account
 					</button>
 					<button
-						className="profile-modal-button"
+						className="profile-modal-button btn-primary"
 						onClick={() => handleCancel()}
 					>
 						Cancel
