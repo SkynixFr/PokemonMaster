@@ -19,6 +19,8 @@ interface BattleActionsProps {
 	currentView: string;
 	setPlayerRunning: (value: boolean) => void;
 	setOpponentRunning: (value: boolean) => void;
+	openModalMoves?: boolean;
+	setOpenModalMoves?: (value: boolean) => void;
 }
 const BattleActions = ({
 	playerPokemon,
@@ -27,10 +29,11 @@ const BattleActions = ({
 	setBattleEnd,
 	currentView,
 	setPlayerRunning,
-	setOpponentRunning
+	setOpponentRunning,
+	openModalMoves,
+	setOpenModalMoves
 }: BattleActionsProps) => {
 	const [openModalRunning, setOpenModalRunning] = useState<boolean>(false);
-	const [openPokemonMoves, setOpenPokemonMoves] = useState<boolean>(false);
 
 	const handlePlayerRunning = () => {
 		if (currentView === 'player') {
@@ -48,7 +51,7 @@ const BattleActions = ({
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') {
 				setOpenModalRunning(false);
-				setOpenPokemonMoves(false);
+				setOpenModalMoves(false);
 			}
 		};
 
@@ -57,14 +60,14 @@ const BattleActions = ({
 		return () => {
 			document.removeEventListener('keydown', handleKeyDown);
 		};
-	}, [setOpenModalRunning, setOpenPokemonMoves]);
+	}, [setOpenModalRunning, setOpenModalMoves]);
 
 	return (
 		<div className={'battle-actions'}>
 			<div className={'battle-actions-btn fadeInToTop'}>
 				<button
 					className={`btn-action ${disabled ? 'disabled' : ''}`}
-					onClick={() => setOpenPokemonMoves(!openPokemonMoves)}
+					onClick={() => setOpenModalMoves(!openModalMoves)}
 					disabled={disabled}
 				>
 					Attack
@@ -87,7 +90,7 @@ const BattleActions = ({
 						height={75}
 					/>
 				</button>
-				{openPokemonMoves && (
+				{openModalMoves && (
 					<div className={'pokemon-moves-modal-container'}>
 						<div className={`pokemon-moves-modal-content fadeInToTop`}>
 							{playerPokemon.moves.map((move, index) => (
@@ -96,7 +99,7 @@ const BattleActions = ({
 									key={index}
 									onClick={() => {
 										handleMoveSelection(move);
-										setOpenPokemonMoves(false);
+										setOpenModalMoves(false);
 									}}
 									disabled={move.pp === 0}
 								>

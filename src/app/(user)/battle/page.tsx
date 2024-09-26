@@ -81,6 +81,7 @@ const Battle = ({ battle }: BattleProps) => {
 
 	const [playerRunning, setPlayerRunning] = useState<boolean>(false);
 	const [opponentRunning, setOpponentRunning] = useState<boolean>(false);
+	const [openModalMoves, setOpenModalMoves] = useState<boolean>(false);
 
 	// Notifications
 	//---------------------------------------------------------
@@ -1183,6 +1184,7 @@ const Battle = ({ battle }: BattleProps) => {
 							setJustSwitched={setJustSwitchedPlayer}
 							setPreviousHp={setPreviousPlayerPokemonHp}
 							disabled={isNotificationActive}
+							setOpenModalMoves={setOpenModalMoves}
 						/>
 					</div>
 
@@ -1199,6 +1201,7 @@ const Battle = ({ battle }: BattleProps) => {
 							setJustSwitched={setJustSwitchedOpponent}
 							setPreviousHp={setPreviousOpponentPokemonHp}
 							disabled={isNotificationActive}
+							setOpenModalMoves={setOpenModalMoves}
 						/>
 					</div>
 
@@ -1234,6 +1237,8 @@ const Battle = ({ battle }: BattleProps) => {
 						currentView={currentView}
 						setPlayerRunning={setPlayerRunning}
 						setOpponentRunning={setOpponentRunning}
+						openModalMoves={openModalMoves}
+						setOpenModalMoves={setOpenModalMoves}
 					/>
 
 					{!battleEnd && (
@@ -1265,6 +1270,7 @@ const Battle = ({ battle }: BattleProps) => {
 							setJustSwitched={setJustSwitchedOpponent}
 							setPreviousHp={setPreviousOpponentPokemonHp}
 							disabled={isNotificationActive}
+							setOpenModalMoves={setOpenModalMoves}
 						/>
 					</div>
 
@@ -1281,6 +1287,7 @@ const Battle = ({ battle }: BattleProps) => {
 							setJustSwitched={setJustSwitchedPlayer}
 							setPreviousHp={setPreviousPlayerPokemonHp}
 							disabled={isNotificationActive}
+							setOpenModalMoves={setOpenModalMoves}
 						/>
 					</div>
 
@@ -1316,6 +1323,8 @@ const Battle = ({ battle }: BattleProps) => {
 						currentView={currentView}
 						setPlayerRunning={setPlayerRunning}
 						setOpponentRunning={setOpponentRunning}
+						setOpenModalMoves={setOpenModalMoves}
+						openModalMoves={openModalMoves}
 					/>
 
 					{!battleEnd && (

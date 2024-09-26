@@ -21,6 +21,7 @@ interface TeamCardProps {
 	setJustSwitched: (justSwitched: boolean) => void;
 	setPreviousHp: (hp: number) => void;
 	disabled: boolean;
+	setOpenModalMoves?: (value: boolean) => void;
 }
 
 const BattleTeamCard = ({
@@ -34,7 +35,8 @@ const BattleTeamCard = ({
 	currentView,
 	setJustSwitched,
 	setPreviousHp,
-	disabled
+	disabled,
+	setOpenModalMoves
 }: TeamCardProps) => {
 	const [isSwitching, setIsSwitching] = useState(false);
 	const [isSwitchingTo, setIsSwitchingTo] = useState<Pokemon | null>(null);
@@ -54,6 +56,7 @@ const BattleTeamCard = ({
 		if (pokemon.stats[0].value === 0) return;
 		setIsSwitching(true);
 		setIsSwitchingTo(pokemon);
+		setOpenModalMoves(false);
 	};
 
 	useEffect(() => {
