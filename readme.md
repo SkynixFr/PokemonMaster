@@ -6,7 +6,7 @@ C'est un jeu de rôle où vous incarnez un dresseur de Pokémon. Vous devez cons
 
 ## Prérequis
 - **Node.js** (installé et en cours d'exécution)
-- **npm** ou **yarn**
+- **npm**
 - **Git** (pour cloner le projet)
 
 ## Installation
