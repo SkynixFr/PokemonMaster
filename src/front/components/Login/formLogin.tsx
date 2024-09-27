@@ -114,7 +114,7 @@ const FormLogin = () => {
 						height={150}
 					/>
 				</div>
-				<h1 className="form-title">SIGN IN</h1>
+				<h1 className="form-title">LOG IN</h1>
 				<div className="input-group">
 					<label htmlFor="email" className="input-label">
 						Email

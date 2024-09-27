@@ -121,7 +121,7 @@ export function battle(): TeamEntity {
 					{
 						id: '66f32cf12072986d98236bbc',
 						name: 'brutal-swing',
-						power: 3000,
+						power: 60,
 						accuracy: 100,
 						pp: 20,
 						maxPp: 20,
